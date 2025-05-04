@@ -1,0 +1,14 @@
+http://rss.nytimes.com/services/xml/rss/nyt/Technology.xml
+http://rss.nytimes.com/services/xml/rss/nyt/Science.xml
+https://www.euronews.com/rss?format=mrss&level=vertical&name=culture
+https://www.euronews.com/rss?format=mrss&level=vertical&name=travel
+https://www.euronews.com/rss?format=mrss&level=vertical&name=sci-tech
+http://timesofindia.indiatimes.com/rssfeeds/-2128672765.cms
+http://timesofindia.indiatimes.com/rssfeeds/2647163.cms
+http://timesofindia.indiatimes.com/rssfeeds/66949542.cms
+http://timesofindia.indiatimes.com/rssfeeds/913168846.cms
+http://timesofindia.indiatimes.com/rssfeeds/2886704.cms
+https://feed.koreatimes.co.kr/k/entertainment.xml
+https://www.sagoodnews.co.za/feed/
+https://latinvex.com/rss/technology/
+https://latinvex.com/rss/index/

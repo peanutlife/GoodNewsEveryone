@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Dashboard - BrightSide News</title>
+    <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}"> 
+    <style>
+        /* Add some specific styles for the admin dashboard */
+        .admin-container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .admin-header h2 {
+            margin: 0;
+            color: #343a40;
+        }
+        .admin-nav a {
+            margin-left: 1rem;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .admin-nav a:hover {
+            text-decoration: underline;
+        }
+        .welcome-message {
+            margin-bottom: 1.5rem;
+        }
+        .content-section {
+            background-color: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .content-section h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: #e76f51;
+        }
+        /* Basic table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 0.75rem;
+            text-align: left;
+            vertical-align: top; /* Align content top */
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        .btn-remove {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            font-size: 0.8rem;
+            color: #fff;
+            background-color: #dc3545;
+            border-color: #dc3545;
+            border-radius: 0.2rem;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn-remove:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .admin-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .admin-nav {
+                margin-top: 0.5rem;
+            }
+            .admin-nav a {
+                margin-left: 0;
+                margin-right: 1rem;
+            }
+            th, td {
+                font-size: 0.9rem;
+                padding: 0.5rem;
+            }
+        }
+        /* Alert styles (copied from manage_feeds.html) */
+        .alert {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid transparent;
+            border-radius: 0.25rem;
+        }
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+         .alert-info {
+            color: #0c5460;
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+         .alert-warning {
+            color: #856404;
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="{{ url_for("admin.dashboard") }}">BrightSide News - Admin Dashboard</a></h1>
+    </header>
+
+    <main class="admin-container">
+        <div class="admin-header">
+            <h2>Dashboard</h2>
+            <nav class="admin-nav">
+                <span>Welcome, {{ username }}!</span>
+                <a href="{{ url_for("admin.dashboard") }}">Dashboard Home</a>
+                <a href="{{ url_for("admin.manage_feeds") }}">Manage Feeds</a>
+                <a href="{{ url_for("admin.logout") }}">Logout</a>
+            </nav>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}" role="alert">
+                {{ message | safe }} {# Use safe filter if message contains HTML #}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <div class="content-section">
+            <h3>Overview</h3>
+            <p>Currently cached positive articles: {{ articles_count if articles_count is defined else "N/A" }}</p>
+            <p>Last fetch time: {{ last_fetched if last_fetched is defined else "N/A" }}</p>
+        </div>
+
+        <div class="content-section">
+            <h3>Recent Positive Articles</h3>
+            <p>Below are the most recent articles fetched and filtered. You can remove articles that you deem unsuitable.</p>
+             <!-- Display recent articles in a table with remove button -->
+            {% if articles and articles is defined %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Source</th>
+                            <th>Published</th>
+                            <th>Sentiment</th>
+                            <th>Action</th> {# New column for remove button #}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for article in articles %} {# Show all cached articles #}
+                            <tr>
+                                <td><a href="{{ article.link }}" target="_blank">{{ article.title | truncate(80) }}</a></td>
+                                <td>{{ article.source_feed | replace("http://", "") | replace("https://", "") | replace("www.", "") | url_parse | attr("netloc") }}</td>
+                                <td>{{ article.published | format_datetime }}</td>
+                                <td>{{ "%.2f"|format(article.sentiment_score) }}</td>
+                                <td>
+                                    {# Form to submit the removal request #}
+                                    <form action="{{ url_for("admin.remove_article") }}" method="post" style="margin:0;">
+                                        <input type="hidden" name="article_link" value="{{ article.link }}">
+                                        <button type="submit" class="btn-remove">Remove</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No articles available to display.</p>
+            {% endif %}
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; {{ now.year }} BrightSide News. All rights reserved.</p>
+    </footer>
+</body>
+</html>
+

@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manage Feeds - BrightSide News Admin</title>
+    <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}">
+    <!-- Reusing some styles from login.html and dashboard.html -->
+    <style>
+        .admin-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .admin-header h2 {
+            margin: 0;
+            color: #343a40;
+        }
+        .admin-nav a {
+            margin-left: 1rem;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .admin-nav a:hover {
+            text-decoration: underline;
+        }
+        .form-container {
+            background-color: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+            min-height: 300px; /* Make textarea larger */
+            font-family: monospace; /* Use monospace font for URLs */
+        }
+        .btn {
+            display: inline-block;
+            font-weight: 400;
+            color: #ffffff;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            background-color: #007bff;
+            border: 1px solid #007bff;
+            padding: 0.75rem 1.25rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 0.25rem;
+            transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            text-decoration: none;
+        }
+        .alert {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid transparent;
+            border-radius: 0.25rem;
+        }
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+         .alert-info {
+            color: #0c5460;
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+         .alert-warning {
+            color: #856404;
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+        }
+        .instructions {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="{{ url_for("admin.dashboard") }}">BrightSide News - Admin</a></h1>
+    </header>
+
+    <main class="admin-container">
+        <div class="admin-header">
+            <h2>Manage RSS Feeds</h2>
+            <nav class="admin-nav">
+                <a href="{{ url_for("admin.dashboard") }}">Dashboard Home</a>
+                <a href="{{ url_for("admin.logout") }}">Logout</a>
+            </nav>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}" role="alert">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <div class="form-container">
+            <p class="instructions">Enter one RSS feed URL per line. Lines starting with # are ignored. Changes will be applied on the next automatic feed fetch cycle (every 15 minutes by default).</p>
+            <form method="post">
+                <div class="form-group">
+                    <label for="feeds">Feed URLs:</label>
+                    <textarea id="feeds" name="feeds" rows="15">{{ feeds_text }}</textarea>
+                </div>
+                <button type="submit" class="btn">Save Feeds</button>
+            </form>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; {{ now.year }} BrightSide News. All rights reserved.</p>
+    </footer>
+</body>
+</html>
+

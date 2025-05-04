@@ -1,0 +1,2 @@
+# Stores links of articles manually removed by admin
+
