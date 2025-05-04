@@ -31,7 +31,7 @@ header {
 }
 
 header h1 a {
-    color: #2a9d8f; /* Uplifting teal color */
+    color: #2a9d8f;
     font-size: 2.5rem;
     text-decoration: none;
 }
@@ -44,75 +44,94 @@ header p {
 
 /* Main Content */
 main {
-    max-width: 900px;
+    max-width: 1200px;
     margin: 2rem auto;
     padding: 0 1rem;
 }
 
 main h2 {
-    color: #e76f51; /* Uplifting coral color */
+    color: #e76f51;
     text-align: center;
     margin-bottom: 2rem;
     font-size: 2rem;
 }
 
-/* Articles Container */
-.articles-container {
+/* Articles Grid */
+.articles-grid {
     display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
 }
 
-article {
+.article-card {
     background-color: #ffffff;
     border: 1px solid #e9ecef;
     border-radius: 8px;
     padding: 1.5rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     transition: box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
 }
 
-article:hover {
+.article-card:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-article h3 {
-    margin-top: 0;
-    margin-bottom: 0.75rem;
-    font-size: 1.4rem;
+.article-icons {
+    margin-bottom: 10px;
+    height: 20px;
 }
 
-article h3 a {
+.icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+    object-fit: contain;
+}
+
+.icon.topic-icon {
+    width: 48px;
+    height: 48px;
+    display: inline-block;
+}
+.article-card h3 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-size: 1.2rem;
+    flex-grow: 0;
+}
+
+.article-card h3 a {
     color: #343a40;
 }
 
-article h3 a:hover {
+.article-card h3 a:hover {
     color: #0056b3;
 }
 
-article .summary {
+.article-card .summary {
     color: #495057;
     margin-bottom: 1rem;
+    font-size: 0.95rem;
+    flex-grow: 1;
 }
 
-/* Metadata */
 .metadata {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #6c757d;
     display: flex;
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
-    gap: 0.5rem 1rem; /* Row and column gap */
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
     border-top: 1px solid #e9ecef;
-    padding-top: 1rem;
-    margin-top: 1rem;
+    padding-top: 0.75rem;
+    margin-top: auto;
+    flex-grow: 0;
 }
 
 .metadata .source {
     font-weight: bold;
-}
-
-.metadata .date {
-    /* Optionally push date to the right if space allows */
-    /* margin-left: auto; */ 
 }
 
 /* Footer */
@@ -129,8 +148,14 @@ footer p {
     margin: 0.3rem 0;
 }
 
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 768px) {
+    main {
+        max-width: 95%;
+    }
+    .articles-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
     header h1 a {
         font-size: 2rem;
     }
@@ -139,9 +164,6 @@ footer p {
     }
     main h2 {
         font-size: 1.8rem;
-    }
-    article h3 {
-        font-size: 1.2rem;
     }
 }
 
@@ -152,10 +174,94 @@ footer p {
     main {
         margin: 1rem auto;
     }
+    .articles-grid {
+        grid-template-columns: 1fr;
+    }
     .metadata {
-        flex-direction: column; /* Stack metadata vertically */
+        flex-direction: column;
         align-items: flex-start;
         gap: 0.3rem;
     }
 }
 
+/* 🔥 FUN TABS NAVBAR */
+.fun-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    background: #fff;
+    padding: 0.5rem;
+    list-style: none;
+    margin: 0;
+    border-bottom: 2px solid #e9ecef;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.fun-tabs li {
+    margin: 0 0.3rem;
+}
+
+.fun-tabs a {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 8px 8px 0 0;
+    font-weight: bold;
+    color: #fff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Unique colors per topic */
+.tab-technology { background: #4CAF50; }
+.tab-science { background: #2196F3; }
+.tab-culture { background: #9C27B0; }
+.tab-travel { background: #FF9800; }
+.tab-sports { background: #FF5722; }
+.tab-business { background: #3F51B5; }
+.tab-health { background: #E91E63; }
+.tab-environment { background: #8BC34A; }
+.tab-teens { background: #F44336; }
+.tab-kids { background: #FFC107; }
+.tab-general { background: #607D8B; }
+
+.fun-tabs a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    opacity: 0.9;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+.noun-attribution {
+    font-size: 0.7rem;
+    color: #999;
+    display: block; /* ensure it shows under icon */
+    margin-top: 2px;
+}
+
+.noun-icon {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+    margin-left: 5px;
+}
+.source-name {
+    font-family: 'Pacifico', cursive;
+    font-size: 1.4em;
+    color: #444;
+    margin: 0.3em 0;
+}
+
+.article-icon img {
+    width: 48px;
+    height: 48px;
+}
+
+.noun-attribution {
+    display: block;
+    font-size: 0.7em;
+    color: #888;
+}

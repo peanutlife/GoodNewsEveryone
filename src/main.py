@@ -76,10 +76,10 @@ def index():
     else:
         articles = article_cache["articles"]
 
-    return render_template("index.html", articles=articles)
-
-# Note: The default static file serving logic from the template is handled 
-# automatically by Flask when static_folder is set. No need for the explicit /<path:path> route 
+    #return render_template("index.html", articles=articles)
+    return render_template("index.html", articles_by_topic=articles)
+# Note: The default static file serving logic from the template is handled
+# automatically by Flask when static_folder is set. No need for the explicit /<path:path> route
 # unless you need custom logic for static files.
 
 if __name__ == "__main__":
@@ -94,7 +94,7 @@ if __name__ == "__main__":
         except Exception as download_e:
             print(f"Failed to download NLTK VADER lexicon: {download_e}")
             print("Sentiment analysis may not work correctly.")
-            
+
     # Perform initial fetch on startup if cache is empty
     if not article_cache["articles"]:
         print("Performing initial article fetch on startup...")
@@ -105,6 +105,5 @@ if __name__ == "__main__":
             print(f"Fetched and cached {len(initial_articles)} articles on startup.")
         except Exception as e:
             print(f"Error during initial article fetch: {e}")
-            
-    app.run(host="0.0.0.0", port=5005, debug=False) # Turn debug off for production-like testing
 
+    app.run(host="0.0.0.0", port=5005, debug=False) # Turn debug off for production-like testing

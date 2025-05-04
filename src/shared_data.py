@@ -33,7 +33,7 @@ CACHE_DURATION_SECONDS = 15 * 60 # Fetch new articles every 15 minutes
 
 # Sentiment threshold (VADER compound score)
 # Increased threshold to filter for more clearly positive articles
-POSITIVE_THRESHOLD = 0.20 # Articles must have a compound score > this value (was 0.05)
+POSITIVE_THRESHOLD = 0.80 # Articles must have a compound score > this value (was 0.05)
 
 # Keywords to filter out (case-insensitive)
 NEGATIVE_KEYWORDS = [
@@ -94,20 +94,19 @@ def add_removed_article_link(link):
     link = link.strip()
     if not link or link in removed_article_links:
         return False # Already removed or empty link
-    
+
     with file_lock:
         try:
             with open(REMOVED_ARTICLES_FILE_PATH, "a") as f:
                 f.write(link + "\n")
             removed_article_links.add(link)
             # Corrected print statement (avoiding multiline f-string issues)
-            print(f"Added '{link}' to removed articles list.") 
+            print(f"Added '{link}' to removed articles list.")
             return True
         except IOError as e:
             print(f"Error adding to removed articles file at {REMOVED_ARTICLES_FILE_PATH}: {e}")
             return False
 
-# --- Initial Load --- 
+# --- Initial Load ---
 FEED_URLS = get_feed_urls()
 load_removed_articles()
-
