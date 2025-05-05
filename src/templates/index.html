@@ -3,100 +3,194 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- SEO Meta Tags -->
     <title>Project Optimist - Your Daily Dose of Positivity</title>
     <meta name="description" content="Project Optimist aggregates positive and uplifting news stories from around the world, filtering out negativity to bring you a brighter perspective.">
     <meta name="keywords" content="positive news, good news, uplifting stories, world news, technology, science, culture, lifestyle, positive aggregation">
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ request.url_root }}">
-    <meta property="og:title" content="Project Optimist - Your Daily Dose of Positivity">
-    <meta property="og:description" content="Focusing on the good news happening around the world. Filtered for positivity.">
-    <meta property="og:site_name" content="Project Optimist">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="{{ request.url_root }}">
-    <meta property="twitter:title" content="Project Optimist - Your Daily Dose of Positivity">
-    <meta property="twitter:description" content="Focusing on the good news happening around the world. Filtered for positivity.">
-
-    <!-- Styles -->
+    <!-- Fonts & CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Fancy cursive font for source name -->
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous">
 </head>
+
 <body>
     <header>
         <h1><a href="/">Project Optimist</a></h1>
         <p>Focusing on the good news happening around the world.</p>
-        <div class="social-sharing">
-            <span>Share the positivity:</span>
-            <a href="https://twitter.com/intent/tweet?url={{ request.url_root | urlencode }}&text={{ 'Check out Project Optimist for your daily dose of positivity!' | urlencode }}" target="_blank" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
-            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.url_root | urlencode }}" target="_blank" title="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.url_root | urlencode }}&title={{ 'Project Optimist - Your Daily Dose of Positivity' | urlencode }}&summary={{ 'Focusing on the good news happening around the world.' | urlencode }}" target="_blank" title="Share on LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-            <a href="mailto:?subject={{ 'Check out Project Optimist!' | urlencode }}&body={{ 'I found this great source for positive news: ' | urlencode }}{{ request.url_root | urlencode }}" title="Share via Email"><i class="fas fa-envelope"></i></a>
-        </div>
     </header>
 
-    <!-- NAVBAR -->
-    <nav>
-        <ul class="fun-tabs">
-            {% for topic, articles in articles_by_topic.items() %}
-                <li><a href="#{{ topic }}" class="tab tab-{{ topic }}">{{ topic.title() }}</a></li>
-            {% endfor %}
-        </ul>
-    </nav>
+    <div class="layout-container">
+        <!-- FILTER SIDEBAR -->
+        <aside class="filter-sidebar">
+            <div class="sidebar-section">
+                <h3>Categories</h3>
+                <ul class="filter-list">
+                    <li><a href="/" class="filter-item {% if not selected_topic %}active{% endif %}">All News</a></li>
+                    {% for topic in topics %}
+                        <li>
+                            <a href="/?topic={{ topic }}" class="filter-item {% if selected_topic == topic %}active{% endif %}">
+                                {% if topic_icons.get(topic) %}
+                                    <img src="{{ url_for('static', filename=topic_icons.get(topic)) }}" alt="icon" class="filter-icon">
+                                {% endif %}
+                                {{ topic|title }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h3>About</h3>
+                <p class="sidebar-info">Project Optimist uses AI to find and rank the most inspiring stories on the web.</p>
+                <div class="inspiration-scale">
+                    <div class="scale-label">Inspiration Scale:</div>
+                    <div class="scale-item">😀 High</div>
+                    <div class="scale-item">🙂 Medium</div>
+                    <div class="scale-item">😐 Low</div>
+                </div>
+            </div>
+        </aside>
 
-    <main>
-         {% if articles_by_topic %}
-             {% for topic, articles in articles_by_topic.items() %}
-                 <section id="{{ topic }}">
-                     <h2>{{ topic.title() }}</h2>
-                     <div class="articles-grid">
-                         {% for article in articles %}
-                             <article class="article-card">
-                                 <!-- ✅ USE LOCAL OPENMOJI -->
-                                 <div class="article-icon">
-                                     {% if article['topic_icon_path'] %}
-                                         <img src="{{ url_for('static', filename=article['topic_icon_path']) }}" alt="Emoji for {{ article['topic_name'] }}" class="icon topic-icon" title="{{ article['topic_name'] }}">
-                                     {% endif %}
-                                 </div>
-                                 <div class="source-name">{{ article['source_name'] }}</div>
-                                 <h3><a href="{{ article['link'] }}" target="_blank" rel="noopener noreferrer">{{ article['title'] }}</a></h3>
-                                 <p class="summary">{{ article['summary'] | striptags | truncate(150) }}</p>
-                                 <div class="metadata">
-                                     <span class="date">Published: {{ article['published'] | format_datetime }}</span>
-                                 </div>
-                             </article>
-                         {% endfor %}
-                     </div>
-                 </section>
-             {% endfor %}
-         {% else %}
-             <p>No positive news articles found at the moment. Please check back later!</p>
-         {% endif %}
-     </main>
+        <!-- MAIN CONTENT -->
+        <main>
+            {% if articles %}
+                <!-- Top Stories Section -->
+                <div class="content-header">
+                    <h2>🔥 Top Stories</h2>
+                </div>
+                <div class="top-stories-container">
+                    {% set top_stories = articles[:4] %}
+                    {% for article in top_stories %}
+      {% set inspiration = article.get('inspiration_score', 5) %}
+      <article id="article-top-{{ loop.index0 }}" class="article-top">
+          <!-- Content area with inspiration badge -->
+          <div class="article-top-content">
+              <!-- Inspiration badge moved to content area -->
+              <div class="inspiration-badge">
+                  {% if inspiration >= 8 %}
+                      😀
+                  {% elif inspiration >= 5 %}
+                      🙂
+                  {% else %}
+                      😐
+                  {% endif %}
+              </div>
 
+              <!-- Source info -->
+              <div class="article-source">
+          <a href="{{ article['link'] }}" class="source-url-chip" target="_blank">
+              {{ article['source_name'] }}
+          </a>
+          <div class="tag-container">
+              {% if article.get('topic_name') %}
+              <span class="topic-tag {{ article.get('topic_name')|title }}">
+                  {% if article.get('topic_icon_path') %}
+                      <img src="{{ url_for('static', filename=article['topic_icon_path']) }}" alt="topic" class="emoji-icon">
+                  {% endif %}
+                  {{ article.get('topic_name')|title }}
+              </span>
+              {% endif %}
+
+              <!-- Location tag - only shown if location is available -->
+              {% if article.get('location') %}
+              <span class="location-tag">
+                  <i class="fas fa-map-marker-alt"></i>
+                  {{ article.get('location') }}
+              </span>
+              {% endif %}
+          </div>
+      </div>
+
+              <!-- Title with topic icon and summary -->
+              <h3>
+                  <a href="{{ article['link'] }}" target="_blank">
+                      {% if article.get('topic_icon_path') %}
+                      <span class="title-icon" style="background-image: url('{{ url_for('static', filename=article['topic_icon_path']) }}');"></span>
+                      {% endif %}
+                      {{ article['title'] }}
+                  </a>
+              </h3>
+              <p class="summary">{{ article['summary'] | striptags | truncate(100) }}</p>
+
+              <!-- Date -->
+              <small class="published">{{ article['published'] | format_datetime }}</small>
+          </div>
+      </article>
+
+                    {% endfor %}
+                </div>
+
+                <!-- Remaining Articles Section -->
+                <div class="content-header">
+                    <h2>More Positive News</h2>
+                </div>
+                {% for article in articles[4:] %}
+      {% set inspiration = article.get('inspiration_score', 5) %}
+      <article id="article-{{ loop.index0 }}" class="article-flat">
+          {% if article.get('image_url') %}
+              <div class="thumbnail-container">
+                  <img src="{{ article['image_url'] }}" alt="Thumbnail" class="thumbnail">
+                  <div class="inspiration-badge small">
+                      {% if inspiration >= 8 %}
+                          😀
+                      {% elif inspiration >= 5 %}
+                          🙂
+                      {% else %}
+                          😐
+                      {% endif %}
+                  </div>
+              </div>
+          {% endif %}
+          <div class="article-content">
+              <h3>
+                  <a href="{{ article['link'] }}" target="_blank">
+                      {% if article.get('topic_icon_path') %}
+                      <span class="title-icon" style="background-image: url('{{ url_for('static', filename=article['topic_icon_path']) }}');"></span>
+                      {% endif %}
+                      {{ article['title'] }}
+                  </a>
+              </h3>
+              <p class="summary">{{ article['summary'] | striptags | truncate(100) }}</p>
+              <div class="article-meta">
+                  <span class="source-name">{{ article['source_name'] }}</span>
+                  {% if article.get('topic_name') %}
+                  <span class="topic-tag {{ article.get('topic_name')|title }}">
+                      {% if article.get('topic_icon_path') %}
+                          <img src="{{ url_for('static', filename=article['topic_icon_path']) }}" alt="topic" class="emoji-icon">
+                      {% endif %}
+                      {{ article.get('topic_name')|title }}
+                  </span>
+                  {% endif %}
+              </div>
+              <small class="published">{{ article['published'] | format_datetime }}</small>
+          </div>
+      </article>
+  {% endfor %}
+            {% else %}
+                <p class="no-articles">No articles available.</p>
+            {% endif %}
+        </main>
+
+        <!-- RIGHT SIDEBAR (for ads, can be empty for now) -->
+        <aside class="ad-sidebar">
+            <!-- This can remain empty as mentioned in your design -->
+        </aside>
+    </div>
 
     <footer>
         <p>&copy; {{ now.year }} Project Optimist. All rights reserved.</p>
         <p>Powered by Good Vibes</p>
     </footer>
+
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const colors = ['#FF6B6B', '#4ECDC4', '#FFD166', '#FF8C42', '#9B5DE5', '#00A896', '#F5A623', '#EF476F', '#06D6A0'];
+        // Make source names a little more subtle
+        const colors = ['#3498db', '#2ecc71', '#9b59b6', '#34495e', '#16a085', '#27ae60', '#2980b9', '#8e44ad', '#2c3e50'];
         document.querySelectorAll('.source-name').forEach(el => {
             const color = colors[Math.floor(Math.random() * colors.length)];
             el.style.color = color;
+            el.style.opacity = '0.8';
         });
     });
     </script>
-
 </body>
 </html>

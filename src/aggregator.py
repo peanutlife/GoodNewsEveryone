@@ -8,8 +8,11 @@ import time
 from datetime import datetime
 import os
 import csv
+import json
 import openai
 from src.shared_data import FEED_URLS, NEGATIVE_KEYWORDS, POSITIVE_THRESHOLD, removed_article_links, load_removed_articles
+from urllib.parse import urlparse
+
 
 # Load OpenAI API Key
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "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")
@@ -90,6 +93,34 @@ def classify_with_llm(text):
         print(f"[LLM Error]: {e}")
         return False
 
+def score_inspiration_with_llm(text):
+    """Ask LLM to score article on inspiration scale from 1-10"""
+    try:
+        prompt = (
+            "Rate this news article on an inspiration scale from 1 to 10, where:\n"
+            "1 = Not inspiring at all\n"
+            "10 = Extremely inspiring, uplifting, and positive\n\n"
+            "Respond with ONLY a number between 1 and 10.\n\n"
+            f"Article:\n{text}"
+        )
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=2,
+            temperature=0
+        )
+        answer = response.choices[0].message.content.strip()
+        # Extract the number
+        try:
+            score = int(re.search(r'\d+', answer).group())
+            return min(max(score, 1), 10)  # Ensure score is between 1-10
+        except (AttributeError, ValueError):
+            print(f"[LLM Score Parsing Error]: '{answer}' not convertible to int")
+            return 5  # Default mid-range score
+    except Exception as e:
+        print(f"[LLM Scoring Error]: {e}")
+        return 5  # Default mid-range score
+
 def get_topic_and_icon(title, summary):
     text_lower = (title + " " + summary).lower()
     for topic, keywords in TOPIC_KEYWORDS.items():
@@ -119,6 +150,10 @@ def parse_date(entry):
     return datetime.now()
 
 def fetch_and_filter_feeds(feed_urls):
+    """
+    Fetch RSS feeds, filter for positive articles, assign topics/icons, and save to JSON cache.
+    Also attempts to extract image URLs for articles (when available).
+    """
     articles_by_topic = {}
     load_removed_articles()
 
@@ -128,15 +163,19 @@ def fetch_and_filter_feeds(feed_urls):
             feed = feedparser.parse(url)
             if feed.bozo:
                 print(f"Warning: Feed may be ill-formed. {feed.bozo_exception}")
+
             for entry in feed.entries:
                 title = entry.get("title", "")
                 link = entry.get("link", "")
                 summary = entry.get("summary", entry.get("description", ""))
                 pub_date = parse_date(entry)
 
-                if not title or not link: continue
-                if link in removed_article_links: continue
-                if contains_negative_keyword(title) or contains_negative_keyword(summary): continue
+                if not title or not link:
+                    continue
+                if link in removed_article_links:
+                    continue
+                if contains_negative_keyword(title) or contains_negative_keyword(summary):
+                    continue
 
                 combined_text = f"{title}. {summary}"
                 sentiment_score = get_positive_sentiment_score(combined_text)
@@ -145,27 +184,64 @@ def fetch_and_filter_feeds(feed_urls):
 
                 if is_positive and llm_positive:
                     topic_name, emoji_icon_path = get_topic_and_icon(title, summary)
+
+                    # Get inspiration score from LLM
+                    inspiration_score = score_inspiration_with_llm(combined_text)
+
+                    # 🖼️ Attempt to extract image from RSS entry
+                    image_url = None
+                    if 'media_content' in entry and entry.media_content:
+                        image_url = entry.media_content[0].get('url')
+                    elif 'media_thumbnail' in entry and entry.media_thumbnail:
+                        image_url = entry.media_thumbnail[0].get('url')
+                    else:
+                        # Try extracting first <img> from description HTML
+                        img_match = re.search(r'<img\s+[^>]*src="([^"]+)"', summary)
+                        if img_match:
+                            image_url = img_match.group(1)
+
+                    # Create favicon URL as fallback
+                    favicon_url = f"https://www.google.com/s2/favicons?domain={urlparse(link).netloc}"
+
                     article = {
                         "title": title,
                         "link": link,
                         "summary": summary,
                         "published": pub_date.isoformat(),
                         "sentiment_score": sentiment_score,
+                        "inspiration_score": inspiration_score,  # Add the inspiration score
                         "source_name": url.split("/")[2],
                         "source_icon_path": DEFAULT_SOURCE_ICON,
                         "topic_name": topic_name,
                         "topic_icon_path": emoji_icon_path,
                         "noun_icon_url": emoji_icon_path,
-                        "noun_icon_attr": "OpenMoji license CC BY-SA 4.0"
+                        "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+                        "image_url": image_url or favicon_url  # Use favicon as fallback
                     }
+
                     articles_by_topic.setdefault(topic_name, []).append(article)
+
         except Exception as e:
             print(f"Error fetching/parsing feed {url}: {e}")
 
+    # Sort all articles by inspiration score in each topic
     for topic in articles_by_topic:
-        articles_by_topic[topic].sort(key=lambda x: x["published"], reverse=True)
+        articles_by_topic[topic].sort(key=lambda x: (x["inspiration_score"], x["published"]), reverse=True)
+
+    # 📝 Save to JSON cache
+    STATIC_DIR = os.path.join(os.path.dirname(__file__), 'static')
+    CACHE_PATH = os.path.join(STATIC_DIR, 'articles_cache.json')
+    os.makedirs(STATIC_DIR, exist_ok=True)
+
+    try:
+        with open(CACHE_PATH, 'w', encoding='utf-8') as f:
+            json.dump(articles_by_topic, f, ensure_ascii=False, indent=2)
+        print(f"[INFO] Saved {sum(len(v) for v in articles_by_topic.values())} articles to cache at {CACHE_PATH}")
+    except Exception as e:
+        print(f"[ERROR] Failed to write cache: {e}")
 
     return articles_by_topic
+
 
 if __name__ == "__main__":
     print("Starting news aggregation...")
@@ -173,4 +249,4 @@ if __name__ == "__main__":
     for topic, articles in topic_articles.items():
         print(f"\n--- {topic.upper()} ({len(articles)} articles) ---")
         for i, article in enumerate(articles[:5]):
-            print(f"{i+1}. {article['title']} (Sentiment: {article['sentiment_score']:.2f})")
+            print(f"{i+1}. {article['title']} (Sentiment: {article['sentiment_score']:.2f}, Inspiration: {article['inspiration_score']})")
