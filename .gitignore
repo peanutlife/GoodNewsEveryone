@@ -1,0 +1,15 @@
+# Source archive
+src.zip
+
+# Text files
+feeds_large.txt
+
+# Virtual environment
+venv/
+
+# Or more specifically:
+venv/bin/distro
+venv/bin/httpx
+venv/bin/normalizer
+venv/bin/openai
+venv/lib/python3.9/site-packages/

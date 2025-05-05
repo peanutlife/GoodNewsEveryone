@@ -7,9 +7,13 @@ import re
 import time
 from datetime import datetime
 import os
-import csv  # ADD THIS
-
+import csv
+import openai
 from src.shared_data import FEED_URLS, NEGATIVE_KEYWORDS, POSITIVE_THRESHOLD, removed_article_links, load_removed_articles
+
+# Load OpenAI API Key
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "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")
+client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
 # Load OpenMoji CSV and build topic-icon map
 STATIC_DIR = os.path.join(os.path.dirname(__file__), 'static')
@@ -18,7 +22,6 @@ CSV_PATH = os.path.join(STATIC_DIR, 'openmoji.csv')
 TOPICS = ["science", "technology", "travel", "health", "culture", "environment", "sports", "kids", "teens", "good news"]
 
 topic_icon_map = {}
-
 with open(CSV_PATH, newline='', encoding='utf-8') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
@@ -28,17 +31,11 @@ with open(CSV_PATH, newline='', encoding='utf-8') as csvfile:
             if topic in annotation and topic not in topic_icon_map:
                 topic_icon_map[topic] = hexcode
 
-print("[INFO] Topic to emoji map:", topic_icon_map)
+# Fallback emojis if missing
 fallback_icons = {
-    'science': '1F52C',      # microscope
-    'technology': '1F4BB',   # laptop
-    'travel': '2708',        # airplane
-    'culture': '1F3A4',      # microphone
-    'environment': '1F333',  # tree
-    'teens': '1F9D1',        # person
-    'kids': '1F476',         # baby
-    'good news': '1F389',     # party popper
-    'general': '1F4A1'        # 💡 light bulb
+    'science': '1F52C', 'technology': '1F4BB', 'travel': '2708',
+    'culture': '1F3A4', 'environment': '1F333', 'teens': '1F9D1',
+    'kids': '1F476', 'good news': '1F389', 'general': '1F4A1'
 }
 for topic, hexcode in fallback_icons.items():
     if topic not in topic_icon_map:
@@ -46,24 +43,23 @@ for topic, hexcode in fallback_icons.items():
 
 print("[INFO] FINAL topic to emoji map:", topic_icon_map)
 
-
-# Ensure NLTK
+# NLTK setup
 try:
     nltk.data.find("sentiment/vader_lexicon.zip")
-except nltk.downloader.DownloadError:
-    print("VADER lexicon not found. Please download it first.")
+except LookupError:
+    nltk.download("vader_lexicon")
 
 sid = SentimentIntensityAnalyzer()
 
 POSITIVE_KEYWORDS = [
-    "inspiring", "uplifting", "hope", "wins", "victory", "healing", "cured", "saved",
-    "rescued", "restored", "joy", "optimistic", "donated", "scholarship", "breakthrough",
-    "innovation", "milestone", "record", "achievement", "honored", "recognition", "award",
-    "volunteer", "community", "success", "progress", "peace", "hero", "kindness", "good samaritan"
+    "inspiring", "uplifting", "hope", "wins", "victory", "healing", "cured",
+    "saved", "rescued", "restored", "joy", "optimistic", "donated",
+    "scholarship", "breakthrough", "innovation", "milestone", "record",
+    "achievement", "honored", "recognition", "award", "volunteer", "community",
+    "success", "progress", "peace", "hero", "kindness", "good samaritan"
 ]
 
 DEFAULT_SOURCE_ICON = "icons/source_default.png"
-DEFAULT_TOPIC_ICON = "icons/topic_default.png"
 
 TOPIC_KEYWORDS = {
     "technology": ["tech", "ai", "software", "hardware", "internet", "gadget", "crypto", "cyber"],
@@ -78,33 +74,42 @@ TOPIC_KEYWORDS = {
     "kids": ["kids", "children", "child", "preschool", "elementary", "nursery"]
 }
 
+def classify_with_llm(text):
+    """Ask GPT if article is positive and inspiring"""
+    try:
+        prompt = f"Is this news article positive and inspiring? Respond with only Yes or No.\n\nArticle:\n{text}"
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=3,
+            temperature=0
+        )
+        answer = response.choices[0].message.content.strip().lower()
+        return answer == "yes"
+    except Exception as e:
+        print(f"[LLM Error]: {e}")
+        return False
+
 def get_topic_and_icon(title, summary):
     text_lower = (title + " " + summary).lower()
     for topic, keywords in TOPIC_KEYWORDS.items():
         for keyword in keywords:
             if re.search(r"\b" + re.escape(keyword) + r"\b", text_lower):
-                # 🎉 Check if OpenMoji hexcode exists
                 emoji_hex = topic_icon_map.get(topic)
                 emoji_path = f"/openmoji/color/svg/{emoji_hex}.svg" if emoji_hex else None
                 return topic, emoji_path
-    # fallback
     emoji_hex = topic_icon_map.get("good news")
-    emoji_path = f"/static/openmoji/color/svg/{emoji_hex}.svg" if emoji_hex else None
+    emoji_path = f"/openmoji/color/svg/{emoji_hex}.svg" if emoji_hex else None
     return "general", emoji_path
 
 def contains_negative_keyword(text):
-    if not text: return False
-    text_lower = text.lower()
-    return any(re.search(r"\b" + re.escape(keyword) + r"\b", text_lower) for keyword in NEGATIVE_KEYWORDS)
+    return any(re.search(r"\b" + re.escape(kw) + r"\b", text.lower()) for kw in NEGATIVE_KEYWORDS) if text else False
 
 def contains_positive_keyword(text):
-    if not text: return False
-    text_lower = text.lower()
-    return any(re.search(r"\b" + re.escape(keyword) + r"\b", text_lower) for keyword in POSITIVE_KEYWORDS)
+    return any(re.search(r"\b" + re.escape(kw) + r"\b", text.lower()) for kw in POSITIVE_KEYWORDS) if text else False
 
 def get_positive_sentiment_score(text):
-    if not text: return 0.0
-    return sid.polarity_scores(text)["compound"]
+    return sid.polarity_scores(text)["compound"] if text else 0.0
 
 def parse_date(entry):
     if hasattr(entry, "published_parsed") and entry.published_parsed:
@@ -133,30 +138,29 @@ def fetch_and_filter_feeds(feed_urls):
                 if link in removed_article_links: continue
                 if contains_negative_keyword(title) or contains_negative_keyword(summary): continue
 
-                combined_text = title + ". " + summary
-                combined_sentiment = get_positive_sentiment_score(combined_text)
+                combined_text = f"{title}. {summary}"
+                sentiment_score = get_positive_sentiment_score(combined_text)
+                is_positive = sentiment_score > POSITIVE_THRESHOLD or contains_positive_keyword(combined_text)
+                llm_positive = classify_with_llm(combined_text)
 
-                if combined_sentiment > POSITIVE_THRESHOLD or contains_positive_keyword(combined_text):
+                if is_positive and llm_positive:
                     topic_name, emoji_icon_path = get_topic_and_icon(title, summary)
                     article = {
                         "title": title,
                         "link": link,
                         "summary": summary,
                         "published": pub_date.isoformat(),
-                        "sentiment_score": combined_sentiment,
+                        "sentiment_score": sentiment_score,
                         "source_name": url.split("/")[2],
                         "source_icon_path": DEFAULT_SOURCE_ICON,
                         "topic_name": topic_name,
                         "topic_icon_path": emoji_icon_path,
-                        "noun_icon_url": emoji_icon_path,  # ✅ reuse emoji icon
-                        "noun_icon_attr": "OpenMoji license CC BY-SA 4.0"  # attribution
+                        "noun_icon_url": emoji_icon_path,
+                        "noun_icon_attr": "OpenMoji license CC BY-SA 4.0"
                     }
-                    if topic_name not in articles_by_topic:
-                        articles_by_topic[topic_name] = []
-                    articles_by_topic[topic_name].append(article)
+                    articles_by_topic.setdefault(topic_name, []).append(article)
         except Exception as e:
             print(f"Error fetching/parsing feed {url}: {e}")
-            continue
 
     for topic in articles_by_topic:
         articles_by_topic[topic].sort(key=lambda x: x["published"], reverse=True)
