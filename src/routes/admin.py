@@ -7,8 +7,8 @@ from functools import wraps
 from src.shared_data import article_cache, get_feed_urls, save_feed_urls, add_removed_article_link
 
 # Basic configuration for admin user (replace with more secure method in production)
-ADMIN_USERNAME = os.environ.get("ADMIN_USER", "admin")
-ADMIN_PASSWORD = os.environ.get("ADMIN_PASS", "password") # Use environment variables!
+ADMIN_USERNAME = os.environ.get("ADMIN_USER", "mahesh")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASS", "Sruti123#") # Use environment variables!
 
 admin_bp = Blueprint("admin", __name__, template_folder="../templates/admin", url_prefix="/admin")
 
@@ -50,20 +50,32 @@ def logout():
 @admin_bp.route("/")
 @login_required
 def dashboard():
-    articles = article_cache.get("articles", [])
+    """Serves the admin dashboard with flattened article list."""
+    # Get articles from cache
+    articles_by_topic = article_cache.get("articles", {})
     last_fetched_dt = article_cache.get("last_fetched")
     last_fetched_str = last_fetched_dt.strftime("%Y-%m-%d %H:%M:%S UTC") if last_fetched_dt else "Never"
-    current_feeds = get_feed_urls() # Get current feeds
-    
+    current_feeds = get_feed_urls()  # Get current feeds
+
+    # Flatten the articles dictionary into a list for the admin dashboard
+    flattened_articles = []
+    for topic, articles_list in articles_by_topic.items():
+        for article in articles_list:
+            # Add topic to each article for display
+            article['topic'] = topic
+            flattened_articles.append(article)
+
+    # Sort by most recent first
+    flattened_articles.sort(key=lambda x: x.get('published', ''), reverse=True)
+
     return render_template(
-        "dashboard.html", 
-        username=ADMIN_USERNAME, 
-        articles=articles, 
-        articles_count=len(articles),
-        feed_urls=current_feeds, # Pass current feeds to template
+        "dashboard.html",
+        username=ADMIN_USERNAME,
+        articles=flattened_articles,
+        articles_count=len(flattened_articles),
+        feed_urls=current_feeds,
         last_fetched=last_fetched_str
     )
-
 @admin_bp.route("/manage-feeds", methods=["GET", "POST"])
 @login_required
 def manage_feeds():
@@ -95,9 +107,8 @@ def remove_article():
     else:
         # Corrected flash message (using single line f-string, no erroneous newlines)
         flash(f"Failed to mark article '{article_link}' for removal (maybe already removed or file error?).", "warning")
-        
+
     # Redirect back to the dashboard
     return redirect(url_for("admin.dashboard"))
 
 # Removed the placeholder /moderate-articles route as functionality is added to dashboard
-

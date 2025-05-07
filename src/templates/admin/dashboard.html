@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin Dashboard - BrightSide News</title>
-    <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}"> 
+    <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}">
     <style>
         /* Add some specific styles for the admin dashboard */
         .admin-container {
@@ -158,42 +158,45 @@
         </div>
 
         <div class="content-section">
-            <h3>Recent Positive Articles</h3>
-            <p>Below are the most recent articles fetched and filtered. You can remove articles that you deem unsuitable.</p>
-             <!-- Display recent articles in a table with remove button -->
-            {% if articles and articles is defined %}
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Source</th>
-                            <th>Published</th>
-                            <th>Sentiment</th>
-                            <th>Action</th> {# New column for remove button #}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for article in articles %} {# Show all cached articles #}
-                            <tr>
-                                <td><a href="{{ article.link }}" target="_blank">{{ article.title | truncate(80) }}</a></td>
-                                <td>{{ article.source_feed | replace("http://", "") | replace("https://", "") | replace("www.", "") | url_parse | attr("netloc") }}</td>
-                                <td>{{ article.published | format_datetime }}</td>
-                                <td>{{ "%.2f"|format(article.sentiment_score) }}</td>
-                                <td>
-                                    {# Form to submit the removal request #}
-                                    <form action="{{ url_for("admin.remove_article") }}" method="post" style="margin:0;">
-                                        <input type="hidden" name="article_link" value="{{ article.link }}">
-                                        <button type="submit" class="btn-remove">Remove</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p>No articles available to display.</p>
-            {% endif %}
-        </div>
+          <h3>Recent Positive Articles</h3>
+          <p>Below are the most recent articles fetched and filtered. You can remove articles that you deem unsuitable.</p>
+           <!-- Display recent articles in a table with remove button -->
+          {% if articles and articles is defined %}
+              <table>
+                  <thead>
+                      <tr>
+                          <th>Title</th>
+                          <th>Topic</th>
+                          <th>Source</th>
+                          <th>Published</th>
+                          <th>Sentiment</th>
+                          <th>Inspiration</th>
+                          <th>Action</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for article in articles %}
+                          <tr>
+                              <td><a href="{{ article.link }}" target="_blank">{{ article.title | truncate(80) if article.title is string else "No Title" }}</a></td>
+                              <td>{{ article.topic_name | title if article.topic_name is string else article.topic | title }}</td>
+                              <td>{{ article.source_name }}</td>
+                              <td>{{ article.published | format_datetime }}</td>
+                              <td>{{ "%.2f"|format(article.sentiment_score) if article.sentiment_score is number else "N/A" }}</td>
+                              <td>{{ "%.1f"|format(article.inspiration_score) if article.inspiration_score is number else "N/A" }}</td>
+                              <td>
+                                  <form action="{{ url_for('admin.remove_article') }}" method="post" style="margin:0;">
+                                      <input type="hidden" name="article_link" value="{{ article.link }}">
+                                      <button type="submit" class="btn-remove">Remove</button>
+                                  </form>
+                              </td>
+                          </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+          {% else %}
+              <p>No articles available to display.</p>
+          {% endif %}
+      </div>
 
     </main>
 
@@ -202,4 +205,3 @@
     </footer>
 </body>
 </html>
-

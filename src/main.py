@@ -3,6 +3,9 @@ import os
 import sys
 import json
 import re
+import threading
+import time
+import hashlib
 from datetime import datetime, timedelta
 from urllib.parse import urlparse
 
@@ -10,12 +13,157 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from flask import Flask, render_template, url_for, session, request, redirect
 
-from src.shared_data import article_cache, CACHE_DURATION_SECONDS
+from src.shared_data import article_cache, CACHE_DURATION_SECONDS, get_feed_urls, removed_article_links, load_removed_articles
 from src.routes.admin import admin_bp
+from src.aggregator import fetch_and_filter_feeds
+
+# Global flag to prevent multiple refresh threads
+cache_refresh_running = False
 
 # Load cached articles JSON at startup
 CACHE_FILE = os.path.join(os.path.dirname(__file__), "static", "articles_cache.json")
+DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
+PERMANENT_CACHE_FILE = os.path.join(DATA_DIR, "article_cache.json")
+os.makedirs(DATA_DIR, exist_ok=True)  # Create data dir if missing
+
 articles_by_topic = {}
+
+def normalize_text(text):
+    """Normalize text for better duplicate detection"""
+    if not text:
+        return ""
+    # Convert to lowercase
+    text = text.lower()
+    # Remove all punctuation and special characters
+    text = re.sub(r'[^\w\s]', '', text)
+    # Remove excess whitespace
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
+
+def generate_content_hash(article):
+    """Generate a hash based on normalized article content to detect duplicates"""
+    title = normalize_text(article.get('title', ''))
+    summary = normalize_text(article.get('summary', ''))
+
+    # Use title + first 100 chars of summary as signature
+    content_signature = title + summary[:100] if summary else title
+    return hashlib.md5(content_signature.encode()).hexdigest()
+
+def deduplicate_articles(articles_by_topic):
+    """
+    Remove duplicate articles across topics based on content similarity
+    Returns deduplicated dictionary
+    """
+    print("🔍 Checking for duplicate articles...")
+
+    # Track seen content hashes
+    seen_hashes = {}
+    total_removed = 0
+
+    # Track which duplicate was kept from which source
+    kept_sources = {}
+
+    # New deduplicated dictionary
+    deduplicated = {}
+
+    # First pass - identify duplicates
+    for topic, articles in articles_by_topic.items():
+        deduplicated[topic] = []
+
+        for article in articles:
+            content_hash = generate_content_hash(article)
+
+            # If we've seen this content before
+            if content_hash in seen_hashes:
+                existing_topic = seen_hashes[content_hash]['topic']
+                existing_article = seen_hashes[content_hash]['article']
+
+                # Choose which one to keep based on criteria
+                # For example, keep the one with higher sentiment score
+                if article.get('sentiment_score', 0) > existing_article.get('sentiment_score', 0):
+                    # Replace the existing one with this one
+                    deduplicated[existing_topic].remove(existing_article)
+                    deduplicated[topic].append(article)
+                    seen_hashes[content_hash] = {'topic': topic, 'article': article}
+
+                    kept_source = article.get('source_name', 'unknown')
+                    kept_sources[content_hash] = kept_source
+
+                total_removed += 1
+            else:
+                # New unique content
+                deduplicated[topic].append(article)
+                seen_hashes[content_hash] = {'topic': topic, 'article': article}
+
+                kept_source = article.get('source_name', 'unknown')
+                kept_sources[content_hash] = kept_source
+
+    print(f"🧹 Removed {total_removed} duplicate articles")
+    return deduplicated
+
+
+def refresh_cache_worker():
+    """Worker function to refresh the article cache in the background"""
+    global cache_refresh_running
+    global articles_by_topic
+
+    cache_refresh_running = True
+
+    try:
+        print("🟢 Starting background cache refresh...")
+
+        # Load the current removed articles list
+        load_removed_articles()
+
+        # Fetch articles incrementally
+        temp_articles_by_topic = fetch_and_filter_feeds(get_feed_urls())
+
+        # Update the global articles_by_topic if we got results
+        if temp_articles_by_topic and sum(len(articles) for articles in temp_articles_by_topic.values()) > 0:
+            articles_by_topic = temp_articles_by_topic
+
+            # Prepare cache JSON for permanent storage
+            cache_data = {
+                "last_fetched": datetime.utcnow().isoformat(),
+                "articles": articles_by_topic
+            }
+
+            # Save to data/article_cache.json for persistence
+            try:
+                with open(PERMANENT_CACHE_FILE, "w", encoding="utf-8") as f:
+                    json.dump(cache_data, f, ensure_ascii=False, indent=2)
+                print(f"🎉 Permanent article cache saved to {PERMANENT_CACHE_FILE}")
+            except Exception as e:
+                print(f"[ERROR] Failed to write permanent cache: {e}")
+        else:
+            print("[WARN] No articles fetched or empty result - keeping existing articles")
+
+    except Exception as e:
+        print(f"[ERROR] Cache refresh failed: {e}")
+    finally:
+        cache_refresh_running = False
+
+def start_background_refresh(initial_delay=5, interval=CACHE_DURATION_SECONDS):
+    """Start a background thread to refresh the cache periodically"""
+    def refresh_loop():
+        # Initial delay to let the application start up completely
+        time.sleep(initial_delay)
+
+        while True:
+            # Only start a new refresh if no refresh is currently running
+            global cache_refresh_running
+            if not cache_refresh_running:
+                refresh_thread = threading.Thread(target=refresh_cache_worker)
+                refresh_thread.daemon = True  # This ensures the thread will exit when the main process exits
+                refresh_thread.start()
+
+            # Wait for the next refresh interval
+            time.sleep(interval)
+
+    background_thread = threading.Thread(target=refresh_loop)
+    background_thread.daemon = True
+    background_thread.start()
+    print(f"🔄 Background cache refresh scheduled every {interval} seconds")
 
 def extract_location_from_content(article):
     """
@@ -173,11 +321,22 @@ def flatten_articles(articles_by_topic, sort_by_inspiration=True):
 
     return flat
 
-if os.path.exists(CACHE_FILE):
+# Load cached articles at startup
+if os.path.exists(PERMANENT_CACHE_FILE):
+    try:
+        with open(PERMANENT_CACHE_FILE, encoding='utf-8') as f:
+            cache_data = json.load(f)
+            articles_by_topic = cache_data.get("articles", {})
+            article_cache["articles"] = articles_by_topic
+            article_cache["last_fetched"] = datetime.fromisoformat(cache_data.get("last_fetched", datetime.now().isoformat()))
+        print(f"[INFO] Loaded {sum(len(v) for v in articles_by_topic.values())} cached articles from permanent JSON.")
+    except Exception as e:
+        print(f"[ERROR] Failed to load permanent cache JSON: {e}")
+elif os.path.exists(CACHE_FILE):
     try:
         with open(CACHE_FILE, encoding='utf-8') as f:
             articles_by_topic = json.load(f)
-        print(f"[INFO] Loaded {sum(len(v) for v in articles_by_topic.values())} cached articles from JSON.")
+        print(f"[INFO] Loaded {sum(len(v) for v in articles_by_topic.values())} cached articles from static JSON.")
     except Exception as e:
         print(f"[ERROR] Failed to load cache JSON: {e}")
 else:
@@ -214,15 +373,31 @@ def inject_now():
     return {"now": datetime.utcnow(), "request": request}
 
 @app.route("/")
+# Update your main.py route function to reload the cache on each request
+# Replace your current index route with this:
+
+@app.route("/")
 def index():
     """Serves the main page with flat mixed feed of positive news articles."""
     global articles_by_topic
+
+    # Check if we should reload the cache from file
+    # This ensures we always have the latest articles
+    try:
+        STATIC_DIR = os.path.join(os.path.dirname(__file__), 'static')
+        CACHE_PATH = os.path.join(STATIC_DIR, 'articles_cache.json')
+        if os.path.exists(CACHE_PATH):
+            with open(CACHE_PATH, 'r', encoding='utf-8') as f:
+                articles_by_topic = json.load(f)
+    except Exception as e:
+        print(f"[WARN] Error loading cache file: {e}")
+        # Continue with whatever is in memory
 
     # Get the topic filter from URL parameter
     selected_topic = request.args.get('topic')
 
     if not articles_by_topic:
-        articles_by_topic = article_cache["articles"]
+        articles_by_topic = article_cache.get("articles", {})
         print("[WARN] Using in-memory article_cache as fallback.")
 
     # Flatten and sort articles by inspiration score (for top stories)
@@ -273,26 +448,22 @@ def index():
 
 @app.route("/refresh")
 def refresh_articles():
-    """Force a refresh of articles by reimporting the aggregator"""
+    """Force a refresh of articles"""
     try:
         # Use this route only in development
         if app.debug:
-            from importlib import reload
-            from src import aggregator
-            reload(aggregator)
-            # Re-run the aggregation
-            aggregator.fetch_and_filter_feeds(aggregator.FEED_URLS)
-            # Reload the cache
-            global articles_by_topic
-            if os.path.exists(CACHE_FILE):
-                with open(CACHE_FILE, encoding='utf-8') as f:
-                    articles_by_topic = json.load(f)
+            refresh_thread = threading.Thread(target=refresh_cache_worker)
+            refresh_thread.daemon = True
+            refresh_thread.start()
             return redirect(url_for('index'))
         else:
             return "Refresh only available in debug mode", 403
     except Exception as e:
         return f"Error refreshing: {str(e)}", 500
 
-
 if __name__ == "__main__":
+    # Start the background cache refresh thread
+    start_background_refresh(initial_delay=5, interval=CACHE_DURATION_SECONDS)
+
+    # Start the Flask application
     app.run(host="0.0.0.0", port=5005, debug=False)
