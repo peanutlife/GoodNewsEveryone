@@ -12,9 +12,13 @@ from urllib.parse import urlparse
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from flask import Flask, render_template, url_for, session, request, redirect
+from flask_login import LoginManager, current_user
 
-from src.shared_data import article_cache, CACHE_DURATION_SECONDS, get_feed_urls, removed_article_links, load_removed_articles
+# Import models and routes
+from src.models.user import db, User, Topic
 from src.routes.admin import admin_bp
+from src.routes.auth import auth_bp, init_topics
+from src.shared_data import article_cache, CACHE_DURATION_SECONDS, get_feed_urls, removed_article_links, load_removed_articles
 from src.aggregator import fetch_and_filter_feeds
 
 # Global flag to prevent multiple refresh threads
@@ -27,6 +31,7 @@ PERMANENT_CACHE_FILE = os.path.join(DATA_DIR, "article_cache.json")
 os.makedirs(DATA_DIR, exist_ok=True)  # Create data dir if missing
 
 articles_by_topic = {}
+last_updated = None
 
 def normalize_text(text):
     """Normalize text for better duplicate detection"""
@@ -101,11 +106,11 @@ def deduplicate_articles(articles_by_topic):
     print(f"🧹 Removed {total_removed} duplicate articles")
     return deduplicated
 
-
 def refresh_cache_worker():
     """Worker function to refresh the article cache in the background"""
     global cache_refresh_running
     global articles_by_topic
+    global last_updated
 
     cache_refresh_running = True
 
@@ -121,10 +126,11 @@ def refresh_cache_worker():
         # Update the global articles_by_topic if we got results
         if temp_articles_by_topic and sum(len(articles) for articles in temp_articles_by_topic.values()) > 0:
             articles_by_topic = temp_articles_by_topic
+            last_updated = datetime.utcnow()
 
             # Prepare cache JSON for permanent storage
             cache_data = {
-                "last_fetched": datetime.utcnow().isoformat(),
+                "last_fetched": last_updated.isoformat(),
                 "articles": articles_by_topic
             }
 
@@ -291,11 +297,11 @@ def extract_location_from_content(article):
     # If nothing found, return None
     return None
 
-def flatten_articles(articles_by_topic, sort_by_inspiration=True):
+def flatten_articles(articles_by_topic, sort_by_inspiration=True, min_score=None):
     """
     Convert articles_by_topic dictionary to a flat list
     If sort_by_inspiration is True, sorts by inspiration_score, then published date
-    Otherwise sorts just by published date
+    min_score can be used to filter articles below a certain inspiration score
     """
     flat = []
     for topic, articles in articles_by_topic.items():
@@ -303,6 +309,10 @@ def flatten_articles(articles_by_topic, sort_by_inspiration=True):
             # Ensure each article has an inspiration_score (default to 5 if missing)
             if 'inspiration_score' not in article:
                 article['inspiration_score'] = 5
+
+            # Apply minimum score filter if provided
+            if min_score is not None and article.get('inspiration_score', 0) < min_score:
+                continue
 
             # Try to extract location from content
             if 'location' not in article:
@@ -314,7 +324,7 @@ def flatten_articles(articles_by_topic, sort_by_inspiration=True):
 
     if sort_by_inspiration:
         # Sort by inspiration score (highest first), then by published date (newest first)
-        flat.sort(key=lambda x: (x.get('inspiration_score', 0), x.get('published', '')), reverse=True)
+        flat.sort(key=lambda x: (x.get('is_inspirational', False), x.get('inspiration_score', 0), x.get('published', '')), reverse=True)
     else:
         # Sort by just published date (newest first)
         flat.sort(key=lambda x: x.get('published', ''), reverse=True)
@@ -328,7 +338,11 @@ if os.path.exists(PERMANENT_CACHE_FILE):
             cache_data = json.load(f)
             articles_by_topic = cache_data.get("articles", {})
             article_cache["articles"] = articles_by_topic
-            article_cache["last_fetched"] = datetime.fromisoformat(cache_data.get("last_fetched", datetime.now().isoformat()))
+            last_updated_str = cache_data.get("last_fetched")
+            if last_updated_str:
+                last_updated = datetime.fromisoformat(last_updated_str)
+            else:
+                last_updated = datetime.now()
         print(f"[INFO] Loaded {sum(len(v) for v in articles_by_topic.values())} cached articles from permanent JSON.")
     except Exception as e:
         print(f"[ERROR] Failed to load permanent cache JSON: {e}")
@@ -336,27 +350,73 @@ elif os.path.exists(CACHE_FILE):
     try:
         with open(CACHE_FILE, encoding='utf-8') as f:
             articles_by_topic = json.load(f)
+            last_updated = datetime.now()
         print(f"[INFO] Loaded {sum(len(v) for v in articles_by_topic.values())} cached articles from static JSON.")
     except Exception as e:
         print(f"[ERROR] Failed to load cache JSON: {e}")
 else:
     print("[WARN] Cache JSON not found. Will serve empty articles.")
 
+# Initialize Flask app
 app = Flask(
     __name__,
     static_folder=os.path.join(os.path.dirname(__file__), "static"),
     template_folder=os.path.join(os.path.dirname(__file__), "templates")
 )
 
+# Configure app
 app.config["SECRET_KEY"] = "brightside_secret_key_123!"
-app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=1)
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=24)
 
+# Database configuration
+DB_PATH = os.path.join(DATA_DIR, "brightside.db")
+app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DB_PATH}"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+# Initialize Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'auth.login'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+# Initialize database
+db.init_app(app)
+with app.app_context():
+    db.create_all()
+    init_topics()  # Initialize topic data
+
+# Register blueprints
 app.register_blueprint(admin_bp)
+app.register_blueprint(auth_bp)
 
 @app.template_filter("format_datetime")
 def format_datetime_filter(iso_string):
     try:
-        dt = datetime.fromisoformat(iso_string)
+        if isinstance(iso_string, str):
+            dt = datetime.fromisoformat(iso_string)
+        else:
+            dt = iso_string
+
+        # Calculate time difference
+        now = datetime.utcnow()
+        diff = now - dt
+
+        # If less than 24 hours, show relative time
+        if diff.days < 1:
+            hours = diff.seconds // 3600
+            minutes = (diff.seconds % 3600) // 60
+
+            if hours > 0:
+                return f"{hours} hour{'s' if hours > 1 else ''} ago"
+            elif minutes > 0:
+                return f"{minutes} minute{'s' if minutes > 1 else ''} ago"
+            else:
+                return "Just now"
+
+        # Otherwise show date and time
         return dt.strftime("%b %d, %Y %H:%M")
     except (ValueError, TypeError):
         return "(Date unavailable)"
@@ -373,22 +433,21 @@ def inject_now():
     return {"now": datetime.utcnow(), "request": request}
 
 @app.route("/")
-# Update your main.py route function to reload the cache on each request
-# Replace your current index route with this:
-
-@app.route("/")
 def index():
     """Serves the main page with flat mixed feed of positive news articles."""
     global articles_by_topic
+    global last_updated
 
     # Check if we should reload the cache from file
     # This ensures we always have the latest articles
     try:
-        STATIC_DIR = os.path.join(os.path.dirname(__file__), 'static')
-        CACHE_PATH = os.path.join(STATIC_DIR, 'articles_cache.json')
-        if os.path.exists(CACHE_PATH):
-            with open(CACHE_PATH, 'r', encoding='utf-8') as f:
-                articles_by_topic = json.load(f)
+        if os.path.exists(PERMANENT_CACHE_FILE):
+            with open(PERMANENT_CACHE_FILE, 'r', encoding='utf-8') as f:
+                cache_data = json.load(f)
+                articles_by_topic = cache_data.get("articles", {})
+                last_updated_str = cache_data.get("last_fetched")
+                if last_updated_str:
+                    last_updated = datetime.fromisoformat(last_updated_str)
     except Exception as e:
         print(f"[WARN] Error loading cache file: {e}")
         # Continue with whatever is in memory
@@ -400,8 +459,17 @@ def index():
         articles_by_topic = article_cache.get("articles", {})
         print("[WARN] Using in-memory article_cache as fallback.")
 
-    # Flatten and sort articles by inspiration score (for top stories)
-    all_articles = flatten_articles(articles_by_topic, sort_by_inspiration=True)
+    # Apply user preferences if logged in
+    min_inspiration_score = None
+    if current_user.is_authenticated:
+        min_inspiration_score = current_user.min_inspiration_score
+
+    # Flatten and sort articles by inspiration score
+    all_articles = flatten_articles(
+        articles_by_topic,
+        sort_by_inspiration=True,
+        min_score=min_inspiration_score
+    )
 
     # Filter by topic if specified
     if selected_topic:
@@ -410,6 +478,25 @@ def index():
             if article.get('topic_name', '').lower() == selected_topic.lower():
                 filtered_articles.append(article)
         all_articles = filtered_articles
+
+    # Filter by user's favorite topics if logged in and no specific topic selected
+    elif current_user.is_authenticated and not selected_topic and current_user.favorite_topics:
+        # Only apply this filter if we have more than enough articles overall
+        if len(all_articles) > 10:
+            favorite_topic_names = [topic.name for topic in current_user.favorite_topics]
+            # Keep some top stories regardless of topic, plus favorite topics, ordered by inspiration
+            top_stories = all_articles[:4]  # Always keep top stories
+            favorite_articles = [a for a in all_articles[4:] if a.get('topic_name', '') in favorite_topic_names]
+
+            # If we have enough favorite articles, use those, otherwise supplement with other articles
+            if len(favorite_articles) >= 8:
+                all_articles = top_stories + favorite_articles
+            else:
+                # Find non-favorite articles to supplement
+                other_articles = [a for a in all_articles[4:] if a.get('topic_name', '') not in favorite_topic_names]
+                # Limit to a reasonable number
+                supplemental_count = max(8 - len(favorite_articles), 0)
+                all_articles = top_stories + favorite_articles + other_articles[:supplemental_count]
 
     # Process articles for display - add decorated titles with emojis
     for article in all_articles:
@@ -443,21 +530,18 @@ def index():
         articles=all_articles,
         topics=unique_topics,
         topic_icons=topic_icons,
-        selected_topic=selected_topic
+        selected_topic=selected_topic,
+        last_updated=last_updated
     )
 
 @app.route("/refresh")
 def refresh_articles():
     """Force a refresh of articles"""
     try:
-        # Use this route only in development
-        if app.debug:
-            refresh_thread = threading.Thread(target=refresh_cache_worker)
-            refresh_thread.daemon = True
-            refresh_thread.start()
-            return redirect(url_for('index'))
-        else:
-            return "Refresh only available in debug mode", 403
+        refresh_thread = threading.Thread(target=refresh_cache_worker)
+        refresh_thread.daemon = True
+        refresh_thread.start()
+        return redirect(url_for('index'))
     except Exception as e:
         return f"Error refreshing: {str(e)}", 500
 

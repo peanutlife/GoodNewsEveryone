@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Login - BrightSide News</title>
-    <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}"> 
+    <title>Admin Login - Project Optimist</title>
+    <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}">
     <style>
         /* Add some specific styles for the login form */
         .login-container {
@@ -88,7 +88,7 @@
 
     <main class="login-container">
         <h2>Admin Login</h2>
-        
+
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
             {% for category, message in messages %}
@@ -117,4 +117,3 @@
     </footer>
 </body>
 </html>
-
