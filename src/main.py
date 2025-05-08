@@ -301,6 +301,7 @@ def flatten_articles(articles_by_topic, sort_by_inspiration=True, min_score=None
     """
     Convert articles_by_topic dictionary to a flat list
     If sort_by_inspiration is True, sorts by inspiration_score, then published date
+    If sort_by_inspiration is False, just keeps articles in chronological order
     min_score can be used to filter articles below a certain inspiration score
     """
     flat = []
@@ -439,7 +440,6 @@ def index():
     global last_updated
 
     # Check if we should reload the cache from file
-    # This ensures we always have the latest articles
     try:
         if os.path.exists(PERMANENT_CACHE_FILE):
             with open(PERMANENT_CACHE_FILE, 'r', encoding='utf-8') as f:
@@ -455,6 +455,9 @@ def index():
     # Get the topic filter from URL parameter
     selected_topic = request.args.get('topic')
 
+    # Get the sorting option
+    sort_option = request.args.get('sort', 'hot')
+
     if not articles_by_topic:
         articles_by_topic = article_cache.get("articles", {})
         print("[WARN] Using in-memory article_cache as fallback.")
@@ -464,12 +467,16 @@ def index():
     if current_user.is_authenticated:
         min_inspiration_score = current_user.min_inspiration_score
 
-    # Flatten and sort articles by inspiration score
+    # Flatten articles
     all_articles = flatten_articles(
         articles_by_topic,
-        sort_by_inspiration=True,
+        sort_by_inspiration=(sort_option != 'new'),  # Only sort by inspiration if not "new"
         min_score=min_inspiration_score
     )
+
+    # If sort_option is 'new', sort by published date
+    if sort_option == 'new':
+        all_articles.sort(key=lambda x: x.get('published', ''), reverse=True)
 
     # Filter by topic if specified
     if selected_topic:
@@ -547,7 +554,7 @@ def refresh_articles():
 
 if __name__ == "__main__":
     # Start the background cache refresh thread
-    start_background_refresh(initial_delay=5, interval=CACHE_DURATION_SECONDS)
+    #start_background_refresh(initial_delay=5, interval=CACHE_DURATION_SECONDS)
 
     # Start the Flask application
     app.run(host="0.0.0.0", port=5005, debug=False)

@@ -3,283 +3,25 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Project Optimist News - Your Daily Dose of Positivity</title>
-    <meta name="description" content="Project Optimist News aggregates positive and uplifting news stories from around the world, filtering out negativity to bring you a brighter perspective.">
-    <meta name="keywords" content="positive news, good news, uplifting stories, world news, technology, science, culture, lifestyle, positive aggregation">
+    <title>BrightSide - Your Daily Feed of Positive News</title>
+    <meta name="description" content="BrightSide aggregates positive and uplifting news stories from around the world, filtering out negativity to bring you a brighter perspective.">
 
     <!-- Fonts & CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous">
-
-    <style>
-        /* New styles for user interface elements */
-        .user-menu {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .user-button {
-            display: flex;
-            align-items: center;
-            background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 20px;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-            color: #333;
-        }
-
-        .user-button:hover {
-            background-color: #f5f5f5;
-        }
-
-        .user-button i {
-            margin-right: 0.5rem;
-            color: #e76f51;
-        }
-
-        .user-dropdown {
-            position: absolute;
-            right: 0;
-            top: 100%;
-            margin-top: 0.5rem;
-            background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            z-index: 100;
-            min-width: 180px;
-            display: none;
-        }
-
-        .user-dropdown.active {
-            display: block;
-        }
-
-        .user-dropdown a {
-            display: block;
-            padding: 0.75rem 1rem;
-            color: #333;
-            text-decoration: none;
-            transition: background-color 0.2s;
-        }
-
-        .user-dropdown a:hover {
-            background-color: #f5f5f5;
-        }
-
-        .user-dropdown a i {
-            margin-right: 0.5rem;
-            width: 16px;
-            text-align: center;
-            color: #e76f51;
-        }
-
-        .user-dropdown .divider {
-            height: 1px;
-            background-color: #e0e0e0;
-            margin: 0.5rem 0;
-        }
-
-        /* Last updated indicator */
-        .last-updated {
-            font-size: 0.85rem;
-            color: #666;
-            margin-top: 0.5rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .last-updated i {
-            margin-right: 0.5rem;
-            color: #e76f51;
-        }
-
-        /* Inspiration indicator */
-        .inspiration-badge {
-            position: absolute;
-            top: 0.75rem;
-            right: 0.75rem;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            z-index: 5;
-        }
-
-        .inspiration-badge.small {
-            width: 24px;
-            height: 24px;
-            font-size: 1rem;
-            top: 0.5rem;
-            right: 0.5rem;
-        }
-
-        .inspiration-badge.truly-inspiring {
-            background-color: #ffd700; /* Gold background for truly inspiring content */
-        }
-
-        .inspiration-dimensions {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            padding: 0.75rem;
-            z-index: 10;
-            width: 220px;
-        }
-
-        .inspiration-badge:hover + .inspiration-dimensions {
-            display: block;
-        }
-
-        .dimension-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
-
-        .dimension-name {
-            font-weight: 600;
-        }
-
-        .dimension-score {
-            font-weight: 400;
-            color: #666;
-        }
-
-        /* Save article button */
-        .save-button {
-            background: none;
-            border: none;
-            color: #999;
-            cursor: pointer;
-            font-size: 1.25rem;
-            transition: color 0.2s;
-            display: flex;
-            align-items: center;
-            padding: 0.25rem 0.5rem;
-            margin-left: auto;
-        }
-
-        .save-button:hover {
-            color: #e76f51;
-        }
-
-        .save-button.saved {
-            color: #e76f51;
-        }
-
-        /* Article share tools */
-        .article-actions {
-            display: flex;
-            align-items: center;
-            margin-top: 0.5rem;
-        }
-
-        .share-buttons {
-            display: flex;
-            align-items: center;
-        }
-
-        .share-buttons a {
-            color: #999;
-            font-size: 1rem;
-            margin-right: 0.75rem;
-            transition: color 0.2s;
-        }
-
-        .share-buttons a:hover {
-            color: #e76f51;
-        }
-
-        /* Alerts */
-        .alert {
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-radius: 8px;
-        }
-
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-info {
-            background-color: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-
-        /* Dark mode */
-        .dark-mode body {
-            background-color: #222;
-            color: #eee;
-        }
-
-        .dark-mode .filter-sidebar,
-        .dark-mode .article-top,
-        .dark-mode .article-flat {
-            background-color: #333;
-            color: #eee;
-        }
-
-        .dark-mode .article-top-content h3 a,
-        .dark-mode .article-content h3 a {
-            color: #eee;
-        }
-
-        .dark-mode .filter-item {
-            color: #ddd;
-        }
-
-        .dark-mode .filter-item:hover,
-        .dark-mode .filter-item.active {
-            background-color: #444;
-        }
-
-        .dark-mode .user-button,
-        .dark-mode .user-dropdown,
-        .dark-mode .inspiration-badge,
-        .dark-mode .inspiration-dimensions {
-            background-color: #333;
-            color: #eee;
-            border-color: #444;
-        }
-
-        .dark-mode .user-button:hover,
-        .dark-mode .user-dropdown a:hover {
-            background-color: #444;
-        }
-
-        .dark-mode .user-dropdown .divider {
-            background-color: #444;
-        }
-    </style>
 </head>
 
 <body>
+    <!-- Sticky Header -->
     <header>
-        <h1><a href="/">Project Optimist</a></h1>
-        <p>Your daily dose of positivity</p>
+        <div class="brand-section">
+            <h1><a href="/">BrightSide</a></h1>
+            <p class="tagline">Your daily dose of positivity</p>
+        </div>
 
-        <!-- User menu -->
         <div class="user-menu">
             {% if current_user.is_authenticated %}
                 <div class="user-button" id="user-menu-button">
@@ -292,37 +34,57 @@
                     <div class="divider"></div>
                     <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt"></i> Log Out</a>
                 </div>
-                {% else %}
-            <div class="auth-buttons">
-                <a href="{{ url_for('auth.login') }}" class="user-button">
-                    <i class="fas fa-sign-in-alt"></i>
-                    <span>Log In</span>
-                </a>
-                <a href="{{ url_for('auth.signup') }}" class="user-button" style="margin-left: 10px;">
-                    <i class="fas fa-user-plus"></i>
-                    <span>Sign Up</span>
-                </a>
-            </div>
-        {% endif %}
+            {% else %}
+                <div class="auth-buttons">
+                    <a href="{{ url_for('auth.login') }}" class="user-button">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Log In</span>
+                    </a>
+                    <a href="{{ url_for('auth.signup') }}" class="user-button">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Sign Up</span>
+                    </a>
+                </div>
+            {% endif %}
         </div>
     </header>
 
+    <!-- Main Layout Container -->
     <div class="layout-container">
-        <!-- FILTER SIDEBAR -->
+        <!-- Left Sidebar -->
         <aside class="filter-sidebar">
             <div class="sidebar-section">
-                <h3>Categories</h3>
+                <h3>CATEGORIES</h3>
                 <ul class="filter-list">
-                    <li><a href="/" class="filter-item {% if not selected_topic %}active{% endif %}">All News</a></li>
+                    <li><a href="/" class="filter-item all-news-filter {% if not selected_topic %}active{% endif %}">All News</a></li>
+
+                    <!-- Travel and Teens first as requested -->
+                    {% set priority_topics = ['travel', 'teens'] %}
+                    {% for p_topic in priority_topics %}
+                        {% if p_topic in topics %}
+                            <li>
+                                <a href="/?topic={{ p_topic }}" class="filter-item {% if selected_topic == p_topic %}active{% endif %}">
+                                    {% if topic_icons.get(p_topic) %}
+                                        <img src="{{ url_for('static', filename=topic_icons.get(p_topic)) }}" alt="icon" class="filter-icon">
+                                    {% endif %}
+                                    {{ p_topic|title }}
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    <!-- Other topics -->
                     {% for topic in topics %}
-                        <li>
-                            <a href="/?topic={{ topic }}" class="filter-item {% if selected_topic == topic %}active{% endif %}">
-                                {% if topic_icons.get(topic) %}
-                                    <img src="{{ url_for('static', filename=topic_icons.get(topic)) }}" alt="icon" class="filter-icon">
-                                {% endif %}
-                                {{ topic|title }}
-                            </a>
-                        </li>
+                        {% if topic not in priority_topics %}
+                            <li>
+                                <a href="/?topic={{ topic }}" class="filter-item {% if selected_topic == topic %}active{% endif %}">
+                                    {% if topic_icons.get(topic) %}
+                                        <img src="{{ url_for('static', filename=topic_icons.get(topic)) }}" alt="icon" class="filter-icon">
+                                    {% endif %}
+                                    {{ topic|title }}
+                                </a>
+                            </li>
+                        {% endif %}
                     {% endfor %}
                 </ul>
             </div>
@@ -336,21 +98,12 @@
             </div>
 
             <div class="sidebar-section">
-                <h3>About</h3>
-                <p class="sidebar-info">Project Optimist brings you positivity from around the world, using AI to find and rank the most inspiring stories.</p>
-                <div class="inspiration-scale">
-                    <div class="scale-label">Inspiration Scale:</div>
-                    <div class="scale-item">😀 High</div>
-                    <div class="scale-item">🙂 Medium</div>
-                    <div class="scale-item">😐 Low</div>
-                </div>
-                <div class="scale-item" style="margin-top: 0.5rem;">
-                    <span style="background-color: #ffd700; padding: 0 4px; border-radius: 4px;">✨</span> Truly Inspirational
-                </div>
+                <h3>ABOUT</h3>
+                <p class="sidebar-info">BrightSide brings you positivity from around the world, using AI to find and rank the most inspiring stories.</p>
             </div>
         </aside>
 
-        <!-- MAIN CONTENT -->
+        <!-- Main Content -->
         <main>
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
@@ -361,240 +114,283 @@
             {% endwith %}
 
             {% if articles %}
-                <!-- Top Stories Section -->
-                <div class="content-header">
-                    <h2>🔥 Top Stories</h2>
+                <!-- Sort options -->
+                <div class="sort-options">
+                    <a href="/?sort=hot" class="sort-option {% if request.args.get('sort') == 'hot' or not request.args.get('sort') %}active{% endif %}">
+                        <i class="fas fa-fire"></i> Hot
+                    </a>
+                    <a href="/?sort=new" class="sort-option {% if request.args.get('sort') == 'new' %}active{% endif %}">
+                        <i class="fas fa-clock"></i> New
+                    </a>
                 </div>
-                <div class="top-stories-container">
-                    {% set top_stories = articles[:4] %}
-                    {% for article in top_stories %}
-                        {% set inspiration = article.get('inspiration_score', 5) %}
-                        {% set is_truly_inspiring = article.get('is_inspirational', False) %}
-                        {% set inspiration_dimensions = article.get('inspiration_dimensions', {}) %}
 
-                        <article id="article-top-{{ loop.index0 }}" class="article-top">
-                            <!-- Content area with inspiration badge -->
-                            <div class="article-top-content">
-                                <!-- Inspiration badge -->
-                                <div class="inspiration-badge {% if is_truly_inspiring %}truly-inspiring{% endif %}">
-                                    {% if is_truly_inspiring %}
-                                       😀
-                                    {% elif inspiration >= 8 %}
-                                        😀
-                                    {% elif inspiration >= 5 %}
-                                        🙂
-                                    {% else %}
-                                        😐
-                                    {% endif %}
-                                </div>
+                <!-- Top Stories Section -->
+                <div class="section-header">
+                    <i class="fas fa-trophy"></i> TOP STORIES
+                </div>
 
-                                <!-- Inspiration dimensions popup -->
-                                <div class="inspiration-dimensions">
-                                    <div class="dimension-item">
-                                        <span class="dimension-name">Overall Score:</span>
-                                        <span class="dimension-score">{{ inspiration }}/10</span>
-                                    </div>
-                                    {% if inspiration_dimensions %}
-                                        {% for dim, score in inspiration_dimensions.items() %}
-                                            {% if dim != 'composite' %}
-                                                <div class="dimension-item">
-                                                    <span class="dimension-name">{{ dim|title }}:</span>
-                                                    <span class="dimension-score">{{ score }}/10</span>
-                                                </div>
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %}
-                                </div>
+                {% for article in articles %}
+                    {% set is_truly_inspiring = article.get('is_inspirational', False) %}
+                    <div class="post">
+                        <!-- Vote sidebar -->
+                        <div class="vote-sidebar">
+                            <button class="vote-up" aria-label="upvote">
+                                <i class="fas fa-arrow-up"></i>
+                            </button>
+                            <span class="vote-score">{{ article.get('inspiration_score')|round|int }}</span>
+                            <button class="vote-down" aria-label="downvote">
+                                <i class="fas fa-arrow-down"></i>
+                            </button>
+                        </div>
 
-                                <!-- Source info -->
-                                <div class="article-source">
-                                    <a href="{{ article['link'] }}" class="source-url-chip" target="_blank">
-                                        {{ article['source_name'] }}
-                                    </a>
-                                    <div class="tag-container">
-                                        {% if article.get('topic_name') %}
-                                            <span class="topic-tag {{ article.get('topic_name')|title }}">
-                                                {% if article.get('topic_icon_path') %}
-                                                    <img src="{{ url_for('static', filename=article['topic_icon_path']) }}" alt="topic" class="emoji-icon">
-                                                {% endif %}
-                                                {{ article.get('topic_name')|title }}
-                                            </span>
-                                        {% endif %}
-
-                                        <!-- Location tag - only shown if location is available -->
-                                        {% if article.get('location') %}
-                                            <span class="location-tag">
-                                                <i class="fas fa-map-marker-alt"></i>
-                                                {{ article.get('location') }}
-                                            </span>
-                                        {% endif %}
-                                    </div>
-                                </div>
-
-                                <!-- Title with topic icon and summary -->
-                                <h3>
-                                    <a href="{{ article['link'] }}" target="_blank">
+                        <div class="post-content">
+                            <div class="post-header">
+                                <div class="post-metadata">
+                                    <a href="/?topic={{ article.get('topic_name', 'general') }}" class="post-topic">
                                         {% if article.get('topic_icon_path') %}
-                                            <span class="title-icon" style="background-image: url('{{ url_for('static', filename=article['topic_icon_path']) }}');"></span>
+                                            <img src="{{ url_for('static', filename=article['topic_icon_path']) }}" alt="topic" class="topic-icon">
                                         {% endif %}
-                                        {{ article['title'] }}
+                                        {{ article.get('topic_name', 'general')|title }}
                                     </a>
-                                </h3>
-                                <p class="summary">{{ article['summary'] | striptags | truncate(100) }}</p>
+                                    <span class="post-source">{{ article.get('source_name', '') }}</span>
+                                    <span class="post-time">{{ article['published'] | format_datetime }}</span>
 
-                                <!-- Date and actions -->
-                                <div class="article-actions">
-                                    <small class="published">{{ article['published'] | format_datetime }}</small>
+                                    {% if is_truly_inspiring %}
+                                        <span class="inspiring-tag">
+                                            <i class="fas fa-star"></i> Inspiring
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
 
-                                    <div class="share-buttons">
-                                        <a href="https://twitter.com/intent/tweet?url={{ article['link'] | urlencode }}&text={{ article['title'] | urlencode }}" target="_blank" title="Share on Twitter">
-                                            <i class="fab fa-twitter"></i>
-                                        </a>
-                                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ article['link'] | urlencode }}" target="_blank" title="Share on Facebook">
-                                            <i class="fab fa-facebook-f"></i>
-                                        </a>
+                            <div class="post-body">
+                                {% if article.get('image_url') %}
+                                    <div class="post-image">
+                                        <img src="{{ article['image_url'] }}" alt="Article image">
                                     </div>
+                                {% endif %}
+
+                                <div class="post-text">
+                                    <h3 class="post-title">
+                                        <a href="{{ article['link'] }}" target="_blank">{{ article['title'] }}</a>
+                                    </h3>
+                                    <p class="post-summary">
+                                        {{ article['summary'] | striptags | truncate(180) }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="post-actions">
+                                <div class="action-buttons">
+                                    <button class="action-button share-btn" data-url="{{ article['link'] }}" data-title="{{ article['title'] }}">
+                                        <i class="fas fa-share-alt"></i> Share
+                                    </button>
 
                                     {% if current_user.is_authenticated %}
-                                        <form action="{{ url_for('auth.save_article') }}" method="post" style="margin: 0; display: contents;">
+                                        <form action="{{ url_for('auth.save_article') }}" method="post" style="display: inline;">
                                             <input type="hidden" name="article_link" value="{{ article['link'] }}">
                                             <input type="hidden" name="article_title" value="{{ article['title'] }}">
                                             <input type="hidden" name="topic_name" value="{{ article.get('topic_name', '') }}">
-                                            <button type="submit" class="save-button" title="Save Article">
-                                                <i class="fas fa-bookmark"></i>
+                                            <button type="submit" class="action-button save-btn">
+                                                <i class="far fa-bookmark"></i> Save
                                             </button>
                                         </form>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </article>
-                    {% endfor %}
-                </div>
-
-                <!-- Remaining Articles Section -->
-                <div class="content-header">
-                    <h2>More Positive News</h2>
-                </div>
-                {% for article in articles[4:] %}
-                    {% set inspiration = article.get('inspiration_score', 5) %}
-                    {% set is_truly_inspiring = article.get('is_inspirational', False) %}
-                    {% set inspiration_dimensions = article.get('inspiration_dimensions', {}) %}
-
-                    <article id="article-{{ loop.index0 }}" class="article-flat">
-                        {% if article.get('image_url') %}
-                            <div class="thumbnail-container {{ article.get('topic_name', 'general')|lower }}">
-                                <img src="{{ article['image_url'] }}" alt="Thumbnail" class="thumbnail">
-                                <div class="inspiration-badge small {% if is_truly_inspiring %}truly-inspiring{% endif %}">
-                                    {% if is_truly_inspiring %}
-                                        😀
-                                    {% elif inspiration >= 8 %}
-                                        😀
-                                    {% elif inspiration >= 5 %}
-                                        🙂
                                     {% else %}
-                                        😐
+                                        <a href="{{ url_for('auth.login') }}" class="action-button save-btn">
+                                            <i class="far fa-bookmark"></i> Save
+                                        </a>
                                     {% endif %}
+
+                                    <a href="{{ article['link'] }}" target="_blank" class="action-button read-btn">
+                                        <i class="fas fa-book-open"></i> Read Full Article
+                                    </a>
                                 </div>
 
-                                <!-- Inspiration dimensions popup -->
-                                <div class="inspiration-dimensions">
-                                    <div class="dimension-item">
-                                        <span class="dimension-name">Overall Score:</span>
-                                        <span class="dimension-score">{{ inspiration }}/10</span>
-                                    </div>
-                                    {% if inspiration_dimensions %}
-                                        {% for dim, score in inspiration_dimensions.items() %}
-                                            {% if dim != 'composite' %}
-                                                <div class="dimension-item">
-                                                    <span class="dimension-name">{{ dim|title }}:</span>
-                                                    <span class="dimension-score">{{ score }}/10</span>
-                                                </div>
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %}
+                                <div class="share-dropdown">
+                                    <a href="https://twitter.com/intent/tweet?url={{ article['link'] | urlencode }}&text={{ article['title'] | urlencode }}" target="_blank" class="share-option">
+                                        <i class="fab fa-twitter"></i> Twitter
+                                    </a>
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ article['link'] | urlencode }}" target="_blank" class="share-option">
+                                        <i class="fab fa-facebook-f"></i> Facebook
+                                    </a>
+                                    <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ article['link'] | urlencode }}&title={{ article['title'] | urlencode }}" target="_blank" class="share-option">
+                                        <i class="fab fa-linkedin-in"></i> LinkedIn
+                                    </a>
+                                    <a href="mailto:?subject={{ article['title'] | urlencode }}&body={{ article['link'] | urlencode }}" class="share-option">
+                                        <i class="fas fa-envelope"></i> Email
+                                    </a>
+                                    <a href="#" class="share-option copy-link" data-url="{{ article['link'] }}">
+                                        <i class="fas fa-link"></i> Copy Link
+                                    </a>
                                 </div>
                             </div>
-                        {% endif %}
-                        <div class="article-content">
-                            <h3>
-                                <a href="{{ article['link'] }}" target="_blank">
-                                    {% if article.get('topic_icon_path') %}
-                                        <span class="title-icon" style="background-image: url('{{ url_for('static', filename=article['topic_icon_path']) }}');"></span>
-                                    {% endif %}
-                                    {{ article['title'] }}
-                                </a>
-                            </h3>
-                            <p class="summary">{{ article['summary'] | striptags | truncate(100) }}</p>
-
-                            <div class="article-meta">
-                                <span class="source-name">{{ article['source_name'] }}</span>
-                                {% if article.get('topic_name') %}
-                                    <span class="topic-tag {{ article.get('topic_name')|title }}">
-                                        {% if article.get('topic_icon_path') %}
-                                            <img src="{{ url_for('static', filename=article['topic_icon_path']) }}" alt="topic" class="emoji-icon">
-                                        {% endif %}
-                                        {{ article.get('topic_name')|title }}
-                                    </span>
-                                {% endif %}
-
-                                {% if current_user.is_authenticated %}
-                                    <form action="{{ url_for('auth.save_article') }}" method="post" style="margin: 0; display: contents;">
-                                        <input type="hidden" name="article_link" value="{{ article['link'] }}">
-                                        <input type="hidden" name="article_title" value="{{ article['title'] }}">
-                                        <input type="hidden" name="topic_name" value="{{ article.get('topic_name', '') }}">
-                                        <button type="submit" class="save-button" title="Save Article">
-                                            <i class="fas fa-bookmark"></i>
-                                        </button>
-                                    </form>
-                                {% endif %}
-                            </div>
-                            <small class="published">{{ article['published'] | format_datetime }}</small>
                         </div>
-                    </article>
+                    </div>
                 {% endfor %}
             {% else %}
-                <p class="no-articles">No articles available right now. Please check back soon!</p>
+                <div class="no-articles">
+                    <i class="fas fa-newspaper"></i>
+                    <h3>No articles available right now</h3>
+                    <p>Please check back soon or try refreshing the page.</p>
+                </div>
             {% endif %}
         </main>
 
-        <!-- RIGHT SIDEBAR -->
+        <!-- Right Sidebar -->
         <aside class="ad-sidebar">
-            <!-- Can be used for future content -->
+            <div class="sidebar-section">
+                <h3>JOIN US</h3>
+                <p class="sidebar-info">Join our community of positive news enthusiasts and get daily updates on the best inspirational stories.</p>
+                {% if not current_user.is_authenticated %}
+                <div class="join-button-container">
+                    <a href="{{ url_for('auth.signup') }}" class="join-button">
+                        <i class="fas fa-user-plus"></i>
+                        Create Account
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="sidebar-section">
+                <h3>TOP TOPICS</h3>
+                <div class="topic-tags-container">
+                    {% for topic in topics[:6] %}
+                        <a href="/?topic={{ topic }}" class="topic-tag {{ topic|title }}">
+                            {% if topic_icons.get(topic) %}
+                                <img src="{{ url_for('static', filename=topic_icons.get(topic)) }}" alt="{{ topic }}" class="emoji-icon">
+                            {% endif %}
+                            {{ topic|title }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
         </aside>
     </div>
 
+    <!-- Footer -->
     <footer>
-        <p>&copy; {{ now.year }} Project Optimist News. All rights reserved.</p>
-        <p>Powered by Optimism</p>
+        <p>&copy; {{ now.year }} BrightSide News. All rights reserved.</p>
+        <p>Powered by Good Vibes</p>
     </footer>
 
+    <!-- Toast notification -->
+    <div class="toast" id="share-toast">
+        <i class="fas fa-check-circle"></i>
+        <span>Link copied to clipboard!</span>
+    </div>
+
+    <div class="toast" id="save-toast">
+        <i class="fas fa-check-circle"></i>
+        <span>Article saved successfully!</span>
+    </div>
+
+    <!-- JavaScript -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Make source names a little more subtle
-        const colors = ['#3498db', '#2ecc71', '#9b59b6', '#34495e', '#16a085', '#27ae60', '#2980b9', '#8e44ad', '#2c3e50'];
-        document.querySelectorAll('.source-name').forEach(el => {
-            const color = colors[Math.floor(Math.random() * colors.length)];
-            el.style.color = color;
-            el.style.opacity = '0.8';
-        });
+        document.addEventListener('DOMContentLoaded', function() {
+            // User dropdown menu
+            const userMenuButton = document.getElementById('user-menu-button');
+            const userDropdown = document.getElementById('user-dropdown');
 
-        // User dropdown menu
-        const userMenuButton = document.getElementById('user-menu-button');
-        const userDropdown = document.getElementById('user-dropdown');
+            if (userMenuButton && userDropdown) {
+                userMenuButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    userDropdown.classList.toggle('active');
+                });
 
-        if (userMenuButton && userDropdown) {
-            userMenuButton.addEventListener('click', function() {
-                userDropdown.classList.toggle('active');
+                document.addEventListener('click', function(e) {
+                    if (!userMenuButton.contains(e.target) && !userDropdown.contains(e.target)) {
+                        userDropdown.classList.remove('active');
+                    }
+                });
+            }
+
+            // Set up voting buttons
+            document.querySelectorAll('.vote-up, .vote-down').forEach(button => {
+                button.addEventListener('click', function() {
+                    const voteContainer = this.closest('.vote-sidebar');
+                    const scoreElement = voteContainer.querySelector('.vote-score');
+                    const currentScore = parseInt(scoreElement.textContent);
+
+                    if (this.classList.contains('vote-up')) {
+                        scoreElement.textContent = currentScore + 1;
+                        this.classList.add('voted');
+                        voteContainer.querySelector('.vote-down').classList.remove('voted');
+                    } else {
+                        scoreElement.textContent = currentScore - 1;
+                        this.classList.add('voted');
+                        voteContainer.querySelector('.vote-up').classList.remove('voted');
+                    }
+                });
             });
 
-            // Close the dropdown when clicking outside
-            document.addEventListener('click', function(event) {
-                if (!userMenuButton.contains(event.target) && !userDropdown.contains(event.target)) {
-                    userDropdown.classList.remove('active');
+            // Share button functionality
+            document.querySelectorAll('.share-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const dropdown = this.closest('.post-actions').querySelector('.share-dropdown');
+                    dropdown.classList.toggle('active');
+
+                    // Close other open dropdowns
+                    document.querySelectorAll('.share-dropdown.active').forEach(openDropdown => {
+                        if (openDropdown !== dropdown) {
+                            openDropdown.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            // Close share dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.share-btn') && !e.target.closest('.share-dropdown')) {
+                    document.querySelectorAll('.share-dropdown.active').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
                 }
             });
-        }
-    });
+
+            // Copy link functionality
+            document.querySelectorAll('.copy-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const url = this.getAttribute('data-url');
+
+                    // Copy to clipboard
+                    const tempInput = document.createElement('input');
+                    document.body.appendChild(tempInput);
+                    tempInput.value = url;
+                    tempInput.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tempInput);
+
+                    // Show toast
+                    const shareToast = document.getElementById('share-toast');
+                    if (shareToast) {
+                        shareToast.classList.add('active');
+                        setTimeout(() => {
+                            shareToast.classList.remove('active');
+                        }, 3000);
+                    }
+
+                    // Close dropdown
+                    this.closest('.share-dropdown').classList.remove('active');
+                });
+            });
+
+            // Show toast when save button is clicked
+            document.querySelectorAll('.save-btn').forEach(btn => {
+                if (btn.tagName.toLowerCase() === 'button') {
+                    btn.addEventListener('click', function(e) {
+                        const saveToast = document.getElementById('save-toast');
+                        if (saveToast) {
+                            saveToast.classList.add('active');
+                            setTimeout(() => {
+                                saveToast.classList.remove('active');
+                            }, 3000);
+                        }
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>

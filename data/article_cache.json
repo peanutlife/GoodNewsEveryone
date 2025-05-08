@@ -1,5 +1,5 @@
 {
-  "last_fetched": "2025-05-07T21:48:09.316007",
+  "last_fetched": "2025-05-08T00:47:49.815787",
   "articles": {
     "business": [
       {
@@ -1898,6 +1898,31 @@
         "noun_icon_url": "/openmoji/color/svg/1F389.svg",
         "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
         "image_url": "https://lifebeyondnumbers.com/wp-content/uploads/2024/02/mother-language-day.jpg"
+      },
+      {
+        "title": "These Beautiful Birds Form Something Like Lasting Friendships",
+        "link": "https://www.nytimes.com/2025/05/07/science/birds-friendships-superb-starlings.html",
+        "summary": "Superb starlings help care for the offspring of birds they are not related to. “To me, that sounds like friendship,” one scientist said.",
+        "published": "2025-05-07T22:41:00",
+        "sentiment_score": 0.9661,
+        "inspiration_score": 6.1,
+        "inspiration_dimensions": {
+          "emotional": 8,
+          "triumph": 6,
+          "social": 7,
+          "novelty": 5,
+          "actionable": 3,
+          "composite": 6.1
+        },
+        "is_inspirational": true,
+        "source_name": "rss.nytimes.com",
+        "source_feed": "http://rss.nytimes.com/services/xml/rss/nyt/Science.xml",
+        "source_icon_path": "icons/source_default.png",
+        "topic_name": "general",
+        "topic_icon_path": "/openmoji/color/svg/1F389.svg",
+        "noun_icon_url": "/openmoji/color/svg/1F389.svg",
+        "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+        "image_url": "https://www.google.com/s2/favicons?domain=www.nytimes.com&sz=128"
       },
       {
         "title": "An idea that just ballooned: Bristol brand produces bags from hot air",
