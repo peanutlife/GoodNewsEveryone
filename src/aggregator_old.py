@@ -10,40 +10,13 @@ import os
 import csv
 import json
 import openai
-import logging
 from src.shared_data import FEED_URLS, NEGATIVE_KEYWORDS, POSITIVE_THRESHOLD, removed_article_links, load_removed_articles
 from urllib.parse import urlparse
 
-# Import configuration for secure API key management
-from src.config import config
 
-# Setup logging
-logger = logging.getLogger(__name__)
-
-# Load OpenAI API Key securely
-try:
-    # Get the current configuration based on environment
-    current_config = config[os.environ.get('FLASK_ENV', 'default')]
-
-    # Access the API key from configuration
-    OPENAI_API_KEY = current_config.OPENAI_API_KEY
-
-    if not OPENAI_API_KEY:
-        logger.error("OpenAI API key not found in configuration. Some features may not work.")
-
-    # Initialize OpenAI client with API key
-    client = openai.OpenAI(api_key=OPENAI_API_KEY)
-
-except Exception as e:
-    logger.error(f"Error initializing OpenAI client: {e}")
-    # Create a dummy client for graceful failure
-    class DummyClient:
-        def __getattr__(self, name):
-            def method(*args, **kwargs):
-                logger.error("OpenAI client not properly initialized. Operation failed.")
-                return None
-            return method
-    client = DummyClient()
+# Load OpenAI API Key
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "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")
+client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
 # Load OpenMoji CSV and build topic-icon map
 STATIC_DIR = os.path.join(os.path.dirname(__file__), 'static')
@@ -52,35 +25,26 @@ CSV_PATH = os.path.join(STATIC_DIR, 'openmoji.csv')
 TOPICS = ["science", "technology", "travel", "health", "culture", "environment", "sports", "kids", "teens", "good news"]
 
 topic_icon_map = {}
-try:
-    with open(CSV_PATH, newline='', encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            annotation = row['annotation'].lower()
-            hexcode = row['hexcode']
-            for topic in TOPICS:
-                if topic in annotation and topic not in topic_icon_map:
-                    topic_icon_map[topic] = hexcode
+with open(CSV_PATH, newline='', encoding='utf-8') as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+        annotation = row['annotation'].lower()
+        hexcode = row['hexcode']
+        for topic in TOPICS:
+            if topic in annotation and topic not in topic_icon_map:
+                topic_icon_map[topic] = hexcode
 
-    # Fallback emojis if missing
-    fallback_icons = {
-        'science': '1F52C', 'technology': '1F4BB', 'travel': '2708',
-        'culture': '1F3A4', 'environment': '1F333', 'teens': '1F9D1',
-        'kids': '1F476', 'good news': '1F389', 'general': '1F4A1'
-    }
-    for topic, hexcode in fallback_icons.items():
-        if topic not in topic_icon_map:
-            topic_icon_map[topic] = hexcode
+# Fallback emojis if missing
+fallback_icons = {
+    'science': '1F52C', 'technology': '1F4BB', 'travel': '2708',
+    'culture': '1F3A4', 'environment': '1F333', 'teens': '1F9D1',
+    'kids': '1F476', 'good news': '1F389', 'general': '1F4A1'
+}
+for topic, hexcode in fallback_icons.items():
+    if topic not in topic_icon_map:
+        topic_icon_map[topic] = hexcode
 
-    logger.info(f"Loaded topic to emoji map: {topic_icon_map}")
-except Exception as e:
-    logger.error(f"Error loading emoji CSV: {e}")
-    # Set default icons if CSV loading fails
-    topic_icon_map = {
-        'science': '1F52C', 'technology': '1F4BB', 'travel': '2708',
-        'culture': '1F3A4', 'environment': '1F333', 'teens': '1F9D1',
-        'kids': '1F476', 'good news': '1F389', 'general': '1F4A1'
-    }
+print("[INFO] FINAL topic to emoji map:", topic_icon_map)
 
 # NLTK setup
 try:
@@ -127,12 +91,9 @@ TOPIC_KEYWORDS = {
     "kids": ["kids", "children", "child", "preschool", "elementary", "nursery", "baby", "toddler", "family", "parenting", "play", "toy", "childhood", "learning", "school", "birthday", "little ones"]
 }
 
+# Add the missing function - this is the fix!
 def classify_with_llm(text):
     """Ask GPT if article is positive and inspiring - Compatibility function"""
-    if not OPENAI_API_KEY:
-        logger.warning("OpenAI API key not available. Skipping LLM classification.")
-        return False
-
     try:
         prompt = f"Is this news article positive and inspiring? Respond with only Yes or No.\n\nArticle:\n{text}"
         response = client.chat.completions.create(
@@ -144,16 +105,12 @@ def classify_with_llm(text):
         answer = response.choices[0].message.content.strip().lower()
         return answer == "yes"
     except Exception as e:
-        logger.error(f"LLM Classification Error: {e}")
+        print(f"[LLM Error]: {e}")
         return False
 
 # Enhanced inspiration classification with more dimensions of analysis
 def classify_inspiration_with_llm(text):
     """Use LLM to classify if an article is inspirational or just positive"""
-    if not OPENAI_API_KEY:
-        logger.warning("OpenAI API key not available. Skipping LLM inspiration classification.")
-        return False
-
     try:
         prompt = (
             "Analyze this news article to determine if it is TRULY INSPIRATIONAL. "
@@ -175,16 +132,12 @@ def classify_inspiration_with_llm(text):
         answer = response.choices[0].message.content.strip().lower()
         return answer == "yes"
     except Exception as e:
-        logger.error(f"LLM Inspiration Error: {e}")
+        print(f"[LLM Inspiration Error]: {e}")
         return False
 
 # Enhanced method for scoring inspirational qualities
 def score_inspiration_with_llm(text):
     """Ask LLM to score article on different inspirational dimensions"""
-    if not OPENAI_API_KEY:
-        logger.warning("OpenAI API key not available. Returning default inspiration score.")
-        return {'composite': 5}
-
     try:
         prompt = (
             "Rate this news article on the following dimensions from 1-10:\n\n"
@@ -248,7 +201,7 @@ def score_inspiration_with_llm(text):
             return {'composite': 5}
 
     except Exception as e:
-        logger.error(f"LLM Scoring Error: {e}")
+        print(f"[LLM Scoring Error]: {e}")
         return {'composite': 5}  # Default mid-range score
 
 def get_topic_and_icon(title, summary):
@@ -307,9 +260,9 @@ def fetch_and_filter_feeds(feed_urls):
         if os.path.exists(CACHE_PATH):
             with open(CACHE_PATH, 'r', encoding='utf-8') as f:
                 articles_by_topic = json.load(f)
-                logger.info(f"Loaded existing cache with {sum(len(v) for v in articles_by_topic.values())} articles")
+                print(f"[INFO] Loaded existing cache with {sum(len(v) for v in articles_by_topic.values())} articles")
     except Exception as e:
-        logger.warning(f"Could not load existing cache: {e}")
+        print(f"[WARN] Could not load existing cache: {e}")
         articles_by_topic = {}
 
     # Keep track of how many new articles we've added
@@ -317,11 +270,11 @@ def fetch_and_filter_feeds(feed_urls):
 
     # Process feeds one by one
     for url_index, url in enumerate(feed_urls):
-        logger.info(f"Fetching feed {url_index+1}/{len(feed_urls)}: {url}")
+        print(f"Fetching feed {url_index+1}/{len(feed_urls)}: {url}")
         try:
             feed = feedparser.parse(url)
             if feed.bozo:
-                logger.warning(f"Feed may be ill-formed. {feed.bozo_exception}")
+                print(f"Warning: Feed may be ill-formed. {feed.bozo_exception}")
 
             # Track new articles from this feed
             feed_new_count = 0
@@ -461,13 +414,13 @@ def fetch_and_filter_feeds(feed_urls):
                     feed_new_count += 1
                     new_articles_count += 1
 
-            logger.info(f"Added {feed_new_count} new articles from {url}")
+            print(f"  Added {feed_new_count} new articles from {url}")
 
             # Sort all articles by inspiration score in this topic
             for topic in articles_by_topic:
                 articles_by_topic[topic].sort(key=lambda x: (x.get("is_inspirational", False),
-                                                           x.get("inspiration_score", 5),
-                                                           x.get("published", "")), reverse=True)
+                                                            x.get("inspiration_score", 5),
+                                                            x.get("published", "")), reverse=True)
 
             # Save cache incrementally after each feed
             if feed_new_count > 0:
@@ -478,12 +431,12 @@ def fetch_and_filter_feeds(feed_urls):
 
                     with open(CACHE_PATH, 'w', encoding='utf-8') as f:
                         json.dump(articles_by_topic, f, ensure_ascii=False, indent=2)
-                    logger.info(f"Incrementally updated cache with {feed_new_count} new articles ({sum(len(v) for v in articles_by_topic.values())} total)")
+                    print(f"[INFO] Incrementally updated cache with {feed_new_count} new articles ({sum(len(v) for v in articles_by_topic.values())} total)")
                 except Exception as e:
-                    logger.error(f"Failed to write incremental cache: {e}")
+                    print(f"[ERROR] Failed to write incremental cache: {e}")
 
         except Exception as e:
-            logger.error(f"Error fetching/parsing feed {url}: {e}")
+            print(f"Error fetching/parsing feed {url}: {e}")
 
     # Final save to JSON cache
     STATIC_DIR = os.path.join(os.path.dirname(__file__), 'static')
@@ -493,20 +446,14 @@ def fetch_and_filter_feeds(feed_urls):
     try:
         with open(CACHE_PATH, 'w', encoding='utf-8') as f:
             json.dump(articles_by_topic, f, ensure_ascii=False, indent=2)
-        logger.info(f"Completed fetch with {new_articles_count} new articles, total: {sum(len(v) for v in articles_by_topic.values())}")
+        print(f"[INFO] Completed fetch with {new_articles_count} new articles, total: {sum(len(v) for v in articles_by_topic.values())}")
     except Exception as e:
-        logger.error(f"Failed to write final cache: {e}")
+        print(f"[ERROR] Failed to write final cache: {e}")
 
     return articles_by_topic
 
 
 if __name__ == "__main__":
-    # Setup console logging for direct script execution
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    )
-
     print("Starting news aggregation...")
     topic_articles = fetch_and_filter_feeds(FEED_URLS)
     for topic, articles in topic_articles.items():

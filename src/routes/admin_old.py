@@ -1,37 +1,16 @@
 # -*- coding: utf-8 -*-
 import os
-import logging
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash, current_app
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from functools import wraps
-from werkzeug.security import generate_password_hash, check_password_hash
 
 # Import shared data functions and cache
 from src.shared_data import article_cache, get_feed_urls, save_feed_urls, add_removed_article_link
-from src.config import config
 
-# Configure logging
-logger = logging.getLogger(__name__)
+# Basic configuration for admin user (replace with more secure method in production)
+ADMIN_USERNAME = os.environ.get("ADMIN_USER", "mahesh")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASS", "Sruti123#") # Use environment variables!
 
-# Admin blueprint
 admin_bp = Blueprint("admin", __name__, template_folder="../templates/admin", url_prefix="/admin")
-
-# --- Helper functions ---
-def get_admin_credentials():
-    """Get admin credentials from config securely"""
-    # Get the current configuration
-    current_config = config[os.environ.get('FLASK_ENV', 'default')]
-
-    # Get admin credentials
-    username = current_config.ADMIN_USER
-    password = current_config.ADMIN_PASS
-
-    # Security check - make sure we have valid credentials
-    if not username or not password:
-        logger.warning("Admin credentials not properly configured! Using default admin/admin is insecure.")
-        username = username or "admin"
-        password = password or "admin"
-
-    return username, password
 
 # --- Authentication Decorator ---
 def login_required(f):
@@ -43,50 +22,23 @@ def login_required(f):
     return decorated_function
 
 # --- Routes ---
+
 @admin_bp.route("/login", methods=["GET", "POST"])
 def login():
-    # Get admin credentials from config
-    admin_username, admin_password = get_admin_credentials()
-
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
-
-        # Implement rate limiting for failed login attempts
-        if 'login_attempts' not in session:
-            session['login_attempts'] = 0
-
-        # Check for excessive login attempts
-        if session.get('login_attempts', 0) >= 5:
-            flash("Too many login attempts. Please try again later.", "danger")
-            return render_template("login.html")
-
-        # Verify credentials
-        if username == admin_username and password == admin_password:
-            # Successful login
+        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
             session["admin_logged_in"] = True
             session.permanent = True # Keep session for a reasonable time
-            session.pop('login_attempts', None)  # Reset login attempts
-
-            # Set session cookie attributes for security
-            session.permanent_session_lifetime = current_app.config.get('PERMANENT_SESSION_LIFETIME')
-
-            # Log successful login
-            logger.info(f"Admin login successful for user: {username}")
-
             flash("Login successful!", "success")
             next_url = request.args.get("next")
             return redirect(next_url or url_for("admin.dashboard"))
         else:
-            # Failed login
-            session['login_attempts'] = session.get('login_attempts', 0) + 1
-            logger.warning(f"Failed admin login attempt ({session['login_attempts']}) for username: {username}")
             flash("Invalid username or password.", "danger")
-
     # Log out if already logged in but visiting login page
     if "admin_logged_in" in session:
          session.pop("admin_logged_in", None)
-
     return render_template("login.html")
 
 @admin_bp.route("/logout")
@@ -99,9 +51,6 @@ def logout():
 @login_required
 def dashboard():
     """Serves the admin dashboard with flattened article list."""
-    # Get admin username for display
-    admin_username, _ = get_admin_credentials()
-
     # Get articles from cache
     articles_by_topic = article_cache.get("articles", {})
     last_fetched_dt = article_cache.get("last_fetched")
@@ -121,72 +70,45 @@ def dashboard():
 
     return render_template(
         "dashboard.html",
-        username=admin_username,
+        username=ADMIN_USERNAME,
         articles=flattened_articles,
         articles_count=len(flattened_articles),
         feed_urls=current_feeds,
         last_fetched=last_fetched_str
     )
-
 @admin_bp.route("/manage-feeds", methods=["GET", "POST"])
 @login_required
 def manage_feeds():
-    """Manage RSS feed sources"""
     if request.method == "POST":
         feeds_text = request.form.get("feeds")
-
-        # Basic validation
-        if not feeds_text:
-            flash("Feed list cannot be empty", "warning")
-            return redirect(url_for("admin.manage_feeds"))
-
-        # Process input feeds
-        new_feeds = []
-        for line in feeds_text.splitlines():
-            line = line.strip()
-            if not line or line.startswith('#'):
-                continue
-
-            # Basic URL validation
-            if not line.startswith(('http://', 'https://')):
-                flash(f"Invalid feed URL format: {line}", "warning")
-                continue
-
-            new_feeds.append(line)
-
-        # Save validated feeds
+        new_feeds = [line.strip() for line in feeds_text.splitlines() if line.strip()]
         if save_feed_urls(new_feeds):
-            logger.info(f"Feed list updated with {len(new_feeds)} feeds")
             flash("Feed list updated successfully. Changes will apply on the next fetch cycle.", "success")
         else:
-            logger.error("Failed to save feed list")
             flash("Error saving feed list. Check file permissions.", "danger")
-
         return redirect(url_for("admin.manage_feeds"))
 
-    # GET request - show current feeds
     current_feeds = get_feed_urls()
     feeds_text = "\n".join(current_feeds)
     return render_template("manage_feeds.html", feeds_text=feeds_text)
 
+# Article Moderation Route
 @admin_bp.route("/remove-article", methods=["POST"])
 @login_required
 def remove_article():
-    """Remove an article from the feed"""
     article_link = request.form.get("article_link")
     if not article_link:
         flash("No article link provided.", "warning")
         return redirect(url_for("admin.dashboard"))
 
-    # Sanitize input
-    article_link = article_link.strip()
-
     if add_removed_article_link(article_link):
-        logger.info(f"Article removed: {article_link}")
-        flash(f"Article marked for removal. It will disappear on the next fetch cycle.", "success")
+        # Corrected flash message (using single line f-string, no erroneous newlines)
+        flash(f"Article '{article_link}' marked for removal. It will disappear on the next fetch cycle.", "success")
     else:
-        logger.warning(f"Failed to remove article: {article_link}")
-        flash("Failed to mark article for removal. It may already be removed or there was a file error.", "warning")
+        # Corrected flash message (using single line f-string, no erroneous newlines)
+        flash(f"Failed to mark article '{article_link}' for removal (maybe already removed or file error?).", "warning")
 
     # Redirect back to the dashboard
     return redirect(url_for("admin.dashboard"))
+
+# Removed the placeholder /moderate-articles route as functionality is added to dashboard
