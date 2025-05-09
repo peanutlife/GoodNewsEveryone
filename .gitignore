@@ -1,3 +1,6 @@
+#env file
+.env
+
 # Source archive
 src.zip
 
