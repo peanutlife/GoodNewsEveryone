@@ -630,7 +630,7 @@ if __name__ == "__main__":
     app = create_app()
 
     # Start the background cache refresh thread
-    #start_background_refresh(initial_delay=5, interval=CACHE_DURATION_SECONDS)
+    start_background_refresh(initial_delay=1000, interval=CACHE_DURATION_SECONDS)
 
     # Start the Flask application
     port = int(os.environ.get("PORT", 5005))
