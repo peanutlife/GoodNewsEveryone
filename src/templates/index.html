@@ -56,7 +56,12 @@
             <div class="sidebar-section">
                 <h3>CATEGORIES</h3>
                 <ul class="filter-list">
-                    <li><a href="/" class="filter-item all-news-filter {% if not selected_topic %}active{% endif %}">All News</a></li>
+                  <li>
+    <a href="/" class="filter-item all-news-filter {% if not selected_topic %}active{% endif %}">
+        <img src="{{ url_for('static', filename='/openmoji/color/svg/1F4F0.svg') }}" alt="icon" class="filter-icon">
+        All News
+    </a>
+</li>
 
                     <!-- Travel and Teens first as requested -->
                     {% set priority_topics = ['travel', 'teens'] %}
@@ -75,17 +80,20 @@
 
                     <!-- Other topics -->
                     {% for topic in topics %}
-                        {% if topic not in priority_topics %}
-                            <li>
-                                <a href="/?topic={{ topic }}" class="filter-item {% if selected_topic == topic %}active{% endif %}">
-                                    {% if topic_icons.get(topic) %}
-                                        <img src="{{ url_for('static', filename=topic_icons.get(topic)) }}" alt="icon" class="filter-icon">
-                                    {% endif %}
-                                    {{ topic|title }}
-                                </a>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
+    {% if topic not in priority_topics %}
+        <li>
+            <a href="/?topic={{ topic }}" class="filter-item {% if selected_topic == topic %}active{% endif %}">
+                {% if topic|lower == 'business' %}
+                    <!-- Force display of business icon -->
+                    <img src="{{ url_for('static', filename='/openmoji/color/svg/1F4BC.svg') }}" alt="icon" class="filter-icon">
+                {% elif topic_icons.get(topic) %}
+                    <img src="{{ url_for('static', filename=topic_icons.get(topic)) }}" alt="icon" class="filter-icon">
+                {% endif %}
+                {{ topic|title }}
+            </a>
+        </li>
+    {% endif %}
+{% endfor %}
                 </ul>
             </div>
 
@@ -116,13 +124,15 @@
             {% if articles %}
                 <!-- Sort options -->
                 <div class="sort-options">
-                    <a href="/?sort=hot" class="sort-option {% if request.args.get('sort') == 'hot' or not request.args.get('sort') %}active{% endif %}">
-                        <i class="fas fa-fire"></i> Hot
-                    </a>
-                    <a href="/?sort=new" class="sort-option {% if request.args.get('sort') == 'new' %}active{% endif %}">
-                        <i class="fas fa-clock"></i> New
-                    </a>
-                </div>
+      <a href="/?sort=hot{% if selected_topic %}&topic={{ selected_topic }}{% endif %}"
+         class="sort-option {% if sort == 'hot' or not sort %}active{% endif %}">
+          <i class="fas fa-fire"></i> Hot
+      </a>
+      <a href="/?sort=new{% if selected_topic %}&topic={{ selected_topic }}{% endif %}"
+         class="sort-option {% if sort == 'new' %}active{% endif %}">
+          <i class="fas fa-clock"></i> New
+      </a>
+  </div>
 
                 <!-- Top Stories Section -->
                 <div class="section-header">
@@ -133,7 +143,7 @@
                     {% set is_truly_inspiring = article.get('is_inspirational', False) %}
                     <div class="post">
                         <!-- Vote sidebar -->
-                      
+
 
                         <div class="post-content">
                             <div class="post-header">

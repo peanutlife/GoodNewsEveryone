@@ -4,7 +4,7 @@ import csv
 STATIC_DIR = os.path.join(os.path.dirname(__file__), '..', 'static')
 CSV_PATH = os.path.join(STATIC_DIR, 'openmoji.csv')
 
-TOPICS = ["science", "technology", "travel", "health", "culture", "environment", "sports", "kids", "teens", "good news"]
+TOPICS = ["science", "technology", "business", "travel", "health", "culture", "environment", "sports", "kids", "teens", "news"]
 
 topic_icon_map = {}
 

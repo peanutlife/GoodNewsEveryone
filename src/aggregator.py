@@ -49,7 +49,7 @@ except Exception as e:
 STATIC_DIR = os.path.join(os.path.dirname(__file__), 'static')
 CSV_PATH = os.path.join(STATIC_DIR, 'openmoji.csv')
 
-TOPICS = ["science", "technology", "travel", "health", "culture", "environment", "sports", "kids", "teens", "good news"]
+TOPICS = ["science", "technology", "travel", "business", "health", "culture", "environment", "sports", "kids", "teens", "good news"]
 
 topic_icon_map = {}
 try:
@@ -66,7 +66,9 @@ try:
     fallback_icons = {
         'science': '1F52C', 'technology': '1F4BB', 'travel': '2708',
         'culture': '1F3A4', 'environment': '1F333', 'teens': '1F9D1',
-        'kids': '1F476', 'good news': '1F389', 'general': '1F4A1'
+        'kids': '1F476', 'good news': '1F389', 'general': '1F4A1',
+        'Business': '1F4BC',  # Briefcase emoji
+        'all news': '1F4F0'   # Newspaper emoji
     }
     for topic, hexcode in fallback_icons.items():
         if topic not in topic_icon_map:

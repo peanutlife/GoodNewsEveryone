@@ -310,8 +310,11 @@ def extract_location_from_content(article):
 def flatten_articles(articles_by_topic, sort_by_inspiration=True, min_score=None):
     """
     Convert articles_by_topic dictionary to a flat list
-    If sort_by_inspiration is True, sorts by inspiration_score, then published date
-    min_score can be used to filter articles below a certain inspiration score
+
+    Parameters:
+    - sort_by_inspiration: If True, sorts by inspiration_score first, then published date
+                          If False, sorts only by published date (newest first)
+    - min_score: If provided, filters articles below a certain inspiration score
     """
     flat = []
     for topic, articles in articles_by_topic.items():
@@ -330,14 +333,29 @@ def flatten_articles(articles_by_topic, sort_by_inspiration=True, min_score=None
                 if location:
                     article['location'] = location
 
+            # Ensure article has a proper datetime object for consistent sorting
+            if isinstance(article.get('published'), str):
+                try:
+                    # Store the datetime object in a separate field to avoid modifying the original
+                    article['_published_dt'] = datetime.fromisoformat(article['published'])
+                except (ValueError, TypeError):
+                    # If parsing fails, use current time as fallback
+                    article['_published_dt'] = datetime.utcnow()
+            else:
+                article['_published_dt'] = datetime.utcnow()
+
             flat.append(article)
 
     if sort_by_inspiration:
         # Sort by inspiration score (highest first), then by published date (newest first)
-        flat.sort(key=lambda x: (x.get('is_inspirational', False), x.get('inspiration_score', 0), x.get('published', '')), reverse=True)
+        flat.sort(key=lambda x: (
+            x.get('is_inspirational', False),
+            x.get('inspiration_score', 0),
+            x.get('_published_dt', datetime.utcnow())
+        ), reverse=True)
     else:
-        # Sort by just published date (newest first)
-        flat.sort(key=lambda x: x.get('published', ''), reverse=True)
+        # Sort ONLY by published date (newest first)
+        flat.sort(key=lambda x: x.get('_published_dt', datetime.utcnow()), reverse=True)
 
     return flat
 
@@ -491,8 +509,9 @@ def initialize_app(app):
             logging.warning(f"Error loading cache file: {e}")
             # Continue with whatever is in memory
 
-        # Get the topic filter from URL parameter
+        # Get the topic filter and sort type from URL parameters
         selected_topic = request.args.get('topic')
+        sort_type = request.args.get('sort', 'hot')  # Default to 'hot' if not specified
 
         if not articles_by_topic:
             articles_by_topic = article_cache.get("articles", {})
@@ -503,12 +522,23 @@ def initialize_app(app):
         if current_user.is_authenticated:
             min_inspiration_score = current_user.min_inspiration_score
 
-        # Flatten and sort articles by inspiration score
-        all_articles = flatten_articles(
-            articles_by_topic,
-            sort_by_inspiration=True,
-            min_score=min_inspiration_score
-        )
+        # Flatten and sort articles based on sort_type
+        if sort_type == 'new':
+            # Sort by published date only for 'new' view
+            all_articles = flatten_articles(
+                articles_by_topic,
+                sort_by_inspiration=False,  # Don't prioritize inspiration score
+                min_score=min_inspiration_score
+            )
+            logging.info("Sorting articles by newest first")
+        else:
+            # Sort by inspiration score (default 'hot' view)
+            all_articles = flatten_articles(
+                articles_by_topic,
+                sort_by_inspiration=True,
+                min_score=min_inspiration_score
+            )
+            logging.info("Sorting articles by inspiration score (hot)")
 
         # Filter by topic if specified
         if selected_topic:
@@ -564,12 +594,21 @@ def initialize_app(app):
             if articles_list and 'topic_icon_path' in articles_list[0]:
                 topic_icons[topic] = articles_list[0]['topic_icon_path']
 
+        # Add icons for categories that might not be in articles
+        if 'Business' not in topic_icons:
+            business_icon = '/openmoji/color/svg/1F4BC.svg'  # Briefcase emoji
+            topic_icons['Business'] = business_icon
+
+        # Add "All News" icon (this is a special case not in articles_by_topic)
+        topic_icons['all news'] = '/openmoji/color/svg/1F4F0.svg'  # Newspaper emoji
+
         return render_template(
             "index.html",
             articles=all_articles,
             topics=unique_topics,
             topic_icons=topic_icons,
             selected_topic=selected_topic,
+            sort=sort_type,  # Pass the current sort type to the template
             last_updated=last_updated
         )
 
@@ -591,7 +630,7 @@ if __name__ == "__main__":
     app = create_app()
 
     # Start the background cache refresh thread
-    start_background_refresh(initial_delay=5, interval=CACHE_DURATION_SECONDS)
+    #start_background_refresh(initial_delay=5, interval=CACHE_DURATION_SECONDS)
 
     # Start the Flask application
     port = int(os.environ.get("PORT", 5005))
