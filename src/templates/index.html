@@ -133,15 +133,7 @@
                     {% set is_truly_inspiring = article.get('is_inspirational', False) %}
                     <div class="post">
                         <!-- Vote sidebar -->
-                        <div class="vote-sidebar">
-                            <button class="vote-up" aria-label="upvote">
-                                <i class="fas fa-arrow-up"></i>
-                            </button>
-                            <span class="vote-score">{{ article.get('inspiration_score')|round|int }}</span>
-                            <button class="vote-down" aria-label="downvote">
-                                <i class="fas fa-arrow-down"></i>
-                            </button>
-                        </div>
+                      
 
                         <div class="post-content">
                             <div class="post-header">
@@ -304,24 +296,7 @@
                 });
             }
 
-            // Set up voting buttons
-            document.querySelectorAll('.vote-up, .vote-down').forEach(button => {
-                button.addEventListener('click', function() {
-                    const voteContainer = this.closest('.vote-sidebar');
-                    const scoreElement = voteContainer.querySelector('.vote-score');
-                    const currentScore = parseInt(scoreElement.textContent);
 
-                    if (this.classList.contains('vote-up')) {
-                        scoreElement.textContent = currentScore + 1;
-                        this.classList.add('voted');
-                        voteContainer.querySelector('.vote-down').classList.remove('voted');
-                    } else {
-                        scoreElement.textContent = currentScore - 1;
-                        this.classList.add('voted');
-                        voteContainer.querySelector('.vote-up').classList.remove('voted');
-                    }
-                });
-            });
 
             // Share button functionality
             document.querySelectorAll('.share-btn').forEach(button => {
