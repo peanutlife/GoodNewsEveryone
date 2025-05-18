@@ -1,5 +1,8 @@
 # BrightSide News - Installation and Deployment Guide
 
+maxresdefault.jpg
+![alt text](maxresdefault.jpg)
+
 This guide provides instructions on how to set up and run the BrightSide News Flask application locally and offers considerations for deploying it to platforms like AWS or Azure.
 
 ## Prerequisites
