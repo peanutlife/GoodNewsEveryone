@@ -248,39 +248,29 @@ def unsubscribe(token):
 
     return redirect(url_for('index'))
 
-
-# Initialize topics
 def init_topics():
-    # Get topics from your existing system
+    """Initialize topics for adult audience"""
     topics_to_create = [
-        {"name": "science", "display_name": "Science", "description": "Scientific discoveries and breakthroughs"},
-        {"name": "technology", "display_name": "Technology", "description": "Tech innovations and digital trends"},
-        {"name": "health", "display_name": "Health", "description": "Health, wellness, and medical advances"},
-        {"name": "environment", "display_name": "Environment", "description": "Environmental news and sustainability"},
-        {"name": "culture", "display_name": "Culture", "description": "Arts, music, and cultural developments"},
-        {"name": "travel", "display_name": "Travel", "description": "Travel destinations and tourism"},
-        {"name": "sports", "display_name": "Sports", "description": "Sports news and achievements"},
-        {"name": "kids", "display_name": "Kids", "description": "News for children and about education"},
-        {"name": "teens", "display_name": "Teens", "description": "Content relevant to teenagers"},
-        {"name": "general", "display_name": "General", "description": "General positive news"}
+        {"name": "science", "display_name": "Science & Discovery", "description": "Scientific breakthroughs and research"},
+        {"name": "technology", "display_name": "Technology", "description": "Tech innovation and digital trends"},
+        {"name": "business", "display_name": "Business & Career", "description": "Entrepreneurship and career success"},
+        {"name": "health", "display_name": "Health & Wellness", "description": "Physical and mental wellbeing"},
+        {"name": "environment", "display_name": "Environment", "description": "Sustainability and climate solutions"},
+        {"name": "personal_growth", "display_name": "Personal Growth", "description": "Motivation and self-improvement"},
+        {"name": "social_impact", "display_name": "Social Impact", "description": "Community and positive change"},
+        {"name": "culture", "display_name": "Arts & Culture", "description": "Creative arts and cultural stories"},
+        {"name": "travel", "display_name": "Travel & Adventure", "description": "Exploration and discovery"},
+        {"name": "relationships", "display_name": "Relationships", "description": "Human connection and community"},
+        {"name": "sports", "display_name": "Sports", "description": "Athletic achievements and comebacks"},
+        {"name": "general", "display_name": "General", "description": "Inspiring stories from all areas"}
     ]
 
     for topic_data in topics_to_create:
-        # Check if topic already exists
         existing = Topic.query.get(topic_data["name"])
         if not existing:
-            # Create emoji icon path from topic name
-            icon_hex = None
-            from src.aggregator import topic_icon_map, fallback_icons
-
-            if topic_data["name"] in topic_icon_map:
-                icon_hex = topic_icon_map[topic_data["name"]]
-            elif topic_data["name"] in fallback_icons:
-                icon_hex = fallback_icons[topic_data["name"]]
-
+            icon_hex = fallback_icons.get(topic_data["name"])
             icon_path = f"/openmoji/color/svg/{icon_hex}.svg" if icon_hex else None
 
-            # Create new topic
             new_topic = Topic(
                 name=topic_data["name"],
                 display_name=topic_data["display_name"],
@@ -290,3 +280,44 @@ def init_topics():
             db.session.add(new_topic)
 
     db.session.commit()
+# Initialize topics
+# def init_topics():
+#     # Get topics from your existing system
+#     topics_to_create = [
+#         {"name": "science", "display_name": "Science", "description": "Scientific discoveries and breakthroughs"},
+#         {"name": "technology", "display_name": "Technology", "description": "Tech innovations and digital trends"},
+#         {"name": "health", "display_name": "Health", "description": "Health, wellness, and medical advances"},
+#         {"name": "environment", "display_name": "Environment", "description": "Environmental news and sustainability"},
+#         {"name": "culture", "display_name": "Culture", "description": "Arts, music, and cultural developments"},
+#         {"name": "travel", "display_name": "Travel", "description": "Travel destinations and tourism"},
+#         {"name": "sports", "display_name": "Sports", "description": "Sports news and achievements"},
+#         {"name": "kids", "display_name": "Kids", "description": "News for children and about education"},
+#         {"name": "teens", "display_name": "Teens", "description": "Content relevant to teenagers"},
+#         {"name": "general", "display_name": "General", "description": "General positive news"}
+#     ]
+#
+#     for topic_data in topics_to_create:
+#         # Check if topic already exists
+#         existing = Topic.query.get(topic_data["name"])
+#         if not existing:
+#             # Create emoji icon path from topic name
+#             icon_hex = None
+#             from src.aggregator import topic_icon_map, fallback_icons
+#
+#             if topic_data["name"] in topic_icon_map:
+#                 icon_hex = topic_icon_map[topic_data["name"]]
+#             elif topic_data["name"] in fallback_icons:
+#                 icon_hex = fallback_icons[topic_data["name"]]
+#
+#             icon_path = f"/openmoji/color/svg/{icon_hex}.svg" if icon_hex else None
+#
+#             # Create new topic
+#             new_topic = Topic(
+#                 name=topic_data["name"],
+#                 display_name=topic_data["display_name"],
+#                 description=topic_data["description"],
+#                 icon_path=icon_path
+#             )
+#             db.session.add(new_topic)
+#
+#     db.session.commit()

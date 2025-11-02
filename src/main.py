@@ -386,12 +386,122 @@ def initialize_app(app):
 
     # Define routes
     @app.route("/")
+    # def index():
+    #     """Serves the main page with flat mixed feed of positive news articles."""
+    #     global articles_by_topic
+    #     global last_updated
+    #
+    #     # Check if we should reload the cache from file
+    #     try:
+    #         if os.path.exists(PERMANENT_CACHE_FILE):
+    #             with open(PERMANENT_CACHE_FILE, 'r', encoding='utf-8') as f:
+    #                 cache_data = json.load(f)
+    #                 articles_by_topic = cache_data.get("articles", {})
+    #                 last_updated_str = cache_data.get("last_fetched")
+    #                 if last_updated_str:
+    #                     last_updated = datetime.fromisoformat(last_updated_str)
+    #     except Exception as e:
+    #         logging.warning(f"Error loading cache file: {e}")
+    #
+    #     # Get the topic filter and sort type from URL parameters
+    #     selected_topic = request.args.get('topic')
+    #     sort_type = request.args.get('sort', 'hot')
+    #
+    #     if not articles_by_topic:
+    #         articles_by_topic = article_cache.get("articles", {})
+    #         logging.warning("Using in-memory article_cache as fallback.")
+    #
+    #     # Apply user preferences if logged in
+    #     min_inspiration_score = None
+    #     if current_user.is_authenticated:
+    #         min_inspiration_score = current_user.min_inspiration_score
+    #
+    #     # Flatten and sort articles based on sort_type
+    #     if sort_type == 'new':
+    #         all_articles = flatten_articles(
+    #             articles_by_topic,
+    #             sort_by_inspiration=False,
+    #             min_score=min_inspiration_score
+    #         )
+    #         logging.info("Sorting articles by newest first")
+    #     else:
+    #         all_articles = flatten_articles(
+    #             articles_by_topic,
+    #             sort_by_inspiration=True,
+    #             min_score=min_inspiration_score
+    #         )
+    #         logging.info("Sorting articles by inspiration score (hot)")
+    #
+    #     # Filter by topic if specified
+    #     if selected_topic:
+    #         filtered_articles = []
+    #         for article in all_articles:
+    #             if article.get('topic_name', '').lower() == selected_topic.lower():
+    #                 filtered_articles.append(article)
+    #         all_articles = filtered_articles
+    #
+    #     # Filter by user's favorite topics if logged in and no specific topic selected
+    #     elif current_user.is_authenticated and not selected_topic and current_user.favorite_topics:
+    #         if len(all_articles) > 10:
+    #             favorite_topic_names = [topic.name for topic in current_user.favorite_topics]
+    #             top_stories = all_articles[:4]
+    #             favorite_articles = [a for a in all_articles[4:] if a.get('topic_name', '') in favorite_topic_names]
+    #
+    #             if len(favorite_articles) >= 8:
+    #                 all_articles = top_stories + favorite_articles
+    #             else:
+    #                 other_articles = [a for a in all_articles[4:] if a.get('topic_name', '') not in favorite_topic_names]
+    #                 supplemental_count = max(8 - len(favorite_articles), 0)
+    #                 all_articles = top_stories + favorite_articles + other_articles[:supplemental_count]
+    #
+    #     # Process articles for display - add decorated titles with emojis
+    #     for article in all_articles:
+    #         emoji = ''
+    #         if article.get('topic_icon_path'):
+    #             hex_code = os.path.splitext(os.path.basename(article['topic_icon_path']))[0]
+    #             try:
+    #                 emoji = chr(int(hex_code, 16))
+    #             except Exception:
+    #                 emoji = ''
+    #         decorated_title = f"[{emoji} {article.get('topic_name', 'General').title()}] {article['title']}"
+    #         article['decorated_title'] = decorated_title
+    #
+    #     # Get the list of unique topics for the sidebar
+    #     unique_topics = []
+    #     for topic in articles_by_topic.keys():
+    #         if topic not in unique_topics:
+    #             unique_topics.append(topic)
+    #
+    #     unique_topics.sort()
+    #
+    #     # Get topic icons for sidebar
+    #     topic_icons = {}
+    #     for topic, articles_list in articles_by_topic.items():
+    #         if articles_list and 'topic_icon_path' in articles_list[0]:
+    #             topic_icons[topic] = articles_list[0]['topic_icon_path']
+    #
+    #     if 'Business' not in topic_icons:
+    #         topic_icons['Business'] = '/openmoji/color/svg/1F4BC.svg'
+    #
+    #     topic_icons['all news'] = '/openmoji/color/svg/1F4F0.svg'
+    #
+    #     return render_template(
+    #         "index.html",
+    #         articles=all_articles,
+    #         topics=unique_topics,
+    #         topic_icons=topic_icons,
+    #         selected_topic=selected_topic,
+    #         sort=sort_type,
+    #         last_updated=last_updated
+    #     )
+
+    @app.route("/")
     def index():
         """Serves the main page with flat mixed feed of positive news articles."""
         global articles_by_topic
         global last_updated
 
-        # Check if we should reload the cache from file
+        # Reload cache if needed
         try:
             if os.path.exists(PERMANENT_CACHE_FILE):
                 with open(PERMANENT_CACHE_FILE, 'r', encoding='utf-8') as f:
@@ -403,9 +513,10 @@ def initialize_app(app):
         except Exception as e:
             logging.warning(f"Error loading cache file: {e}")
 
-        # Get the topic filter and sort type from URL parameters
+        # Get parameters
         selected_topic = request.args.get('topic')
-        sort_type = request.args.get('sort', 'hot')
+        sort_type = request.args.get('sort', 'top')  # Changed default from 'hot' to 'top'
+        time_filter = request.args.get('time', 'all')  # New parameter
 
         if not articles_by_topic:
             articles_by_topic = article_cache.get("articles", {})
@@ -417,20 +528,41 @@ def initialize_app(app):
             min_inspiration_score = current_user.min_inspiration_score
 
         # Flatten and sort articles based on sort_type
-        if sort_type == 'new':
+        if sort_type == 'latest':
             all_articles = flatten_articles(
                 articles_by_topic,
                 sort_by_inspiration=False,
                 min_score=min_inspiration_score
             )
             logging.info("Sorting articles by newest first")
-        else:
+        else:  # 'top' or default
             all_articles = flatten_articles(
                 articles_by_topic,
                 sort_by_inspiration=True,
                 min_score=min_inspiration_score
             )
-            logging.info("Sorting articles by inspiration score (hot)")
+            logging.info("Sorting articles by inspiration score (top)")
+
+        # Apply time filter
+        if time_filter != 'all':
+            now = datetime.utcnow()
+            filtered_by_time = []
+
+            for article in all_articles:
+                pub_date = article.get('_published_dt', datetime.utcnow())
+
+                if time_filter == 'today':
+                    if (now - pub_date).days < 1:
+                        filtered_by_time.append(article)
+                elif time_filter == 'week':
+                    if (now - pub_date).days < 7:
+                        filtered_by_time.append(article)
+                elif time_filter == 'month':
+                    if (now - pub_date).days < 30:
+                        filtered_by_time.append(article)
+
+            all_articles = filtered_by_time
+            logging.info(f"Filtered to {len(all_articles)} articles from {time_filter}")
 
         # Filter by topic if specified
         if selected_topic:
@@ -440,7 +572,7 @@ def initialize_app(app):
                     filtered_articles.append(article)
             all_articles = filtered_articles
 
-        # Filter by user's favorite topics if logged in and no specific topic selected
+        # Filter by user's favorite topics if logged in
         elif current_user.is_authenticated and not selected_topic and current_user.favorite_topics:
             if len(all_articles) > 10:
                 favorite_topic_names = [topic.name for topic in current_user.favorite_topics]
@@ -450,11 +582,12 @@ def initialize_app(app):
                 if len(favorite_articles) >= 8:
                     all_articles = top_stories + favorite_articles
                 else:
-                    other_articles = [a for a in all_articles[4:] if a.get('topic_name', '') not in favorite_topic_names]
+                    other_articles = [a for a in all_articles[4:] if
+                                      a.get('topic_name', '') not in favorite_topic_names]
                     supplemental_count = max(8 - len(favorite_articles), 0)
                     all_articles = top_stories + favorite_articles + other_articles[:supplemental_count]
 
-        # Process articles for display - add decorated titles with emojis
+        # Process articles for display
         for article in all_articles:
             emoji = ''
             if article.get('topic_icon_path'):
@@ -466,15 +599,11 @@ def initialize_app(app):
             decorated_title = f"[{emoji} {article.get('topic_name', 'General').title()}] {article['title']}"
             article['decorated_title'] = decorated_title
 
-        # Get the list of unique topics for the sidebar
-        unique_topics = []
-        for topic in articles_by_topic.keys():
-            if topic not in unique_topics:
-                unique_topics.append(topic)
-
+        # Get unique topics
+        unique_topics = list(articles_by_topic.keys())
         unique_topics.sort()
 
-        # Get topic icons for sidebar
+        # Get topic icons
         topic_icons = {}
         for topic, articles_list in articles_by_topic.items():
             if articles_list and 'topic_icon_path' in articles_list[0]:
@@ -492,9 +621,9 @@ def initialize_app(app):
             topic_icons=topic_icons,
             selected_topic=selected_topic,
             sort=sort_type,
+            time_filter=time_filter,  # Pass to template
             last_updated=last_updated
         )
-
     @app.route("/refresh")
     def refresh_articles():
         """Force a refresh of articles"""

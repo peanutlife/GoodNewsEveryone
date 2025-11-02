@@ -1,3 +1,45 @@
+# Major News - Good News Sections
+https://www.goodnewsnetwork.org/feed/
+https://www.positive.news/feed/
+https://www.optimistdaily.com/feed/
+https://www.goodgoodgood.co/articles/rss.xml
+https://reasonstobecheerful.world/feed/
+
+# Science & Technology
+http://rss.nytimes.com/services/xml/rss/nyt/Technology.xml
+http://rss.nytimes.com/services/xml/rss/nyt/Science.xml
+https://www.sciencedaily.com/rss/all.xml
+https://www.technologyreview.com/feed/
+
+# Business & Entrepreneurship
+https://www.entrepreneur.com/latest.rss
+https://techcrunch.com/feed/
+https://www.fastcompany.com/latest/rss
+
+# Health & Wellness
+https://www.mindbodygreen.com/rss
+https://www.healthline.com/rss
+
+# Environment
+https://www.treehugger.com/feeds/rss
+https://www.greenbiz.com/feed
+
+# Personal Growth & Success
+https://www.success.com/feed/
+https://www.lifehack.org/feed
+https://zenhabits.net/feed/
+https://tinybuddha.com/feed/
+
+# Social Impact
+https://www.yesmagazine.org/rss.xml
+https://www.globalcitizen.org/en/feed/
+
+# Culture
+https://www.euronews.com/rss?format=mrss&level=vertical&name=culture
+
+# Travel
+https://www.euronews.com/rss?format=mrss&level=vertical&name=travel
+
 http://rss.nytimes.com/services/xml/rss/nyt/Technology.xml
 http://rss.nytimes.com/services/xml/rss/nyt/Science.xml
 https://www.euronews.com/rss?format=mrss&level=vertical&name=culture

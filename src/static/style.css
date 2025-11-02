@@ -279,37 +279,60 @@ main {
   min-width: 0;
 }
 
-/* Sort options */
+/* Enhanced sort and time filter options */
 .sort-options {
-  display: flex;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  background: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-.sort-option {
+.sort-tabs {
   display: flex;
-  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.time-filter {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sort-option, .time-option {
   padding: 0.5rem 1rem;
-  margin-right: 0.75rem;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  color: var(--text-medium);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.sort-option i {
-  margin-right: 0.5rem;
-}
-
-.sort-option:hover {
-  background-color: #f0f0f0;
+  border-radius: 6px;
   text-decoration: none;
+  color: #6c757d;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  border: 1px solid #e9ecef;
+  background: #f8f9fa;
+}
+
+.sort-option:hover, .time-option:hover {
+  background: #e9ecef;
+  color: #495057;
 }
 
 .sort-option.active {
-  background-color: #e6f0ff;
-  color: var(--primary-blue);
-  font-weight: 500;
+  background: #e76f51;
+  color: white;
+  border-color: #e76f51;
+}
+
+.time-option.active {
+  background: #264653;
+  color: white;
+  border-color: #264653;
+}
+
+.sort-option i {
+  margin-right: 0.25rem;
 }
 
 /* Section header */
@@ -433,16 +456,37 @@ main {
   color: var(--text-light);
 }
 
-/* Inspiring tag */
-.inspiring-tag {
+/* Article tags styling */
+.article-tags {
   display: flex;
-  align-items: center;
-  color: var(--accent-yellow);
-  font-weight: 600;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
 }
 
-.inspiring-tag i {
-  margin-right: 0.25rem;
+.article-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+
+.article-tag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Hide old inspiring-tag style */
+.inspiring-tag {
+  display: none;
 }
 
 /* Post body - horizontal layout */

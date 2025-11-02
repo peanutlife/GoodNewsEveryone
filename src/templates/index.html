@@ -123,7 +123,39 @@
             {% endwith %}
 
             {% if articles %}
-                <!-- Sort options -->
+                <!-- Sort and Time Filter options -->
+<div class="sort-options">
+    <div class="sort-tabs">
+        <a href="/?sort=top{% if selected_topic %}&topic={{ selected_topic }}{% endif %}{% if time_filter and time_filter != 'all' %}&time={{ time_filter }}{% endif %}"
+           class="sort-option {% if sort == 'top' or not sort %}active{% endif %}">
+            <i class="fas fa-star"></i> Top Stories
+        </a>
+        <a href="/?sort=latest{% if selected_topic %}&topic={{ selected_topic }}{% endif %}{% if time_filter and time_filter != 'all' %}&time={{ time_filter }}{% endif %}"
+           class="sort-option {% if sort == 'latest' %}active{% endif %}">
+            <i class="fas fa-clock"></i> Latest
+        </a>
+    </div>
+
+    <div class="time-filter">
+        <a href="/?sort={{ sort or 'top' }}{% if selected_topic %}&topic={{ selected_topic }}{% endif %}&time=all"
+           class="time-option {% if not time_filter or time_filter == 'all' %}active{% endif %}">
+            All Time
+        </a>
+        <a href="/?sort={{ sort or 'top' }}{% if selected_topic %}&topic={{ selected_topic }}{% endif %}&time=today"
+           class="time-option {% if time_filter == 'today' %}active{% endif %}">
+            Today
+        </a>
+        <a href="/?sort={{ sort or 'top' }}{% if selected_topic %}&topic={{ selected_topic }}{% endif %}&time=week"
+           class="time-option {% if time_filter == 'week' %}active{% endif %}">
+            This Week
+        </a>
+        <a href="/?sort={{ sort or 'top' }}{% if selected_topic %}&topic={{ selected_topic }}{% endif %}&time=month"
+           class="time-option {% if time_filter == 'month' %}active{% endif %}">
+            This Month
+        </a>
+    </div>
+</div>
+                <!-- Sort options
                 <div class="sort-options">
       <a href="/?sort=hot{% if selected_topic %}&topic={{ selected_topic }}{% endif %}"
          class="sort-option {% if sort == 'hot' or not sort %}active{% endif %}">
@@ -133,7 +165,7 @@
          class="sort-option {% if sort == 'new' %}active{% endif %}">
           <i class="fas fa-clock"></i> New
       </a>
-  </div>
+  </div> -->
 
                 <!-- Top Stories Section -->
                 <div class="section-header">
@@ -147,24 +179,35 @@
 
 
                         <div class="post-content">
-                            <div class="post-header">
-                                <div class="post-metadata">
-                                    <a href="/?topic={{ article.get('topic_name', 'general') }}" class="post-topic">
-                                        {% if article.get('topic_icon_path') %}
-                                            <img src="{{ url_for('static', filename=article['topic_icon_path']) }}" alt="topic" class="topic-icon">
-                                        {% endif %}
-                                        {{ article.get('topic_name', 'general')|title }}
-                                    </a>
-                                    <span class="post-source">{{ article.get('source_name', '') }}</span>
-                                    <span class="post-time">{{ article['published'] | format_datetime }}</span>
+                         <div class="post-header">
+    <div class="post-metadata">
+        <a href="/?topic={{ article.get('topic_name', 'general') }}" class="post-topic">
+            {% if article.get('topic_icon_path') %}
+                <img src="{{ url_for('static', filename=article['topic_icon_path']) }}" alt="topic" class="topic-icon">
+            {% endif %}
+            {{ article.get('topic_name', 'general')|title }}
+        </a>
+        <span class="post-source">{{ article.get('source_name', '') }}</span>
+        <span class="post-time">{{ article['published'] | format_datetime }}</span>
+    </div>
 
-                                    {% if is_truly_inspiring %}
-                                        <span class="inspiring-tag">
-                                            <i class="fas fa-star"></i> Inspiring
-                                        </span>
-                                    {% endif %}
-                                </div>
-                            </div>
+    <!-- DEBUG: Show if tags exist
+    <div style="background: yellow; color: black; padding: 5px; margin: 5px 0;">
+        🐛 DEBUG: {{ article.get('tags', []) | length }} tags |
+        {% if article.get('tags') %}HAS TAGS{% else %}NO TAGS{% endif %}
+    </div>
+-->
+    <!-- Multiple tags instead of single "Inspiring" tag -->
+    {% if article.get('tags') %}
+        <div class="article-tags">
+            {% for tag in article.get('tags', []) %}
+                <span class="article-tag" style="background-color: {{ tag.color }}; color: white;">
+                    {{ tag.icon }} {{ tag.name }}
+                </span>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
 
                             <div class="post-body">
                                 {% if article.get('image_url') %}
