@@ -25,6 +25,8 @@ from src.aggregator import fetch_and_filter_feeds
 #Import Email Subsbriber model
 from src.models.subscriber import EmailSubscriber
 
+from src.config import config
+
 # Set up logging
 logging.basicConfig(level=logging.INFO,
                    format='[%(asctime)s] %(levelname)s in %(module)s: %(message)s')
@@ -362,6 +364,7 @@ def flatten_articles(articles_by_topic, sort_by_inspiration=True, min_score=None
 
     return flat
 
+
 def create_app():
     """Create and configure the Flask application"""
     app = Flask(
@@ -374,25 +377,56 @@ def create_app():
     app.config["SECRET_KEY"] = "brightside_secret_key_123!"
     app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=24)
 
-    # Database configuration
-    DB_PATH = os.path.join(DATA_DIR, "brightside.db")
-    db_dir = os.path.dirname(DB_PATH)
+    # Database configuration - Use config class
+    from src.config import config
+    env = os.environ.get('FLASK_ENV', 'development')
+    app_config = config[env]
+    app_config.init_app(app)
 
-    # Ensure database directory exists
-    if not os.path.exists(db_dir):
-        os.makedirs(db_dir, exist_ok=True)
-        logging.info(f"Created database directory: {db_dir}")
-
-    # Configure SQLAlchemy
-    app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DB_PATH}"
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-    logging.info(f"Database path: {DB_PATH}")
+    logging.info(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
 
     # Initialize application with additional configuration
     initialize_app(app)
 
     return app
+# def create_app():
+#     """Create and configure the Flask application"""
+#     app = Flask(
+#         __name__,
+#         static_folder=os.path.join(os.path.dirname(__file__), "static"),
+#         template_folder=os.path.join(os.path.dirname(__file__), "templates")
+#     )
+#
+#     # Configure app
+#     app.config["SECRET_KEY"] = "brightside_secret_key_123!"
+#     app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=24)
+#
+#     # # Database configuration
+#     # DB_PATH = os.path.join(DATA_DIR, "brightside.db")
+#     # db_dir = os.path.dirname(DB_PATH)
+#     #
+#     # # Ensure database directory exists
+#     # if not os.path.exists(db_dir):
+#     #     os.makedirs(db_dir, exist_ok=True)
+#     #     logging.info(f"Created database directory: {db_dir}")
+#     #
+#     # # Configure SQLAlchemy
+#     # app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DB_PATH}"
+#     # app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+#     #
+#     # logging.info(f"Database path: {DB_PATH}")
+#     #
+#     # # Initialize application with additional configuration
+#     # initialize_app(app)
+#     # Database configuration - Use config class
+#     from src.config import config
+#     env = os.environ.get('FLASK_ENV', 'development')
+#     app_config = config[env]
+#     app_config.init_app(app)
+#
+#     logging.info(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
+#
+#     return app
 
 def initialize_app(app):
     """Initialize Flask application with database and routes"""
