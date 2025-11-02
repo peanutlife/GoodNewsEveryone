@@ -1426,6 +1426,31 @@
       "image_url": "https://www.google.com/s2/favicons?domain=dougdvorak.com&sz=128"
     },
     {
+      "title": "OpenAI Restructures as For-Profit Company",
+      "link": "https://www.nytimes.com/2025/10/28/technology/openai-restructure-for-profit-company.html",
+      "summary": "The artificial intelligence company said the nonprofit that controlled the organization would receive a $130 billion stake in the new company.",
+      "published": "2025-10-28T19:21:43",
+      "sentiment_score": 0.4767,
+      "inspiration_score": 3.2,
+      "inspiration_dimensions": {
+        "emotional": 3,
+        "triumph": 2,
+        "social": 4,
+        "novelty": 7,
+        "actionable": 1,
+        "composite": 3.2
+      },
+      "is_inspirational": true,
+      "source_name": "rss.nytimes.com",
+      "source_feed": "http://rss.nytimes.com/services/xml/rss/nyt/Technology.xml",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "business",
+      "topic_icon_path": "/openmoji/color/svg/1F23A.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F23A.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://static01.nyt.com/images/2025/10/28/multimedia/28openai-restructure-1-gtpl/28openai-restructure-1-gtpl-mediumSquareAt3X.jpg"
+    },
+    {
       "title": "How to Fund a Startup: Tips & Strategies for Success",
       "link": "https://www.success.com/how-to-get-funding-for-startup/",
       "summary": "<p>Looking to get funding for your startup? Learn about fundraising rounds, common sources of funds and strategies to fund your business.</p>\n<p>The post <a href=\"https://www.success.com/how-to-get-funding-for-startup/\">How to Fund a Startup: Tips &amp; Strategies for Success</a> appeared first on <a href=\"https://www.success.com\">SUCCESS</a>.</p>",
@@ -8755,6 +8780,31 @@
       "noun_icon_url": "/openmoji/color/svg/1F3A4.svg",
       "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
       "image_url": "https://lifebeyondnumbers.com/wp-content/uploads/2024/02/life-quotes.jpg"
+    },
+    {
+      "title": "PLAYTOPIA returns to Cape Town this December!",
+      "link": "https://www.sagoodnews.co.za/playtopia-returns-to-cape-town-this-december/",
+      "summary": "<p>PLAYTOPIA, Africa’s premier Indie Games &#038; Immersive Arts Festival and Summit, returns in December 2025</p>\n<p>The post <a href=\"https://www.sagoodnews.co.za/playtopia-returns-to-cape-town-this-december/\">PLAYTOPIA returns to Cape Town this December!</a> appeared first on <a href=\"https://www.sagoodnews.co.za\">The Home Of Great South African News</a>.</p>",
+      "published": "2025-10-28T23:00:14",
+      "sentiment_score": 0.8353,
+      "inspiration_score": 4.5,
+      "inspiration_dimensions": {
+        "emotional": 6,
+        "triumph": 4,
+        "social": 3,
+        "novelty": 7,
+        "actionable": 2,
+        "composite": 4.5
+      },
+      "is_inspirational": true,
+      "source_name": "www.sagoodnews.co.za",
+      "source_feed": "https://www.sagoodnews.co.za/feed/",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "culture",
+      "topic_icon_path": "/openmoji/color/svg/1F3A4.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F3A4.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://www.sagoodnews.co.za/wp-content/uploads/2025/10/Playtopia-1-2025-1024x670.jpg"
     },
     {
       "title": "October is National Book Month. Here are 11 ways to celebrate",

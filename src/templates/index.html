@@ -188,8 +188,8 @@
                                     <button class="action-button share-btn" data-url="{{ article['link'] }}" data-title="{{ article['title'] }}">
                                         <i class="fas fa-share-alt"></i> Share
                                     </button>
- <!-- Temporarily hidden save functionality
-                                    {% if current_user.is_authenticated %}
+
+                                    <!-- {% if current_user.is_authenticated %}
                                         <form action="{{ url_for('auth.save_article') }}" method="post" style="display: inline;">
                                             <input type="hidden" name="article_link" value="{{ article['link'] }}">
                                             <input type="hidden" name="article_title" value="{{ article['title'] }}">
@@ -202,15 +202,13 @@
                                         <a href="{{ url_for('auth.login') }}" class="action-button save-btn">
                                             <i class="far fa-bookmark"></i> Save
                                         </a>
-                                    {% endif %}
-                                    -->
+                                    {% endif %} -->
 
                                     <a href="{{ article['link'] }}" target="_blank" class="action-button read-btn">
                                         <i class="fas fa-book-open"></i> Read Full Article
                                     </a>
                                 </div>
 
-                                <div class="share-dropdown">
                                 <div class="share-dropdown">
                                     <a href="https://twitter.com/intent/tweet?url={{ article['link'] | urlencode }}&text={{ article['title'] | urlencode }}" target="_blank" class="share-option">
                                         <i class="fab fa-twitter"></i> Twitter
