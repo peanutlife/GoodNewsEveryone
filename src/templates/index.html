@@ -241,17 +241,15 @@
         <!-- Right Sidebar -->
         <aside class="ad-sidebar">
             <div class="sidebar-section">
-                <h3>JOIN US</h3>
-                <p class="sidebar-info">Join our community of positive news enthusiasts and get daily updates on the best inspirational stories.</p>
-                {% if not current_user.is_authenticated %}
-                <div class="join-button-container">
-                    <a href="{{ url_for('auth.signup') }}" class="join-button">
-                        <i class="fas fa-user-plus"></i>
-                        Create Account
-                    </a>
-                </div>
-                {% endif %}
-            </div>
+        <h3>GET DAILY INSPIRATION</h3>
+        <p class="sidebar-info">Subscribe to receive the top 10 most inspiring stories delivered to your inbox every morning.</p>
+        <div class="join-button-container">
+            <a href="{{ url_for('auth.subscribe') }}" class="join-button">
+                <i class="fas fa-envelope"></i>
+                Subscribe Now
+            </a>
+        </div>
+    </div>
 
             <div class="sidebar-section">
                 <h3>TOP TOPICS</h3>
