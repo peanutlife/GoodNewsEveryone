@@ -2,7 +2,7 @@
 import os
 os.environ['FLASK_ENV'] = 'development'
 
-from src.main import app, db
+from src.main_older import app, db
 
 # Create all tables
 with app.app_context():
