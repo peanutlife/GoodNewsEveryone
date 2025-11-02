@@ -25,7 +25,12 @@ class Config:
         # Render uses postgres:// but SQLAlchemy needs postgresql://
         if DATABASE_URL.startswith('postgres://'):
             DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
-        SQLALCHEMY_DATABASE_URI = DATABASE_URL
+
+        # Add SSL parameters for Render's PostgreSQL
+        if '?' in DATABASE_URL:
+            SQLALCHEMY_DATABASE_URI = f"{DATABASE_URL}&sslmode=require"
+        else:
+            SQLALCHEMY_DATABASE_URI = f"{DATABASE_URL}?sslmode=require"
     else:
         # Local development - use PostgreSQL
         db_name = os.environ.get('DB_NAME', 'brightside_dev')
@@ -36,7 +41,19 @@ class Config:
 
         SQLALCHEMY_DATABASE_URI = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 
+    # SQLAlchemy settings
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    # Connection pool settings for production reliability
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'pool_pre_ping': True,  # Verify connections before using them
+        'pool_recycle': 300,  # Recycle connections after 5 minutes
+        'pool_size': 10,  # Number of connections to maintain
+        'max_overflow': 20,  # Max additional connections when pool is full
+        'connect_args': {
+            'connect_timeout': 10,  # Connection timeout in seconds
+        }
+    }
 
     # Admin
     ADMIN_USER = os.environ.get('ADMIN_USER')
@@ -66,11 +83,23 @@ class DevelopmentConfig(Config):
     """Development configuration."""
     DEBUG = True
 
+    # Override engine options for local development (less restrictive)
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'pool_pre_ping': True,
+        'pool_recycle': 3600,
+        'connect_args': {
+            'connect_timeout': 5,
+        }
+    }
+
 
 class TestingConfig(Config):
     """Testing configuration."""
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+
+    # No connection pooling for testing
+    SQLALCHEMY_ENGINE_OPTIONS = {}
 
 
 class ProductionConfig(Config):
@@ -88,6 +117,14 @@ class ProductionConfig(Config):
 
         if cls.ADMIN_USER == 'admin' or not cls.ADMIN_PASS:
             app.logger.error("Insecure admin credentials detected in production!")
+
+        # Log database connection info (without password)
+        if cls.DATABASE_URL:
+            # Parse and log sanitized connection info
+            from urllib.parse import urlparse
+            parsed = urlparse(cls.SQLALCHEMY_DATABASE_URI)
+            safe_uri = f"{parsed.scheme}://{parsed.hostname}:{parsed.port}{parsed.path}"
+            app.logger.info(f"Production database: {safe_uri}")
 
 
 # Configuration mapping
