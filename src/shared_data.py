@@ -33,7 +33,7 @@ CACHE_DURATION_SECONDS = 15 * 60 # Fetch new articles every 15 minutes
 
 # Sentiment threshold (VADER compound score)
 # Increased threshold to filter for more clearly positive articles
-POSITIVE_THRESHOLD = 0.80 # Articles must have a compound score > this value (was 0.05)
+POSITIVE_THRESHOLD = 0.50 # Articles must have a compound score > this value (was 0.05)
 
 # Keywords to filter out (case-insensitive)
 NEGATIVE_KEYWORDS = [

@@ -15,7 +15,7 @@ from urllib.parse import urlparse
 
 
 # Load OpenAI API Key
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "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")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
 # Load OpenMoji CSV and build topic-icon map

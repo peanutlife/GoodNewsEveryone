@@ -136,7 +136,7 @@ def classify_with_llm(text):
         return False
 
     try:
-        prompt = f"Is this news article positive and inspiring? Respond with only Yes or No.\n\nArticle:\n{text}"
+        prompt = f"Is this news article positive, uplifting, or inspiring? Respond with only Yes or No.\n\nArticle:\n{text[:500]}"  # Truncate to save tokens
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}],
