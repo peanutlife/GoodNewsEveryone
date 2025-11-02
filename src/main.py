@@ -22,6 +22,9 @@ from src.routes.auth import auth_bp, init_topics
 from src.shared_data import article_cache, CACHE_DURATION_SECONDS, get_feed_urls, removed_article_links, load_removed_articles
 from src.aggregator import fetch_and_filter_feeds
 
+#Import Email Subsbriber model
+from src.models.subscriber import EmailSubscriber
+
 # Set up logging
 logging.basicConfig(level=logging.INFO,
                    format='[%(asctime)s] %(levelname)s in %(module)s: %(message)s')
