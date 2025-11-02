@@ -1,0 +1,239 @@
+https://www.mindbodygreen.com/rss
+  Error: <unknown>:2:7468: not well-formed (invalid token)
+
+https://www.healthline.com/rss
+  Error: <unknown>:2:0: not well-formed (invalid token)
+
+https://www.treehugger.com/feeds/rss
+  Error: <unknown>:144:173: not well-formed (invalid token)
+
+https://www.greenbiz.com/feed
+  Error: <unknown>:3:0: syntax error
+
+https://zenhabits.net/feed/
+  Error: <unknown>:19:2: mismatched tag
+
+https://www.yesmagazine.org/rss.xml
+  Error: <unknown>:2:751: not well-formed (invalid token)
+
+https://www.globalcitizen.org/en/feed/
+  Error: <unknown>:2390:54: not well-formed (invalid token)
+
+https://feed.koreatimes.co.kr/k/entertainment.xml
+  Error: No entries found
+
+https://latinvex.com/rss/index/
+  Error: <unknown>:75:2: mismatched tag
+
+https://www.yesmagazine.org/rss.xml
+  Error: <unknown>:2:751: not well-formed (invalid token)
+
+https://www.dailygood.org/rss
+  Error: HTTP Error 302: The HTTP server returned a redirect error that would lead to an infinite loop.
+The last 30x error message was:
+Found
+
+https://www.goodnet.org/rss
+  Error: <unknown>:3:0: junk after document element
+
+https://notallnewsisbad.com/rss.xml
+  Error: <unknown>:20:51: not well-formed (invalid token)
+
+https://www.onlygoodnewsdaily.com/rss
+  Error: <unknown>:20:18: not well-formed (invalid token)
+
+https://globalpositivenews.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://www.goodnewsshared.com/feed/
+  Error: <unknown>:101:6: mismatched tag
+
+https://www.goodnewsmagazine.org/feed/
+  Error: text/html is not an XML media type
+
+https://www.goodnewspilipinas.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://www.today.com/news/good-news/rss
+  Error: <unknown>:6:750: not well-formed (invalid token)
+
+https://thenewdaily.com.au/news/good-news/feed/
+  Error: <unknown>:2:751: not well-formed (invalid token)
+
+https://www.bbc.co.uk/news/topics/c1038wnxyy2t/uplifting-stories
+  Error: <unknown>:408:4: mismatched tag
+
+https://www.abc.net.au/news/feed/5141364/rss.xml
+  Error: <unknown>:2:0: syntax error
+
+https://www.wfmz.com/news/good-news/?rss=1
+  Error: <unknown>:257:168: not well-formed (invalid token)
+
+https://www.goodnewshub.com/feed/
+  Error: text/html is not an XML media type
+
+https://www.goodnewsfinland.com/feed/
+  Error: <unknown>:2:0: not well-formed (invalid token)
+
+https://www.successconsciousness.com/blog/feed/
+  Error: No entries found
+
+https://www.yourselfquotes.com/feed/
+  Error: <urlopen error [SSL: TLSV1_ALERT_PROTOCOL_VERSION] tlsv1 alert protocol version (_ssl.c:1129)>
+
+https://www.1000spotlights.com/feed/
+  Error: <unknown>:5:0: syntax error
+
+https://www.entrepreneur.com/topic/motivation.rss
+  Error: <unknown>:66:22: not well-formed (invalid token)
+
+https://www.lifehack.org/motivation/feed
+  Error: <unknown>:2:0: not well-formed (invalid token)
+
+https://zenhabits.net/feed/
+  Error: <unknown>:19:2: mismatched tag
+
+https://scottmiker.com/feed/
+  Error: <unknown>:2:0: syntax error
+
+https://inspiredyou.life/feed/
+  Error: text/html is not an XML media type
+
+https://thetritetribe.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://adoseofhopewithhopesheree.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://thehomeofhope.com/feed/
+  Error: <unknown>:12:65: not well-formed (invalid token)
+
+https://www.lifesway.co.za/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://sarasarvivek.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://speak4mc.com/feed/
+  Error: <unknown>:20:18: not well-formed (invalid token)
+
+https://motivationalcheck.com/feed/
+  Error: <unknown>:112:2: mismatched tag
+
+https://jillianhaslam.com/feed/
+  Error: <unknown>:20:18: not well-formed (invalid token)
+
+https://wealthygorilla.com/feed/
+  Error: <unknown>:24:243: not well-formed (invalid token)
+
+https://www.inspirationalstories.com/feed/
+  Error: No entries found
+
+https://everydaypower.com/feed/
+  Error: <unknown>:2:0: not well-formed (invalid token)
+
+https://themindsjournal.com/feed/
+  Error: <urlopen error [SSL: TLSV1_ALERT_PROTOCOL_VERSION] tlsv1 alert protocol version (_ssl.c:1129)>
+
+https://www.habitstacker.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://www.wisdomwords.com/feed/
+  Error: text/html is not an XML media type
+
+https://www.wewishes.com/feed/
+  Error: <unknown>:48:10: mismatched tag
+
+https://inspiyr.com/feed/
+  Error: <unknown>:69:50: undefined entity
+
+https://bloggingapov.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://ayietim.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://inspirationandmotivation.com/feed/
+  Error: <unknown>:12:65: not well-formed (invalid token)
+
+https://motivationalbrains.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://franklyspeakingwithglory.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://motivationalhumoristspeaker.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://seobacklinks.com/feed/
+  Error: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1129)>
+
+https://coachmichaeltaylor.com/feed/
+  Error: <unknown>:5:102: not well-formed (invalid token)
+
+https://burningdesiresmotivation.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://lifeandmotivation.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://motivateyourselfdaily.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://combiningdreams.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://bemorestore.com/feed/
+  Error: <unknown>:2:0: syntax error
+
+https://gobeyondsuccess.com/feed/
+  Error: text/html is not an XML media type
+
+https://reformandmotivate.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://aamazingstory.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://paballo.com/feed/
+  Error: text/html; charset="utf-8" is not an XML media type
+
+https://thebravequeen.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://articlrg.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://motivationalpoohtalks.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://wrdmotivator.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://judithricquel.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://amydee.com/feed/
+  Error: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self signed certificate (_ssl.c:1129)>
+
+https://rolistance.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://motivationaldiaries.com/feed/
+  Error: <unknown>:2:0: syntax error
+
+https://perfectmotivationsinc.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://yourpersonalmotivator.com/feed/
+  Error: <urlopen error [SSL: TLSV1_ALERT_PROTOCOL_VERSION] tlsv1 alert protocol version (_ssl.c:1129)>
+
+https://getmotivation.com/feed/
+  Error: <unknown>:6:2: mismatched tag
+
+https://neverstoprukunanahi.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+https://margaretokubo.com/feed/
+  Error: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+

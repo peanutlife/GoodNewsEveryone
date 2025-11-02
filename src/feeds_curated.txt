@@ -1,0 +1,124 @@
+# GOOD NEWS AGGREGATORS (Core Sources)
+https://www.goodnewsnetwork.org/feed/
+https://www.positive.news/feed/
+https://www.optimistdaily.com/feed/
+https://www.goodgoodgood.co/articles/rss.xml
+https://reasonstobecheerful.world/feed/
+https://www.upworthy.com/feed
+
+# SCIENCE & TECHNOLOGY
+https://www.sciencedaily.com/rss/all.xml
+https://www.technologyreview.com/feed/
+https://techcrunch.com/feed/
+https://www.wired.com/feed/rss
+https://arstechnica.com/feed/
+https://www.theverge.com/rss/index.xml
+https://news.ycombinator.com/rss
+https://www.newscientist.com/feed/home
+https://phys.org/rss-feed/
+https://www.space.com/feeds/all
+
+# BUSINESS & ENTREPRENEURSHIP
+https://www.entrepreneur.com/latest.rss
+https://www.fastcompany.com/latest/rss
+https://www.inc.com/rss/
+https://hbr.org/feed
+https://www.forbes.com/innovation/feed/
+
+# HEALTH & WELLNESS
+https://www.mindbodygreen.com/rss
+https://www.healthline.com/rss
+https://www.webmd.com/rss/rss.aspx?RSSSource=RSS_PUBLIC
+https://www.medicalnewstoday.com/rss/news.xml
+https://www.prevention.com/rss/all.xml/
+
+# ENVIRONMENT & SUSTAINABILITY
+https://www.treehugger.com/feeds/rss
+https://www.greenbiz.com/feed
+https://grist.org/feed/
+https://www.ecowatch.com/feed
+https://cleantechnica.com/feed/
+https://www.anthropocenemagazine.org/feed/
+
+# PERSONAL DEVELOPMENT & MOTIVATION
+https://www.success.com/feed/
+https://www.lifehack.org/feed
+https://zenhabits.net/feed/
+https://tinybuddha.com/feed/
+https://www.pickthebrain.com/blog/feed/
+https://www.marcandangel.com/feed/
+
+# SOCIAL IMPACT & PHILANTHROPY
+https://www.yesmagazine.org/rss.xml
+https://www.globalcitizen.org/en/feed/
+https://www.charitywater.org/feed/
+https://www.ashoka.org/en/rss.xml
+
+# CULTURE & ARTS
+https://www.boredpanda.com/feed/
+https://mymodernmet.com/feed/
+https://www.thisiscolossal.com/feed/
+
+# PSYCHOLOGY & RELATIONSHIPS
+https://www.psychologytoday.com/us/blog/feed
+https://greatergood.berkeley.edu/feeds/rss_articles
+
+# INNOVATION & DESIGN
+https://www.core77.com/posts/rss
+https://www.designboom.com/feed/
+https://www.dezeen.com/feed/
+
+# GENERAL NEWS (Major outlets - good news sections)
+https://www.theguardian.com/world/rss
+https://www.bbc.com/news/rss.xml
+https://feeds.bbci.co.uk/news/technology/rss.xml
+https://feeds.bbci.co.uk/news/science_and_environment/rss.xml
+https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml
+https://rss.nytimes.com/services/xml/rss/nyt/Science.xml
+https://www.npr.org/rss/rss.php?id=1001
+https://www.csmonitor.com/rss
+
+# INTERNATIONAL GOOD NEWS
+https://www.euronews.com/rss?format=mrss&level=vertical&name=lifestyle
+https://www.aljazeera.com/xml/rss/all.xml
+https://www.dw.com/en/rss/rss-en-top/s-9097/rss.xml
+
+# INSPIRATION & HUMAN INTEREST
+https://www.inspiremore.com/feed/
+https://www.sunnyskyz.com/good-news/rss.xml
+https://www.rd.com/feed/
+
+# EDUCATION & LEARNING
+https://www.edutopia.org/rss.xml
+https://www.khanacademy.org/blog/rss.xml
+
+# ANIMALS & NATURE
+https://www.thedodo.com/rss.xml
+https://www.earthtouchnews.com/feed/
+
+# FOOD & SUSTAINABILITY
+https://civileats.com/feed/
+https://foodtank.com/feed/
+
+# CLIMATE SOLUTIONS
+https://www.canarymedia.com/feed
+https://www.volts.wtf/feed
+
+# TECH FOR GOOD
+https://restofworld.org/feed/latest/
+https://www.onezeroeight.com/feed/
+
+# ARCHITECTURE & URBAN PLANNING
+https://www.curbed.com/rss/index.xml
+https://www.architecturaldigest.com/feed/rss
+
+# SPORTS (Inspirational stories)
+https://www.espn.com/espn/rss/news
+https://www.theplayerstribune.com/feed
+
+# ADDITIONAL QUALITY SOURCES
+https://www.atlasobscura.com/feeds/latest
+https://ideas.ted.com/feed/
+https://www.brainpickings.org/feed/
+https://waitbutwhy.com/feed
+https://www.openculture.com/feed
