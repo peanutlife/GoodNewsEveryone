@@ -16,3 +16,6 @@ venv/bin/httpx
 venv/bin/normalizer
 venv/bin/openai
 venv/lib/python3.9/site-packages/
+
+data/article_cache.json
+data/brightside.db

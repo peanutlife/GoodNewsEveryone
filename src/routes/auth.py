@@ -3,8 +3,11 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash, session
 from flask_login import login_user, logout_user, login_required, current_user
 from src.models.user import User, Topic, db
-from src.shared_data import article_cache
+from src.models.subscriber import EmailSubscriber
+\from src.shared_data import article_cache
 import os
+import secrets
+
 
 auth_bp = Blueprint('auth', __name__, template_folder='../templates/auth')
 
@@ -195,6 +198,56 @@ def remove_saved_article(article_id):
         flash('Article not found', 'danger')
 
     return redirect(url_for('auth.saved_articles'))
+
+
+@auth_bp.route('/subscribe', methods=['GET', 'POST'])
+def subscribe():
+    if request.method == 'POST':
+        email = request.form.get('email', '').strip()
+
+        # Validate email
+        if not email or '@' not in email:
+            flash('Please enter a valid email address', 'danger')
+            return redirect(url_for('auth.subscribe'))
+
+        # Check if already subscribed
+        existing = EmailSubscriber.query.filter_by(email=email).first()
+        if existing:
+            if existing.is_active:
+                flash('This email is already subscribed!', 'info')
+            else:
+                existing.is_active = True
+                db.session.commit()
+                flash('Welcome back! Your subscription has been reactivated.', 'success')
+            return redirect(url_for('index'))
+
+        # Create new subscriber
+        subscriber = EmailSubscriber(
+            email=email,
+            unsubscribe_token=secrets.token_urlsafe(32)
+        )
+        db.session.add(subscriber)
+        db.session.commit()
+
+        flash('Thank you for subscribing! You\'ll receive daily positive news in your inbox.', 'success')
+        return redirect(url_for('index'))
+
+    return render_template('subscribe.html')
+
+
+@auth_bp.route('/unsubscribe/<token>')
+def unsubscribe(token):
+    subscriber = EmailSubscriber.query.filter_by(unsubscribe_token=token).first()
+
+    if subscriber:
+        subscriber.is_active = False
+        db.session.commit()
+        flash('You have been unsubscribed. We\'re sorry to see you go!', 'info')
+    else:
+        flash('Invalid unsubscribe link', 'danger')
+
+    return redirect(url_for('index'))
+
 
 # Initialize topics
 def init_topics():
