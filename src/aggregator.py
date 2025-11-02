@@ -266,92 +266,134 @@ def classify_article_tags(article):
 
 
 def classify_with_llm(text):
-    """Ask GPT if article is positive and inspiring"""
-    if not OPENAI_API_KEY:
-        logger.warning("OpenAI API key not available. Skipping LLM classification.")
-        return False
-
-    try:
-        prompt = f"Is this news article positive, uplifting, or inspiring? Respond with only Yes or No.\n\nArticle:\n{text[:500]}"
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": prompt}],
-            max_tokens=3,
-            temperature=0
-        )
-        answer = response.choices[0].message.content.strip().lower()
-        return answer == "yes"
-    except Exception as e:
-        logger.error(f"LLM Classification Error: {e}")
-        return False
+    """
+    Ask GPT if article is positive and inspiring
+    DISABLED: Using VADER sentiment only to avoid rate limits
+    """
+    # Temporarily disabled - rate limit exceeded
+    # Use VADER sentiment + keyword matching instead
+    return True  # Let articles through if they pass VADER checks
 
 
 def score_inspiration_with_llm(text):
-    """Ask LLM to score article on different inspirational dimensions"""
-    if not OPENAI_API_KEY:
-        logger.warning("OpenAI API key not available. Returning default inspiration score.")
-        return {'composite': 5}
+    """Heuristic scoring based on sentiment + keywords"""
+    from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
-    try:
-        prompt = (
-            "Rate this news article on the following dimensions from 1-10:\n\n"
-            "1) EMOTIONAL IMPACT: Does it evoke positive emotions like hope, joy, or admiration? (1=No emotion, 10=Powerful emotional impact)\n"
-            "2) TRIUMPH OVER ADVERSITY: Does it show people overcoming significant challenges? (1=No adversity narrative, 10=Extraordinary triumph)\n"
-            "3) SOCIAL BENEFIT: Does it describe actions that help communities or society? (1=No social impact, 10=Major positive social impact)\n"
-            "4) NOVELTY & INNOVATION: Does it present new ideas or approaches to problems? (1=Nothing novel, 10=Groundbreaking innovation)\n"
-            "5) ACTIONABILITY: Does it offer ideas readers could apply in their own lives? (1=Not actionable, 10=Highly actionable)\n\n"
-            "For each dimension, respond with ONLY a number between 1-10.\n"
-            "Format your response exactly like this example:\n"
-            "Emotional: 7\n"
-            "Triumph: 8\n"
-            "Social: 6\n"
-            "Novelty: 9\n"
-            "Actionable: 5\n\n"
-            f"Article:\n{text}"
-        )
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": prompt}],
-            max_tokens=75,
-            temperature=0
-        )
-        answer = response.choices[0].message.content.strip()
+    score = 5  # Base score
+    text_lower = text.lower()
 
-        # Parse the scores
-        scores = {}
-        for line in answer.split('\n'):
-            if ':' in line:
-                dimension, value = line.split(':')
-                try:
-                    score = int(value.strip())
-                    scores[dimension.strip().lower()] = min(max(score, 1), 10)
-                except (ValueError, AttributeError):
-                    pass
+    # Get VADER sentiment
+    sid = SentimentIntensityAnalyzer()
+    sentiment = sid.polarity_scores(text)
+    compound = sentiment['compound']
 
-        # Calculate weighted composite score
-        if len(scores) >= 5:
-            weights = {
-                'emotional': 0.25,
-                'triumph': 0.25,
-                'social': 0.2,
-                'novelty': 0.15,
-                'actionable': 0.15
-            }
+    # Base score from sentiment (0-10 scale)
+    score = 5 + (compound * 5)  # compound is -1 to 1, scale to 0-10
 
-            composite_score = 0
-            for dim, weight in weights.items():
-                if dim in scores:
-                    composite_score += scores[dim] * weight
+    # Boost for high-impact keywords
+    high_impact_words = ['breakthrough', 'triumph', 'overcame', 'hero', 'saved', 'rescued']
+    high_matches = sum(1 for word in high_impact_words if word in text_lower)
+    score += high_matches * 1.0
 
-            composite_score = round(composite_score, 1)
-            scores['composite'] = composite_score
-            return scores
-        else:
-            return {'composite': 5}
+    # Cap at 10
+    score = min(10, max(1, score))
 
-    except Exception as e:
-        logger.error(f"LLM Scoring Error: {e}")
-        return {'composite': 5}
+    return {
+        'composite': round(score, 1),
+        'emotional': round(score, 1),
+        'triumph': round(score, 1),
+        'social': round(score, 1),
+        'novelty': round(score, 1),
+        'actionable': round(score, 1)
+    }
+
+# def classify_with_llm(text):
+#     """Ask GPT if article is positive and inspiring"""
+#     if not OPENAI_API_KEY:
+#         logger.warning("OpenAI API key not available. Skipping LLM classification.")
+#         return False
+#
+#     try:
+#         prompt = f"Is this news article positive, uplifting, or inspiring? Respond with only Yes or No.\n\nArticle:\n{text[:500]}"
+#         response = client.chat.completions.create(
+#             model="gpt-3.5-turbo",
+#             messages=[{"role": "user", "content": prompt}],
+#             max_tokens=3,
+#             temperature=0
+#         )
+#         answer = response.choices[0].message.content.strip().lower()
+#         return answer == "yes"
+#     except Exception as e:
+#         logger.error(f"LLM Classification Error: {e}")
+#         return False
+
+
+# def score_inspiration_with_llm(text):
+#     """Ask LLM to score article on different inspirational dimensions"""
+#     if not OPENAI_API_KEY:
+#         logger.warning("OpenAI API key not available. Returning default inspiration score.")
+#         return {'composite': 5}
+#
+#     try:
+#         prompt = (
+#             "Rate this news article on the following dimensions from 1-10:\n\n"
+#             "1) EMOTIONAL IMPACT: Does it evoke positive emotions like hope, joy, or admiration? (1=No emotion, 10=Powerful emotional impact)\n"
+#             "2) TRIUMPH OVER ADVERSITY: Does it show people overcoming significant challenges? (1=No adversity narrative, 10=Extraordinary triumph)\n"
+#             "3) SOCIAL BENEFIT: Does it describe actions that help communities or society? (1=No social impact, 10=Major positive social impact)\n"
+#             "4) NOVELTY & INNOVATION: Does it present new ideas or approaches to problems? (1=Nothing novel, 10=Groundbreaking innovation)\n"
+#             "5) ACTIONABILITY: Does it offer ideas readers could apply in their own lives? (1=Not actionable, 10=Highly actionable)\n\n"
+#             "For each dimension, respond with ONLY a number between 1-10.\n"
+#             "Format your response exactly like this example:\n"
+#             "Emotional: 7\n"
+#             "Triumph: 8\n"
+#             "Social: 6\n"
+#             "Novelty: 9\n"
+#             "Actionable: 5\n\n"
+#             f"Article:\n{text}"
+#         )
+#         response = client.chat.completions.create(
+#             model="gpt-3.5-turbo",
+#             messages=[{"role": "user", "content": prompt}],
+#             max_tokens=75,
+#             temperature=0
+#         )
+#         answer = response.choices[0].message.content.strip()
+#
+#         # Parse the scores
+#         scores = {}
+#         for line in answer.split('\n'):
+#             if ':' in line:
+#                 dimension, value = line.split(':')
+#                 try:
+#                     score = int(value.strip())
+#                     scores[dimension.strip().lower()] = min(max(score, 1), 10)
+#                 except (ValueError, AttributeError):
+#                     pass
+#
+#         # Calculate weighted composite score
+#         if len(scores) >= 5:
+#             weights = {
+#                 'emotional': 0.25,
+#                 'triumph': 0.25,
+#                 'social': 0.2,
+#                 'novelty': 0.15,
+#                 'actionable': 0.15
+#             }
+#
+#             composite_score = 0
+#             for dim, weight in weights.items():
+#                 if dim in scores:
+#                     composite_score += scores[dim] * weight
+#
+#             composite_score = round(composite_score, 1)
+#             scores['composite'] = composite_score
+#             return scores
+#         else:
+#             return {'composite': 5}
+#
+#     except Exception as e:
+#         logger.error(f"LLM Scoring Error: {e}")
+#         return {'composite': 5}
 
 
 def get_topic_and_icon(title, summary):
