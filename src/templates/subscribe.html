@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscribe - Project Optimist News</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .subscribe-container {
+            max-width: 600px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .subscribe-container h2 {
+            color: #e76f51;
+            margin-bottom: 1rem;
+        }
+
+        .subscribe-form {
+            margin-top: 2rem;
+        }
+
+        .email-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .subscribe-btn {
+            background-color: #e76f51;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .subscribe-btn:hover {
+            background-color: #e86a43;
+        }
+
+        .benefits-list {
+            text-align: left;
+            margin: 2rem auto;
+            max-width: 400px;
+        }
+
+        .benefits-list li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .benefits-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #e76f51;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="/">Project Optimist</a></h1>
+        <p>Your daily dose of positivity</p>
+    </header>
+
+    <main class="subscribe-container">
+        <h2>📧 Get Daily Positivity in Your Inbox</h2>
+        <p>Join thousands of readers who start their day with inspiring stories</p>
+
+        <ul class="benefits-list">
+            <li>Top 10 most inspiring stories delivered daily</li>
+            <li>Curated by AI for maximum positivity</li>
+            <li>No spam, unsubscribe anytime</li>
+            <li>Free forever</li>
+        </ul>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="post" class="subscribe-form">
+            <input type="email" name="email" placeholder="Enter your email address"
+                   class="email-input" required>
+            <button type="submit" class="subscribe-btn">Subscribe Now</button>
+        </form>
+
+        <p style="margin-top: 1.5rem; font-size: 0.9rem; color: #666;">
+            We respect your privacy. Your email will never be shared.
+        </p>
+    </main>
+
+    <footer>
+        <p>&copy; {{ now.year }} Project Optimist News. All rights reserved.</p>
+    </footer>
+</body>
+</html>
