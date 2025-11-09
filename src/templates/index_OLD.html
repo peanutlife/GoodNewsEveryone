@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en" {% if current_user.is_authenticated and current_user.dark_mode %}class="dark-mode"{% endif %}>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Project Optimist - Your Daily Feed of Positive News</title>
+    <meta name="description" content="Project Optimist aggregates positive and uplifting news stories from around the world.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_masonry.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous">
+</head>
+
+<body>
+    <!-- Sticky Header -->
+    <header>
+        <div class="brand-section">
+            <h1><a href="/">Project Optimist</a></h1>
+            <p class="tagline">Your daily dose of positivity</p>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="layout-container">
+        <!-- Left Sidebar (Compact) -->
+        <aside class="filter-sidebar">
+            <div class="sidebar-section">
+                <h3>TOPICS</h3>
+                <ul class="filter-list">
+                    <li>
+                        <a href="/" class="filter-item all-news-filter {% if not selected_topic %}active{% endif %}">
+                            <img src="{{ url_for('static', filename='/openmoji/color/svg/1F4F0.svg') }}" alt="icon" class="filter-icon">
+                            <span>All</span>
+                        </a>
+                    </li>
+
+                    {% for topic in topics %}
+                        <li>
+                            <a href="/?topic={{ topic }}" class="filter-item {% if selected_topic == topic %}active{% endif %}">
+                                {% if topic_icons.get(topic) %}
+                                    <img src="{{ url_for('static', filename=topic_icons.get(topic)) }}" alt="icon" class="filter-icon">
+                                {% endif %}
+                                <span>{{ topic[:8] }}</span>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="last-updated">
+                    <i class="fas fa-sync-alt"></i>
+                    <small>{{ last_updated|format_datetime if last_updated else 'Now' }}</small>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content (Full Width Masonry) -->
+        <main>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% if articles %}
+                <!-- Sort Controls (Sticky) -->
+                <div class="sort-controls">
+                    <div class="sort-tabs">
+                        <a href="/?sort=top{% if selected_topic %}&topic={{ selected_topic }}{% endif %}"
+                           class="sort-option {% if sort == 'top' or not sort %}active{% endif %}">
+                            <i class="fas fa-star"></i> Top
+                        </a>
+                        <a href="/?sort=latest{% if selected_topic %}&topic={{ selected_topic }}{% endif %}"
+                           class="sort-option {% if sort == 'latest' %}active{% endif %}">
+                            <i class="fas fa-clock"></i> Latest
+                        </a>
+                    </div>
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="masonry" title="Masonry View">
+                            <i class="fas fa-th"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Masonry Container -->
+                <div class="masonry-container">
+                    {% for article in articles %}
+                        {% if loop.index % 8 == 5 %}
+                            <!-- Ad Spot (Every 5th article) -->
+                            <div class="ad-card ad-featured">
+                                <div class="ad-content">
+                                    <div class="ad-badge">Sponsored</div>
+                                    <h3>Featured Story</h3>
+                                    <p>Get daily inspiration with Project Optimist</p>
+                                    <button class="ad-btn">Learn More</button>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <!-- Article Card (Dynamic Size Based on Image) -->
+                        {% set has_image = article.get('image_url') %}
+                        {% set card_size = 'card-large' if has_image else 'card-compact' %}
+                        {% set size_class = 'size-' + (loop.index % 5 | string) %}
+
+                        <article class="card {{ card_size }} {{ size_class }}" data-topic="{{ article.get('topic_name', 'general') }}">
+                            {% if has_image %}
+                                <div class="card-image">
+                                    <img src="{{ article['image_url'] }}" alt="{{ article['title'] }}" loading="lazy">
+                                    <div class="card-image-overlay"></div>
+                                </div>
+                            {% endif %}
+
+                            <div class="card-body">
+                                <div class="card-header">
+                                    <div class="card-meta">
+                                        <a href="/?topic={{ article.get('topic_name', 'general') }}" class="card-topic">
+                                            {% if article.get('topic_icon_path') %}
+                                                <img src="{{ url_for('static', filename=article['topic_icon_path']) }}" alt="topic" class="topic-icon" loading="lazy">
+                                            {% endif %}
+                                            {{ article.get('topic_name', 'general')|title }}
+                                        </a>
+                                        <span class="card-source" title="{{ article.get('source_name', '') }}">
+                                            {{ article.get('source_name', '')[:15] }}
+                                        </span>
+                                    </div>
+                                    <span class="card-time">{{ article['published'] | format_datetime }}</span>
+
+                                    {% if article.get('tags') %}
+                                        <div class="card-tags">
+                                            {% for tag in article.get('tags', [])[:1] %}
+                                                <span class="tag" style="background-color: {{ tag.color }}">{{ tag.icon }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                <h3 class="card-title">
+                                    <a href="{{ article['link'] }}" target="_blank">{{ article['title'][:60] }}...</a>
+                                </h3>
+
+                                {% if not has_image %}
+                                    <p class="card-summary">{{ article['summary'] | striptags | truncate(100) }}</p>
+                                {% endif %}
+
+                                <div class="card-actions">
+                                    <button class="action-btn share-btn" data-url="{{ article['link'] }}" title="Share">
+                                        <i class="fas fa-share-alt"></i>
+                                    </button>
+                                    <a href="{{ article['link'] }}" target="_blank" class="action-btn read-btn" title="Read">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </a>
+                                </div>
+
+                                <!-- Share Dropdown -->
+                                <div class="share-dropdown">
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ article['link'] | urlencode }}" target="_blank" rel="noopener noreferrer">
+                                        <i class="fab fa-facebook-f"></i>
+                                    </a>
+                                    <a href="https://twitter.com/intent/tweet?url={{ article['link'] | urlencode }}&text={{ article['title'] | urlencode }}" target="_blank" rel="noopener noreferrer">
+                                        <i class="fab fa-twitter"></i>
+                                    </a>
+                                    <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ article['link'] | urlencode }}" target="_blank" rel="noopener noreferrer">
+                                        <i class="fab fa-linkedin-in"></i>
+                                    </a>
+                                    <a href="#" class="copy-link" data-url="{{ article['link'] }}">
+                                        <i class="fas fa-link"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+
+                <!-- Infinite Scroll Trigger -->
+                <div class="infinite-scroll-trigger"></div>
+
+            {% else %}
+                <div class="no-articles">
+                    <i class="fas fa-inbox"></i>
+                    <h3>No articles yet</h3>
+                </div>
+            {% endif %}
+        </main>
+
+        <!-- Right Sidebar (Newsletter) -->
+        <aside class="side-panel">
+            <div class="panel-content">
+                <div class="newsletter-box">
+                    <h3>📧 Daily Digest</h3>
+                    <p>Get 10 inspiring stories each morning</p>
+                    <a href="{{ url_for('auth.subscribe') }}" class="subscribe-btn">
+                        <i class="fas fa-envelope"></i> Subscribe
+                    </a>
+                </div>
+
+                <div class="trending-box">
+                    <h4>Trending Topics</h4>
+                    <div class="trending-list">
+                        {% for topic in topics[:5] %}
+                            <a href="/?topic={{ topic }}" class="trending-item">
+                                {% if topic_icons.get(topic) %}
+                                    <img src="{{ url_for('static', filename=topic_icons.get(topic)) }}" alt="{{ topic }}" loading="lazy">
+                                {% endif %}
+                                {{ topic|title }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; {{ now.year }} Project Optimist | Powered by Good Vibes</p>
+    </footer>
+
+    <!-- Toast -->
+    <div class="toast" id="share-toast">
+        <i class="fas fa-check-circle"></i>
+        <span>Link copied!</span>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Share button functionality
+            document.querySelectorAll('.share-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const dropdown = this.closest('.card').querySelector('.share-dropdown');
+
+                    document.querySelectorAll('.share-dropdown.active').forEach(d => {
+                        if (d !== dropdown) d.classList.remove('active');
+                    });
+
+                    dropdown.classList.toggle('active');
+                });
+            });
+
+            // Copy link
+            document.querySelectorAll('.copy-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const url = this.getAttribute('data-url');
+
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(url).then(() => {
+                            showToast();
+                            this.closest('.share-dropdown').classList.remove('active');
+                        });
+                    }
+                });
+            });
+
+            // Close dropdown on outside click
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.share-btn') && !e.target.closest('.share-dropdown')) {
+                    document.querySelectorAll('.share-dropdown.active').forEach(d => {
+                        d.classList.remove('active');
+                    });
+                }
+            });
+
+            function showToast() {
+                const toast = document.getElementById('share-toast');
+                toast.classList.add('active');
+                setTimeout(() => toast.classList.remove('active'), 3000);
+            }
+
+            // Infinite scroll (placeholder for pagination logic)
+            const observerOptions = {
+                root: null,
+                rootMargin: '100px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Load more articles here
+                        console.log('Load more articles');
+                    }
+                });
+            }, observerOptions);
+
+            const trigger = document.querySelector('.infinite-scroll-trigger');
+            if (trigger) observer.observe(trigger);
+        });
+    </script>
+</body>
+</html>

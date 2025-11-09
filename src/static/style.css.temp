@@ -1,0 +1,870 @@
+/* ============================================================
+   PROJECT OPTIMIST - MASONRY LAYOUT (ADDICTION-FOCUSED DESIGN)
+   Inspired by: Pinterest, TikTok, Twitter, Threads
+   Psychology: Variable sizing, infinite scroll, smooth motion
+   ============================================================ */
+
+:root {
+  --primary-blue: #4169e1;
+  --primary-green: #00a86b;
+  --primary-orange: #f7a01b;
+  --bg-light: #ffffff;
+  --bg-gray: #f5f7fa;
+  --text-dark: #1a1a1a;
+  --text-medium: #555555;
+  --text-light: #999999;
+  --border-color: #e5e7eb;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: var(--bg-gray);
+  color: var(--text-dark);
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   HEADER (STICKY, MINIMAL)
+   ============================================================ */
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: white;
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.brand-section {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+header h1 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+header h1 a {
+  color: var(--primary-green);
+  text-decoration: none;
+}
+
+header .tagline {
+  font-size: 0.75rem;
+  color: var(--text-light);
+}
+
+/* ============================================================
+   MAIN LAYOUT (3-COLUMN MASONRY)
+   Left: Narrow sidebar
+   Center: Full masonry grid
+   Right: Narrow panel
+   ============================================================ */
+
+.layout-container {
+  display: grid;
+  grid-template-columns: 100px 1fr 280px;
+  gap: 1rem;
+  max-width: 1600px;
+  margin: 1rem auto;
+  padding: 0 0.5rem;
+}
+
+/* Left Sidebar (Minimal) */
+.filter-sidebar {
+  position: sticky;
+  top: 4.5rem;
+  height: fit-content;
+  background: white;
+  border-radius: 12px;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebar-section {
+  padding: 0;
+}
+
+.sidebar-section h3 {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.filter-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 8px;
+  background: var(--bg-gray);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  color: var(--text-dark);
+  gap: 0.25rem;
+}
+
+.filter-item:hover {
+  background: white;
+  border-color: var(--primary-blue);
+}
+
+.filter-item.active {
+  background: var(--primary-blue);
+  color: white;
+  border-color: var(--primary-blue);
+}
+
+.filter-item span {
+  display: none;
+}
+
+.filter-item.active span {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+.filter-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.last-updated {
+  font-size: 0.65rem;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.last-updated i {
+  color: var(--primary-green);
+  font-size: 0.7rem;
+}
+
+/* ============================================================
+   MAIN CONTENT (MASONRY GRID)
+   ============================================================ */
+
+main {
+  min-height: 100vh;
+}
+
+.sort-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.sort-tabs {
+  display: flex;
+  gap: 0.5rem;
+  background: white;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.sort-option {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-medium);
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.sort-option:hover {
+  background: var(--bg-gray);
+  color: var(--text-dark);
+}
+
+.sort-option.active {
+  background: var(--primary-orange);
+  color: white;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.view-btn {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border-color);
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-medium);
+  transition: all 0.2s ease;
+}
+
+.view-btn.active {
+  background: var(--primary-blue);
+  color: white;
+  border-color: var(--primary-blue);
+}
+
+/* ============================================================
+   MASONRY CONTAINER (KEY INNOVATION)
+   CSS Grid with auto-fit for responsive masonry
+   ============================================================ */
+
+.masonry-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-auto-rows: auto;
+  gap: 0.75rem;
+  grid-auto-flow: dense;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Card Sizing Logic (Pinterest-style variable sizing) */
+
+.card-compact {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+.card-large {
+  grid-column: span 1;
+  grid-row: span 2;
+}
+
+/* Size variation for visual interest (auto-fill pattern) */
+
+.size-1 { /* Every 5th: tall card (2 rows) */
+  grid-row: span 2;
+}
+
+.size-2, .size-3 { /* Compact cards */
+  grid-row: span 1;
+}
+
+.size-4 { /* Medium cards */
+  grid-column: span 1;
+  grid-row: span 1.5;
+}
+
+.size-0 { /* Featured (ads) */
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+/* Responsive masonry breakpoints */
+
+@media (max-width: 1200px) {
+  .masonry-container {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+
+  .layout-container {
+    grid-template-columns: 80px 1fr 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .masonry-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .card-large {
+    grid-row: span 1;
+  }
+
+  .size-1, .size-4 {
+    grid-row: span 1;
+  }
+
+  .layout-container {
+    grid-template-columns: 60px 1fr;
+  }
+
+  .side-panel {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .masonry-container {
+    grid-template-columns: 1fr;
+  }
+
+  .layout-container {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-sidebar {
+    display: none;
+  }
+}
+
+/* ============================================================
+   CARD STYLING (CORE UX)
+   ============================================================ */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  height: 100%;
+}
+
+.card:hover {
+  border-color: var(--primary-blue);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+/* Compact cards (no image) */
+.card-compact {
+  min-height: 120px;
+  padding: 0.75rem;
+}
+
+.card-compact .card-image {
+  display: none;
+}
+
+/* Large cards (with image) */
+.card-large {
+  padding: 0;
+}
+
+.card-large .card-body {
+  padding: 0.75rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+/* Card Image (Hero) */
+.card-image {
+  width: 100%;
+  height: 140px;
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(135deg, #f0f0f0 0%, #e5e5e5 100%);
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.4s ease;
+}
+
+.card:hover .card-image img {
+  transform: scale(1.08);
+}
+
+.card-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.3));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card:hover .card-image-overlay {
+  opacity: 1;
+}
+
+/* Card Body */
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-grow: 1;
+}
+
+.card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+}
+
+.card-topic {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: var(--primary-blue);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.card-topic:hover {
+  color: var(--primary-green);
+}
+
+.topic-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.card-source {
+  color: var(--text-light);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80px;
+}
+
+.card-time {
+  color: var(--text-light);
+  font-size: 0.65rem;
+}
+
+.card-tags {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 0.8rem;
+}
+
+.card-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-title a {
+  color: var(--text-dark);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.card-title a:hover {
+  color: var(--primary-blue);
+}
+
+.card-summary {
+  font-size: 0.75rem;
+  color: var(--text-medium);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+}
+
+/* Card Actions */
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  cursor: pointer;
+  color: var(--text-medium);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.action-btn:hover {
+  background: var(--bg-gray);
+  color: var(--primary-blue);
+  border-color: var(--primary-blue);
+}
+
+.read-btn {
+  margin-left: auto;
+  background: var(--primary-blue);
+  color: white;
+  border-color: var(--primary-blue);
+}
+
+.read-btn:hover {
+  background: #3657d0;
+}
+
+/* Share Dropdown */
+.share-dropdown {
+  position: absolute;
+  bottom: 50px;
+  left: 0.75rem;
+  right: 0.75rem;
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.2s ease;
+  z-index: 50;
+}
+
+.share-dropdown.active {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.share-dropdown a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: var(--bg-gray);
+  color: var(--text-dark);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+}
+
+.share-dropdown a:hover {
+  background: var(--primary-blue);
+  color: white;
+}
+
+/* ============================================================
+   AD CARDS (NATIVE ADS)
+   ============================================================ */
+
+.ad-card {
+  background: linear-gradient(135deg, #f7a01b 0%, #ff8c42 100%);
+  color: white;
+  border: 2px solid rgba(255,255,255,0.3);
+}
+
+.ad-card:hover {
+  border-color: white;
+  box-shadow: 0 8px 24px rgba(247,160,27,0.3);
+}
+
+.ad-content {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+  justify-content: center;
+  text-align: center;
+}
+
+.ad-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  opacity: 0.9;
+  letter-spacing: 1px;
+}
+
+.ad-content h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.ad-content p {
+  font-size: 0.8rem;
+  opacity: 0.95;
+  margin: 0;
+}
+
+.ad-btn {
+  padding: 0.4rem 0.8rem;
+  background: white;
+  color: #f7a01b;
+  border: none;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.25rem;
+}
+
+.ad-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* ============================================================
+   RIGHT SIDEBAR (NEWSLETTER + TRENDING)
+   ============================================================ */
+
+.side-panel {
+  position: sticky;
+  top: 4.5rem;
+  height: fit-content;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.panel-content > div {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+}
+
+.panel-content > div:last-child {
+  border-bottom: none;
+}
+
+.newsletter-box h3 {
+  font-size: 0.9rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.newsletter-box p {
+  font-size: 0.8rem;
+  color: var(--text-medium);
+  margin: 0 0 0.75rem 0;
+}
+
+.subscribe-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.6rem;
+  background: var(--primary-blue);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.subscribe-btn:hover {
+  background: #3657d0;
+  transform: translateY(-1px);
+}
+
+.trending-box h4 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem 0;
+  color: var(--text-dark);
+}
+
+.trending-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.trending-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  background: var(--bg-gray);
+  text-decoration: none;
+  color: var(--text-dark);
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.trending-item:hover {
+  background: var(--primary-blue);
+  color: white;
+}
+
+.trending-item img {
+  width: 18px;
+  height: 18px;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+footer {
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--text-light);
+  font-size: 0.8rem;
+  margin-top: 2rem;
+  border-top: 1px solid var(--border-color);
+}
+
+/* ============================================================
+   ALERTS & TOAST
+   ============================================================ */
+
+.alert {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  background: #d4edda;
+  border-left: 4px solid var(--primary-green);
+  color: #155724;
+  font-size: 0.9rem;
+}
+
+.no-articles {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-light);
+}
+
+.no-articles i {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  opacity: 0.3;
+}
+
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  padding: 0.75rem 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: none;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 1000;
+  border-left: 4px solid var(--primary-green);
+}
+
+.toast.active {
+  display: flex;
+  animation: slideIn 0.3s ease-out;
+}
+
+.toast i {
+  color: var(--primary-green);
+  font-size: 1.1rem;
+}
+
+.toast span {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ============================================================
+   INFINITE SCROLL TRIGGER (Invisible marker)
+   ============================================================ */
+
+.infinite-scroll-trigger {
+  height: 1px;
+  margin-top: 2rem;
+}
+
+/* ============================================================
+   DARK MODE (Future)
+   ============================================================ */
+
+.dark-mode {
+  --bg-light: #1a1a1a;
+  --bg-gray: #0f0f0f;
+  --text-dark: #ffffff;
+  --border-color: #333333;
+}

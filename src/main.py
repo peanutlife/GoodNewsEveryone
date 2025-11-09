@@ -496,6 +496,8 @@ def initialize_app(app):
     #     )
 
     @app.route("/")
+
+
     def index():
         """Serves the main page with flat mixed feed of positive news articles."""
         global articles_by_topic
@@ -634,6 +636,141 @@ def initialize_app(app):
             return redirect(url_for('index'))
         except Exception as e:
             return f"Error refreshing: {str(e)}", 500
+
+    # ============================================
+    # CORRECTED /masonry ROUTE
+    # Replace your current /masonry route with this
+    # ============================================
+
+    @app.route("/masonry")
+    def masonry_test():
+        """Masonry layout with same logic as index()"""
+        global articles_by_topic
+        global last_updated
+
+        # Reload cache if needed
+        try:
+            if os.path.exists(PERMANENT_CACHE_FILE):
+                with open(PERMANENT_CACHE_FILE, 'r', encoding='utf-8') as f:
+                    cache_data = json.load(f)
+                    articles_by_topic = cache_data.get("articles", {})
+                    last_updated_str = cache_data.get("last_fetched")
+                    if last_updated_str:
+                        last_updated = datetime.fromisoformat(last_updated_str)
+        except Exception as e:
+            logging.warning(f"Error loading cache file: {e}")
+
+        # Get parameters
+        selected_topic = request.args.get('topic')
+        sort_type = request.args.get('sort', 'top')
+        time_filter = request.args.get('time', 'all')  # THIS WAS MISSING
+
+        if not articles_by_topic:
+            articles_by_topic = article_cache.get("articles", {})
+            logging.warning("Using in-memory article_cache as fallback.")
+
+        # Apply user preferences if logged in
+        min_inspiration_score = None
+        if current_user.is_authenticated:
+            min_inspiration_score = current_user.min_inspiration_score
+
+        # Flatten and sort articles
+        if sort_type == 'latest':
+            all_articles = flatten_articles(
+                articles_by_topic,
+                sort_by_inspiration=False,
+                min_score=min_inspiration_score
+            )
+            logging.info("Sorting articles by newest first")
+        else:  # 'top' or default
+            all_articles = flatten_articles(
+                articles_by_topic,
+                sort_by_inspiration=True,
+                min_score=min_inspiration_score
+            )
+            logging.info("Sorting articles by inspiration score (top)")
+
+        # Apply time filter - THIS ENTIRE SECTION WAS MISSING
+        if time_filter != 'all':
+            now = datetime.utcnow()
+            filtered_by_time = []
+
+            for article in all_articles:
+                pub_date = article.get('_published_dt', datetime.utcnow())
+
+                if time_filter == 'today':
+                    if (now - pub_date).days < 1:
+                        filtered_by_time.append(article)
+                elif time_filter == 'week':
+                    if (now - pub_date).days < 7:
+                        filtered_by_time.append(article)
+                elif time_filter == 'month':
+                    if (now - pub_date).days < 30:
+                        filtered_by_time.append(article)
+
+            all_articles = filtered_by_time
+            logging.info(f"Filtered to {len(all_articles)} articles from {time_filter}")
+
+        # Filter by topic if specified
+        if selected_topic:
+            filtered_articles = []
+            for article in all_articles:
+                if article.get('topic_name', '').lower() == selected_topic.lower():
+                    filtered_articles.append(article)
+            all_articles = filtered_articles
+
+        # Filter by user's favorite topics if logged in
+        elif current_user.is_authenticated and not selected_topic and current_user.favorite_topics:
+            if len(all_articles) > 10:
+                favorite_topic_names = [topic.name for topic in current_user.favorite_topics]
+                top_stories = all_articles[:4]
+                favorite_articles = [a for a in all_articles[4:] if a.get('topic_name', '') in favorite_topic_names]
+
+                if len(favorite_articles) >= 8:
+                    all_articles = top_stories + favorite_articles
+                else:
+                    other_articles = [a for a in all_articles[4:] if
+                                      a.get('topic_name', '') not in favorite_topic_names]
+                    supplemental_count = max(8 - len(favorite_articles), 0)
+                    all_articles = top_stories + favorite_articles + other_articles[:supplemental_count]
+
+        # Process articles for display
+        for article in all_articles:
+            emoji = ''
+            if article.get('topic_icon_path'):
+                hex_code = os.path.splitext(os.path.basename(article['topic_icon_path']))[0]
+                try:
+                    emoji = chr(int(hex_code, 16))
+                except Exception:
+                    emoji = ''
+            decorated_title = f"[{emoji} {article.get('topic_name', 'General').title()}] {article['title']}"
+            article['decorated_title'] = decorated_title
+
+        # Get unique topics
+        unique_topics = list(articles_by_topic.keys())
+        unique_topics.sort()
+
+        # Get topic icons
+        topic_icons = {}
+        for topic, articles_list in articles_by_topic.items():
+            if articles_list and 'topic_icon_path' in articles_list[0]:
+                topic_icons[topic] = articles_list[0]['topic_icon_path']
+
+        if 'Business' not in topic_icons:
+            topic_icons['Business'] = '/openmoji/color/svg/1F4BC.svg'
+
+        topic_icons['all news'] = '/openmoji/color/svg/1F4F0.svg'
+
+        return render_template(
+            "index_masonry.html",  # or "index.html" if using unified template
+            articles=all_articles,
+            topics=unique_topics,
+            topic_icons=topic_icons,
+            selected_topic=selected_topic,
+            sort=sort_type,
+            time_filter=time_filter,  # MAKE SURE THIS IS PASSED
+            last_updated=last_updated
+        )
 
     return app
 

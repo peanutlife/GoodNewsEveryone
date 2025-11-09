@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Project Optimist - Your Daily Feed of Positive News</title>
+    <meta name="description" content="Project Optimist aggregates positive and uplifting news stories from around the world, filtering out negativity to bring you a brighter perspective.">
+
+    <!-- Fonts & CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_masonry.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous">
+</head>
+
+<body>
+    <!-- Sticky Header -->
+    <header>
+        <div class="brand-section">
+            <h1><a href="/">Project Optimist</a></h1>
+            <p class="tagline">Your daily dose of positivity</p>
+        </div>
+    </header>
+
+    <!-- Main Layout Container -->
+    <div class="layout-container">
+        <!-- Left Sidebar - Compact Filters -->
+        <aside class="filter-sidebar">
+            <div class="sidebar-section">
+                <h3>CATEGORIES</h3>
+                <ul class="filter-list">
+                    <li>
+                        <a href="/" class="filter-item all-news-filter {% if not selected_topic %}active{% endif %}">
+                            <img src="{{ url_for('static', filename='/openmoji/color/svg/1F4F0.svg') }}" alt="icon" class="filter-icon">
+                            All News
+                        </a>
+                    </li>
+
+                    {% for topic in topics %}
+                        <li>
+                            <a href="/?topic={{ topic }}" class="filter-item {% if selected_topic == topic %}active{% endif %}">
+                                {% if topic|lower == 'business' %}
+                                    <img src="{{ url_for('static', filename='/openmoji/color/svg/1F4BC.svg') }}" alt="icon" class="filter-icon">
+                                {% elif topic_icons.get(topic) %}
+                                    <img src="{{ url_for('static', filename=topic_icons.get(topic)) }}" alt="icon" class="filter-icon">
+                                {% endif %}
+                                {{ topic|title }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="last-updated">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>{{ last_updated|format_datetime if last_updated else 'Just now' }}</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>ABOUT</h3>
+                <p class="sidebar-info">Discover inspiring stories using AI-powered curation.</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% if articles %}
+                <!-- Sort and Time Filter Options -->
+                <div class="sort-options">
+                    <div class="sort-tabs">
+                        <a href="/?sort=top{% if selected_topic %}&topic={{ selected_topic }}{% endif %}{% if time_filter and time_filter != 'all' %}&time={{ time_filter }}{% endif %}"
+                           class="sort-option {% if sort == 'top' or not sort %}active{% endif %}">
+                            <i class="fas fa-star"></i> Top Stories
+                        </a>
+                        <a href="/?sort=latest{% if selected_topic %}&topic={{ selected_topic }}{% endif %}{% if time_filter and time_filter != 'all' %}&time={{ time_filter }}{% endif %}"
+                           class="sort-option {% if sort == 'latest' %}active{% endif %}">
+                            <i class="fas fa-clock"></i> Latest
+                        </a>
+                    </div>
+
+                    <div class="time-filter">
+                        <a href="/?sort={{ sort or 'top' }}{% if selected_topic %}&topic={{ selected_topic }}{% endif %}&time=all"
+                           class="time-option {% if not time_filter or time_filter == 'all' %}active{% endif %}">
+                            All Time
+                        </a>
+                        <a href="/?sort={{ sort or 'top' }}{% if selected_topic %}&topic={{ selected_topic }}{% endif %}&time=today"
+                           class="time-option {% if time_filter == 'today' %}active{% endif %}">
+                            Today
+                        </a>
+                        <a href="/?sort={{ sort or 'top' }}{% if selected_topic %}&topic={{ selected_topic }}{% endif %}&time=week"
+                           class="time-option {% if time_filter == 'week' %}active{% endif %}">
+                            This Week
+                        </a>
+                        <a href="/?sort={{ sort or 'top' }}{% if selected_topic %}&topic={{ selected_topic }}{% endif %}&time=month"
+                           class="time-option {% if time_filter == 'month' %}active{% endif %}">
+                            This Month
+                        </a>
+                    </div>
+                </div>
+
+                <div class="section-header">
+                    <i class="fas fa-trophy"></i> TRENDING NOW
+                </div>
+
+                <!-- MASONRY GRID - Variable Card Sizing -->
+                <div class="masonry-container">
+                    {% for article in articles %}
+                        {% set has_image = article.get('image_url') and article.get('image_url') != '' %}
+                        {% set card_size = 'compact' %}
+                        
+                        {# Determine card size based on position and image availability #}
+                        {% if loop.index % 5 == 0 and has_image %}
+                            {% set card_size = 'large' %}
+                        {% elif loop.index % 4 == 0 and has_image %}
+                            {% set card_size = 'medium' %}
+                        {% elif has_image and (loop.index % 7 == 0) %}
+                            {% set card_size = 'large' %}
+                        {% elif not has_image %}
+                            {% set card_size = 'compact' %}
+                        {% else %}
+                            {% set card_size = 'medium' if has_image else 'compact' %}
+                        {% endif %}
+
+                        <article class="post {{ card_size }}">
+                            <!-- Image (if available and not compact) -->
+                            {% if has_image and card_size != 'compact' %}
+                                <div class="post-image">
+                                    <img src="{{ article['image_url'] }}" 
+                                         alt="{{ article['title'][:50] }}"
+                                         loading="lazy">
+                                </div>
+                            {% endif %}
+
+                            <div class="post-content">
+                                <div class="post-header">
+                                    <div class="post-metadata">
+                                        <a href="/?topic={{ article.get('topic_name', 'general') }}" class="post-topic">
+                                            {% if article.get('topic_icon_path') %}
+                                                <img src="{{ url_for('static', filename=article['topic_icon_path']) }}" 
+                                                     alt="topic" 
+                                                     class="topic-icon">
+                                            {% endif %}
+                                            {{ article.get('topic_name', 'general')|title }}
+                                        </a>
+                                        <span class="post-source">{{ article.get('source_name', '')[:20] }}</span>
+                                        <span class="post-time">{{ article['published'] | format_datetime }}</span>
+                                    </div>
+
+                                    <!-- Article Tags -->
+                                    {% if article.get('tags') and card_size != 'compact' %}
+                                        <div class="article-tags">
+                                            {% for tag in article.get('tags', [])[:2] %}
+                                                <span class="article-tag" style="background-color: {{ tag.color }};">
+                                                    {{ tag.icon }} {{ tag.name }}
+                                                </span>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Title -->
+                                <h3 class="post-title">
+                                    <a href="{{ article['link'] }}" target="_blank" rel="noopener">
+                                        {{ article['title'] }}
+                                    </a>
+                                </h3>
+
+                                <!-- Summary (hidden for compact cards) -->
+                                {% if card_size != 'compact' %}
+                                    <p class="post-summary">
+                                        {{ article['summary'] | striptags | truncate(150) }}
+                                    </p>
+                                {% endif %}
+
+                                <!-- Actions -->
+                                <div class="post-actions">
+                                    <div class="action-buttons">
+                                        <button class="action-button share-btn" 
+                                                data-url="{{ article['link'] }}" 
+                                                data-title="{{ article['title'] }}">
+                                            <i class="fas fa-share-alt"></i> Share
+                                        </button>
+
+                                        <a href="{{ article['link'] }}" 
+                                           target="_blank" 
+                                           rel="noopener"
+                                           class="action-button read-btn">
+                                            <i class="fas fa-arrow-right"></i> Read
+                                        </a>
+                                    </div>
+
+                                    <!-- Share Dropdown -->
+                                    <div class="share-dropdown">
+                                        <a href="https://twitter.com/intent/tweet?url={{ article['link'] | urlencode }}&text={{ article['title'] | urlencode }}" 
+                                           target="_blank" 
+                                           rel="noopener"
+                                           class="share-option">
+                                            <i class="fab fa-twitter"></i> Twitter
+                                        </a>
+                                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ article['link'] | urlencode }}" 
+                                           target="_blank" 
+                                           rel="noopener"
+                                           class="share-option">
+                                            <i class="fab fa-facebook-f"></i> Facebook
+                                        </a>
+                                        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ article['link'] | urlencode }}&title={{ article['title'] | urlencode }}" 
+                                           target="_blank" 
+                                           rel="noopener"
+                                           class="share-option">
+                                            <i class="fab fa-linkedin-in"></i> LinkedIn
+                                        </a>
+                                        <a href="mailto:?subject={{ article['title'] | urlencode }}&body={{ article['link'] | urlencode }}" 
+                                           class="share-option">
+                                            <i class="fas fa-envelope"></i> Email
+                                        </a>
+                                        <a href="#" 
+                                           class="share-option copy-link" 
+                                           data-url="{{ article['link'] }}">
+                                            <i class="fas fa-link"></i> Copy Link
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+
+            {% else %}
+                <div class="no-articles">
+                    <i class="fas fa-newspaper"></i>
+                    <h3>No articles available right now</h3>
+                    <p>Please check back soon or try refreshing the page.</p>
+                </div>
+            {% endif %}
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="ad-sidebar">
+            <div class="sidebar-section">
+                <h3>GET DAILY INSPIRATION</h3>
+                <p class="sidebar-info">Subscribe to receive the top 10 most inspiring stories delivered to your inbox every morning.</p>
+                <div class="join-button-container">
+                    <a href="{{ url_for('auth.subscribe') }}" class="join-button">
+                        <i class="fas fa-envelope"></i>
+                        Subscribe Now
+                    </a>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>TOP TOPICS</h3>
+                <div class="topic-tags-container">
+                    {% for topic in topics[:8] %}
+                        <a href="/?topic={{ topic }}" class="topic-tag {{ topic|title }}">
+                            {% if topic_icons.get(topic) %}
+                                <img src="{{ url_for('static', filename=topic_icons.get(topic)) }}" 
+                                     alt="{{ topic }}" 
+                                     class="emoji-icon">
+                            {% endif %}
+                            {{ topic|title }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; {{ now.year }} Project Optimist. All rights reserved.</p>
+        <p>Powered by Good Vibes 🌟</p>
+    </footer>
+
+    <!-- Toast Notifications -->
+    <div class="toast" id="share-toast">
+        <i class="fas fa-check-circle"></i>
+        <span>Link copied to clipboard!</span>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Share button functionality
+            document.querySelectorAll('.share-btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const dropdown = this.closest('.post-actions').querySelector('.share-dropdown');
+                    
+                    // Close other dropdowns
+                    document.querySelectorAll('.share-dropdown.active').forEach(openDropdown => {
+                        if (openDropdown !== dropdown) {
+                            openDropdown.classList.remove('active');
+                        }
+                    });
+                    
+                    dropdown.classList.toggle('active');
+                });
+            });
+
+            // Close share dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.share-btn') && !e.target.closest('.share-dropdown')) {
+                    document.querySelectorAll('.share-dropdown.active').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                }
+            });
+
+            // Copy link functionality
+            document.querySelectorAll('.copy-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const url = this.getAttribute('data-url');
+
+                    // Modern clipboard API
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(url).then(() => {
+                            showToast();
+                        }).catch(err => {
+                            console.error('Failed to copy:', err);
+                            fallbackCopy(url);
+                        });
+                    } else {
+                        fallbackCopy(url);
+                    }
+
+                    // Close dropdown
+                    this.closest('.share-dropdown').classList.remove('active');
+                });
+            });
+
+            // Fallback copy method
+            function fallbackCopy(text) {
+                const tempInput = document.createElement('input');
+                document.body.appendChild(tempInput);
+                tempInput.value = text;
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                showToast();
+            }
+
+            // Show toast notification
+            function showToast() {
+                const toast = document.getElementById('share-toast');
+                if (toast) {
+                    toast.classList.add('active');
+                    setTimeout(() => {
+                        toast.classList.remove('active');
+                    }, 3000);
+                }
+            }
+
+            // Infinite scroll detection (optional - for future implementation)
+            let isLoading = false;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !isLoading) {
+                        // Future: Load more articles
+                        console.log('Near bottom - could load more articles');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            // Observe the last article for infinite scroll trigger
+            const articles = document.querySelectorAll('.post');
+            if (articles.length > 0) {
+                observer.observe(articles[articles.length - 1]);
+            }
+
+            // Lazy loading images with better error handling
+            if ('loading' in HTMLImageElement.prototype) {
+                // Browser supports native lazy loading
+                console.log('Native lazy loading supported');
+            } else {
+                // Fallback for older browsers
+                const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+                const imageObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.src = img.dataset.src || img.src;
+                            imageObserver.unobserve(img);
+                        }
+                    });
+                });
+
+                lazyImages.forEach(img => imageObserver.observe(img));
+            }
+
+            // Performance: Debounce scroll events
+            let scrollTimeout;
+            window.addEventListener('scroll', function() {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(function() {
+                    // Scroll event handler (if needed)
+                }, 150);
+            }, { passive: true });
+        });
+    </script>
+</body>
+</html>
