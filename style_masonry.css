@@ -9,6 +9,13 @@
   --primary-orange: #f7a01b;
   --bg-light: #ffffff;
   --bg-gray: #f8f9fa;
+  --bg-ivory: #fdf7f2;
+  --bg-lavender: #f1f4ff;
+  --bg-mint: #edf7f4;
+  --page-gradient:
+    radial-gradient(120% 120% at 15% 15%, rgba(255, 215, 179, 0.35) 0%, rgba(255, 215, 179, 0) 40%),
+    radial-gradient(140% 100% at 85% 20%, rgba(185, 221, 255, 0.35) 0%, rgba(185, 221, 255, 0) 55%),
+    radial-gradient(140% 90% at 50% 90%, rgba(205, 244, 224, 0.35) 0%, rgba(205, 244, 224, 0) 55%);
   --text-dark: #333333;
   --text-medium: #555555;
   --text-light: #777777;
@@ -30,7 +37,9 @@ body {
   font-size: 16px;
   line-height: 1.5;
   color: var(--text-dark);
-  background-color: var(--bg-gray);
+  background-color: var(--bg-ivory);
+  background-image: var(--page-gradient), linear-gradient(135deg, var(--bg-ivory) 0%, var(--bg-lavender) 55%, #f6f8ff 100%);
+  background-attachment: fixed;
   overflow-x: hidden;
 }
 
@@ -43,8 +52,9 @@ a {
    HEADER - Minimal & Sticky
    ============================================ */
 header {
-  background-color: var(--bg-light);
-  border-bottom: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(233, 236, 239, 0.7);
   padding: 0.75rem 1.5rem;
   display: flex;
   align-items: center;
@@ -95,9 +105,10 @@ header .tagline {
    LEFT SIDEBAR - Compact Filters
    ============================================ */
 .filter-sidebar {
-  background-color: var(--bg-light);
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 8px;
   box-shadow: var(--card-shadow);
+  backdrop-filter: blur(18px);
   position: sticky;
   top: 5rem;
   height: fit-content;
