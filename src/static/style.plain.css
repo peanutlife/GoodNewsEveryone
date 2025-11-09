@@ -1,6 +1,6 @@
 /* ============================================
-   PROJECT OPTIMIST - WARM PAPER DESIGN
-   Design Philosophy: Sunday Morning Newspaper
+   PROJECT OPTIMIST - JONY IVE INSPIRED REDESIGN
+   Design Principles: Simplicity, Clarity, Joy
    ============================================ */
 
 :root {
@@ -11,31 +11,28 @@
   --forest-green: #2ECC71;        /* Growth, life */
   --lavender: #9B59B6;            /* Creativity, depth */
 
-  /* Warm Neutrals - The Paper Metaphor */
+  /* Neutrals - Sophisticated, Not Generic */
   --pure-white: #FFFFFF;
-  --morning-paper: #FFFDF8;       /* Warm white with hint of cream */
-  --sunday-paper: #FFF9F0;        /* Slightly warmer, cozy feel */
-  --paper-base: #FEFCF7;          /* Base warm background */
-  --cloud: #FAF6F0;               /* Warm light grey */
-  --stone: #F0EBE3;               /* Warm borders */
-  --parchment: #F8F4ED;           /* Article backgrounds */
+  --paper: #FAFBFC;               /* Soft white, easy on eyes */
+  --cloud: #F5F7FA;               /* Light grey */
+  --stone: #E8ECEF;               /* Borders */
   --charcoal: #2C3E50;            /* Primary text */
   --slate: #546E7A;               /* Secondary text */
   --whisper: #95A5A6;             /* Tertiary text */
 
-  /* Subtle Background Patterns */
-  --paper-texture: radial-gradient(ellipse at top, #FFFDF8, #FEFCF7);
-  --morning-gradient: linear-gradient(180deg, #FFFDF8 0%, #FEFCF7 40%, #FAF6F0 100%);
-  --subtle-warmth: linear-gradient(135deg, rgba(255, 253, 248, 0.5), rgba(255, 249, 240, 0.3));
+  /* Semantic Colors */
+  --success: #2ECC71;
+  --info: #4A90E2;
+  --warning: #F7B731;
+  --error: #E74C3C;
 
-  /* Enhanced Shadows - Warmer, Softer */
-  --shadow-subtle: 0 1px 3px rgba(44, 62, 80, 0.04);
-  --shadow-soft: 0 2px 8px rgba(44, 62, 80, 0.06);
-  --shadow-medium: 0 4px 16px rgba(44, 62, 80, 0.08);
-  --shadow-strong: 0 8px 32px rgba(44, 62, 80, 0.12);
-  --shadow-warm: 0 4px 20px rgba(255, 107, 53, 0.05); /* Warm orange shadow */
+  /* Shadows - Depth Without Weight */
+  --shadow-subtle: 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-soft: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-medium: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-strong: 0 8px 32px rgba(0,0,0,0.12);
 
-  /* Typography Scale */
+  /* Typography Scale - San Francisco / Inter inspired */
   --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
@@ -75,46 +72,23 @@ body {
   font-size: 16px;
   line-height: 1.6;
   color: var(--charcoal);
-  background: var(--morning-gradient);
-  min-height: 100vh;
+  background: var(--paper);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  position: relative;
-}
-
-/* Subtle paper texture overlay */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background:
-    radial-gradient(ellipse at top left, rgba(255, 249, 240, 0.4), transparent 40%),
-    radial-gradient(ellipse at bottom right, rgba(255, 253, 248, 0.3), transparent 50%);
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Main content above texture */
-body > * {
-  position: relative;
-  z-index: 2;
 }
 
 /* ============================================
-   HEADER - Warm & Inviting
+   HEADER - Minimal, Focused
    ============================================ */
 header {
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(255, 253, 248, 0.92));
+  background: var(--pure-white);
   border-bottom: 1px solid var(--stone);
   padding: var(--space-4) var(--space-6);
   position: sticky;
   top: 0;
   z-index: 1000;
   backdrop-filter: blur(20px);
-  box-shadow: 0 2px 20px rgba(255, 107, 53, 0.03);
+  background: rgba(255, 255, 255, 0.92);
 }
 
 .brand-section h1 {
@@ -124,7 +98,6 @@ header {
   letter-spacing: -0.02em;
   color: var(--sunrise-orange);
   margin: 0;
-  text-shadow: 0 1px 2px rgba(255, 107, 53, 0.1);
 }
 
 .brand-section h1 a {
@@ -158,31 +131,21 @@ header {
 }
 
 /* ============================================
-   SIDEBAR SECTIONS - Paper Cards
+   LEFT SIDEBAR - Refined, Clear
    ============================================ */
+.filter-sidebar {
+  position: sticky;
+  top: calc(80px + var(--space-6));
+  height: fit-content;
+}
+
 .sidebar-section {
-  background: linear-gradient(135deg, var(--pure-white), var(--morning-paper));
+  background: var(--pure-white);
   border-radius: var(--radius-lg);
   padding: var(--space-5);
   margin-bottom: var(--space-4);
-  box-shadow:
-    var(--shadow-soft),
-    0 2px 10px rgba(255, 107, 53, 0.02);
+  box-shadow: var(--shadow-soft);
   border: 1px solid var(--stone);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Subtle corner accent */
-.sidebar-section::before {
-  content: "";
-  position: absolute;
-  top: -20px;
-  right: -20px;
-  width: 60px;
-  height: 60px;
-  background: radial-gradient(circle, rgba(255, 107, 53, 0.05), transparent 70%);
-  border-radius: 50%;
 }
 
 .sidebar-section h3 {
@@ -192,13 +155,8 @@ header {
   letter-spacing: 0.08em;
   color: var(--slate);
   margin-bottom: var(--space-4);
-  position: relative;
-  z-index: 1;
 }
 
-/* ============================================
-   FILTERS - Warm Interactions
-   ============================================ */
 .filter-list {
   list-style: none;
 }
@@ -217,21 +175,17 @@ header {
   color: var(--charcoal);
   transition: all var(--transition-fast);
   text-decoration: none;
-  background: transparent;
 }
 
 .filter-item:hover {
-  background: linear-gradient(135deg, var(--cloud), var(--parchment));
+  background: var(--cloud);
   transform: translateX(2px);
-  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.05);
 }
 
 .filter-item.active {
   background: linear-gradient(135deg, var(--sunrise-orange), var(--morning-gold));
   color: var(--pure-white);
-  box-shadow:
-    var(--shadow-soft),
-    0 4px 12px rgba(255, 107, 53, 0.15);
+  box-shadow: var(--shadow-soft);
 }
 
 .filter-icon {
@@ -246,25 +200,38 @@ header {
   filter: brightness(0) invert(1);
 }
 
+.last-updated {
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--whisper);
+  padding: var(--space-3);
+  background: var(--cloud);
+  border-radius: var(--radius-sm);
+}
+
+.last-updated i {
+  margin-right: var(--space-2);
+  color: var(--forest-green);
+}
+
 /* ============================================
-   MAIN CONTENT AREA
+   MAIN CONTENT
    ============================================ */
 main {
   min-width: 0;
 }
 
-/* Sort Controls - Warm Paper Card */
+/* Sort Controls - Clean, Functional */
 .sort-options {
-  background: linear-gradient(135deg, var(--pure-white), var(--morning-paper));
+  background: var(--pure-white);
   border-radius: var(--radius-lg);
   padding: var(--space-4);
   margin-bottom: var(--space-5);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow:
-    var(--shadow-soft),
-    0 2px 10px rgba(255, 107, 53, 0.02);
+  box-shadow: var(--shadow-soft);
   border: 1px solid var(--stone);
 }
 
@@ -282,29 +249,23 @@ main {
   text-decoration: none;
   transition: all var(--transition-base);
   border: 1px solid transparent;
-  background: transparent;
 }
 
 .sort-option:hover {
-  background: var(--parchment);
+  background: var(--cloud);
   color: var(--charcoal);
-  border-color: var(--stone);
 }
 
 .sort-option.active {
-  background: linear-gradient(135deg, var(--sunrise-orange), var(--morning-gold));
+  background: var(--sunrise-orange);
   color: var(--pure-white);
-  box-shadow:
-    var(--shadow-soft),
-    0 3px 10px rgba(255, 107, 53, 0.2);
-  border-color: transparent;
+  box-shadow: var(--shadow-soft);
 }
 
 .sort-option i {
   margin-right: var(--space-1);
 }
 
-/* Time filters with warm hover states */
 .time-filter {
   display: flex;
   gap: var(--space-2);
@@ -318,19 +279,16 @@ main {
   color: var(--slate);
   text-decoration: none;
   transition: all var(--transition-fast);
-  background: transparent;
 }
 
 .time-option:hover {
   color: var(--charcoal);
-  background: var(--parchment);
-  box-shadow: 0 2px 6px rgba(255, 107, 53, 0.05);
+  background: var(--cloud);
 }
 
 .time-option.active {
   color: var(--sky-blue);
-  background: linear-gradient(135deg, rgba(74, 144, 226, 0.08), rgba(74, 144, 226, 0.12));
-  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.1);
+  background: rgba(74, 144, 226, 0.1);
 }
 
 .section-header {
@@ -347,54 +305,92 @@ main {
 .section-header i {
   margin-right: var(--space-2);
   color: var(--morning-gold);
-  filter: drop-shadow(0 1px 2px rgba(247, 183, 49, 0.3));
 }
 
 /* ============================================
-   ARTICLE CARDS - Warm Paper Feel
+   MASONRY GRID - Refined
+   ============================================ */
+.masonry-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-auto-rows: 24px;
+  gap: var(--space-5);
+  grid-auto-flow: dense;
+}
+
+/* ============================================
+   ARTICLE CARDS - Beautiful, Purposeful
    ============================================ */
 .post {
-  background: linear-gradient(135deg, var(--pure-white), var(--morning-paper));
+  background: var(--pure-white);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow:
-    var(--shadow-soft),
-    0 3px 15px rgba(255, 107, 53, 0.02);
+  box-shadow: var(--shadow-soft);
   transition: all var(--transition-base);
   border: 1px solid var(--stone);
   display: flex;
   flex-direction: column;
-  position: relative;
-}
-
-/* Subtle paper texture on hover */
-.post::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background:
-    radial-gradient(circle at top right, rgba(255, 249, 240, 0.5), transparent 40%);
-  opacity: 0;
-  transition: opacity var(--transition-base);
-  pointer-events: none;
-}
-
-.post:hover::before {
-  opacity: 1;
 }
 
 .post:hover {
-  box-shadow:
-    var(--shadow-medium),
-    0 6px 20px rgba(255, 107, 53, 0.06);
+  box-shadow: var(--shadow-medium);
   transform: translateY(-4px);
-  border-color: rgba(255, 107, 53, 0.15);
+  border-color: var(--cloud);
 }
 
-/* Post Header with warm tones */
+/* Card Sizes */
+.post.compact {
+  grid-row: span 7;
+}
+
+.post.medium {
+  grid-row: span 11;
+}
+
+.post.large {
+  grid-row: span 16;
+}
+
+/* Image */
+.post-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--cloud), var(--stone));
+  position: relative;
+}
+
+.post.compact .post-image {
+  display: none;
+}
+
+.post.medium .post-image {
+  height: 140px;
+}
+
+.post.large .post-image {
+  height: 240px;
+}
+
+.post-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.post:hover .post-image img {
+  transform: scale(1.05);
+}
+
+/* Content */
+.post-content {
+  padding: var(--space-4);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 .post-header {
   margin-bottom: var(--space-3);
 }
@@ -415,59 +411,51 @@ main {
   color: var(--sky-blue);
   text-decoration: none;
   padding: var(--space-1) var(--space-2);
-  background: linear-gradient(135deg, rgba(74, 144, 226, 0.08), rgba(74, 144, 226, 0.12));
+  background: rgba(74, 144, 226, 0.08);
   border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
 }
 
 .post-topic:hover {
-  background: linear-gradient(135deg, rgba(74, 144, 226, 0.12), rgba(74, 144, 226, 0.18));
-  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.15);
+  background: rgba(74, 144, 226, 0.15);
 }
 
-/* Image with warm overlay */
-.post-image {
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
-  background: linear-gradient(135deg, var(--cloud), var(--stone));
-  position: relative;
+.topic-icon {
+  width: 14px;
+  height: 14px;
+  margin-right: var(--space-1);
 }
 
-.post-image::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(to bottom, transparent 70%, rgba(255, 249, 240, 0.1));
-  pointer-events: none;
+.post-source {
+  font-size: 0.6875rem;
+  color: var(--whisper);
 }
 
-.post-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform var(--transition-slow);
+.post-time {
+  font-size: 0.6875rem;
+  color: var(--whisper);
 }
 
-.post:hover .post-image img {
-  transform: scale(1.05);
-}
-
-/* Content area */
-.post-content {
-  padding: var(--space-4);
-  flex: 1;
+/* Tags - Subtle, Refined */
+.article-tags {
   display: flex;
-  flex-direction: column;
-  background: transparent;
-  position: relative;
-  z-index: 1;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
 }
 
-/* Title with subtle warmth */
+.article-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-xl);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--pure-white);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-subtle);
+}
+
+/* Title */
 .post-title {
   font-family: var(--font-display);
   font-size: 1.125rem;
@@ -476,6 +464,21 @@ main {
   margin-bottom: var(--space-3);
   letter-spacing: -0.01em;
   color: var(--charcoal);
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.post.compact .post-title {
+  font-size: 0.9375rem;
+  -webkit-line-clamp: 2;
+}
+
+.post.large .post-title {
+  font-size: 1.25rem;
+  -webkit-line-clamp: 4;
 }
 
 .post-title a {
@@ -486,31 +489,39 @@ main {
 
 .post-title a:hover {
   color: var(--sunrise-orange);
-  text-shadow: 0 1px 3px rgba(255, 107, 53, 0.1);
 }
 
-/* Summary text */
+/* Summary */
 .post-summary {
   font-size: 0.875rem;
   color: var(--slate);
   line-height: 1.6;
   margin-bottom: var(--space-4);
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* Actions with warm border */
+.post.large .post-summary {
+  -webkit-line-clamp: 3;
+}
+
+/* Actions */
 .post-actions {
   margin-top: auto;
   padding-top: var(--space-3);
   border-top: 1px solid var(--stone);
   position: relative;
-  background: linear-gradient(to right, var(--stone), transparent, var(--stone));
-  background-size: 100% 1px;
-  background-position: top;
-  background-repeat: no-repeat;
-  border-top: none;
 }
 
-/* Action buttons with warm hover */
+.action-buttons {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
 .action-button {
   display: inline-flex;
   align-items: center;
@@ -527,9 +538,8 @@ main {
 }
 
 .action-button:hover {
-  background: var(--parchment);
+  background: var(--cloud);
   color: var(--charcoal);
-  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.05);
 }
 
 .action-button i {
@@ -544,83 +554,66 @@ main {
 }
 
 .read-btn:hover {
-  background: linear-gradient(135deg, rgba(255, 107, 53, 0.08), rgba(255, 107, 53, 0.12));
-  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.15);
+  background: rgba(255, 107, 53, 0.08);
 }
 
-/* Tags with warm gradients */
-.article-tags {
+/* Share Dropdown */
+.share-dropdown {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: var(--space-2);
+  background: var(--pure-white);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-medium);
+  padding: var(--space-2);
+  display: none;
+  gap: var(--space-1);
+  z-index: 100;
+}
+
+.share-dropdown.active {
   display: flex;
-  gap: var(--space-2);
-  margin-top: var(--space-2);
 }
 
-.article-tag {
-  display: inline-flex;
+.share-option {
+  display: flex;
   align-items: center;
-  padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-xl);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  color: var(--pure-white);
-  backdrop-filter: blur(10px);
-  box-shadow:
-    var(--shadow-subtle),
-    0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Topic tag colors with warm undertones */
-.topic-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-xl);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--pure-white);
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  color: var(--slate);
   text-decoration: none;
-  transition: all var(--transition-base);
-  box-shadow:
-    var(--shadow-subtle),
-    0 2px 10px rgba(0, 0, 0, 0.08);
+  transition: all var(--transition-fast);
 }
 
-.topic-tag:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    var(--shadow-soft),
-    0 4px 15px rgba(0, 0, 0, 0.12);
-}
-
-/* Warm gradient backgrounds for topics */
-.topic-tag.Science {
-  background: linear-gradient(135deg, #667eea, #a855f7);
-  box-shadow: 0 3px 15px rgba(168, 85, 247, 0.3);
-}
-.topic-tag.Technology {
-  background: linear-gradient(135deg, #ff6b6b, #ff8787);
-  box-shadow: 0 3px 15px rgba(255, 107, 107, 0.3);
-}
-.topic-tag.Business {
-  background: linear-gradient(135deg, #4dabf7, #74c0fc);
-  box-shadow: 0 3px 15px rgba(77, 171, 247, 0.3);
-}
-.topic-tag.Health {
-  background: linear-gradient(135deg, #51cf66, #8ce99a);
-  box-shadow: 0 3px 15px rgba(81, 207, 102, 0.3);
-}
-.topic-tag.Environment {
-  background: linear-gradient(135deg, #20c997, #63e6be);
-  box-shadow: 0 3px 15px rgba(32, 201, 151, 0.3);
-}
-.topic-tag.Culture {
-  background: linear-gradient(135deg, #ff6b9d, #feca57);
-  box-shadow: 0 3px 15px rgba(255, 107, 157, 0.3);
+.share-option:hover {
+  background: var(--cloud);
+  color: var(--charcoal);
 }
 
 /* ============================================
-   RIGHT SIDEBAR - Call to Action
+   RIGHT SIDEBAR
    ============================================ */
+.ad-sidebar {
+  position: sticky;
+  top: calc(80px + var(--space-6));
+  height: fit-content;
+}
+
+.sidebar-section {
+  /* Inherits from left sidebar */
+}
+
+.sidebar-info {
+  font-size: 0.875rem;
+  color: var(--slate);
+  line-height: 1.6;
+  margin-bottom: var(--space-4);
+}
+
 .join-button {
   display: flex;
   align-items: center;
@@ -634,24 +627,63 @@ main {
   font-weight: 600;
   text-decoration: none;
   transition: all var(--transition-base);
-  box-shadow:
-    var(--shadow-soft),
-    0 4px 15px rgba(74, 144, 226, 0.25);
+  box-shadow: var(--shadow-soft);
 }
 
 .join-button:hover {
   transform: translateY(-2px);
-  box-shadow:
-    var(--shadow-medium),
-    0 6px 20px rgba(74, 144, 226, 0.35);
+  box-shadow: var(--shadow-medium);
 }
 
 .join-button i {
   margin-right: var(--space-2);
 }
 
+/* Topic Tags */
+.topic-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.topic-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-xl);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--pure-white);
+  text-decoration: none;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-subtle);
+}
+
+.topic-tag:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+}
+
+.topic-tag img {
+  width: 14px;
+  height: 14px;
+  margin-right: var(--space-1);
+  filter: brightness(0) invert(1);
+}
+
+/* Topic Colors - Sophisticated Gradients */
+.topic-tag.Science { background: linear-gradient(135deg, #667eea, #764ba2); }
+.topic-tag.Technology { background: linear-gradient(135deg, #f093fb, #f5576c); }
+.topic-tag.Business { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+.topic-tag.Health { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+.topic-tag.Environment { background: linear-gradient(135deg, #38ef7d, #11998e); }
+.topic-tag.Culture { background: linear-gradient(135deg, #fa709a, #fee140); }
+.topic-tag.Travel { background: linear-gradient(135deg, #30cfd0, #330867); }
+.topic-tag.Sports { background: linear-gradient(135deg, #ff9a56, #ff6a88); }
+.topic-tag.General { background: linear-gradient(135deg, #ffecd2, #fcb69f); }
+
 /* ============================================
-   FOOTER - Warm and Cozy
+   FOOTER
    ============================================ */
 footer {
   text-align: center;
@@ -660,18 +692,7 @@ footer {
   color: var(--whisper);
   font-size: 0.875rem;
   border-top: 1px solid var(--stone);
-  background: linear-gradient(to bottom, var(--cloud), var(--parchment));
-  position: relative;
-}
-
-footer::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 20%;
-  right: 20%;
-  height: 1px;
-  background: linear-gradient(to right, transparent, var(--stone), transparent);
+  background: var(--cloud);
 }
 
 footer p {
@@ -679,25 +700,23 @@ footer p {
 }
 
 /* ============================================
-   TOAST NOTIFICATIONS - Warm Success
+   TOAST
    ============================================ */
 .toast {
   position: fixed;
   bottom: var(--space-6);
   right: var(--space-6);
   padding: var(--space-3) var(--space-4);
-  background: linear-gradient(135deg, rgba(44, 62, 80, 0.95), rgba(52, 73, 94, 0.95));
+  background: var(--charcoal);
   color: var(--pure-white);
   border-radius: var(--radius-md);
-  box-shadow:
-    var(--shadow-strong),
-    0 8px 25px rgba(44, 62, 80, 0.3);
+  box-shadow: var(--shadow-strong);
   display: none;
   align-items: center;
   gap: var(--space-2);
   z-index: 9999;
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(44, 62, 80, 0.95);
 }
 
 .toast.active {
@@ -707,7 +726,6 @@ footer p {
 
 .toast i {
   color: var(--forest-green);
-  filter: drop-shadow(0 1px 3px rgba(46, 204, 113, 0.4));
 }
 
 @keyframes slideInToast {
@@ -722,44 +740,39 @@ footer p {
 }
 
 /* ============================================
-   ALERTS - Warm Variations
+   ALERTS
    ============================================ */
 .alert {
   padding: var(--space-4);
   margin-bottom: var(--space-5);
   border-radius: var(--radius-md);
   border-left: 4px solid;
-  background: linear-gradient(135deg, var(--pure-white), var(--morning-paper));
-  box-shadow:
-    var(--shadow-soft),
-    0 3px 15px rgba(0, 0, 0, 0.03);
+  background: var(--pure-white);
+  box-shadow: var(--shadow-soft);
 }
 
 .alert-success {
   border-left-color: var(--success);
-  background: linear-gradient(135deg, rgba(46, 204, 113, 0.05), rgba(46, 204, 113, 0.08));
+  background: rgba(46, 204, 113, 0.05);
 }
 
 .alert-danger {
   border-left-color: var(--error);
-  background: linear-gradient(135deg, rgba(231, 76, 60, 0.05), rgba(231, 76, 60, 0.08));
+  background: rgba(231, 76, 60, 0.05);
 }
 
 .alert-info {
   border-left-color: var(--info);
-  background: linear-gradient(135deg, rgba(74, 144, 226, 0.05), rgba(74, 144, 226, 0.08));
+  background: rgba(74, 144, 226, 0.05);
 }
 
 /* ============================================
-   NO ARTICLES STATE - Friendly & Warm
+   NO ARTICLES STATE
    ============================================ */
 .no-articles {
   text-align: center;
   padding: var(--space-10) var(--space-4);
   color: var(--slate);
-  background: linear-gradient(135deg, var(--morning-paper), var(--parchment));
-  border-radius: var(--radius-lg);
-  margin: var(--space-6) 0;
 }
 
 .no-articles i {
@@ -767,7 +780,6 @@ footer p {
   color: var(--whisper);
   opacity: 0.3;
   margin-bottom: var(--space-4);
-  filter: drop-shadow(0 2px 8px rgba(255, 107, 53, 0.1));
 }
 
 .no-articles h3 {
@@ -782,17 +794,7 @@ footer p {
 }
 
 /* ============================================
-   ACCESSIBILITY & FOCUS STATES
-   ============================================ */
-a:focus-visible,
-button:focus-visible {
-  outline: 2px solid var(--sky-blue);
-  outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.2);
-}
-
-/* ============================================
-   RESPONSIVE DESIGN
+   RESPONSIVE
    ============================================ */
 @media (max-width: 1400px) {
   .layout-container {
@@ -816,13 +818,13 @@ button:focus-visible {
     flex-wrap: wrap;
     gap: var(--space-2);
   }
+
+  .masonry-container {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
 }
 
 @media (max-width: 768px) {
-  body::before {
-    background: var(--morning-gradient);
-  }
-
   .layout-container {
     padding: var(--space-4);
     gap: var(--space-4);
@@ -838,6 +840,23 @@ button:focus-visible {
 
   .tagline {
     display: none;
+  }
+
+  .masonry-container {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .post.compact {
+    grid-row: span 8;
+  }
+
+  .post.medium {
+    grid-row: span 12;
+  }
+
+  .post.large {
+    grid-row: span 17;
   }
 
   .sort-options {
@@ -868,37 +887,32 @@ button:focus-visible {
 }
 
 /* ============================================
-   DARK MODE SUPPORT (Future Enhancement)
+   ACCESSIBILITY
    ============================================ */
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Define dark mode warm colors here if needed */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
-/* ============================================
-   PRINT STYLES
-   ============================================ */
-@media print {
-  body {
-    background: white;
-  }
+/* Focus States */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--sky-blue);
+  outline-offset: 2px;
+}
 
-  body::before {
-    display: none;
-  }
-
-  header,
-  .filter-sidebar,
-  .ad-sidebar,
-  footer,
-  .post-actions {
-    display: none;
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  :root {
+    --charcoal: #000000;
+    --slate: #333333;
+    --stone: #999999;
   }
 
   .post {
-    box-shadow: none;
-    border: 1px solid #ddd;
-    page-break-inside: avoid;
+    border-width: 2px;
   }
 }
