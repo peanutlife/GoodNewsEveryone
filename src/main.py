@@ -774,16 +774,8 @@ def initialize_app(app):
 
     @app.route("/warm")
     def warm_test():
-        return render_template(
-            "index_warm.html",  # Copy of index.html with warm CSS
-            articles=all_articles,
-            topics=unique_topics,
-            topic_icons=topic_icons,
-            selected_topic=selected_topic,
-            sort=sort_type,
-            time_filter=time_filter,
-            last_updated=last_updated
-        )
+        """Test warm design by calling existing index function"""
+        return index()  # Uses your existing index logic
 
     return app
 
