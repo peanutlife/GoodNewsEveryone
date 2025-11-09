@@ -1,5 +1,5 @@
 {
-  "last_fetched": "2025-11-09T08:00:46.023713",
+  "last_fetched": "2025-11-09T08:03:34.827180",
   "articles": {
     "science": [
       {
@@ -10969,6 +10969,32 @@
         "noun_icon_url": "/openmoji/color/svg/1F389.svg",
         "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
         "image_url": "https://images2.minutemediacdn.com/image/upload/c_crop,w_5181,h_2914,x_0,y_0/c_fill,w_2880,ar_16:9,f_auto,q_auto,g_auto/images/voltaxMediaLibrary/mmsport/theplayertribune/01k4d6zz3ghe99bky03w.jpg",
+        "tags": []
+      },
+      {
+        "title": "Your Future Self Will Worship You If You Do These 17 Garden Chores This Fall",
+        "link": "https://www.boredpanda.com/prepare-your-garden-for-the-cold/",
+        "summary": "Winter is coming, and your garden had better get its coat on!",
+        "published": "2025-11-09T07:00:25",
+        "sentiment_score": 0.6588,
+        "inspiration_score": 8.3,
+        "inspiration_dimensions": {
+          "composite": 8.3,
+          "emotional": 8.3,
+          "triumph": 8.3,
+          "social": 8.3,
+          "novelty": 8.3,
+          "actionable": 8.3
+        },
+        "is_inspirational": true,
+        "source_name": "www.boredpanda.com",
+        "source_feed": "https://www.boredpanda.com/feed/",
+        "source_icon_path": "icons/source_default.png",
+        "topic_name": "general",
+        "topic_icon_path": "/openmoji/color/svg/1F389.svg",
+        "noun_icon_url": "/openmoji/color/svg/1F389.svg",
+        "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+        "image_url": "https://www.boredpanda.com/blog/wp-content/uploads/2025/11/prepare-your-garden-for-the-cold-fb-690e0cb81a5aa.png",
         "tags": []
       },
       {
