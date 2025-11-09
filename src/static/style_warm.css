@@ -1,0 +1,904 @@
+/* ============================================
+   PROJECT OPTIMIST - WARM PAPER DESIGN
+   Design Philosophy: Sunday Morning Newspaper
+   ============================================ */
+
+:root {
+  /* Primary Palette - Warm, Optimistic, Human */
+  --sunrise-orange: #FF6B35;      /* Energy, warmth */
+  --morning-gold: #F7B731;        /* Optimism, light */
+  --sky-blue: #4A90E2;            /* Calm, trust */
+  --forest-green: #2ECC71;        /* Growth, life */
+  --lavender: #9B59B6;            /* Creativity, depth */
+
+  /* Warm Neutrals - The Paper Metaphor */
+  --pure-white: #FFFFFF;
+  --morning-paper: #FFFDF8;       /* Warm white with hint of cream */
+  --sunday-paper: #FFF9F0;        /* Slightly warmer, cozy feel */
+  --paper-base: #FEFCF7;          /* Base warm background */
+  --cloud: #FAF6F0;               /* Warm light grey */
+  --stone: #F0EBE3;               /* Warm borders */
+  --parchment: #F8F4ED;           /* Article backgrounds */
+  --charcoal: #2C3E50;            /* Primary text */
+  --slate: #546E7A;               /* Secondary text */
+  --whisper: #95A5A6;             /* Tertiary text */
+
+  /* Subtle Background Patterns */
+  --paper-texture: radial-gradient(ellipse at top, #FFFDF8, #FEFCF7);
+  --morning-gradient: linear-gradient(180deg, #FFFDF8 0%, #FEFCF7 40%, #FAF6F0 100%);
+  --subtle-warmth: linear-gradient(135deg, rgba(255, 253, 248, 0.5), rgba(255, 249, 240, 0.3));
+
+  /* Enhanced Shadows - Warmer, Softer */
+  --shadow-subtle: 0 1px 3px rgba(44, 62, 80, 0.04);
+  --shadow-soft: 0 2px 8px rgba(44, 62, 80, 0.06);
+  --shadow-medium: 0 4px 16px rgba(44, 62, 80, 0.08);
+  --shadow-strong: 0 8px 32px rgba(44, 62, 80, 0.12);
+  --shadow-warm: 0 4px 20px rgba(255, 107, 53, 0.05); /* Warm orange shadow */
+
+  /* Typography Scale */
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Spacing System - 8pt Grid */
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.5rem;   /* 24px */
+  --space-6: 2rem;     /* 32px */
+  --space-8: 3rem;     /* 48px */
+  --space-10: 4rem;    /* 64px */
+
+  /* Border Radius - Soft, Friendly */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Transitions - Smooth, Natural */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--charcoal);
+  background: var(--morning-gradient);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+}
+
+/* Subtle paper texture overlay */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse at top left, rgba(255, 249, 240, 0.4), transparent 40%),
+    radial-gradient(ellipse at bottom right, rgba(255, 253, 248, 0.3), transparent 50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Main content above texture */
+body > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* ============================================
+   HEADER - Warm & Inviting
+   ============================================ */
+header {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(255, 253, 248, 0.92));
+  border-bottom: 1px solid var(--stone);
+  padding: var(--space-4) var(--space-6);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 2px 20px rgba(255, 107, 53, 0.03);
+}
+
+.brand-section h1 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--sunrise-orange);
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(255, 107, 53, 0.1);
+}
+
+.brand-section h1 a {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity var(--transition-base);
+}
+
+.brand-section h1 a:hover {
+  opacity: 0.8;
+}
+
+.tagline {
+  font-size: 0.875rem;
+  color: var(--slate);
+  font-weight: 400;
+  margin: var(--space-1) 0 0 0;
+  letter-spacing: 0.01em;
+}
+
+/* ============================================
+   LAYOUT - Spacious, Breathable
+   ============================================ */
+.layout-container {
+  display: grid;
+  grid-template-columns: 200px 1fr 320px;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: var(--space-6);
+  gap: var(--space-6);
+}
+
+/* ============================================
+   SIDEBAR SECTIONS - Paper Cards
+   ============================================ */
+.sidebar-section {
+  background: linear-gradient(135deg, var(--pure-white), var(--morning-paper));
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  margin-bottom: var(--space-4);
+  box-shadow:
+    var(--shadow-soft),
+    0 2px 10px rgba(255, 107, 53, 0.02);
+  border: 1px solid var(--stone);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle corner accent */
+.sidebar-section::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, rgba(255, 107, 53, 0.05), transparent 70%);
+  border-radius: 50%;
+}
+
+.sidebar-section h3 {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--slate);
+  margin-bottom: var(--space-4);
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================
+   FILTERS - Warm Interactions
+   ============================================ */
+.filter-list {
+  list-style: none;
+}
+
+.filter-list li {
+  margin-bottom: var(--space-1);
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--charcoal);
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  background: transparent;
+}
+
+.filter-item:hover {
+  background: linear-gradient(135deg, var(--cloud), var(--parchment));
+  transform: translateX(2px);
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.05);
+}
+
+.filter-item.active {
+  background: linear-gradient(135deg, var(--sunrise-orange), var(--morning-gold));
+  color: var(--pure-white);
+  box-shadow:
+    var(--shadow-soft),
+    0 4px 12px rgba(255, 107, 53, 0.15);
+}
+
+.filter-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: var(--space-2);
+  opacity: 0.8;
+}
+
+.filter-item.active .filter-icon {
+  opacity: 1;
+  filter: brightness(0) invert(1);
+}
+
+/* ============================================
+   MAIN CONTENT AREA
+   ============================================ */
+main {
+  min-width: 0;
+}
+
+/* Sort Controls - Warm Paper Card */
+.sort-options {
+  background: linear-gradient(135deg, var(--pure-white), var(--morning-paper));
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow:
+    var(--shadow-soft),
+    0 2px 10px rgba(255, 107, 53, 0.02);
+  border: 1px solid var(--stone);
+}
+
+.sort-tabs {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.sort-option {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--slate);
+  text-decoration: none;
+  transition: all var(--transition-base);
+  border: 1px solid transparent;
+  background: transparent;
+}
+
+.sort-option:hover {
+  background: var(--parchment);
+  color: var(--charcoal);
+  border-color: var(--stone);
+}
+
+.sort-option.active {
+  background: linear-gradient(135deg, var(--sunrise-orange), var(--morning-gold));
+  color: var(--pure-white);
+  box-shadow:
+    var(--shadow-soft),
+    0 3px 10px rgba(255, 107, 53, 0.2);
+  border-color: transparent;
+}
+
+.sort-option i {
+  margin-right: var(--space-1);
+}
+
+/* Time filters with warm hover states */
+.time-filter {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.time-option {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--slate);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  background: transparent;
+}
+
+.time-option:hover {
+  color: var(--charcoal);
+  background: var(--parchment);
+  box-shadow: 0 2px 6px rgba(255, 107, 53, 0.05);
+}
+
+.time-option.active {
+  color: var(--sky-blue);
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.08), rgba(74, 144, 226, 0.12));
+  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.1);
+}
+
+.section-header {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--slate);
+  margin: var(--space-6) 0 var(--space-5) 0;
+  display: flex;
+  align-items: center;
+}
+
+.section-header i {
+  margin-right: var(--space-2);
+  color: var(--morning-gold);
+  filter: drop-shadow(0 1px 2px rgba(247, 183, 49, 0.3));
+}
+
+/* ============================================
+   ARTICLE CARDS - Warm Paper Feel
+   ============================================ */
+.post {
+  background: linear-gradient(135deg, var(--pure-white), var(--morning-paper));
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow:
+    var(--shadow-soft),
+    0 3px 15px rgba(255, 107, 53, 0.02);
+  transition: all var(--transition-base);
+  border: 1px solid var(--stone);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Subtle paper texture on hover */
+.post::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at top right, rgba(255, 249, 240, 0.5), transparent 40%);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  pointer-events: none;
+}
+
+.post:hover::before {
+  opacity: 1;
+}
+
+.post:hover {
+  box-shadow:
+    var(--shadow-medium),
+    0 6px 20px rgba(255, 107, 53, 0.06);
+  transform: translateY(-4px);
+  border-color: rgba(255, 107, 53, 0.15);
+}
+
+/* Post Header with warm tones */
+.post-header {
+  margin-bottom: var(--space-3);
+}
+
+.post-metadata {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.post-topic {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--sky-blue);
+  text-decoration: none;
+  padding: var(--space-1) var(--space-2);
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.08), rgba(74, 144, 226, 0.12));
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.post-topic:hover {
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.12), rgba(74, 144, 226, 0.18));
+  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.15);
+}
+
+/* Image with warm overlay */
+.post-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--cloud), var(--stone));
+  position: relative;
+}
+
+.post-image::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 70%, rgba(255, 249, 240, 0.1));
+  pointer-events: none;
+}
+
+.post-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.post:hover .post-image img {
+  transform: scale(1.05);
+}
+
+/* Content area */
+.post-content {
+  padding: var(--space-4);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+/* Title with subtle warmth */
+.post-title {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: var(--space-3);
+  letter-spacing: -0.01em;
+  color: var(--charcoal);
+}
+
+.post-title a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-base);
+}
+
+.post-title a:hover {
+  color: var(--sunrise-orange);
+  text-shadow: 0 1px 3px rgba(255, 107, 53, 0.1);
+}
+
+/* Summary text */
+.post-summary {
+  font-size: 0.875rem;
+  color: var(--slate);
+  line-height: 1.6;
+  margin-bottom: var(--space-4);
+}
+
+/* Actions with warm border */
+.post-actions {
+  margin-top: auto;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--stone);
+  position: relative;
+  background: linear-gradient(to right, var(--stone), transparent, var(--stone));
+  background-size: 100% 1px;
+  background-position: top;
+  background-repeat: no-repeat;
+  border-top: none;
+}
+
+/* Action buttons with warm hover */
+.action-button {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border: none;
+  background: none;
+  color: var(--slate);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+.action-button:hover {
+  background: var(--parchment);
+  color: var(--charcoal);
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.05);
+}
+
+.action-button i {
+  margin-right: var(--space-1);
+  font-size: 0.875rem;
+}
+
+.read-btn {
+  margin-left: auto;
+  color: var(--sunrise-orange);
+  font-weight: 600;
+}
+
+.read-btn:hover {
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.08), rgba(255, 107, 53, 0.12));
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.15);
+}
+
+/* Tags with warm gradients */
+.article-tags {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.article-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-xl);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--pure-white);
+  backdrop-filter: blur(10px);
+  box-shadow:
+    var(--shadow-subtle),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Topic tag colors with warm undertones */
+.topic-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-xl);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--pure-white);
+  text-decoration: none;
+  transition: all var(--transition-base);
+  box-shadow:
+    var(--shadow-subtle),
+    0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.topic-tag:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    var(--shadow-soft),
+    0 4px 15px rgba(0, 0, 0, 0.12);
+}
+
+/* Warm gradient backgrounds for topics */
+.topic-tag.Science {
+  background: linear-gradient(135deg, #667eea, #a855f7);
+  box-shadow: 0 3px 15px rgba(168, 85, 247, 0.3);
+}
+.topic-tag.Technology {
+  background: linear-gradient(135deg, #ff6b6b, #ff8787);
+  box-shadow: 0 3px 15px rgba(255, 107, 107, 0.3);
+}
+.topic-tag.Business {
+  background: linear-gradient(135deg, #4dabf7, #74c0fc);
+  box-shadow: 0 3px 15px rgba(77, 171, 247, 0.3);
+}
+.topic-tag.Health {
+  background: linear-gradient(135deg, #51cf66, #8ce99a);
+  box-shadow: 0 3px 15px rgba(81, 207, 102, 0.3);
+}
+.topic-tag.Environment {
+  background: linear-gradient(135deg, #20c997, #63e6be);
+  box-shadow: 0 3px 15px rgba(32, 201, 151, 0.3);
+}
+.topic-tag.Culture {
+  background: linear-gradient(135deg, #ff6b9d, #feca57);
+  box-shadow: 0 3px 15px rgba(255, 107, 157, 0.3);
+}
+
+/* ============================================
+   RIGHT SIDEBAR - Call to Action
+   ============================================ */
+.join-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: linear-gradient(135deg, var(--sky-blue), var(--lavender));
+  color: var(--pure-white);
+  border-radius: var(--radius-md);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition-base);
+  box-shadow:
+    var(--shadow-soft),
+    0 4px 15px rgba(74, 144, 226, 0.25);
+}
+
+.join-button:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    var(--shadow-medium),
+    0 6px 20px rgba(74, 144, 226, 0.35);
+}
+
+.join-button i {
+  margin-right: var(--space-2);
+}
+
+/* ============================================
+   FOOTER - Warm and Cozy
+   ============================================ */
+footer {
+  text-align: center;
+  padding: var(--space-8) var(--space-4);
+  margin-top: var(--space-10);
+  color: var(--whisper);
+  font-size: 0.875rem;
+  border-top: 1px solid var(--stone);
+  background: linear-gradient(to bottom, var(--cloud), var(--parchment));
+  position: relative;
+}
+
+footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--stone), transparent);
+}
+
+footer p {
+  margin: var(--space-1) 0;
+}
+
+/* ============================================
+   TOAST NOTIFICATIONS - Warm Success
+   ============================================ */
+.toast {
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-6);
+  padding: var(--space-3) var(--space-4);
+  background: linear-gradient(135deg, rgba(44, 62, 80, 0.95), rgba(52, 73, 94, 0.95));
+  color: var(--pure-white);
+  border-radius: var(--radius-md);
+  box-shadow:
+    var(--shadow-strong),
+    0 8px 25px rgba(44, 62, 80, 0.3);
+  display: none;
+  align-items: center;
+  gap: var(--space-2);
+  z-index: 9999;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.toast.active {
+  display: flex;
+  animation: slideInToast 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toast i {
+  color: var(--forest-green);
+  filter: drop-shadow(0 1px 3px rgba(46, 204, 113, 0.4));
+}
+
+@keyframes slideInToast {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   ALERTS - Warm Variations
+   ============================================ */
+.alert {
+  padding: var(--space-4);
+  margin-bottom: var(--space-5);
+  border-radius: var(--radius-md);
+  border-left: 4px solid;
+  background: linear-gradient(135deg, var(--pure-white), var(--morning-paper));
+  box-shadow:
+    var(--shadow-soft),
+    0 3px 15px rgba(0, 0, 0, 0.03);
+}
+
+.alert-success {
+  border-left-color: var(--success);
+  background: linear-gradient(135deg, rgba(46, 204, 113, 0.05), rgba(46, 204, 113, 0.08));
+}
+
+.alert-danger {
+  border-left-color: var(--error);
+  background: linear-gradient(135deg, rgba(231, 76, 60, 0.05), rgba(231, 76, 60, 0.08));
+}
+
+.alert-info {
+  border-left-color: var(--info);
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.05), rgba(74, 144, 226, 0.08));
+}
+
+/* ============================================
+   NO ARTICLES STATE - Friendly & Warm
+   ============================================ */
+.no-articles {
+  text-align: center;
+  padding: var(--space-10) var(--space-4);
+  color: var(--slate);
+  background: linear-gradient(135deg, var(--morning-paper), var(--parchment));
+  border-radius: var(--radius-lg);
+  margin: var(--space-6) 0;
+}
+
+.no-articles i {
+  font-size: 4rem;
+  color: var(--whisper);
+  opacity: 0.3;
+  margin-bottom: var(--space-4);
+  filter: drop-shadow(0 2px 8px rgba(255, 107, 53, 0.1));
+}
+
+.no-articles h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--charcoal);
+  margin-bottom: var(--space-2);
+}
+
+.no-articles p {
+  color: var(--slate);
+}
+
+/* ============================================
+   ACCESSIBILITY & FOCUS STATES
+   ============================================ */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--sky-blue);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.2);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 1400px) {
+  .layout-container {
+    grid-template-columns: 180px 1fr 280px;
+    gap: var(--space-5);
+  }
+}
+
+@media (max-width: 1200px) {
+  .layout-container {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-sidebar,
+  .ad-sidebar {
+    position: static;
+  }
+
+  .filter-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+}
+
+@media (max-width: 768px) {
+  body::before {
+    background: var(--morning-gradient);
+  }
+
+  .layout-container {
+    padding: var(--space-4);
+    gap: var(--space-4);
+  }
+
+  header {
+    padding: var(--space-4);
+  }
+
+  .brand-section h1 {
+    font-size: 1.5rem;
+  }
+
+  .tagline {
+    display: none;
+  }
+
+  .sort-options {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+  }
+
+  .time-filter {
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 480px) {
+  .post-title {
+    font-size: 1rem;
+  }
+
+  .action-buttons {
+    flex-wrap: wrap;
+  }
+
+  .toast {
+    left: var(--space-4);
+    right: var(--space-4);
+    bottom: var(--space-4);
+  }
+}
+
+/* ============================================
+   DARK MODE SUPPORT (Future Enhancement)
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Define dark mode warm colors here if needed */
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+  body {
+    background: white;
+  }
+
+  body::before {
+    display: none;
+  }
+
+  header,
+  .filter-sidebar,
+  .ad-sidebar,
+  footer,
+  .post-actions {
+    display: none;
+  }
+
+  .post {
+    box-shadow: none;
+    border: 1px solid #ddd;
+    page-break-inside: avoid;
+  }
+}
