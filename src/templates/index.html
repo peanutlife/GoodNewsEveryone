@@ -12,8 +12,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4295146235414490"
-     crossorigin="anonymous"></script>
+
+    <!-- AdSense loader (load once) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4295146235414490" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -137,6 +138,19 @@
                         </article>
                     </section>
 
+                    <!-- Ad: after hero -->
+                    <div class="ad-block" style="margin:16px 0;">
+                        <ins class="adsbygoogle"
+                             style="display:block"
+                             data-ad-client="ca-pub-4295146235414490"
+                             data-ad-slot="5585311271"
+                             data-ad-format="auto"
+                             data-full-width-responsive="true"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+
                     <!-- Featured Inspirations -->
                     {% if articles|length > 3 %}
                         <section class="featured-inspirations">
@@ -217,6 +231,24 @@
                 <!-- Masonry Grid Layout -->
                 <div class="articles-grid">
                     {% for article in articles[start_index:] %}
+
+                        {# Inject an ad every 6 posts #}
+                        {% if loop.index0 > 0 and loop.index0 % 6 == 0 %}
+                            <div class="post ad-post">
+                                <div class="ad-block" style="margin:12px 0;">
+                                    <ins class="adsbygoogle"
+                                         style="display:block"
+                                         data-ad-client="ca-pub-4295146235414490"
+                                         data-ad-slot="5585311271"
+                                         data-ad-format="auto"
+                                         data-full-width-responsive="true"></ins>
+                                    <script>
+                                        (adsbygoogle = window.adsbygoogle || []).push({});
+                                    </script>
+                                </div>
+                            </div>
+                        {% endif %}
+
                         <div class="post">
                             {% if article.get('image_url') %}
                                 <div class="post-image">
@@ -298,6 +330,19 @@
                     <p>Please check back soon or try refreshing the page.</p>
                 </div>
             {% endif %}
+
+            <!-- Ad: above footer -->
+            <div class="ad-block footer-ad" style="margin:24px 0;">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-4295146235414490"
+                     data-ad-slot="5585311271"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
         </main>
 
         <!-- Right Sidebar -->
