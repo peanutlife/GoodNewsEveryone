@@ -183,7 +183,7 @@
                             All Time
                         </a>
                         <a href="/?sort={{ sort or 'top' }}{% if selected_topic %}&topic={{ selected_topic }}{% endif %}&time=today"
-                           class="time_option {% if time_filter == 'today' %}active{% endif %}">
+                           class="time-option {% if time_filter == 'today' %}active{% endif %}">
                             Today
                         </a>
                         <a href="/?sort={{ sort or 'top' }}{% if selected_topic %}&topic={{ selected_topic }}{% endif %}&time=week"
@@ -342,58 +342,82 @@
     <!-- JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Share button functionality
-            document.querySelectorAll('.share-btn').forEach(button => {
-                button.addEventListener('click', function(e) {
+            // Share button functionality with event delegation
+            document.addEventListener('click', function(e) {
+                // Handle share button clicks
+                if (e.target.closest('.share-btn')) {
                     e.preventDefault();
-                    const dropdown = this.closest('.post-actions').querySelector('.share-dropdown');
-                    dropdown.classList.toggle('active');
+                    e.stopPropagation();
 
-                    // Close other open dropdowns
+                    const shareBtn = e.target.closest('.share-btn');
+                    const postActions = shareBtn.closest('.post-actions');
+                    const dropdown = postActions.querySelector('.share-dropdown');
+
+                    // Close all other dropdowns first
                     document.querySelectorAll('.share-dropdown.active').forEach(openDropdown => {
                         if (openDropdown !== dropdown) {
                             openDropdown.classList.remove('active');
                         }
                     });
-                });
-            });
 
-            // Close share dropdowns when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.share-btn') && !e.target.closest('.share-dropdown')) {
+                    // Toggle current dropdown
+                    dropdown.classList.toggle('active');
+                }
+
+                // Handle copy link clicks
+                else if (e.target.closest('.copy-link')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const copyLink = e.target.closest('.copy-link');
+                    const url = copyLink.getAttribute('data-url');
+
+                    // Modern clipboard API with fallback
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(url).then(() => {
+                            showToast();
+                        }).catch(() => {
+                            fallbackCopy(url);
+                        });
+                    } else {
+                        fallbackCopy(url);
+                    }
+
+                    // Close dropdown
+                    copyLink.closest('.share-dropdown').classList.remove('active');
+                }
+
+                // Close dropdowns when clicking outside
+                else if (!e.target.closest('.share-dropdown')) {
                     document.querySelectorAll('.share-dropdown.active').forEach(dropdown => {
                         dropdown.classList.remove('active');
                     });
                 }
             });
 
-            // Copy link functionality
-            document.querySelectorAll('.copy-link').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const url = this.getAttribute('data-url');
+            // Fallback copy method
+            function fallbackCopy(text) {
+                const tempInput = document.createElement('input');
+                tempInput.style.position = 'fixed';
+                tempInput.style.opacity = '0';
+                document.body.appendChild(tempInput);
+                tempInput.value = text;
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                showToast();
+            }
 
-                    // Copy to clipboard
-                    const tempInput = document.createElement('input');
-                    document.body.appendChild(tempInput);
-                    tempInput.value = url;
-                    tempInput.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(tempInput);
-
-                    // Show toast
-                    const shareToast = document.getElementById('share-toast');
-                    if (shareToast) {
-                        shareToast.classList.add('active');
-                        setTimeout(() => {
-                            shareToast.classList.remove('active');
-                        }, 3000);
-                    }
-
-                    // Close dropdown
-                    this.closest('.share-dropdown').classList.remove('active');
-                });
-            });
+            // Show toast notification
+            function showToast() {
+                const shareToast = document.getElementById('share-toast');
+                if (shareToast) {
+                    shareToast.classList.add('active');
+                    setTimeout(() => {
+                        shareToast.classList.remove('active');
+                    }, 3000);
+                }
+            }
         });
     </script>
 </body>

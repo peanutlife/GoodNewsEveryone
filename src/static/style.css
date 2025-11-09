@@ -507,26 +507,30 @@ main {
 }
 
 .time-option {
-  padding: var(--space-1) var(--space-2);
+  display: inline-block;
+  padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-sm);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 500;
   color: var(--slate);
   text-decoration: none;
   transition: all var(--transition-fast);
-  background: transparent;
+  background: var(--cloud);
+  border: 1px solid var(--stone);
 }
 
 .time-option:hover {
   color: var(--charcoal);
   background: var(--parchment);
   box-shadow: 0 2px 6px rgba(255, 107, 53, 0.05);
+  border-color: rgba(255, 107, 53, 0.2);
 }
 
 .time-option.active {
-  color: var(--sky-blue);
-  background: linear-gradient(135deg, rgba(74, 144, 226, 0.08), rgba(74, 144, 226, 0.12));
-  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.1);
+  color: var(--pure-white);
+  background: linear-gradient(135deg, var(--sky-blue), rgba(74, 144, 226, 0.9));
+  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.25);
+  border-color: var(--sky-blue);
 }
 
 .section-header {
@@ -771,6 +775,7 @@ main {
   margin-top: auto;
   padding-top: var(--space-3);
   border-top: 1px solid var(--stone);
+  position: relative;
 }
 
 .action-buttons {
@@ -830,7 +835,8 @@ main {
   padding: var(--space-2);
   display: none;
   gap: var(--space-1);
-  z-index: 100;
+  z-index: 1000;
+  min-width: 200px;
 }
 
 .share-dropdown.active {
@@ -847,11 +853,13 @@ main {
   color: var(--slate);
   text-decoration: none;
   transition: all var(--transition-fast);
+  font-size: 0.875rem;
 }
 
 .share-option:hover {
   background: var(--cloud);
   color: var(--charcoal);
+  transform: scale(1.1);
 }
 
 /* ============================================

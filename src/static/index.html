@@ -3,23 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Project Optimist - Your Daily Feed of Positive News</title>
-    <meta name="description" content="Project Optimist aggregates positive and uplifting news stories from around the world, filtering out negativity to bring you a brighter perspective.">
-    <meta name="google-adsense-account" content="ca-pub-4295146235414490">
+    <title>Project Peanutlife - Your Daily Feed of Positive News</title>
+    <meta name="description" content="Project Peanutlife brings you the most inspiring and uplifting news stories from around the world.">
 
     <!-- Fonts & CSS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet>
-
-
-
-{% if request.path == '/warm' %}
-            <link rel="stylesheet" href="{{ url_for('static', filename='style_warm_adapted.css') }}">
-    {% else %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    {% endif %}
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous">
 </head>
 
@@ -27,57 +18,15 @@
     <!-- Sticky Header -->
     <header>
         <div class="brand-section">
-            <h1><a href="/">Project Optimist</a></h1>
+            <h1><a href="/">Project Peanutlife 🥜</a></h1>
             <p class="tagline">Your daily dose of positivity</p>
         </div>
-        <!-- Temporarily hidden user menu
-        <div class="user-menu">
-            {% if current_user.is_authenticated %}
-                <div class="user-button" id="user-menu-button">
-                    <i class="fas fa-user-circle"></i>
-                    <span>{{ current_user.username }}</span>
-                </div>
-                <div class="user-dropdown" id="user-dropdown">
-                    <a href="{{ url_for('auth.profile') }}"><i class="fas fa-cog"></i> Profile Settings</a>
-                    <a href="{{ url_for('auth.saved_articles') }}"><i class="fas fa-bookmark"></i> Saved Articles</a>
-                    <div class="divider"></div>
-                    <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt"></i> Log Out</a>
-                </div>
-            {% else %}
-                <div class="auth-buttons">
-                    <a href="{{ url_for('auth.login') }}" class="user-button">
-                        <i class="fas fa-sign-in-alt"></i>
-                        <span>Log In</span>
-                    </a>
-                    <a href="{{ url_for('auth.signup') }}" class="user-button">
-                        <i class="fas fa-user-plus"></i>
-                        <span>Sign Up</span>
-                    </a>
-                </div>
-            {% endif %}
-        </div>
-        -->
     </header>
 
     <!-- Main Layout Container -->
     <div class="layout-container">
         <!-- Left Sidebar -->
         <aside class="filter-sidebar">
-            <div class="sidebar-section">
-                <h3>ADVERTISEMENT</h3>
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR-ID"
-                     crossorigin="anonymous"></script>
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-client="ca-pub-YOUR-ID"
-                     data-ad-slot="YOUR-SLOT-ID"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
-                <script>
-                     (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-            </div>
-
             <div class="sidebar-section">
                 <h3>CATEGORIES</h3>
                 <ul class="filter-list">
@@ -109,7 +58,6 @@
                             <li>
                                 <a href="/?topic={{ topic }}" class="filter-item {% if selected_topic == topic %}active{% endif %}">
                                     {% if topic|lower == 'business' %}
-                                        <!-- Force display of business icon -->
                                         <img src="{{ url_for('static', filename='/openmoji/color/svg/1F4BC.svg') }}" alt="icon" class="filter-icon">
                                     {% elif topic_icons.get(topic) %}
                                         <img src="{{ url_for('static', filename=topic_icons.get(topic)) }}" alt="icon" class="filter-icon">
@@ -132,7 +80,7 @@
 
             <div class="sidebar-section">
                 <h3>ABOUT</h3>
-                <p class="sidebar-info">Project Optimist brings you positivity from around the world, using AI to find and rank the most inspiring stories.</p>
+                <p class="sidebar-info">Project Peanutlife brings you positivity from around the world, using AI to find and rank the most inspiring stories.</p>
             </div>
         </aside>
 
@@ -147,6 +95,75 @@
             {% endwith %}
 
             {% if articles %}
+                <!-- Daily Inspiration Hero Section -->
+                {% if articles and not selected_topic and (not time_filter or time_filter == 'all' or time_filter == 'today') %}
+                    {% set hero_article = articles[0] %}
+                    <section class="daily-inspiration-hero">
+                        <div class="hero-badge">
+                            <i class="fas fa-star"></i>
+                            TODAY'S MOST INSPIRING STORY
+                        </div>
+
+                        <article class="hero-article">
+                            {% if hero_article.get('image_url') %}
+                                <div class="hero-image">
+                                    <img src="{{ hero_article['image_url'] }}" alt="{{ hero_article['title'] }}">
+                                </div>
+                            {% endif %}
+
+                            <div class="hero-content">
+                                <h2 class="hero-title topic-{{ hero_article.get('topic_name', 'general')|lower|replace(' ', '-') }}"
+                                    style="--topic-color: var(--topic-{{ hero_article.get('topic_name', 'general')|lower|replace(' ', '-') }});">
+                                    <a href="{{ hero_article['link'] }}" target="_blank">{{ hero_article['title'] }}</a>
+                                </h2>
+                                <p class="hero-summary">
+                                    {{ hero_article['summary'] | striptags | truncate(200) }}
+                                </p>
+                                <div class="hero-stats">
+                                    <span class="inspiration-score">
+                                        <i class="fas fa-heart"></i>
+                                        {{ hero_article.get('inspiration_score', 0) }} Inspiration Score
+                                    </span>
+                                    <span class="topic-label">
+                                        {% if hero_article.get('topic_icon_path') %}
+                                            <img src="{{ url_for('static', filename=hero_article['topic_icon_path']) }}" alt="topic" style="width: 16px; height: 16px;">
+                                        {% endif %}
+                                        {{ hero_article.get('topic_name', 'general')|title }}
+                                    </span>
+                                </div>
+                            </div>
+                        </article>
+                    </section>
+
+                    <!-- Featured Inspirations -->
+                    {% if articles|length > 3 %}
+                        <section class="featured-inspirations">
+                            <div class="section-header">
+                                <i class="fas fa-fire"></i> MORE AMAZING STORIES TODAY
+                            </div>
+                            <div class="inspiration-tiles">
+                                {% for article in articles[1:4] %}
+                                    <article class="inspiration-tile">
+                                        <h3 class="post-title topic-{{ article.get('topic_name', 'general')|lower|replace(' ', '-') }}"
+                                            style="--topic-color: var(--topic-{{ article.get('topic_name', 'general')|lower|replace(' ', '-') }});">
+                                            <a href="{{ article['link'] }}" target="_blank">{{ article['title'] }}</a>
+                                        </h3>
+                                        <div class="post-metadata">
+                                            <a href="/?topic={{ article.get('topic_name', 'general') }}" class="post-topic">
+                                                {% if article.get('topic_icon_path') %}
+                                                    <img src="{{ url_for('static', filename=article['topic_icon_path']) }}" alt="topic" class="topic-icon">
+                                                {% endif %}
+                                                {{ article.get('topic_name', 'general')|title }}
+                                            </a>
+                                            <span class="post-time">{{ article['published'] | format_datetime }}</span>
+                                        </div>
+                                    </article>
+                                {% endfor %}
+                            </div>
+                        </section>
+                    {% endif %}
+                {% endif %}
+
                 <!-- Sort and Time Filter options -->
                 <div class="sort-options">
                     <div class="sort-tabs">
@@ -180,102 +197,98 @@
                     </div>
                 </div>
 
-                <!-- Top Stories Section -->
+                <!-- Regular Stories Section -->
                 <div class="section-header">
-                    <i class="fas fa-trophy"></i> TOP STORIES
+                    <i class="fas fa-trophy"></i>
+                    {% if selected_topic %}
+                        {{ selected_topic|upper }} STORIES
+                    {% else %}
+                        ALL STORIES
+                    {% endif %}
                 </div>
 
-                {% for article in articles %}
-                    <div class="post">
-                        <div class="post-content">
-                            <div class="post-header">
-                                <div class="post-metadata">
-                                    <a href="/?topic={{ article.get('topic_name', 'general') }}" class="post-topic">
-                                        {% if article.get('topic_icon_path') %}
-                                            <img src="{{ url_for('static', filename=article['topic_icon_path']) }}" alt="topic" class="topic-icon">
-                                        {% endif %}
-                                        {{ article.get('topic_name', 'general')|title }}
-                                    </a>
-                                    <span class="post-source">{{ article.get('source_name', '') }}</span>
-                                    <span class="post-time">{{ article['published'] | format_datetime }}</span>
+                {% set start_index = 0 %}
+                {% if not selected_topic and (not time_filter or time_filter == 'all' or time_filter == 'today') and articles|length > 3 %}
+                    {% set start_index = 4 %}
+                {% endif %}
+
+                <!-- Masonry Grid Layout -->
+                <div class="articles-grid">
+                    {% for article in articles[start_index:] %}
+                        <div class="post">
+                            {% if article.get('image_url') %}
+                                <div class="post-image">
+                                    <img src="{{ article['image_url'] }}" alt="Article image">
+                                </div>
+                            {% endif %}
+
+                            <div class="post-content">
+                                <div class="post-header">
+                                    <div class="post-metadata">
+                                        <a href="/?topic={{ article.get('topic_name', 'general') }}" class="post-topic">
+                                            {% if article.get('topic_icon_path') %}
+                                                <img src="{{ url_for('static', filename=article['topic_icon_path']) }}" alt="topic" class="topic-icon">
+                                            {% endif %}
+                                            {{ article.get('topic_name', 'general')|title }}
+                                        </a>
+                                        <span class="post-source">{{ article.get('source_name', '') }}</span>
+                                        <span class="post-time">{{ article['published'] | format_datetime }}</span>
+                                    </div>
+
+                                    {% if article.get('tags') %}
+                                        <div class="article-tags">
+                                            {% for tag in article.get('tags', [])[:2] %}
+                                                <span class="article-tag" style="background-color: {{ tag.color }}; color: white;">
+                                                    {{ tag.icon }} {{ tag.name }}
+                                                </span>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
                                 </div>
 
-                                <!-- Multiple tags instead of single "Inspiring" tag -->
-                                {% if article.get('tags') %}
-                                    <div class="article-tags">
-                                        {% for tag in article.get('tags', []) %}
-                                            <span class="article-tag" style="background-color: {{ tag.color }}; color: white;">
-                                                {{ tag.icon }} {{ tag.name }}
-                                            </span>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </div>
-
-                            <div class="post-body">
-                                {% if article.get('image_url') %}
-                                    <div class="post-image">
-                                        <img src="{{ article['image_url'] }}" alt="Article image">
-                                    </div>
-                                {% endif %}
-
-                                <div class="post-text">
-                                    <h3 class="post-title">
+                                <div class="post-body">
+                                    <h3 class="post-title topic-{{ article.get('topic_name', 'general')|lower|replace(' ', '-') }}"
+                                        style="--topic-color: var(--topic-{{ article.get('topic_name', 'general')|lower|replace(' ', '-') }});">
                                         <a href="{{ article['link'] }}" target="_blank">{{ article['title'] }}</a>
                                     </h3>
                                     <p class="post-summary">
-                                        {{ article['summary'] | striptags | truncate(180) }}
+                                        {{ article['summary'] | striptags | truncate(150) }}
                                     </p>
                                 </div>
-                            </div>
 
-                            <div class="post-actions">
-                                <div class="action-buttons">
-                                    <button class="action-button share-btn" data-url="{{ article['link'] }}" data-title="{{ article['title'] }}">
-                                        <i class="fas fa-share-alt"></i> Share
-                                    </button>
+                                <div class="post-actions">
+                                    <div class="action-buttons">
+                                        <button class="action-button share-btn" data-url="{{ article['link'] }}" data-title="{{ article['title'] }}">
+                                            <i class="fas fa-share-alt"></i> Share
+                                        </button>
 
-                                    <!-- {% if current_user.is_authenticated %}
-                                        <form action="{{ url_for('auth.save_article') }}" method="post" style="display: inline;">
-                                            <input type="hidden" name="article_link" value="{{ article['link'] }}">
-                                            <input type="hidden" name="article_title" value="{{ article['title'] }}">
-                                            <input type="hidden" name="topic_name" value="{{ article.get('topic_name', '') }}">
-                                            <button type="submit" class="action-button save-btn">
-                                                <i class="far fa-bookmark"></i> Save
-                                            </button>
-                                        </form>
-                                    {% else %}
-                                        <a href="{{ url_for('auth.login') }}" class="action-button save-btn">
-                                            <i class="far fa-bookmark"></i> Save
+                                        <a href="{{ article['link'] }}" target="_blank" class="action-button read-btn">
+                                            <i class="fas fa-book-open"></i> Read
                                         </a>
-                                    {% endif %} -->
+                                    </div>
 
-                                    <a href="{{ article['link'] }}" target="_blank" class="action-button read-btn">
-                                        <i class="fas fa-book-open"></i> Read Full Article
-                                    </a>
-                                </div>
-
-                                <div class="share-dropdown">
-                                    <a href="https://twitter.com/intent/tweet?url={{ article['link'] | urlencode }}&text={{ article['title'] | urlencode }}" target="_blank" class="share-option">
-                                        <i class="fab fa-twitter"></i> Twitter
-                                    </a>
-                                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ article['link'] | urlencode }}" target="_blank" class="share-option">
-                                        <i class="fab fa-facebook-f"></i> Facebook
-                                    </a>
-                                    <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ article['link'] | urlencode }}&title={{ article['title'] | urlencode }}" target="_blank" class="share-option">
-                                        <i class="fab fa-linkedin-in"></i> LinkedIn
-                                    </a>
-                                    <a href="mailto:?subject={{ article['title'] | urlencode }}&body={{ article['link'] | urlencode }}" class="share-option">
-                                        <i class="fas fa-envelope"></i> Email
-                                    </a>
-                                    <a href="#" class="share-option copy-link" data-url="{{ article['link'] }}">
-                                        <i class="fas fa-link"></i> Copy Link
-                                    </a>
+                                    <div class="share-dropdown">
+                                        <a href="https://twitter.com/intent/tweet?url={{ article['link'] | urlencode }}&text={{ article['title'] | urlencode }}" target="_blank" class="share-option">
+                                            <i class="fab fa-twitter"></i>
+                                        </a>
+                                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ article['link'] | urlencode }}" target="_blank" class="share-option">
+                                            <i class="fab fa-facebook-f"></i>
+                                        </a>
+                                        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ article['link'] | urlencode }}&title={{ article['title'] | urlencode }}" target="_blank" class="share-option">
+                                            <i class="fab fa-linkedin-in"></i>
+                                        </a>
+                                        <a href="mailto:?subject={{ article['title'] | urlencode }}&body={{ article['link'] | urlencode }}" class="share-option">
+                                            <i class="fas fa-envelope"></i>
+                                        </a>
+                                        <a href="#" class="share-option copy-link" data-url="{{ article['link'] }}">
+                                            <i class="fas fa-link"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             {% else %}
                 <div class="no-articles">
                     <i class="fas fa-newspaper"></i>
@@ -301,12 +314,12 @@
             <div class="sidebar-section">
                 <h3>TOP TOPICS</h3>
                 <div class="topic-tags-container">
-                    {% for topic in topics[:6] %}
-                        <a href="/?topic={{ topic }}" class="topic-tag {{ topic|title }}">
+                    {% for topic in topics[:12] %}
+                        <a href="/?topic={{ topic }}" class="topic-tag {{ topic|title|replace(' ', '-')|replace('_', '-') }}">
                             {% if topic_icons.get(topic) %}
                                 <img src="{{ url_for('static', filename=topic_icons.get(topic)) }}" alt="{{ topic }}" class="emoji-icon">
                             {% endif %}
-                            {{ topic|title }}
+                            {{ topic|title|replace('_', ' ') }}
                         </a>
                     {% endfor %}
                 </div>
@@ -316,8 +329,8 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; {{ now.year }} Project Optimist. All rights reserved.</p>
-        <p>Powered by Good Vibes</p>
+        <p>&copy; {{ now.year }} Project Peanutlife. All rights reserved.</p>
+        <p>Powered by Good Vibes & Peanuts 🥜</p>
     </footer>
 
     <!-- Toast notification -->
@@ -326,98 +339,85 @@
         <span>Link copied to clipboard!</span>
     </div>
 
-    <div class="toast" id="save-toast">
-        <i class="fas fa-check-circle"></i>
-        <span>Article saved successfully!</span>
-    </div>
-
     <!-- JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // User dropdown menu
-            const userMenuButton = document.getElementById('user-menu-button');
-            const userDropdown = document.getElementById('user-dropdown');
-
-            if (userMenuButton && userDropdown) {
-                userMenuButton.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    userDropdown.classList.toggle('active');
-                });
-
-                document.addEventListener('click', function(e) {
-                    if (!userMenuButton.contains(e.target) && !userDropdown.contains(e.target)) {
-                        userDropdown.classList.remove('active');
-                    }
-                });
-            }
-
-            // Share button functionality
-            document.querySelectorAll('.share-btn').forEach(button => {
-                button.addEventListener('click', function(e) {
+            // Share button functionality with event delegation
+            document.addEventListener('click', function(e) {
+                // Handle share button clicks
+                if (e.target.closest('.share-btn')) {
                     e.preventDefault();
-                    const dropdown = this.closest('.post-actions').querySelector('.share-dropdown');
-                    dropdown.classList.toggle('active');
+                    e.stopPropagation();
 
-                    // Close other open dropdowns
+                    const shareBtn = e.target.closest('.share-btn');
+                    const postActions = shareBtn.closest('.post-actions');
+                    const dropdown = postActions.querySelector('.share-dropdown');
+
+                    // Close all other dropdowns first
                     document.querySelectorAll('.share-dropdown.active').forEach(openDropdown => {
                         if (openDropdown !== dropdown) {
                             openDropdown.classList.remove('active');
                         }
                     });
-                });
-            });
 
-            // Close share dropdowns when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.share-btn') && !e.target.closest('.share-dropdown')) {
+                    // Toggle current dropdown
+                    dropdown.classList.toggle('active');
+                }
+
+                // Handle copy link clicks
+                else if (e.target.closest('.copy-link')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const copyLink = e.target.closest('.copy-link');
+                    const url = copyLink.getAttribute('data-url');
+
+                    // Modern clipboard API with fallback
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(url).then(() => {
+                            showToast();
+                        }).catch(() => {
+                            fallbackCopy(url);
+                        });
+                    } else {
+                        fallbackCopy(url);
+                    }
+
+                    // Close dropdown
+                    copyLink.closest('.share-dropdown').classList.remove('active');
+                }
+
+                // Close dropdowns when clicking outside
+                else if (!e.target.closest('.share-dropdown')) {
                     document.querySelectorAll('.share-dropdown.active').forEach(dropdown => {
                         dropdown.classList.remove('active');
                     });
                 }
             });
 
-            // Copy link functionality
-            document.querySelectorAll('.copy-link').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const url = this.getAttribute('data-url');
+            // Fallback copy method
+            function fallbackCopy(text) {
+                const tempInput = document.createElement('input');
+                tempInput.style.position = 'fixed';
+                tempInput.style.opacity = '0';
+                document.body.appendChild(tempInput);
+                tempInput.value = text;
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                showToast();
+            }
 
-                    // Copy to clipboard
-                    const tempInput = document.createElement('input');
-                    document.body.appendChild(tempInput);
-                    tempInput.value = url;
-                    tempInput.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(tempInput);
-
-                    // Show toast
-                    const shareToast = document.getElementById('share-toast');
-                    if (shareToast) {
-                        shareToast.classList.add('active');
-                        setTimeout(() => {
-                            shareToast.classList.remove('active');
-                        }, 3000);
-                    }
-
-                    // Close dropdown
-                    this.closest('.share-dropdown').classList.remove('active');
-                });
-            });
-
-            // Show toast when save button is clicked
-            document.querySelectorAll('.save-btn').forEach(btn => {
-                if (btn.tagName.toLowerCase() === 'button') {
-                    btn.addEventListener('click', function(e) {
-                        const saveToast = document.getElementById('save-toast');
-                        if (saveToast) {
-                            saveToast.classList.add('active');
-                            setTimeout(() => {
-                                saveToast.classList.remove('active');
-                            }, 3000);
-                        }
-                    });
+            // Show toast notification
+            function showToast() {
+                const shareToast = document.getElementById('share-toast');
+                if (shareToast) {
+                    shareToast.classList.add('active');
+                    setTimeout(() => {
+                        shareToast.classList.remove('active');
+                    }, 3000);
                 }
-            });
+            }
         });
     </script>
 </body>

@@ -1086,6 +1086,32 @@
       "tags": []
     },
     {
+      "title": "Climate change is making flights bumpier. Here’s how one airline is using AI to predict turbulence",
+      "link": "http://www.euronews.com/travel/2025/11/09/climate-change-is-making-flights-bumpier-heres-how-one-airline-is-using-ai-to-predict-turb",
+      "summary": "Given that experts say climate change is making the skies bumpier, airlines are looking for ways to ensure passengers’ safety and comfort.",
+      "published": "2025-11-09T06:00:15",
+      "sentiment_score": 0.7845,
+      "inspiration_score": 8.9,
+      "inspiration_dimensions": {
+        "composite": 8.9,
+        "emotional": 8.9,
+        "triumph": 8.9,
+        "social": 8.9,
+        "novelty": 8.9,
+        "actionable": 8.9
+      },
+      "is_inspirational": true,
+      "source_name": "www.euronews.com",
+      "source_feed": "https://www.euronews.com/rss?format=mrss&level=vertical&name=lifestyle",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "science",
+      "topic_icon_path": "/openmoji/color/svg/1F52C.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F52C.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://www.google.com/s2/favicons?domain=www.euronews.com&sz=128",
+      "tags": []
+    },
+    {
       "title": "Geopolitics, backsliding and progress: Here's what to expect at this year's COP30 global climate talks",
       "link": "https://phys.org/news/2025-11-geopolitics-backsliding-year-cop30-global.html",
       "summary": "Along with delegates from all over the world, I'll be heading to the United Nations COP30 climate summit in the Brazilian Amazon city of Belém. Like many others, I'm unsure what to expect.",
@@ -1872,6 +1898,32 @@
       "tags": []
     },
     {
+      "title": "The International Space Station celebrates 25 years of human life in space. Here’s a look back at it",
+      "link": "http://www.euronews.com/next/2025/11/09/the-international-space-station-celebrates-25-years-of-human-life-in-space-heres-a-look-ba",
+      "summary": "Three American and Russian astronauts landed at the International Space Station for the first time in November 2000. We take a look back at some of the station’s biggest moments.",
+      "published": "2025-11-09T07:00:31",
+      "sentiment_score": 0.5719,
+      "inspiration_score": 7.9,
+      "inspiration_dimensions": {
+        "composite": 7.9,
+        "emotional": 7.9,
+        "triumph": 7.9,
+        "social": 7.9,
+        "novelty": 7.9,
+        "actionable": 7.9
+      },
+      "is_inspirational": true,
+      "source_name": "www.euronews.com",
+      "source_feed": "https://www.euronews.com/rss?format=mrss&level=vertical&name=lifestyle",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "science",
+      "topic_icon_path": "/openmoji/color/svg/1F52C.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F52C.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://www.google.com/s2/favicons?domain=www.euronews.com&sz=128",
+      "tags": []
+    },
+    {
       "title": "A 500-million-year-old brain \"radar\" still shapes how you see",
       "link": "https://www.sciencedaily.com/releases/2025/11/251108083858.htm",
       "summary": "New research shows that the superior colliculus, a primitive brain region, can independently interpret visual information. This challenges long-held beliefs that only the cortex handles such complex computations. The discovery highlights how ancient neural circuits guide attention and perception, shaping how we react to the world around us.",
@@ -2089,6 +2141,32 @@
       "noun_icon_url": "/openmoji/color/svg/1F52C.svg",
       "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
       "image_url": "https://images.newscientist.com/wp-content/uploads/2025/10/21114500/SEI_2705903091.jpg",
+      "tags": []
+    },
+    {
+      "title": "“Really bizarre” quantum discovery defies the rules of physics",
+      "link": "https://www.sciencedaily.com/releases/2025/11/251108083908.htm",
+      "summary": "Researchers have discovered quantum oscillations inside an insulating material, overturning long-held assumptions. Their work at the National Magnetic Field Laboratory suggests that the effect originates in the material’s bulk rather than its surface. The finding points toward a “new duality” in materials science—where compounds may behave as both metals and insulators—offering a fascinating puzzle for future research.",
+      "published": "2025-11-09T05:36:10",
+      "sentiment_score": 0.5423,
+      "inspiration_score": 7.7,
+      "inspiration_dimensions": {
+        "composite": 7.7,
+        "emotional": 7.7,
+        "triumph": 7.7,
+        "social": 7.7,
+        "novelty": 7.7,
+        "actionable": 7.7
+      },
+      "is_inspirational": true,
+      "source_name": "www.sciencedaily.com",
+      "source_feed": "https://www.sciencedaily.com/rss/all.xml",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "science",
+      "topic_icon_path": "/openmoji/color/svg/1F52C.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F52C.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://www.google.com/s2/favicons?domain=www.sciencedaily.com&sz=128",
       "tags": []
     },
     {
@@ -2466,6 +2544,38 @@
       "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
       "image_url": "https://www.google.com/s2/favicons?domain=www.goodnewsnetwork.org&sz=128",
       "tags": []
+    },
+    {
+      "title": "DNA’s hidden power could transform how we make medicines",
+      "link": "https://www.sciencedaily.com/releases/2025/11/251108083914.htm",
+      "summary": "Scientists found that DNA’s phosphate groups can direct chemical reactions to make the correct mirror-image form of drug molecules. This breakthrough simplifies chiral drug production, reducing waste and energy use. Using a new “PS scanning” method, the team pinpointed which DNA parts guide reactions. The approach could revolutionize green chemistry in pharmaceuticals.",
+      "published": "2025-11-09T04:59:09",
+      "sentiment_score": -0.1779,
+      "inspiration_score": 5.1,
+      "inspiration_dimensions": {
+        "composite": 5.1,
+        "emotional": 5.1,
+        "triumph": 5.1,
+        "social": 5.1,
+        "novelty": 5.1,
+        "actionable": 5.1
+      },
+      "is_inspirational": true,
+      "source_name": "www.sciencedaily.com",
+      "source_feed": "https://www.sciencedaily.com/rss/all.xml",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "science",
+      "topic_icon_path": "/openmoji/color/svg/1F52C.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F52C.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://www.google.com/s2/favicons?domain=www.sciencedaily.com&sz=128",
+      "tags": [
+        {
+          "name": "Breakthrough",
+          "color": "#8338ec",
+          "icon": "💡"
+        }
+      ]
     },
     {
       "title": "Empowering street vendors in Indonesia through a sustainability-integrated financial literacy program",
@@ -4988,6 +5098,32 @@
       "tags": []
     },
     {
+      "title": "Microsoft Confirms Special Offer For Windows Users—Free Gift Cards",
+      "link": "https://www.forbes.com/sites/zakdoffman/2025/11/09/microsoft-confirms-special-offer-for-windows-users-free-gift-cards/",
+      "summary": "Yes, Microsoft is really offering free gift cards to Windows users. Here’s what you do.",
+      "published": "2025-11-09T07:27:15",
+      "sentiment_score": 0.933,
+      "inspiration_score": 9.7,
+      "inspiration_dimensions": {
+        "composite": 9.7,
+        "emotional": 9.7,
+        "triumph": 9.7,
+        "social": 9.7,
+        "novelty": 9.7,
+        "actionable": 9.7
+      },
+      "is_inspirational": true,
+      "source_name": "www.forbes.com",
+      "source_feed": "https://www.forbes.com/innovation/feed/",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "general",
+      "topic_icon_path": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://imageio.forbes.com/specials-images/imageserve/6805d764e9216bb6ed674264/0x0.jpg?width=960&precrop=2024%2C1138%2Cx335%2Cy318",
+      "tags": []
+    },
+    {
       "title": "Public confidence in American higher education is rising, but reality remains misrepresented",
       "link": "https://timesofindia.indiatimes.com/education/news/public-confidence-in-american-higher-education-is-rising-but-reality-remains-misrepresented/articleshow/125188584.cms",
       "summary": "<a href=\"https://timesofindia.indiatimes.com/education/news/public-confidence-in-american-higher-education-is-rising-but-reality-remains-misrepresented/articleshow/125188584.cms\"><img align=\"left\" border=\"0\" hspace=\"10\" src=\"https://timesofindia.indiatimes.com/photo/125188584.cms\" style=\"margin-top: 3px; margin-right: 5px;\" /></a>Public confidence in American higher education is rebounding, yet media coverage and cultural narratives continue to focus on elite institutions, obscuring the experiences of the majority of students. Nontraditional learners, working adults, parents, and first-generation students—face unique challenges. Experts urge broader recognition of diverse pathways, better data systems, and realistic portrayals to ensure colleges remain relevant, equitable, and impactful.",
@@ -5355,6 +5491,32 @@
       "noun_icon_url": "/openmoji/color/svg/1F389.svg",
       "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
       "image_url": "https://images2.minutemediacdn.com/image/upload/c_crop,w_1919,h_1079,x_0,y_0/c_fill,w_2880,ar_16:9,f_auto,q_auto,g_auto/images/voltaxMediaLibrary/mmsport/theplayertribune/01h5n31bc4vmz40ygwka.jpg",
+      "tags": []
+    },
+    {
+      "title": "Not your belly! Doc reveals the first sign of weight gain",
+      "link": "https://timesofindia.indiatimes.com/life-style/health-fitness/health-news/first-sign-of-weight-gain-isnt-what-you-think/articleshow/125196922.cms",
+      "summary": "<img align=\"left\" border=\"0\" hspace=\"10\" src=\"https://timesofindia.indiatimes.com/photo/125196922.cms\" style=\"margin-top: 3px; margin-right: 5px;\" />Weight gain begins subtly inside the body, with the tongue being the first area to accumulate fat. This internal fat buildup can lead to snoring, the initial observable sign of weight gain, even in individuals who are not visibly overweight. This phenomenon has been observed in studies, highlighting snoring as a potential indicator of developing obesity.",
+      "published": "2025-11-09T04:38:46",
+      "sentiment_score": 0.9118,
+      "inspiration_score": 9.6,
+      "inspiration_dimensions": {
+        "composite": 9.6,
+        "emotional": 9.6,
+        "triumph": 9.6,
+        "social": 9.6,
+        "novelty": 9.6,
+        "actionable": 9.6
+      },
+      "is_inspirational": true,
+      "source_name": "timesofindia.indiatimes.com",
+      "source_feed": "http://timesofindia.indiatimes.com/rssfeeds/2886704.cms",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "general",
+      "topic_icon_path": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://timesofindia.indiatimes.com/photo/125196922.cms",
       "tags": []
     },
     {
@@ -5771,6 +5933,58 @@
       "noun_icon_url": "/openmoji/color/svg/1F389.svg",
       "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
       "image_url": "https://www.google.com/s2/favicons?domain=www.goodnewsnetwork.org&sz=128",
+      "tags": []
+    },
+    {
+      "title": "Rare ‘Mellon Blue’ diamond expected to fetch up to $30 million at auction",
+      "link": "http://www.euronews.com/video/2025/11/09/rare-mellon-blue-diamond-expected-to-fetch-up-to-30-million-at-auction",
+      "summary": "Geneva’s November auctions will showcase the 9.51-carat “Mellon Blue” diamond, a Fancy Vivid Blue gem valued at up to $30 million, alongside the Glowing Rose pink diamond and historic jewels once owned by Napoleon.",
+      "published": "2025-11-09T07:34:46",
+      "sentiment_score": 0.9022,
+      "inspiration_score": 9.5,
+      "inspiration_dimensions": {
+        "composite": 9.5,
+        "emotional": 9.5,
+        "triumph": 9.5,
+        "social": 9.5,
+        "novelty": 9.5,
+        "actionable": 9.5
+      },
+      "is_inspirational": true,
+      "source_name": "www.euronews.com",
+      "source_feed": "https://www.euronews.com/rss?format=mrss&level=vertical&name=lifestyle",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "general",
+      "topic_icon_path": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://www.google.com/s2/favicons?domain=www.euronews.com&sz=128",
+      "tags": []
+    },
+    {
+      "title": "9 historical monuments in India which are over 1,000 years old!",
+      "link": "https://timesofindia.indiatimes.com/life-style/travel/destinations/9-historical-monuments-in-india-which-are-over-1000-years-old/articleshow/125197536.cms",
+      "summary": "<img align=\"left\" border=\"0\" hspace=\"10\" src=\"https://timesofindia.indiatimes.com/photo/125197536.cms\" style=\"margin-top: 3px; margin-right: 5px;\" />India boasts ancient architectural marvels over a millennium old, showcasing spiritual significance and artistic mastery. From Bihar's Barabar Caves to Tamil Nadu's Shore Temple and Maharashtra's Kailasa Temple, these structures, including Sanchi's Stupa and Khajuraho's sculptures, stand as testaments to a rich past.  These enduring monuments offer a captivating glimpse into India's historical grandeur.",
+      "published": "2025-11-09T06:03:23",
+      "sentiment_score": 0.908,
+      "inspiration_score": 9.5,
+      "inspiration_dimensions": {
+        "composite": 9.5,
+        "emotional": 9.5,
+        "triumph": 9.5,
+        "social": 9.5,
+        "novelty": 9.5,
+        "actionable": 9.5
+      },
+      "is_inspirational": true,
+      "source_name": "timesofindia.indiatimes.com",
+      "source_feed": "http://timesofindia.indiatimes.com/rssfeeds/2886704.cms",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "general",
+      "topic_icon_path": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://timesofindia.indiatimes.com/photo/125197536.cms",
       "tags": []
     },
     {
@@ -7346,6 +7560,32 @@
       "tags": []
     },
     {
+      "title": "Nearly 1 million Filipinos evacuate as Super Typhoon Fung-wong approaches",
+      "link": "https://www.aljazeera.com/news/2025/11/9/nearly-1-million-filipinos-evacuate-as-super-typhoon-fung-wong-approaches?traffic_source=rss",
+      "summary": "Philippines weather bureau warns of &#039;life-threatening conditions&#039; as super storm heads for its largest island.",
+      "published": "2025-11-09T07:44:21",
+      "sentiment_score": 0.8126,
+      "inspiration_score": 9.1,
+      "inspiration_dimensions": {
+        "composite": 9.1,
+        "emotional": 9.1,
+        "triumph": 9.1,
+        "social": 9.1,
+        "novelty": 9.1,
+        "actionable": 9.1
+      },
+      "is_inspirational": true,
+      "source_name": "www.aljazeera.com",
+      "source_feed": "https://www.aljazeera.com/xml/rss/all.xml",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "general",
+      "topic_icon_path": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://www.google.com/s2/favicons?domain=www.aljazeera.com&sz=128",
+      "tags": []
+    },
+    {
       "title": "'Work hard' - is Maresca's message bringing back peak Garnacho?",
       "link": "https://www.bbc.com/sport/football/articles/cj0ev6em6mro?at_medium=RSS&at_campaign=rss",
       "summary": "Alejandro Garnacho was exiled at Manchester United under Ruben Amorim but two goals and two assists in four games highlight his improving form at Chelsea.",
@@ -8522,6 +8762,38 @@
       "tags": []
     },
     {
+      "title": "DNA in seawater reveals lost hammerhead sharks",
+      "link": "https://www.sciencedaily.com/releases/2025/11/251108083904.htm",
+      "summary": "A revolutionary eDNA test detects endangered hammerhead sharks using genetic traces left in seawater, eliminating the need to capture or even see them. This powerful tool could finally uncover where these elusive species still survive, and help protect them before they disappear for good.",
+      "published": "2025-11-08T16:03:47",
+      "sentiment_score": 0.7783,
+      "inspiration_score": 8.9,
+      "inspiration_dimensions": {
+        "composite": 8.9,
+        "emotional": 8.9,
+        "triumph": 8.9,
+        "social": 8.9,
+        "novelty": 8.9,
+        "actionable": 8.9
+      },
+      "is_inspirational": true,
+      "source_name": "www.sciencedaily.com",
+      "source_feed": "https://www.sciencedaily.com/rss/all.xml",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "general",
+      "topic_icon_path": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://www.google.com/s2/favicons?domain=www.sciencedaily.com&sz=128",
+      "tags": [
+        {
+          "name": "Breakthrough",
+          "color": "#8338ec",
+          "icon": "💡"
+        }
+      ]
+    },
+    {
       "title": "Here’s Where the Word “Dude” Came From—And Trust Us, You Are Never Going to Guess This One",
       "link": "https://www.rd.com/article/where-the-word-dude-came-from/",
       "summary": "<p>We've been saying \"dude\" for as long as we can remember, but where did it come from? Does it mean the same thing now as it did then? We investigate.</p>\n<p>The post <a href=\"https://www.rd.com/article/where-the-word-dude-came-from/\">Here&#8217;s Where the Word &#8220;Dude&#8221; Came From—And Trust Us, You Are Never Going to Guess This One</a> appeared first on <a href=\"https://www.rd.com\">Reader&#039;s Digest</a>.</p>",
@@ -9490,6 +9762,32 @@
       "tags": []
     },
     {
+      "title": "UGC NET December 2025 correction window opens tomorrow: Check list of editable fields and how to make corrections",
+      "link": "https://timesofindia.indiatimes.com/education/news/ugc-net-december-2025-correction-window-opens-tomorrow-check-list-of-editable-fields-and-how-to-make-corrections/articleshow/125198320.cms",
+      "summary": "<a href=\"https://timesofindia.indiatimes.com/education/news/ugc-net-december-2025-correction-window-opens-tomorrow-check-list-of-editable-fields-and-how-to-make-corrections/articleshow/125198320.cms\"><img align=\"left\" border=\"0\" hspace=\"10\" src=\"https://timesofindia.indiatimes.com/photo/125198320.cms\" style=\"margin-top: 3px; margin-right: 5px;\" /></a>The National Testing Agency is opening the UGC NET December 2025 application correction window from November 10th to 12th. Candidates can rectify errors in date of birth, category, and parents' names. Crucial details like name and mobile number are non-editable. This is a vital chance to ensure accuracy before the exam, which determines eligibility for JRF and Assistant Professor positions.",
+      "published": "2025-11-09T07:25:21",
+      "sentiment_score": 0.7351,
+      "inspiration_score": 8.7,
+      "inspiration_dimensions": {
+        "composite": 8.7,
+        "emotional": 8.7,
+        "triumph": 8.7,
+        "social": 8.7,
+        "novelty": 8.7,
+        "actionable": 8.7
+      },
+      "is_inspirational": true,
+      "source_name": "timesofindia.indiatimes.com",
+      "source_feed": "http://timesofindia.indiatimes.com/rssfeeds/913168846.cms",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "general",
+      "topic_icon_path": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://timesofindia.indiatimes.com/photo/125198320.cms",
+      "tags": []
+    },
+    {
       "title": "Today’s Wordle #1604 Hints And Answer For Sunday, November 9",
       "link": "https://www.forbes.com/sites/erikkain/2025/11/08/todays-wordle-1604-hints-and-answer-for-sunday-november-9/",
       "summary": "Looking for help with today's New York Times Wordle? Here are some expert hints, clues and commentary to help you solve today's Wordle and sharpen your guessing game.",
@@ -9958,6 +10256,32 @@
       "tags": []
     },
     {
+      "title": "Messi scores two goals as Inter Miami eliminate Nashville in playoffs",
+      "link": "https://www.aljazeera.com/sports/2025/11/9/messi-scores-two-goals-as-inter-miami-eliminate-nashville-in-playoffs?traffic_source=rss",
+      "summary": "Star forward Lionel Messi and Inter Miami advanced to MLS Cup East semifinals with Game 3 playoff win over Nashville.",
+      "published": "2025-11-09T04:42:00",
+      "sentiment_score": 0.7003,
+      "inspiration_score": 8.5,
+      "inspiration_dimensions": {
+        "composite": 8.5,
+        "emotional": 8.5,
+        "triumph": 8.5,
+        "social": 8.5,
+        "novelty": 8.5,
+        "actionable": 8.5
+      },
+      "is_inspirational": true,
+      "source_name": "www.aljazeera.com",
+      "source_feed": "https://www.aljazeera.com/xml/rss/all.xml",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "general",
+      "topic_icon_path": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://www.google.com/s2/favicons?domain=www.aljazeera.com&sz=128",
+      "tags": []
+    },
+    {
       "title": "Boozer twins start strong in debut for No. 6 Duke",
       "link": "https://www.espn.com/mens-college-basketball/story/_/id/46896650/cameron-cayden-boozer-start-strong-debut-no-6-duke",
       "summary": "Cameron and Cayden Boozer thrived in their freshman debut at Duke, with Cameron going for 25 points, 8 rebounds and 5 assists in a blowout win.",
@@ -10354,6 +10678,32 @@
       "tags": []
     },
     {
+      "title": "Meme matters: Angelina Jolie's driver taken by Ukraine army goes viral on net",
+      "link": "http://www.euronews.com/culture/2025/11/09/meme-matters-angelina-jolies-driver-taken-by-ukraine-army-goes-viral-on-net",
+      "summary": "The famous Hollywood actress and UN Goodwill Ambassador visited the Ukrainian cities of Mykolaïv and Kherson this week. Her trip was marred by a row with the Territorial Recruitment Centre - but the internet was delighted.",
+      "published": "2025-11-09T05:24:19",
+      "sentiment_score": 0.6705,
+      "inspiration_score": 8.4,
+      "inspiration_dimensions": {
+        "composite": 8.4,
+        "emotional": 8.4,
+        "triumph": 8.4,
+        "social": 8.4,
+        "novelty": 8.4,
+        "actionable": 8.4
+      },
+      "is_inspirational": true,
+      "source_name": "www.euronews.com",
+      "source_feed": "https://www.euronews.com/rss?format=mrss&level=vertical&name=culture",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "general",
+      "topic_icon_path": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://images.euronews.com/articles/stories/09/53/92/57/696x392_cmsv2_619ac335-6e2e-53a6-b246-79a643d2a157-9539257.jpg",
+      "tags": []
+    },
+    {
       "title": "Senate Introduces Food Ingredient Disclosure Bill, Addressing MAHA Concerns",
       "link": "https://civileats.com/2025/11/06/senate-introduces-food-ingredient-disclosure-bill-addressing-maha-concerns/",
       "summary": "<p>November 6, 2025 – Republicans have introduced a long-watched bill that would reform food ingredient reporting and review, after pushback from the Make America Healthy Again (MAHA) movement. Senator Roger Marshall (R-Kansas) introduced the Better Food Disclosure Act Thursday along with Senators Rick Scott (R-Florida) and Katie Britt (R-Alabama). The bill would require food companies [&#8230;]</p>\n<p>The post <a href=\"https://civileats.com/2025/11/06/senate-introduces-food-ingredient-disclosure-bill-addressing-maha-concerns/\">Senate Introduces Food Ingredient Disclosure Bill, Addressing MAHA&nbsp;Concerns</a> appeared first on <a href=\"https://civileats.com\">Civil Eats</a>.</p>",
@@ -10617,6 +10967,32 @@
       "noun_icon_url": "/openmoji/color/svg/1F389.svg",
       "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
       "image_url": "https://images2.minutemediacdn.com/image/upload/c_crop,w_5181,h_2914,x_0,y_0/c_fill,w_2880,ar_16:9,f_auto,q_auto,g_auto/images/voltaxMediaLibrary/mmsport/theplayertribune/01k4d6zz3ghe99bky03w.jpg",
+      "tags": []
+    },
+    {
+      "title": "Your Future Self Will Worship You If You Do These 17 Garden Chores This Fall",
+      "link": "https://www.boredpanda.com/prepare-your-garden-for-the-cold/",
+      "summary": "Winter is coming, and your garden had better get its coat on!",
+      "published": "2025-11-09T07:00:25",
+      "sentiment_score": 0.6588,
+      "inspiration_score": 8.3,
+      "inspiration_dimensions": {
+        "composite": 8.3,
+        "emotional": 8.3,
+        "triumph": 8.3,
+        "social": 8.3,
+        "novelty": 8.3,
+        "actionable": 8.3
+      },
+      "is_inspirational": true,
+      "source_name": "www.boredpanda.com",
+      "source_feed": "https://www.boredpanda.com/feed/",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "general",
+      "topic_icon_path": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://www.boredpanda.com/blog/wp-content/uploads/2025/11/prepare-your-garden-for-the-cold-fb-690e0cb81a5aa.png",
       "tags": []
     },
     {
@@ -11692,6 +12068,32 @@
       "tags": []
     },
     {
+      "title": "Epsilon Advanced Materials Anticipates EV Batteries For 1 Million US-Made EVs Per Year … Are They Nuts?",
+      "link": "https://cleantechnica.com/2025/11/09/epsilon-advanced-materials-anticipates-ev-batteries-for-1-million-us-made-evs-per-year-are-they-nuts/",
+      "summary": "<p>The leading Indian EV battery materials firm Epsilon Advanced Materials plans to meet the graphite anode demand of 1 million in made-in-the-US EVs  per year by 2030.</p>\n<p>The post <a href=\"https://cleantechnica.com/2025/11/09/epsilon-advanced-materials-anticipates-ev-batteries-for-1-million-us-made-evs-per-year-are-they-nuts/\">Epsilon Advanced Materials Anticipates EV Batteries For 1 Million US-Made EVs Per Year &#8230; Are They Nuts?</a> appeared first on <a href=\"https://cleantechnica.com\">CleanTechnica</a>.</p>",
+      "published": "2025-11-09T05:35:37",
+      "sentiment_score": 0.594,
+      "inspiration_score": 8.0,
+      "inspiration_dimensions": {
+        "composite": 8.0,
+        "emotional": 8.0,
+        "triumph": 8.0,
+        "social": 8.0,
+        "novelty": 8.0,
+        "actionable": 8.0
+      },
+      "is_inspirational": true,
+      "source_name": "cleantechnica.com",
+      "source_feed": "https://cleantechnica.com/feed/",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "general",
+      "topic_icon_path": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://www.google.com/s2/favicons?domain=cleantechnica.com&sz=128",
+      "tags": []
+    },
+    {
       "title": "The 'anti-weather' of Venus",
       "link": "https://phys.org/news/2025-11-anti-weather-venus.html",
       "summary": "Conditions on Venus's surface have largely remained a mystery for decades. Carl Sagan famously pointed out that people were quick to jump to conclusions, such as that there are dinosaurs living there, from scant little evidence collected from the planet. But just because we have little actual data doesn't mean we can't draw conclusions, and better yet models, from the data we do have.",
@@ -11773,6 +12175,58 @@
       "noun_icon_url": "/openmoji/color/svg/1F389.svg",
       "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
       "image_url": "https://substackcdn.com/image/fetch/$s_!yoJb!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fb1be565b-c28e-4263-8b4d-38644140591a_1512x942.jpeg",
+      "tags": []
+    },
+    {
+      "title": "Spurs' Fox hits ground running, has 24 in debut",
+      "link": "https://www.espn.com/nba/story/_/id/46901459/deaaron-fox-nets-24-season-debut-spurs-beat-pelicans",
+      "summary": "De'Aaron Fox scored 24 points in his season debut for the Spurs, a 126-119 win over the Pelicans on Saturday night.",
+      "published": "2025-11-09T05:46:15",
+      "sentiment_score": 0.5859,
+      "inspiration_score": 7.9,
+      "inspiration_dimensions": {
+        "composite": 7.9,
+        "emotional": 7.9,
+        "triumph": 7.9,
+        "social": 7.9,
+        "novelty": 7.9,
+        "actionable": 7.9
+      },
+      "is_inspirational": true,
+      "source_name": "www.espn.com",
+      "source_feed": "https://www.espn.com/espn/rss/news",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "general",
+      "topic_icon_path": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://www.google.com/s2/favicons?domain=www.espn.com&sz=128",
+      "tags": []
+    },
+    {
+      "title": "The Big Ten offers beautiful drama in Week 11",
+      "link": "https://www.espn.com/college-football/story/_/page/gamedayfinal110825/college-football-week-11-highlights-top-plays-games-takeaways-2025",
+      "summary": "The spotlight was on the Big Ten with a couple of playoff-bound teams barely escaping the weekend.",
+      "published": "2025-11-09T05:10:11",
+      "sentiment_score": 0.5868,
+      "inspiration_score": 7.9,
+      "inspiration_dimensions": {
+        "composite": 7.9,
+        "emotional": 7.9,
+        "triumph": 7.9,
+        "social": 7.9,
+        "novelty": 7.9,
+        "actionable": 7.9
+      },
+      "is_inspirational": true,
+      "source_name": "www.espn.com",
+      "source_feed": "https://www.espn.com/espn/rss/news",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "general",
+      "topic_icon_path": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://www.google.com/s2/favicons?domain=www.espn.com&sz=128",
       "tags": []
     },
     {
@@ -12007,6 +12461,32 @@
       "noun_icon_url": "/openmoji/color/svg/1F389.svg",
       "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
       "image_url": "https://www.google.com/s2/favicons?domain=theutopianlife.com&sz=128",
+      "tags": []
+    },
+    {
+      "title": "Nearly a million people evacuate as Super Typhoon Fung-wong threatens the Philippines",
+      "link": "https://www.npr.org/2025/11/09/g-s1-97091/nearly-a-million-people-evacuate-as-super-typhoon-fung-wong-threatens-the-philippines",
+      "summary": "Super Typhoon Fung-wong, the biggest storm to threaten the Philippines this year, started battering the country's northeastern coast ahead of landfall on Sunday.",
+      "published": "2025-11-09T06:44:36",
+      "sentiment_score": 0.5574,
+      "inspiration_score": 7.8,
+      "inspiration_dimensions": {
+        "composite": 7.8,
+        "emotional": 7.8,
+        "triumph": 7.8,
+        "social": 7.8,
+        "novelty": 7.8,
+        "actionable": 7.8
+      },
+      "is_inspirational": true,
+      "source_name": "www.npr.org",
+      "source_feed": "https://www.npr.org/rss/rss.php?id=1001",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "general",
+      "topic_icon_path": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://npr.brightspotcdn.com/dims3/default/strip/false/crop/6882x4588+0+0/resize/6882x4588!/?url=http%3A%2F%2Fnpr-brightspot.s3.amazonaws.com%2F5d%2F19%2F75e62383426da4e4ddb488b61e38%2Fap25311360634661.jpg",
       "tags": []
     },
     {
@@ -12423,6 +12903,32 @@
       "noun_icon_url": "/openmoji/color/svg/1F389.svg",
       "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
       "image_url": "https://www.sunnyskyz.com/uploads/2025/10/7xd1f-dog-leads-officer-to-injured-owner-florida-lg.jpg",
+      "tags": []
+    },
+    {
+      "title": "Nearly one million people evacuated as the Philippines braces for Typhoon Fung-wong",
+      "link": "http://www.euronews.com/2025/11/09/nearly-one-million-people-evacuated-as-the-philippines-braces-for-typhoon-fung-wong",
+      "summary": "The Philippines’ braces for the second major typhoon to strike in two weeks. Experts are predicting Super Typhoon Fung-wong to make landfall with the archipelagic nation late on Sunday or early Monday, carrying winds exceeding 185 kilometres an hour in speed.",
+      "published": "2025-11-09T07:24:48",
+      "sentiment_score": 0.5267,
+      "inspiration_score": 7.6,
+      "inspiration_dimensions": {
+        "composite": 7.6,
+        "emotional": 7.6,
+        "triumph": 7.6,
+        "social": 7.6,
+        "novelty": 7.6,
+        "actionable": 7.6
+      },
+      "is_inspirational": true,
+      "source_name": "www.euronews.com",
+      "source_feed": "https://www.euronews.com/rss?format=mrss&level=vertical&name=lifestyle",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "general",
+      "topic_icon_path": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F389.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://www.google.com/s2/favicons?domain=www.euronews.com&sz=128",
       "tags": []
     },
     {
@@ -15111,6 +15617,38 @@
   ],
   "technology": [
     {
+      "title": "Moved by a Patient’s Pain, This 27-YO Engineer Created a Wheelchair With a Toilet That Brings Back Dignity",
+      "link": "https://thebetterindia.com/innovation/sruthi-babu-sahayatha-wheelchair-with-toilet-india-10634892",
+      "summary": "<img src=\"https://img-cdn.publive.online/fit-in/1280x960/english-betterindia/media/media_files/2025/11/07/wheelchair-with-toilet-sruthi-babu-2025-11-07-10-16-11.jpg\" /><p dir=\"ltr\"><span>When Sruthi Babu, a 27-year-old biomedical engineer, saw an elderly paralysed man in a hospital whisper, &ldquo;</span><span>It is better to die than live like this</span><span>,&rdquo; something shifted in her.</span></p>\n<p dir=\"ltr\"><span>&ldquo;He was with his daughters and wanted to use the toilet. After defecating, he needed someone to clean him, and the two daughters looked at each other. The guilt and embarrassment in the father&rsquo;s eyes said everything,&rdquo; Sruthi recalls to&nbsp;</span><span>The Better India</span><span>.</span></p>\n<p dir=\"ltr\"><span>That painful moment became the spark behind Sahayatha &mdash; the&nbsp;</span><a href=\"https://thebetterindia.com/313813/coimbatore-sruthi-babu-built-smart-wheelchair-with-commode-self-cleaning-feature-shark-tank/\"><span>world&rsquo;s first wheelchair with a built-in water-cleaning toilet </span></a><span>system.</span></p>\n<h2 dir=\"ltr\"><span>An idea born of empathy</span></h2>\n<p dir=\"ltr\"><span>During her fellowship in&nbsp;</span><a href=\"https://thebetterindia.com/health-care/frontier-technology-india-healthcare-innovation-10541468\"><span>medical innovation</span></a><span> in Odisha, Sruthi began to wonder: What if mobility could also mean dignity?</span></p>\n<p dir=\"ltr\"><span>Working from a small unit in Coimbatore, she and her father, K K Babu, a mechanical engineer, began experimenting.</span></p>\n<p dir=\"ltr\"><span>&ldquo;My father worked tirelessly with me to make this product happen,&rdquo; she says. &ldquo;We went through 118 iterations before landing on the final design.&rdquo;</span></p>\n<blockquote class=\"instagram-media\">\n<div style=\"padding: 16px;\"><a href=\"https://www.instagram.com/p/DQqVNoeiNd-/?utm_source=ig_embed&amp;utm_campaign=loading\" rel=\"noopener\" style=\"line-height: 0; padding: 0 0; text-align: center; text-decoration: none; width: 100%;\" target=\"_blank\">\n<div style=\"display: flex;\">\n<div style=\"background-color: #f4f4f4; border-radius: 50%; height: 40px; margin-right: 14px; width: 40px;\"></div>\n<div style=\"display: flex;\">\n<div style=\"background-color: #f4f4f4; border-radius: 4px; height: 14px; margin-bottom: 6px; width: 100px;\"></div>\n<div style=\"background-color: #f4f4f4; border-radius: 4px; height: 14px; width: 60px;\"></div>\n</div>\n</div>\n<div style=\"padding: 19% 0;\"></div>\n<div style=\"display: block; height: 50px; margin: 0 auto 12px; width: 50px;\"></div>\n<div style=\"padding-top: 8px;\">\n<div style=\"color: #3897f0; font-family: Arial,sans-serif; font-size: 14px; font-style: normal; font-weight: 550; line-height: 18px;\">View this post on Instagram</div>\n</div>\n<div style=\"padding: 12.5% 0;\"></div>\n<div style=\"display: flex; margin-bottom: 14px;\">\n<div>\n<div></div>\n<div></div>\n<div></div>\n</div>\n<div style=\"margin-left: 8px;\">\n<div style=\"background-color: #f4f4f4; border-radius: 50%; height: 20px; width: 20px;\"></div>\n<div></div>\n</div>\n<div style=\"margin-left: auto;\">\n<div></div>\n<div></div>\n<div></div>\n</div>\n</div>\n<div style=\"display: flex; margin-bottom: 24px;\">\n<div style=\"background-color: #f4f4f4; border-radius: 4px; height: 14px; margin-bottom: 6px; width: 224px;\"></div>\n<div style=\"background-color: #f4f4f4; border-radius: 4px; height: 14px; width: 144px;\"></div>\n</div>\n</a>\n<p style=\"color: #c9c8cd; font-family: Arial,sans-serif; font-size: 14px; line-height: 17px; margin-bottom: 0; margin-top: 8px; overflow: hidden; padding: 8px 0 7px; text-align: center; white-space: nowrap;\"><a href=\"https://www.instagram.com/p/DQqVNoeiNd-/?utm_source=ig_embed&amp;utm_campaign=loading\" rel=\"noopener\" style=\"color: #c9c8cd; font-family: Arial,sans-serif; font-size: 14px; font-style: normal; font-weight: normal; line-height: 17px; text-decoration: none;\" target=\"_blank\">A post shared by The Better India (@thebetterindia)</a></p>\n</div>\n</blockquote>\n<p dir=\"ltr\"><span>\n\n</span></p>\n<h2 dir=\"ltr\"><span>A wheelchair that restores independence</span></h2>\n<p dir=\"ltr\"><span>The result was Sahayatha &mdash; a simple yet&nbsp;</span><a href=\"https://thebetterindia.com/changemakers/frontier-tech-innovations-india-healthcare-water-education-farming-10533182\"><span>revolutionary device</span></a><span>. It comes with a small water tank, a jet spray, and a removable waste container, allowing users to clean themselves easily and privately.</span></p>\n<p dir=\"ltr\"><span>&ldquo;The cleaning system uses an old Japanese technique called the bidet system,&rdquo; Sruthi explains. &ldquo;It&rsquo;s quite common, but not in wheelchairs. The faecal matter is collected in a cup-shaped container that can be removed from the back without disturbing the patient.&rdquo;</span><b></b></p>\n<p dir=\"ltr\"><span>The wheelchair also converts into a stretcher, reducing the need for multiple transfers and caretakers.</span><b></b></p>\n<p dir=\"ltr\"><span>&ldquo;With this, the number of caretakers needed reduces from three to one,&rdquo; she says. &ldquo;More importantly, users gain back confidence and independence.&rdquo;</span><b></b></p>\n<p dir=\"ltr\"><span>Today, Sahayatha is patented in over 140 countries and has already helped more than 300 people live with greater comfort and self-respect.</span><b></b></p>\n<p dir=\"ltr\"><span>From hospital corridors to homes, this invention is doing more than </span><a href=\"https://thebetterindia.com/361727/wheelchair-friendly-places-to-visit-in-bengaluru-ramp-my-city-prateek-khandelwal-access-for-disabled-people/\"><span>improving accessibility</span></a><span> &mdash; it&rsquo;s restoring dignity.</span></p>\n<p dir=\"ltr\"><span>&ldquo;People think someone with a mobility issue only needs a wheelchair,&rdquo; Sruthi says. &ldquo;But they also need help with the most basic things. With Sahayatha, we are trying to give them that freedom back.&rdquo;</span></p>\n<p dir=\"ltr\"><span>Sruthi&rsquo;s mission is simple:&nbsp;</span><span>mobility should never come at the cost of dignity.</span></p>\n<p dir=\"ltr\"><span>Through empathy, engineering, and persistence, she</span><span>&rsquo;s proving that innovation is not just about invention &mdash; sometimes it&rsquo;s also about humanity.</span></p>",
+      "published": "2025-11-09T06:30:37",
+      "sentiment_score": 0.9923,
+      "inspiration_score": 10.0,
+      "inspiration_dimensions": {
+        "composite": 10.0,
+        "emotional": 10.0,
+        "triumph": 10.0,
+        "social": 10.0,
+        "novelty": 10.0,
+        "actionable": 10.0
+      },
+      "is_inspirational": true,
+      "source_name": "www.thebetterindia.com",
+      "source_feed": "https://www.thebetterindia.com/feed/",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "technology",
+      "topic_icon_path": "/openmoji/color/svg/1F4BB.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F4BB.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://img-cdn.publive.online/fit-in/1280x960/english-betterindia/media/media_files/2025/11/07/wheelchair-with-toilet-sruthi-babu-2025-11-07-10-16-11.jpg",
+      "tags": [
+        {
+          "name": "Breakthrough",
+          "color": "#8338ec",
+          "icon": "💡"
+        }
+      ]
+    },
+    {
       "title": "Supplement your Spotify stream with these classic radio treasures",
       "link": "https://www.fastcompany.com/91433611/radio-finder",
       "summary": "<p>I love FM radio. It’s okay: You can call me a Luddite.</p>\n\n\n\n<p>My alarm clock is the local public radio station. I love toggling between a few music stations while driving, or even while reading at home. And during a road trip, there’s nothing quite like discovering a community station with random locals curating their own playlists—it gives you a sense of where you are that no Spotify playlist can match.</p>\n\n\n\n<p>The problem: It’s hard to know what stations exist locally, even in your own town but particularly while on a road trip. You can explore the dial, which has a certain serendipity, but what if you just want to . . . know?</p>\n\n\n\n<p><em>And </em>be able to tune in with or without an actual traditional radio in front of you?</p>\n\n\n\n<p><em>This tip originally appeared in the free </em><a href=\"https://theintelligence.com/cool-tools-fc\"><strong><em>Cool Tools newsletter</em></strong></a><strong><em> </em></strong><em>from </em><a href=\"http://theintelligence.com/\"><em>The Intelligence</em></a><em>. Get the next issue </em><a href=\"https://theintelligence.com/cool-tools-fc\"><em>in your inbox</em></a><em> and get ready to discover all sorts of awesome tech treasures!</em></p>\n\n\n\n<h2 class=\"wp-block-heading\" id=\"h-old-school-listening-with-a-modern-twist\">Old-school listening with a modern twist</h2>\n\n\n\n<p>This exact problem is why I like <a href=\"https://radio-locator.com/\"><strong>Radio Locator​</strong></a>. It’s a free website that lets you enter any city or zip code and find all the terrestrial stations that are available for that area.</p>\n\n\n\n<p>➜ It’ll show you a list of every FM <em>and </em>AM station in any U.S. city or zip code. You can also browse international radio stations by country.</p>\n\n\n\n<p>⌚ And it all takes just a few seconds<strong> </strong>to do.</p>\n\n\n\n<figure class=\"wp-block-image size-large\"><img alt=\"\" class=\"wp-image-91437873\" height=\"464\" src=\"https://images.fastcompany.com/image/upload/f_webp,q_auto,c_fit,w_1024/wp-cms-2/2025/11/radio-locator.png\" width=\"1024\" /><figcaption class=\"wp-element-caption\">The Radio Locator site is free and as simple as can be.<br /></figcaption></figure>\n\n\n\n<p>This is a rare service that isn’t cluttered with ads or upselling. Just open the site, type a place, and you’ll see a list. Stations are sorted by frequency, but you’ll also see the call sign, the distance to the tower, and what format of radio station is offered. (I’m personally always looking for public radio or alternative stations, but you can figure out what <em>you </em>want for yourself.)</p>\n\n\n\n<figure class=\"wp-block-image size-large\"><img alt=\"\" class=\"wp-image-91437876\" height=\"472\" src=\"https://images.fastcompany.com/image/upload/f_webp,q_auto,c_fit,w_1024/wp-cms-2/2025/11/radio-locator-stations.png\" width=\"1024\" /><figcaption class=\"wp-element-caption\">You can find info about all sorts of stations, in any geographical area.<br /></figcaption></figure>\n\n\n\n<p>📲 Of course, all of this only applies if you’ve got an actual-factual FM radio on your hands. What if you’re more of a computer-and-phone kind of person? Easy: Just click through on any of the stations on Radio Locator, and they’ll generally take you to a website where you can stream the station.</p>\n\n\n\n<p>💡 Or, if you prefer a dedicated tool for the job, there’s <a href=\"https://streema.com/\"><strong>​</strong>Streema<strong>​</strong></a>. It’s a free site that makes it easy to search for and stream just about any radio station imaginable, anywhere in the world. A few stations redirect to websites—best I can tell for legal reasons—but the overwhelming majority of the time, you can just search for a website and start listening.</p>\n\n\n\n<figure class=\"wp-block-image size-large\"><img alt=\"\" class=\"wp-image-91437877\" height=\"434\" src=\"https://images.fastcompany.com/image/upload/f_webp,q_auto,c_fit,w_1024/wp-cms-2/2025/11/streema.png\" width=\"1024\" /><figcaption class=\"wp-element-caption\">Streema makes most on-demand radio listening a swift click or tap away.<br /></figcaption></figure>\n\n\n\n<p>Either way, you can find and listen to old-fashioned radio stations anytime. Again: I recommend finding public and community stations, as those tend not to have ads, but take the time to explore. It’s nice to get away from the algorithm sometimes.</p>\n\n\n\n<ul class=\"wp-block-list\">\n<li>You can open <a href=\"https://radio-locator.com/\">Radio Locator​</a> and <a href=\"https://streema.com/\">​Streema​</a> directly in your web browser on any device. Streema also offers an app called Simple Radio for both <a href=\"https://play.google.com/store/apps/details?id=com.streema.simpleradio&amp;hl=en_US\">​Android​</a> and <a href=\"https://apps.apple.com/us/app/simple-radio-fm-am-stations/id891132290\">​iOS,​</a> if you’d rather go that route.</li>\n\n\n\n<li>Radio Locator and Streema are both free in the browser. Simple Radio is free with on-screen ads or you can get an ad-free version for $6 a month.</li>\n\n\n\n<li>Neither site requires a login or any real personal data, but you <em>can </em>opt to share your location—if you want.</li>\n</ul>\n\n\n\n<p><em>Treat yourself to all sorts of brain-boosting goodies like this with the free </em><a href=\"https://theintelligence.com/cool-tools-fc\"><strong><em>Cool Tools newsletter</em></strong></a><em>—starting with an instant introduction to an incredible audio app that’ll tune up your days in truly delightful ways.</em></p>",
@@ -15637,6 +16175,38 @@
       "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
       "image_url": "https://cdn.lifehack.org/wp-content/uploads/2025/06/Human-Life-Coach-and-AI-Life-Coach-Comparison.png",
       "tags": []
+    },
+    {
+      "title": "Stanford discovers an extraordinary crystal that could transform quantum tech",
+      "link": "https://www.sciencedaily.com/releases/2025/11/251108083912.htm",
+      "summary": "Stanford scientists found that strontium titanate improves its performance when frozen to near absolute zero, showing extraordinary optical and mechanical behavior. Its nonlinear and piezoelectric properties make it ideal for cryogenic quantum technologies. Once overlooked, this cheap, accessible material now promises to advance lasers, computing, and space exploration alike.",
+      "published": "2025-11-09T06:25:50",
+      "sentiment_score": 0.8625,
+      "inspiration_score": 9.3,
+      "inspiration_dimensions": {
+        "composite": 9.3,
+        "emotional": 9.3,
+        "triumph": 9.3,
+        "social": 9.3,
+        "novelty": 9.3,
+        "actionable": 9.3
+      },
+      "is_inspirational": true,
+      "source_name": "www.sciencedaily.com",
+      "source_feed": "https://www.sciencedaily.com/rss/all.xml",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "technology",
+      "topic_icon_path": "/openmoji/color/svg/1F4BB.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F4BB.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://www.google.com/s2/favicons?domain=www.sciencedaily.com&sz=128",
+      "tags": [
+        {
+          "name": "Inspiring",
+          "color": "#e76f51",
+          "icon": "⭐"
+        }
+      ]
     },
     {
       "title": "I Was Treated Like a Criminal’: Nigerians Speak Out Against Rogue Digital Loan Apps",
@@ -18858,6 +19428,32 @@
       "tags": []
     },
     {
+      "title": "'Lux' album review: Rosalía's musical gift to the world which keeps on giving",
+      "link": "http://www.euronews.com/culture/2025/11/09/lux-album-review-rosalias-musical-gift-to-the-world-which-keeps-on-giving",
+      "summary": "In a career defined by variety and the defying of boundaries, Rosalía’s LUX stands as a monumental achievement of an avantgarde musical vision. Jakub Dutkiewicz has been listening carefully.",
+      "published": "2025-11-09T07:14:11",
+      "sentiment_score": 0.7783,
+      "inspiration_score": 8.9,
+      "inspiration_dimensions": {
+        "composite": 8.9,
+        "emotional": 8.9,
+        "triumph": 8.9,
+        "social": 8.9,
+        "novelty": 8.9,
+        "actionable": 8.9
+      },
+      "is_inspirational": true,
+      "source_name": "www.euronews.com",
+      "source_feed": "https://www.euronews.com/rss?format=mrss&level=vertical&name=culture",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "business",
+      "topic_icon_path": "/openmoji/color/svg/1F23A.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F23A.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://images.euronews.com/articles/stories/09/54/17/94/696x392_cmsv2_6d205679-a655-5544-ac47-280515af8ca7-9541794.jpg",
+      "tags": []
+    },
+    {
       "title": "After 4-day workweek success, this company is letting employees work whenever and wherever they want",
       "link": "https://www.goodgoodgood.co/articles/lumen-seo-32-hour-workweek",
       "summary": "Lumen SEO is now offering even more flexibility, especially for childcare, weather, and menstrual health.",
@@ -18907,6 +19503,32 @@
       "noun_icon_url": "/openmoji/color/svg/1F23A.svg",
       "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
       "image_url": "https://www.google.com/s2/favicons?domain=conniepodesta.com&sz=128",
+      "tags": []
+    },
+    {
+      "title": "Kenyan Electric Mobility Company Roam Launches Crowdfunding Campaign on Crowdcube",
+      "link": "https://cleantechnica.com/2025/11/08/kenyan-electric-mobility-company-roam-launches-crowdfunding-campaign-on-crowdcube/",
+      "summary": "<p>Kenya’s electric motorcycle sector is starting to gain significant traction. Market share of electric motorcycles jumped from literally 0% to 7% in just over 3 years (2021–2024). Recent figures show that for the first 8 months of 2025, electric motorcycles made up 10% of new motorcycle registrations in Kenya. Speaking   ... [continued]</p>\n<p>The post <a href=\"https://cleantechnica.com/2025/11/08/kenyan-electric-mobility-company-roam-launches-crowdfunding-campaign-on-crowdcube/\">Kenyan Electric Mobility Company Roam Launches Crowdfunding Campaign on Crowdcube</a> appeared first on <a href=\"https://cleantechnica.com\">CleanTechnica</a>.</p>",
+      "published": "2025-11-09T04:01:05",
+      "sentiment_score": 0.7506,
+      "inspiration_score": 8.8,
+      "inspiration_dimensions": {
+        "composite": 8.8,
+        "emotional": 8.8,
+        "triumph": 8.8,
+        "social": 8.8,
+        "novelty": 8.8,
+        "actionable": 8.8
+      },
+      "is_inspirational": true,
+      "source_name": "cleantechnica.com",
+      "source_feed": "https://cleantechnica.com/feed/",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "business",
+      "topic_icon_path": "/openmoji/color/svg/1F23A.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F23A.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://www.google.com/s2/favicons?domain=cleantechnica.com&sz=128",
       "tags": []
     },
     {
@@ -19903,6 +20525,32 @@
       ]
     },
     {
+      "title": "From better skin to improved mental health: 6 benefits of eating an orange everyday",
+      "link": "https://timesofindia.indiatimes.com/life-style/health-fitness/diet/from-better-skin-to-improved-mental-health-6-benefits-of-eating-an-orange-everyday/photostory/125189378.cms",
+      "summary": "<img align=\"left\" border=\"0\" hspace=\"10\" src=\"https://timesofindia.indiatimes.com/photo/125189378.cms\" style=\"margin-top: 3px; margin-right: 5px;\" />Beyond the cheerful and vibrant appearance, oranges hold a treasure trove of nutrients. Science confirms that oranges can benefit almost every system in the body. A simple habit like eating one orange everyday can touch many aspects of an individual’s health. Pairing oranges with an overall healthy diet, sleep, and exercise, can deliver a potent package of nutrients with minimal downside. Here are 6 benefits of eating an orange everyday.",
+      "published": "2025-11-09T04:30:00",
+      "sentiment_score": 0.9764,
+      "inspiration_score": 9.9,
+      "inspiration_dimensions": {
+        "composite": 9.9,
+        "emotional": 9.9,
+        "triumph": 9.9,
+        "social": 9.9,
+        "novelty": 9.9,
+        "actionable": 9.9
+      },
+      "is_inspirational": true,
+      "source_name": "timesofindia.indiatimes.com",
+      "source_feed": "http://timesofindia.indiatimes.com/rssfeeds/2886704.cms",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "health",
+      "topic_icon_path": "/openmoji/color/svg/1F9D1-200D-2695-FE0F.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F9D1-200D-2695-FE0F.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://timesofindia.indiatimes.com/photo/125189378.cms",
+      "tags": []
+    },
+    {
       "title": "When Women’s Cricket Struggled, Mandira Bedi Gave up Her Own Fee To Keep the Game Alive",
       "link": "https://thebetterindia.com/trending/mandira-bedi-indian-women-cricket-10626735",
       "summary": "<img src=\"https://img-cdn.publive.online/fit-in/1280x960/english-betterindia/media/media_files/2025/11/06/mandira-bedi-2025-11-06-12-51-52.png\" /><p dir=\"ltr\"><span>We first knew Mandira Bedi as the spirited Preeti from </span><span>Dilwale Dulhania Le Jayenge</span><span>, but her journey goes far beyond Bollywood. An actor, fitness icon, and television personality, she&rsquo;s worn many hats with effortless charm and grit.&nbsp;</span></p>\n<p dir=\"ltr\"><span>Her unexpected innings in the world of sports is where she broke stereotypes to become one of India&rsquo;s first female sports presenters.</span></p>\n<p dir=\"ltr\"><span>From hosting the <a href=\"https://thebetterindia.com/trending/india-icc-women-worldcup2025-families-coaches-behind-cricket-revolution-10618223\" rel=\"dofollow noopener\" target=\"_blank\">ICC World Cups</a>, Champions Trophies, and IPL, Mandira Bedi not only brought a fresh voice to a space long dominated by men but also stood as a quiet force behind India&rsquo;s women&rsquo;s cricket team.</span></p>\n<p dir=\"ltr\"><span>Her support might have gone unseen, but it has surely made a lasting impact.</span></p>\n<h2 dir=\"ltr\"><span>The silent sponsor of women&rsquo;s dreams</span></h2>\n<p dir=\"ltr\"><span>In the early 2000s, seeing women on the cricket field wasn&rsquo;t something the world was entirely comfortable with, resulting in inadequate funding and limited support for India&rsquo;s women&rsquo;s team.</span></p>\n<p dir=\"ltr\"><span>But that&rsquo;s when Mandira Bedi stepped in &mdash; the woman who carried the game on her shoulders and believed in their dreams when few others did.</span></p>\n<p dir=\"ltr\"><span>At that time, Mandira was the face of Asmi Jewellery, and when she saw the women&rsquo;s team struggling, she decided to use her privilege for change.&nbsp;</span></p>\n<p dir=\"ltr\"><span>She not only convinced Asmi Jewellery and Infosys to step in for the sponsorship but also gave up her own endorsement fee so that the team could fly, excel in their training, and compete.&nbsp;</span></p>\n<p dir=\"ltr\"><span>Mandira did something only a few with power ever do. This one act of belief kept women&rsquo;s cricket alive long enough to reach the 2005 <a href=\"https://thebetterindia.com/trending/in-photos-india-icc-womens-world-cup-2025-win-10617435\" rel=\"dofollow noopener\" target=\"_blank\">World Cup final</a>.</span></p>\n<blockquote class=\"instagram-media\">\n<div style=\"padding: 16px;\"><a href=\"https://www.instagram.com/reel/DQrIwBtCKUn/?utm_source=ig_embed&amp;utm_campaign=loading\" rel=\"noopener\" style=\"line-height: 0; padding: 0 0; text-align: center; text-decoration: none; width: 100%;\" target=\"_blank\">\n<div style=\"display: flex;\">\n<div style=\"background-color: #f4f4f4; border-radius: 50%; height: 40px; margin-right: 14px; width: 40px;\"></div>\n<div style=\"display: flex;\">\n<div style=\"background-color: #f4f4f4; border-radius: 4px; height: 14px; margin-bottom: 6px; width: 100px;\"></div>\n<div style=\"background-color: #f4f4f4; border-radius: 4px; height: 14px; width: 60px;\"></div>\n</div>\n</div>\n<div style=\"padding: 19% 0;\"></div>\n<div style=\"display: block; height: 50px; margin: 0 auto 12px; width: 50px;\"></div>\n<div style=\"padding-top: 8px;\">\n<div style=\"color: #3897f0; font-family: Arial,sans-serif; font-size: 14px; font-style: normal; font-weight: 550; line-height: 18px;\">View this post on Instagram</div>\n</div>\n<div style=\"padding: 12.5% 0;\"></div>\n<div style=\"display: flex; margin-bottom: 14px;\">\n<div>\n<div></div>\n<div></div>\n<div></div>\n</div>\n<div style=\"margin-left: 8px;\">\n<div style=\"background-color: #f4f4f4; border-radius: 50%; height: 20px; width: 20px;\"></div>\n<div></div>\n</div>\n<div style=\"margin-left: auto;\">\n<div></div>\n<div></div>\n<div></div>\n</div>\n</div>\n<div style=\"display: flex; margin-bottom: 24px;\">\n<div style=\"background-color: #f4f4f4; border-radius: 4px; height: 14px; margin-bottom: 6px; width: 224px;\"></div>\n<div style=\"background-color: #f4f4f4; border-radius: 4px; height: 14px; width: 144px;\"></div>\n</div>\n</a>\n<p style=\"color: #c9c8cd; font-family: Arial,sans-serif; font-size: 14px; line-height: 17px; margin-bottom: 0; margin-top: 8px; overflow: hidden; padding: 8px 0 7px; text-align: center; white-space: nowrap;\"><a href=\"https://www.instagram.com/reel/DQrIwBtCKUn/?utm_source=ig_embed&amp;utm_campaign=loading\" rel=\"noopener\" style=\"color: #c9c8cd; font-family: Arial,sans-serif; font-size: 14px; font-style: normal; font-weight: normal; line-height: 17px; text-decoration: none;\" target=\"_blank\">A post shared by The Better India (@thebetterindia)</a></p>\n</div>\n</blockquote>\n<p dir=\"ltr\"><span>\n\n</span></p>\n<h2 dir=\"ltr\"><span>Fighting battles, breaking barriers, and redefining strength</span></h2>\n<p dir=\"ltr\"><span>During her time hosting the World Cup, she studied every stat, strategy, and player detail while fighting sexism in the commentary box. Despite being skilled in her craft, she was ignored by senior pannelist and called 'eye candy' instead of a cricket expert.</span></p>\n<p dir=\"ltr\"><span>From battling postpartum depression after her son&rsquo;s birth to coping with the loss of her husband, Mandira Bedi has never shied away from speaking about pain, healing, and loss.&nbsp;</span></p>\n<p dir=\"ltr\"><span>Through her honesty, she&rsquo;s made conversations around <a href=\"https://thebetterindia.com/421323/enactus-dcac-helping-people-with-disabilities-adaptive-clothing-empowering-disabled-community/\" rel=\"dofollow noopener\" target=\"_blank\">mental health feel</a> a little less heavy &mdash; and a lot more human.</span></p>\n<p dir=\"ltr\"><span>In May 2025, she became the co-founder of a mental awareness programme, where she discusses&nbsp;</span><span>mental health through her personal social media, interviews, and collaborations, using her own experiences to promote conversations around grief, stress, and healing.&nbsp;</span></p>\n<p dir=\"ltr\"><span>Mandira&rsquo;s story reminds us that she didn&rsquo;t just help <a href=\"https://thebetterindia.com/trending/coach-amol-muzumdar-india-women-cricket-10624075\" rel=\"dofollow noopener\" target=\"_blank\">India&rsquo;s women cricketers</a> take the field &mdash; she showed the world what true strength looks like, both on and beyond the pitch.</span></p>\n<p dir=\"ltr\"><span><b>&nbsp;</b></span></p>\n<h5 dir=\"ltr\"><em>Sources</em></h5>\n<h5 dir=\"ltr\"><em><a href=\"https://timesofindia.indiatimes.com/entertainment/hindi/bollywood/news/when-mandira-bedi-came-to-the-rescue-of-the-indian-womens-cricket-team-when-they-didnt-get-any-financial-support-i-stood-on-the-sidelines-/articleshow/125072545.cms\" rel=\"nofollow\">&lsquo;When Mandira Bedi came to the rescue of the Indian women's cricket team when they didn't get any financial support: 'I stood on the sidelines...'</a> by Times Of India, Published on 4 November, 2025.</em></h5>\n<h5 dir=\"ltr\"><em><a href=\"https://www.mediainfoline.com/brand/mandira-bedi-joins-the-full-circle-as-co-founder-championing-a-national-movement-for-mental-health#google_vignette\" rel=\"nofollow\">&lsquo;Mandira Bedi Joins The Full Circle as Co-Founder &mdash; Championing a National Movement for Mental Health&rsquo;</a> by Media Infoline, Published on 22 May 2025.</em></h5>\n<h5></h5>",
@@ -20149,6 +20797,38 @@
       "tags": []
     },
     {
+      "title": "What happens if you cut sugar for two weeks?",
+      "link": "https://timesofindia.indiatimes.com/life-style/health-fitness/health-news/what-happens-if-you-cut-sugar-for-two-weeks-american-doctor-explains/articleshow/125197773.cms",
+      "summary": "<img align=\"left\" border=\"0\" hspace=\"10\" src=\"https://timesofindia.indiatimes.com/photo/125197773.cms\" style=\"margin-top: 3px; margin-right: 5px;\" />Cutting out added sugar for just two weeks can yield significant health improvements, according to a gastroenterologist. \"I’ve witnessed remarkable transformations in my patients after they remove sugar from their diets. \" Patients experience better liver and gut health, reduced eye puffiness, and a decrease in belly fat. Skin clarity also improves, with breakouts lessening. This aligns with scientific findings linking excess sugar to metabolic issues and obesity.",
+      "published": "2025-11-09T06:20:00",
+      "sentiment_score": 0.9186,
+      "inspiration_score": 9.6,
+      "inspiration_dimensions": {
+        "composite": 9.6,
+        "emotional": 9.6,
+        "triumph": 9.6,
+        "social": 9.6,
+        "novelty": 9.6,
+        "actionable": 9.6
+      },
+      "is_inspirational": true,
+      "source_name": "timesofindia.indiatimes.com",
+      "source_feed": "http://timesofindia.indiatimes.com/rssfeeds/2886704.cms",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "health",
+      "topic_icon_path": "/openmoji/color/svg/1F9D1-200D-2695-FE0F.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F9D1-200D-2695-FE0F.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://timesofindia.indiatimes.com/photo/125197773.cms",
+      "tags": [
+        {
+          "name": "Inspiring",
+          "color": "#e76f51",
+          "icon": "⭐"
+        }
+      ]
+    },
+    {
       "title": "Why Mental Health Awareness Matters and How You Can Make a Difference",
       "link": "https://www.lifehack.org/973656/mental-health-awareness",
       "summary": "<p>Mental health is not just a personal concern but a collective responsibility. Despite growing conversations around it, mental health remains misunderstood, under-resourced, and stigmatized. Raising awareness is more than sharing statistics or hashtags—it’s about fostering understanding, compassion, and actionable change that improves lives. This article delves into the profound importance of mental health awareness, explores ... <a class=\"read-more\" href=\"https://www.lifehack.org/973656/mental-health-awareness\" title=\"Why Mental Health Awareness Matters and How You Can Make a Difference\">Read more</a></p>\n<p>The post <a href=\"https://www.lifehack.org/973656/mental-health-awareness\">Why Mental Health Awareness Matters and How You Can Make a Difference</a> appeared first on <a href=\"https://www.lifehack.org\">LifeHack</a>.</p>",
@@ -20198,6 +20878,32 @@
       "noun_icon_url": "/openmoji/color/svg/1F9D1-200D-2695-FE0F.svg",
       "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
       "image_url": "https://www.google.com/s2/favicons?domain=www.dailymotivation.site&sz=128",
+      "tags": []
+    },
+    {
+      "title": "At 60, Milind Soman’s fitness rules are simple: No gimmicks, the secret lies in...",
+      "link": "https://timesofindia.indiatimes.com/life-style/health-fitness/health-news/at-60-milind-somans-fitness-rules-are-simple-no-gimmicks-the-secret-lies-in-/articleshow/125197529.cms",
+      "summary": "<img align=\"left\" border=\"0\" hspace=\"10\" src=\"https://timesofindia.indiatimes.com/photo/125197529.cms\" style=\"margin-top: 3px; margin-right: 5px;\" />Milind Soman, the ageless fitness icon, reveals his simple approach to staying lean and energetic at 60. He prioritizes functionality over gym routines, focusing on 10-15 minutes of daily exercise, outdoor activities, and bodyweight workouts. His diet consists of fresh, home-cooked meals, avoiding processed foods. Soman emphasizes consistency and respecting the body's natural rhythm for long-term wellness.",
+      "published": "2025-11-09T07:30:00",
+      "sentiment_score": 0.8625,
+      "inspiration_score": 9.3,
+      "inspiration_dimensions": {
+        "composite": 9.3,
+        "emotional": 9.3,
+        "triumph": 9.3,
+        "social": 9.3,
+        "novelty": 9.3,
+        "actionable": 9.3
+      },
+      "is_inspirational": true,
+      "source_name": "timesofindia.indiatimes.com",
+      "source_feed": "http://timesofindia.indiatimes.com/rssfeeds/2886704.cms",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "health",
+      "topic_icon_path": "/openmoji/color/svg/1F9D1-200D-2695-FE0F.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F9D1-200D-2695-FE0F.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://timesofindia.indiatimes.com/photo/125197529.cms",
       "tags": []
     },
     {
@@ -21322,6 +22028,32 @@
       ]
     },
     {
+      "title": "Norris has 'lessened weaknesses' as he builds on title lead",
+      "link": "https://www.bbc.com/sport/formula1/articles/c4gzlw1p53qo?at_medium=RSS&at_campaign=rss",
+      "summary": "Lando Norris has every prospect of extending his championship lead further at the Sao Paulo Grand Prix as he continues a strong run of form.",
+      "published": "2025-11-08T22:24:46",
+      "sentiment_score": 0.836,
+      "inspiration_score": 9.2,
+      "inspiration_dimensions": {
+        "composite": 9.2,
+        "emotional": 9.2,
+        "triumph": 9.2,
+        "social": 9.2,
+        "novelty": 9.2,
+        "actionable": 9.2
+      },
+      "is_inspirational": true,
+      "source_name": "www.bbc.com",
+      "source_feed": "https://www.bbc.com/news/rss.xml",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "sports",
+      "topic_icon_path": "/openmoji/color/svg/1F3C5.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F3C5.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/2ffc/live/f7155700-bcec-11f0-bef8-2995471bb63c.jpg",
+      "tags": []
+    },
+    {
       "title": "No One Better Than Us",
       "link": "https://www.theplayerstribune.com/william-contreras-mlb-milwaukee-brewers-baseball?utm_source=RSS",
       "summary": "William Contreras and the Brewers are ready for the playoffs: “If you’re telling me another team is the best??? Man, I swear. I haven’t seen them.”",
@@ -21556,6 +22288,32 @@
       "tags": []
     },
     {
+      "title": "Man City and Liverpool become hunters - how key is Etihad meeting?",
+      "link": "https://www.bbc.com/sport/football/articles/cvg74rqy97vo?at_medium=RSS&at_campaign=rss",
+      "summary": "BBC Sport chief football writer Phil McNulty questions how important the outcome of Sunday's Etihad meeting will be to Manchester City and Liverpool's title hopes.",
+      "published": "2025-11-09T06:18:42",
+      "sentiment_score": 0.5574,
+      "inspiration_score": 7.8,
+      "inspiration_dimensions": {
+        "composite": 7.8,
+        "emotional": 7.8,
+        "triumph": 7.8,
+        "social": 7.8,
+        "novelty": 7.8,
+        "actionable": 7.8
+      },
+      "is_inspirational": true,
+      "source_name": "www.bbc.com",
+      "source_feed": "https://www.bbc.com/news/rss.xml",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "sports",
+      "topic_icon_path": "/openmoji/color/svg/1F3C5.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F3C5.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/2ffd/live/e9e50f10-bc94-11f0-b664-a7f703134079.jpg",
+      "tags": []
+    },
+    {
       "title": "Hit for six: why India’s Women’s Cricket World Cup win is victory for equality",
       "link": "https://www.theguardian.com/world/2025/nov/07/india-women-cricket-world-cup-win-victory-equality",
       "summary": "<p>Sacrifices made to reach final – defying social stigma, lack of resources and juggling jobs between training – makes victory still more extraordinary</p><p>Growing up in rural India, Shafali Verma always knew she had a hunger to play cricket. But in her small town of Rohtak, in the north Indian state of Haryana, cricket was not a game for girls. Aged nine, desperate to play, she cut her hair short, entered a tournament disguised as her brother, and went on to win man of the match.</p><p>Verma’s determined father, Sanjeev, in the face of refusal from every cricket academy or training centre who would not accept his daughter, enrolled her as a boy. “Luckily, nobody noticed,” he <a href=\"https://www.hindustantimes.com/cricket/shafali-verma-s-father-reveals-india-s-youngest-t20i-debutant-trained-as-a-boy-in-rohtak/story-SxXqaWIvYo79vzWgc6J2cL.html\">recalled</a>, as Verma made her debut for the national women’s team at 15 years old.</p> <a href=\"https://www.theguardian.com/world/2025/nov/07/india-women-cricket-world-cup-win-victory-equality\">Continue reading...</a>",
@@ -21709,6 +22467,32 @@
       "noun_icon_url": "/openmoji/color/svg/1F3C5.svg",
       "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
       "image_url": "https://cdn.prod.website-files.com/5f6cc9cd16d59d990c8fca33/690b94de1c794e584b35d00d_cant-win-victory-fund-gerrymandering.jpg",
+      "tags": []
+    },
+    {
+      "title": "Djokovic withdraws from ATP Finals after record-setting Athens win",
+      "link": "https://www.aljazeera.com/sports/2025/11/9/djokovic-withdraws-from-atp-finals-after-record-setting-athens-win?traffic_source=rss",
+      "summary": "Novak Djokovic has pulled out of ATP Finals after beating Lorenzo Musetti, but not before setting new hardcourt mark.",
+      "published": "2025-11-09T04:10:36",
+      "sentiment_score": 0.1027,
+      "inspiration_score": 5.5,
+      "inspiration_dimensions": {
+        "composite": 5.5,
+        "emotional": 5.5,
+        "triumph": 5.5,
+        "social": 5.5,
+        "novelty": 5.5,
+        "actionable": 5.5
+      },
+      "is_inspirational": true,
+      "source_name": "www.aljazeera.com",
+      "source_feed": "https://www.aljazeera.com/xml/rss/all.xml",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "sports",
+      "topic_icon_path": "/openmoji/color/svg/1F3C5.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F3C5.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://www.google.com/s2/favicons?domain=www.aljazeera.com&sz=128",
       "tags": []
     },
     {
@@ -22550,6 +23334,32 @@
       "tags": []
     },
     {
+      "title": "RBSE to conduct board exams twice a year from 2026‑27: Students get second chance to improve marks",
+      "link": "https://timesofindia.indiatimes.com/education/news/rbse-to-conduct-board-exams-twice-a-year-from-202627-students-get-second-chance-to-improve-marks/articleshow/125196867.cms",
+      "summary": "<a href=\"https://timesofindia.indiatimes.com/education/news/rbse-to-conduct-board-exams-twice-a-year-from-202627-students-get-second-chance-to-improve-marks/articleshow/125196867.cms\"><img align=\"left\" border=\"0\" hspace=\"10\" src=\"https://timesofindia.indiatimes.com/photo/125196867.cms\" style=\"margin-top: 3px; margin-right: 5px;\" /></a>Rajasthan Board of Secondary Education (RBSE) will conduct board exams twice a year for Class 10 and 12 students starting from the 2026-27 academic session. The first exam is compulsory, while the second, optional session allows students to improve marks in up to three subjects, with the best performance considered for final results.",
+      "published": "2025-11-09T04:25:23",
+      "sentiment_score": 0.9001,
+      "inspiration_score": 9.5,
+      "inspiration_dimensions": {
+        "composite": 9.5,
+        "emotional": 9.5,
+        "triumph": 9.5,
+        "social": 9.5,
+        "novelty": 9.5,
+        "actionable": 9.5
+      },
+      "is_inspirational": true,
+      "source_name": "timesofindia.indiatimes.com",
+      "source_feed": "http://timesofindia.indiatimes.com/rssfeeds/913168846.cms",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "culture",
+      "topic_icon_path": "/openmoji/color/svg/1F3A8.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F3A8.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://timesofindia.indiatimes.com/photo/125196867.cms",
+      "tags": []
+    },
+    {
       "title": "Celebrate Halloween with Michael Jackson’s Horrifically Entertaining “Thriller” Music Video—and a Behind-the-Scenes Documentary",
       "link": "https://www.openculture.com/2025/10/michael-jacksons-horrifically-entertaining-thriller-music-video.html",
       "summary": "Michael Jackson’s&#160;Thriller is the best-selling album of all time, and not by a particularly slim margin. The most recent figures have it registered at 51.3 million copies, as against the 31.2 million notched by the runner up, AC/DC’s Back in Black. But it would surely be a closer call without the title song’s celebrated music [&#8230;]",
@@ -22885,6 +23695,32 @@
       "noun_icon_url": "/openmoji/color/svg/1F3A8.svg",
       "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
       "image_url": "https://www.google.com/s2/favicons?domain=www.goodnewsnetwork.org&sz=128",
+      "tags": []
+    },
+    {
+      "title": "Luis Marie pleats recycled fabric to create \"first-ever all-textile room divider\"",
+      "link": "https://www.dezeen.com/2025/11/09/plissade-textile-room-divider/",
+      "summary": "<p>Dutch design studio Luis Marie has channelled the traditional craft of pleating to create an acoustic room divider that can stand on its own despite being made entirely from textiles. Shortlisted in the textile design category of Dezeen Awards 2025, Plissade is billed as the \"first-ever all-textile room divider\". Luis Marie founders Fenna van der Klei and</p>\n<p>The post <a href=\"https://www.dezeen.com/2025/11/09/plissade-textile-room-divider/\" rel=\"nofollow\">Luis Marie pleats recycled fabric to create &quot;first-ever all-textile room divider&quot;</a> appeared first on <a href=\"https://www.dezeen.com\" rel=\"nofollow\">Dezeen</a>.</p>",
+      "published": "2025-11-09T06:00:15",
+      "sentiment_score": 0.8074,
+      "inspiration_score": 9.0,
+      "inspiration_dimensions": {
+        "composite": 9.0,
+        "emotional": 9.0,
+        "triumph": 9.0,
+        "social": 9.0,
+        "novelty": 9.0,
+        "actionable": 9.0
+      },
+      "is_inspirational": true,
+      "source_name": "www.dezeen.com",
+      "source_feed": "https://www.dezeen.com/feed/",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "culture",
+      "topic_icon_path": "/openmoji/color/svg/1F3A8.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F3A8.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://static.dezeen.com/uploads/2025/10/Plissade_dezeen_2364_col_1-852x852.jpg",
       "tags": []
     },
     {
@@ -23718,6 +24554,32 @@
       "tags": []
     },
     {
+      "title": "Sports should get same importance as education and culture: Union Minister Harsh Malhotra",
+      "link": "https://timesofindia.indiatimes.com/education/news/sports-should-get-same-importance-as-education-and-culture-union-minister-harsh-malhotra/articleshow/125196554.cms",
+      "summary": "<a href=\"https://timesofindia.indiatimes.com/education/news/sports-should-get-same-importance-as-education-and-culture-union-minister-harsh-malhotra/articleshow/125196554.cms\"><img align=\"left\" border=\"0\" hspace=\"10\" src=\"https://timesofindia.indiatimes.com/photo/125196554.cms\" style=\"margin-top: 3px; margin-right: 5px;\" /></a>The Sansad Khel Mahotsav 2025, East Delhi, a flagship initiative to promote local sporting talent and physical fitness, has entered its second day. The event, which was inaugurated on Thursday by Harsh Malhotra, Union Minister of State for Corporate Affairs and Road, Transport & Highways, has witnessed phenomenal participation, especially from the youth.",
+      "published": "2025-11-09T03:23:12",
+      "sentiment_score": 0.5574,
+      "inspiration_score": 7.8,
+      "inspiration_dimensions": {
+        "composite": 7.8,
+        "emotional": 7.8,
+        "triumph": 7.8,
+        "social": 7.8,
+        "novelty": 7.8,
+        "actionable": 7.8
+      },
+      "is_inspirational": true,
+      "source_name": "timesofindia.indiatimes.com",
+      "source_feed": "http://timesofindia.indiatimes.com/rssfeeds/913168846.cms",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "culture",
+      "topic_icon_path": "/openmoji/color/svg/1F3A8.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F3A8.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://timesofindia.indiatimes.com/photo/125196554.cms",
+      "tags": []
+    },
+    {
       "title": "Do you know these languages don’t use letters to speak?",
       "link": "https://timesofindia.indiatimes.com/education/news/do-you-know-these-languages-dont-use-letters-to-speak/articleshow/125189261.cms",
       "summary": "<a href=\"https://timesofindia.indiatimes.com/education/news/do-you-know-these-languages-dont-use-letters-to-speak/articleshow/125189261.cms\"><img align=\"left\" border=\"0\" hspace=\"10\" src=\"https://timesofindia.indiatimes.com/photo/125189261.cms\" style=\"margin-top: 3px; margin-right: 5px;\" /></a>Writing is more than letters; it is a reflection of culture, thought, and history. While alphabets like English or Devanagari map sounds to symbols, Chinese and Japanese systems rely on characters and syllabaries to convey meaning. Across the globe, diverse scripts—from abjads to abugidas—demonstrate that language can be as layered, artistic, and cognitive as the minds that create it.",
@@ -24081,6 +24943,32 @@
       "noun_icon_url": "/openmoji/color/svg/1F333.svg",
       "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
       "image_url": "https://images.euronews.com/articles/stories/09/29/14/20/696x392_cmsv2_585d929a-b87c-5897-a39c-58a814b484d8-9291420.jpg",
+      "tags": []
+    },
+    {
+      "title": "Renewable Energy Infrastructure Resilience Tested as a Supertyphoon Approaches the Philippines",
+      "link": "https://cleantechnica.com/2025/11/09/renewable-energy-infrastructure-resilience-tested-as-a-supertyphoon-approaches-the-philippines/",
+      "summary": "<p>The convergence of climate reality and energy transition Super Typhoon Fung-Wong (locally designated Uwan) is approaching the Philippines with forecast sustained winds potentially exceeding 185 kph (115 mph), and a possible intensification to Category 5 (157 mph or higher or 252 km/h or greater) strength, it tests a fundamental question   ... [continued]</p>\n<p>The post <a href=\"https://cleantechnica.com/2025/11/09/renewable-energy-infrastructure-resilience-tested-as-a-supertyphoon-approaches-the-philippines/\">Renewable Energy Infrastructure Resilience Tested as a Supertyphoon Approaches the Philippines</a> appeared first on <a href=\"https://cleantechnica.com\">CleanTechnica</a>.</p>",
+      "published": "2025-11-09T05:26:29",
+      "sentiment_score": 0.9081,
+      "inspiration_score": 9.5,
+      "inspiration_dimensions": {
+        "composite": 9.5,
+        "emotional": 9.5,
+        "triumph": 9.5,
+        "social": 9.5,
+        "novelty": 9.5,
+        "actionable": 9.5
+      },
+      "is_inspirational": true,
+      "source_name": "cleantechnica.com",
+      "source_feed": "https://cleantechnica.com/feed/",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "environment",
+      "topic_icon_path": "/openmoji/color/svg/1F333.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F333.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://www.google.com/s2/favicons?domain=cleantechnica.com&sz=128",
       "tags": []
     },
     {
@@ -24539,6 +25427,32 @@
     }
   ],
   "relationships": [
+    {
+      "title": "​5 smart ways to spend the most wholesome time with partner",
+      "link": "https://timesofindia.indiatimes.com/life-style/relationships/love-sex/5-smart-ways-to-spend-the-most-wholesome-time-with-partner/photostory/125190038.cms",
+      "summary": "<img align=\"left\" border=\"0\" hspace=\"10\" src=\"https://timesofindia.indiatimes.com/photo/125190038.cms\" style=\"margin-top: 3px; margin-right: 5px;\" />Spending quality, wholesome time with your partner strengthens the bond and creates lasting memories. In today’s busy world, carving out moments that focus on connection and joy is more important than ever.​Wholesome activities go beyond the usual dates, giving meaningful moments to laugh, relax, and grow together. Whether you want to understand each other better or simply unwind in a fun, gentle way, there are plenty of simple yet soulful ways to enjoy each other’s company completely. These activities help nurture love and companionship while making everyday moments feel special.​Here are 5 special ways to spend pure, wholesome time with your partner​",
+      "published": "2025-11-09T05:18:29",
+      "sentiment_score": 0.9931,
+      "inspiration_score": 10.0,
+      "inspiration_dimensions": {
+        "composite": 10.0,
+        "emotional": 10.0,
+        "triumph": 10.0,
+        "social": 10.0,
+        "novelty": 10.0,
+        "actionable": 10.0
+      },
+      "is_inspirational": true,
+      "source_name": "timesofindia.indiatimes.com",
+      "source_feed": "http://timesofindia.indiatimes.com/rssfeeds/2886704.cms",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "relationships",
+      "topic_icon_path": "/openmoji/color/svg/1F46B.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F46B.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://timesofindia.indiatimes.com/photo/125190038.cms",
+      "tags": []
+    },
     {
       "title": "Watch: How Auto Driver’s Daughter Minakshi Hooda Punched Through Poverty to Become World Champion",
       "link": "https://thebetterindia.com/sports/minakshi-hooda-48kg-world-champion-liverpool-sports-boxing-10476318",
