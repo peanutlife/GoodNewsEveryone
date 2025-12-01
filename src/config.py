@@ -61,6 +61,14 @@ class Config:
     # API Keys
     OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 
+    # Email Configuration
+    MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
+    MAIL_PORT = int(os.environ.get('MAIL_PORT', 587))
+    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', 'True').lower() == 'true'
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER', 'noreply@peanutlife.com')
+
     @classmethod
     def init_app(cls, app):
         """Initialize application configuration."""
