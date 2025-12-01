@@ -250,6 +250,22 @@ def unsubscribe(token):
 
 def init_topics():
     """Initialize topics for adult audience"""
+    # Fallback emojis for topics
+    fallback_icons = {
+        'science': '1F52C',  # Microscope
+        'technology': '1F4BB',  # Laptop
+        'business': '1F4BC',  # Briefcase
+        'health': '1F48A',  # Pill
+        'environment': '1F331',  # Seedling
+        'personal_growth': '1F4AA',  # Flexed biceps
+        'social_impact': '1F91D',  # Handshake
+        'culture': '1F3A8',  # Artist palette
+        'travel': '2708-FE0F',  # Airplane
+        'relationships': '2764-FE0F',  # Heart
+        'sports': '26BD',  # Soccer ball
+        'general': '1F389'  # Party popper
+    }
+
     topics_to_create = [
         {"name": "science", "display_name": "Science & Discovery", "description": "Scientific breakthroughs and research"},
         {"name": "technology", "display_name": "Technology", "description": "Tech innovation and digital trends"},
