@@ -1288,3 +1288,89 @@ footer p {
     page-break-inside: avoid;
   }
 }
+
+/* ============================================
+   AD CONTROL & PLACEMENT IMPROVEMENTS
+   Added: To control AdSense placement and improve UX
+   ============================================ */
+
+/* Ad Container - Makes ads less intrusive */
+.ad-block {
+  max-width: 728px;
+  margin: var(--space-6) auto;
+  padding: var(--space-4);
+  background: var(--cloud);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-md);
+  text-align: center;
+  position: relative;
+}
+
+.ad-block::before {
+  content: "Sponsored";
+  display: block;
+  font-size: 0.7rem;
+  color: var(--whisper);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-2);
+  font-weight: 600;
+}
+
+/* Ensure hero section has breathing room before ads */
+.daily-inspiration-hero + .ad-block {
+  margin-top: var(--space-8);
+}
+
+/* Footer ad styling */
+.footer-ad {
+  margin-top: var(--space-8);
+  padding: var(--space-5);
+  border-top: 2px solid var(--stone);
+  background: linear-gradient(to bottom, var(--cloud), var(--parchment));
+}
+
+.footer-ad::before {
+  content: "Sponsored Content";
+}
+
+/* Prevent ads from breaking layout */
+.ad-block ins,
+.ad-block ins.adsbygoogle {
+  display: block !important;
+  max-width: 100%;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+/* Mobile ad adjustments */
+@media (max-width: 768px) {
+  .ad-block {
+    max-width: 100%;
+    margin: var(--space-4) 0;
+    padding: var(--space-3);
+  }
+
+  .ad-block::before {
+    font-size: 0.65rem;
+    margin-bottom: var(--space-2);
+  }
+
+  .daily-inspiration-hero + .ad-block {
+    margin-top: var(--space-5);
+  }
+
+  .footer-ad {
+    margin-top: var(--space-6);
+    padding: var(--space-4);
+  }
+}
+
+/* Hide ads in print */
+@media print {
+  .ad-block,
+  .footer-ad,
+  ins.adsbygoogle {
+    display: none !important;
+  }
+}
