@@ -83,6 +83,10 @@ def get_active_subscribers(database_url):
         if database_url.startswith('postgres://'):
             database_url = database_url.replace('postgres://', 'postgresql://', 1)
 
+        # Use psycopg (v3) driver which is compatible with Python 3.13
+        if 'postgresql://' in database_url and '+psycopg' not in database_url:
+            database_url = database_url.replace('postgresql://', 'postgresql+psycopg://', 1)
+
         engine = create_engine(
             database_url,
             pool_pre_ping=True,
