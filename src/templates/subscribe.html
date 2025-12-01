@@ -77,14 +77,18 @@
     </header>
 
     <main class="subscribe-container">
-        <h2>📧 Get Daily Positivity in Your Inbox</h2>
-        <p>Join thousands of readers who start their day with inspiring stories</p>
+        <h2>📧 Start Your Day with Hope</h2>
+        <p style="font-size: 1.1rem; line-height: 1.6; color: #555; margin: 1.5rem 0;">
+            In a world filled with negativity, we believe you deserve to start each morning with stories that inspire, uplift, and remind you of the good happening all around us.
+        </p>
 
         <ul class="benefits-list">
-            <li>Top 10 most inspiring stories delivered daily</li>
-            <li>Curated by AI for maximum positivity</li>
-            <li>No spam, unsubscribe anytime</li>
-            <li>Free forever</li>
+            <li>Top 10 inspiring stories delivered daily at 8 AM</li>
+            <li>Hand-picked positive news from trusted sources</li>
+            <li>A daily inspirational quote to brighten your morning</li>
+            <li><strong>Zero spam. Zero ads. Zero data sharing.</strong></li>
+            <li>Unsubscribe anytime with one click</li>
+            <li>Free forever - our gift to you</li>
         </ul>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -101,9 +105,12 @@
             <button type="submit" class="subscribe-btn">Subscribe Now</button>
         </form>
 
-        <p style="margin-top: 1.5rem; font-size: 0.9rem; color: #666;">
-            We respect your privacy. Your email will never be shared.
-        </p>
+        <div style="margin-top: 2rem; padding: 1.5rem; background: #f9f9f9; border-radius: 8px; font-size: 0.95rem; color: #555; line-height: 1.6;">
+            <p style="margin: 0 0 0.5rem 0;"><strong>Our Promise to You:</strong></p>
+            <p style="margin: 0;">
+                We will <strong>never</strong> spam you, share your email, or send you ads. This is purely our passion project to spread positivity in a world that desperately needs it. Your trust means everything to us. 💛
+            </p>
+        </div>
     </main>
 
     <footer>

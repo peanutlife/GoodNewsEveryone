@@ -3,6 +3,41 @@
 
 from datetime import datetime
 import re
+import random
+
+# Inspirational quotes for daily emails
+DAILY_QUOTES = [
+    ("Be the change you wish to see in the world.", "Mahatma Gandhi"),
+    ("The only way to do great work is to love what you do.", "Steve Jobs"),
+    ("Believe you can and you're halfway there.", "Theodore Roosevelt"),
+    ("In the middle of difficulty lies opportunity.", "Albert Einstein"),
+    ("The best time to plant a tree was 20 years ago. The second best time is now.", "Chinese Proverb"),
+    ("Your limitation—it's only your imagination.", "Unknown"),
+    ("Great things never come from comfort zones.", "Unknown"),
+    ("Dream it. Wish it. Do it.", "Unknown"),
+    ("Success doesn't just find you. You have to go out and get it.", "Unknown"),
+    ("The harder you work for something, the greater you'll feel when you achieve it.", "Unknown"),
+    ("Dream bigger. Do bigger.", "Unknown"),
+    ("Don't stop when you're tired. Stop when you're done.", "Unknown"),
+    ("Wake up with determination. Go to bed with satisfaction.", "Unknown"),
+    ("Do something today that your future self will thank you for.", "Unknown"),
+    ("Little things make big days.", "Unknown"),
+    ("It's going to be hard, but hard does not mean impossible.", "Unknown"),
+    ("Don't wait for opportunity. Create it.", "Unknown"),
+    ("Sometimes we're tested not to show our weaknesses, but to discover our strengths.", "Unknown"),
+    ("The key to success is to focus on goals, not obstacles.", "Unknown"),
+    ("Believe in yourself and all that you are.", "Christian D. Larson"),
+    ("You are never too old to set another goal or to dream a new dream.", "C.S. Lewis"),
+    ("The future belongs to those who believe in the beauty of their dreams.", "Eleanor Roosevelt"),
+    ("It is during our darkest moments that we must focus to see the light.", "Aristotle"),
+    ("Whoever is happy will make others happy too.", "Anne Frank"),
+    ("Do not let what you cannot do interfere with what you can do.", "John Wooden"),
+    ("You will face many defeats in life, but never let yourself be defeated.", "Maya Angelou"),
+    ("The greatest glory in living lies not in never falling, but in rising every time we fall.", "Nelson Mandela"),
+    ("In the end, it's not the years in your life that count. It's the life in your years.", "Abraham Lincoln"),
+    ("Life is what happens when you're busy making other plans.", "John Lennon"),
+    ("Spread love everywhere you go. Let no one ever come to you without leaving happier.", "Mother Teresa"),
+]
 
 
 def extract_image_from_summary(summary):
@@ -32,6 +67,9 @@ def strip_html(html_text):
 
 def generate_nyt_digest_html(articles, unsubscribe_url):
     """Generate clean NYT Wirecutter-inspired HTML for daily digest email"""
+
+    # Get random daily quote
+    quote_text, quote_author = random.choice(DAILY_QUOTES)
 
     # Build article sections
     article_sections = ""
@@ -137,11 +175,29 @@ def generate_nyt_digest_html(articles, unsubscribe_url):
                         </td>
                     </tr>
 
+                    <!-- Daily Quote -->
+                    <tr>
+                        <td style="padding: 30px 40px;">
+                            <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 8px; padding: 30px; border-left: 4px solid #667eea;">
+                                <tr>
+                                    <td style="text-align: center;">
+                                        <p style="margin: 0 0 12px 0; font-size: 20px; line-height: 1.6; color: #1a202c; font-style: italic; font-weight: 500;">
+                                            "{quote_text}"
+                                        </p>
+                                        <p style="margin: 0; font-size: 14px; color: #4a5568; font-weight: 600;">
+                                            — {quote_author}
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
                     <!-- Intro -->
                     <tr>
-                        <td style="padding: 40px 40px 30px 40px;">
-                            <p style="margin: 0; font-size: 17px; line-height: 1.6; color: #333;">
-                                Good morning! Here are today's top {len(articles)} inspiring stories, carefully selected to brighten your day and remind you of all the good happening in the world.
+                        <td style="padding: 20px 40px 30px 40px;">
+                            <p style="margin: 0; font-size: 17px; line-height: 1.6; color: #333; text-align: center;">
+                                Good morning! Here are today's top {len(articles)} inspiring stories to brighten your day ☀️
                             </p>
                         </td>
                     </tr>
@@ -158,8 +214,9 @@ def generate_nyt_digest_html(articles, unsubscribe_url):
                     <!-- Footer -->
                     <tr>
                         <td style="padding: 40px; text-align: center; border-top: 1px solid #e5e5e5; background-color: #f9f9f9;">
-                            <p style="margin: 0 0 12px 0; color: #666; font-size: 12px; line-height: 1.5;">
-                                You're receiving this because you subscribed to Project Peanutlife.
+                            <p style="margin: 0 0 16px 0; color: #666; font-size: 13px; line-height: 1.6;">
+                                You're receiving this because you chose to start your days with positivity. ☀️<br>
+                                <strong>We will never spam you, share your email, or send you ads.</strong>
                             </p>
                             <p style="margin: 0 0 12px 0; font-size: 12px;">
                                 <a href="{unsubscribe_url}" style="color: #666; text-decoration: underline;">Unsubscribe</a>
@@ -167,7 +224,7 @@ def generate_nyt_digest_html(articles, unsubscribe_url):
                                 <a href="https://peanutlife.com" style="color: #666; text-decoration: underline;">Visit Website</a>
                             </p>
                             <p style="margin: 0; color: #999; font-size: 11px;">
-                                © {datetime.now().year} Project Peanutlife. Spreading positivity, one story at a time.
+                                © {datetime.now().year} Project Peanutlife. Spreading positivity, one story at a time. 💛
                             </p>
                         </td>
                     </tr>
