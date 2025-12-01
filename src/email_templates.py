@@ -5,38 +5,28 @@ from datetime import datetime
 import re
 import random
 
-# Inspirational quotes for daily emails
+# Inspirational quotes for daily emails (quote, author, image_url)
 DAILY_QUOTES = [
-    ("Be the change you wish to see in the world.", "Mahatma Gandhi"),
-    ("The only way to do great work is to love what you do.", "Steve Jobs"),
-    ("Believe you can and you're halfway there.", "Theodore Roosevelt"),
-    ("In the middle of difficulty lies opportunity.", "Albert Einstein"),
-    ("The best time to plant a tree was 20 years ago. The second best time is now.", "Chinese Proverb"),
-    ("Your limitation—it's only your imagination.", "Unknown"),
-    ("Great things never come from comfort zones.", "Unknown"),
-    ("Dream it. Wish it. Do it.", "Unknown"),
-    ("Success doesn't just find you. You have to go out and get it.", "Unknown"),
-    ("The harder you work for something, the greater you'll feel when you achieve it.", "Unknown"),
-    ("Dream bigger. Do bigger.", "Unknown"),
-    ("Don't stop when you're tired. Stop when you're done.", "Unknown"),
-    ("Wake up with determination. Go to bed with satisfaction.", "Unknown"),
-    ("Do something today that your future self will thank you for.", "Unknown"),
-    ("Little things make big days.", "Unknown"),
-    ("It's going to be hard, but hard does not mean impossible.", "Unknown"),
-    ("Don't wait for opportunity. Create it.", "Unknown"),
-    ("Sometimes we're tested not to show our weaknesses, but to discover our strengths.", "Unknown"),
-    ("The key to success is to focus on goals, not obstacles.", "Unknown"),
-    ("Believe in yourself and all that you are.", "Christian D. Larson"),
-    ("You are never too old to set another goal or to dream a new dream.", "C.S. Lewis"),
-    ("The future belongs to those who believe in the beauty of their dreams.", "Eleanor Roosevelt"),
-    ("It is during our darkest moments that we must focus to see the light.", "Aristotle"),
-    ("Whoever is happy will make others happy too.", "Anne Frank"),
-    ("Do not let what you cannot do interfere with what you can do.", "John Wooden"),
-    ("You will face many defeats in life, but never let yourself be defeated.", "Maya Angelou"),
-    ("The greatest glory in living lies not in never falling, but in rising every time we fall.", "Nelson Mandela"),
-    ("In the end, it's not the years in your life that count. It's the life in your years.", "Abraham Lincoln"),
-    ("Life is what happens when you're busy making other plans.", "John Lennon"),
-    ("Spread love everywhere you go. Let no one ever come to you without leaving happier.", "Mother Teresa"),
+    ("Be the change you wish to see in the world.", "Mahatma Gandhi", "https://images.unsplash.com/photo-1615461066841-6116e61058f4?w=400&h=400&fit=crop"),
+    ("The only way to do great work is to love what you do.", "Steve Jobs", "https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=400&h=400&fit=crop"),
+    ("Believe you can and you're halfway there.", "Theodore Roosevelt", "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop"),
+    ("In the middle of difficulty lies opportunity.", "Albert Einstein", "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=400&h=400&fit=crop"),
+    ("The best time to plant a tree was 20 years ago. The second best time is now.", "Chinese Proverb", "https://images.unsplash.com/photo-1516410529446-2c777cb7366d?w=400&h=400&fit=crop"),
+    ("The future belongs to those who believe in the beauty of their dreams.", "Eleanor Roosevelt", "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop"),
+    ("It is during our darkest moments that we must focus to see the light.", "Aristotle", "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop"),
+    ("Whoever is happy will make others happy too.", "Anne Frank", "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop"),
+    ("Do not let what you cannot do interfere with what you can do.", "John Wooden", "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop"),
+    ("You will face many defeats in life, but never let yourself be defeated.", "Maya Angelou", "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop"),
+    ("The greatest glory in living lies not in never falling, but in rising every time we fall.", "Nelson Mandela", "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop"),
+    ("In the end, it's not the years in your life that count. It's the life in your years.", "Abraham Lincoln", "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop"),
+    ("Life is what happens when you're busy making other plans.", "John Lennon", "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=400&h=400&fit=crop"),
+    ("Spread love everywhere you go.", "Mother Teresa", "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop"),
+    ("The only impossible journey is the one you never begin.", "Tony Robbins", "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop"),
+    ("Life is 10% what happens to you and 90% how you react to it.", "Charles R. Swindoll", "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop"),
+    ("Your time is limited, don't waste it living someone else's life.", "Steve Jobs", "https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=400&h=400&fit=crop"),
+    ("Whether you think you can or you think you can't, you're right.", "Henry Ford", "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop"),
+    ("The way to get started is to quit talking and begin doing.", "Walt Disney", "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop"),
+    ("Don't watch the clock; do what it does. Keep going.", "Sam Levenson", "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop"),
 ]
 
 
@@ -69,7 +59,7 @@ def generate_nyt_digest_html(articles, unsubscribe_url):
     """Generate clean NYT Wirecutter-inspired HTML for daily digest email"""
 
     # Get random daily quote
-    quote_text, quote_author = random.choice(DAILY_QUOTES)
+    quote_text, quote_author, quote_image = random.choice(DAILY_QUOTES)
 
     # Build article sections
     article_sections = ""
@@ -175,18 +165,29 @@ def generate_nyt_digest_html(articles, unsubscribe_url):
                         </td>
                     </tr>
 
-                    <!-- Daily Quote -->
+                    <!-- Daily Quote with Image -->
                     <tr>
                         <td style="padding: 30px 40px;">
-                            <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 8px; padding: 30px; border-left: 4px solid #667eea;">
+                            <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
                                 <tr>
-                                    <td style="text-align: center;">
-                                        <p style="margin: 0 0 12px 0; font-size: 20px; line-height: 1.6; color: #1a202c; font-style: italic; font-weight: 500;">
-                                            "{quote_text}"
-                                        </p>
-                                        <p style="margin: 0; font-size: 14px; color: #4a5568; font-weight: 600;">
-                                            — {quote_author}
-                                        </p>
+                                    <td style="padding: 0;">
+                                        <table width="100%" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <!-- Quote Image -->
+                                                <td width="120" style="vertical-align: top; padding: 30px 0 30px 30px;">
+                                                    <img src="{quote_image}" alt="{quote_author}" style="width: 100px; height: 100px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.3); display: block; object-fit: cover;" />
+                                                </td>
+                                                <!-- Quote Text -->
+                                                <td style="vertical-align: middle; padding: 30px 30px 30px 20px;">
+                                                    <p style="margin: 0 0 12px 0; font-size: 19px; line-height: 1.5; color: white; font-style: italic; font-weight: 500;">
+                                                        "{quote_text}"
+                                                    </p>
+                                                    <p style="margin: 0; font-size: 15px; color: rgba(255,255,255,0.9); font-weight: 600;">
+                                                        — {quote_author}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </td>
                                 </tr>
                             </table>

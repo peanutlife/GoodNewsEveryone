@@ -6,9 +6,39 @@
     <title>Subscribe - Project Optimist News</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
+        .hero-quote {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.95), rgba(118, 75, 162, 0.95)),
+                        url('https://images.unsplash.com/photo-1505682634904-d7c8d95cdc50?w=1200') center/cover;
+            padding: 4rem 2rem;
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .hero-quote h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-quote-text {
+            font-size: 1.5rem;
+            font-style: italic;
+            margin: 2rem auto;
+            max-width: 700px;
+            line-height: 1.6;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .hero-quote-author {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin-top: 1rem;
+        }
+
         .subscribe-container {
             max-width: 600px;
-            margin: 3rem auto;
+            margin: 0 auto 3rem;
             padding: 2rem;
             background-color: #fff;
             border-radius: 8px;
@@ -75,6 +105,17 @@
         <h1><a href="/">Project Optimist</a></h1>
         <p>Your daily dose of positivity</p>
     </header>
+
+    <!-- Hero Quote Section -->
+    <section class="hero-quote">
+        <h2>✨ Start Every Morning Inspired ✨</h2>
+        <div class="hero-quote-text">
+            "Be the change you wish to see in the world."
+        </div>
+        <div class="hero-quote-author">
+            — Mahatma Gandhi
+        </div>
+    </section>
 
     <main class="subscribe-container">
         <h2>📧 Start Your Day with Hope</h2>
