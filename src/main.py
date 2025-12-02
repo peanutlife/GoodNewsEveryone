@@ -85,6 +85,56 @@ def normalize_text(text):
     return text
 
 
+def clean_old_articles(articles_by_topic, days_to_keep=30):
+    """Remove articles older than specified days to prevent memory bloat"""
+    cutoff_date = datetime.utcnow() - timedelta(days=days_to_keep)
+    cleaned = {}
+    total_removed = 0
+
+    for topic, articles in articles_by_topic.items():
+        cleaned[topic] = []
+        for article in articles:
+            try:
+                pub_date_str = article.get('published', '')
+                if pub_date_str:
+                    pub_date = datetime.fromisoformat(pub_date_str)
+                    if pub_date >= cutoff_date:
+                        cleaned[topic].append(article)
+                    else:
+                        total_removed += 1
+                else:
+                    # Keep articles without dates
+                    cleaned[topic].append(article)
+            except (ValueError, TypeError):
+                # Keep articles with invalid dates
+                cleaned[topic].append(article)
+
+    logging.info(f"🧹 Cleaned {total_removed} articles older than {days_to_keep} days")
+    return cleaned
+
+
+def limit_articles_per_topic(articles_by_topic, max_per_topic=50):
+    """Limit number of articles per topic to prevent memory bloat"""
+    limited = {}
+    total_removed = 0
+
+    for topic, articles in articles_by_topic.items():
+        if len(articles) > max_per_topic:
+            # Keep top articles by inspiration score
+            sorted_articles = sorted(
+                articles,
+                key=lambda x: (x.get('inspiration_score', 0), x.get('published', '')),
+                reverse=True
+            )
+            limited[topic] = sorted_articles[:max_per_topic]
+            total_removed += len(articles) - max_per_topic
+        else:
+            limited[topic] = articles
+
+    logging.info(f"🧹 Removed {total_removed} articles (limit: {max_per_topic} per topic)")
+    return limited
+
+
 def generate_content_hash(article):
     """Generate a hash based on normalized article content to detect duplicates"""
     title = normalize_text(article.get('title', ''))
@@ -134,10 +184,24 @@ def refresh_cache_worker():
 
     try:
         print("🟢 Starting background cache refresh...")
+
+        # Clear old data from memory BEFORE fetching new data
+        import gc
+        old_count = sum(len(articles) for articles in articles_by_topic.values()) if articles_by_topic else 0
+        articles_by_topic = {}  # Clear global cache
+        gc.collect()  # Force garbage collection
+        logging.info(f"🧹 Cleared {old_count} articles from memory before refresh")
+
         load_removed_articles()
         temp_articles_by_topic = fetch_and_filter_feeds(get_feed_urls())
 
         if temp_articles_by_topic and sum(len(articles) for articles in temp_articles_by_topic.values()) > 0:
+            # Clean old articles (>30 days)
+            temp_articles_by_topic = clean_old_articles(temp_articles_by_topic, days_to_keep=30)
+
+            # Limit articles per topic (max 50 per topic)
+            temp_articles_by_topic = limit_articles_per_topic(temp_articles_by_topic, max_per_topic=50)
+
             articles_by_topic = temp_articles_by_topic
             last_updated = datetime.utcnow()
 
@@ -324,21 +388,35 @@ def initialize_app(app):
             with open(PERMANENT_CACHE_FILE, encoding='utf-8') as f:
                 cache_data = json.load(f)
                 articles_by_topic = cache_data.get("articles", {})
+
+                # Clean and limit articles on startup to reduce memory
+                original_count = sum(len(v) for v in articles_by_topic.values())
+                articles_by_topic = clean_old_articles(articles_by_topic, days_to_keep=30)
+                articles_by_topic = limit_articles_per_topic(articles_by_topic, max_per_topic=50)
+                final_count = sum(len(v) for v in articles_by_topic.values())
+
                 article_cache["articles"] = articles_by_topic
                 last_updated_str = cache_data.get("last_fetched")
                 if last_updated_str:
                     last_updated = datetime.fromisoformat(last_updated_str)
                 else:
                     last_updated = datetime.now()
-            logging.info(f"✅ Loaded {sum(len(v) for v in articles_by_topic.values())} cached articles from permanent JSON.")
+            logging.info(f"✅ Loaded {final_count} cached articles from permanent JSON (cleaned {original_count - final_count} old/excess articles)")
         except Exception as e:
             logging.error(f"❌ Failed to load permanent cache JSON: {e}")
     elif os.path.exists(CACHE_FILE):
         try:
             with open(CACHE_FILE, encoding='utf-8') as f:
                 articles_by_topic = json.load(f)
+
+                # Clean and limit articles
+                original_count = sum(len(v) for v in articles_by_topic.values())
+                articles_by_topic = clean_old_articles(articles_by_topic, days_to_keep=30)
+                articles_by_topic = limit_articles_per_topic(articles_by_topic, max_per_topic=50)
+                final_count = sum(len(v) for v in articles_by_topic.values())
+
                 last_updated = datetime.now()
-            logging.info(f"✅ Loaded {sum(len(v) for v in articles_by_topic.values())} cached articles from static JSON.")
+            logging.info(f"✅ Loaded {final_count} cached articles from static JSON (cleaned {original_count - final_count} old/excess articles)")
         except Exception as e:
             logging.error(f"❌ Failed to load cache JSON: {e}")
     else:
