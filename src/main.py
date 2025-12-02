@@ -19,7 +19,7 @@ from flask_login import LoginManager, current_user
 from src.models.user import db, User, Topic
 from src.routes.admin import admin_bp
 from src.routes.auth import auth_bp, init_topics
-from src.shared_data import article_cache, CACHE_DURATION_SECONDS, get_feed_urls, removed_article_links, load_removed_articles
+from src.shared_data import article_cache, CACHE_DURATION_SECONDS, get_feed_urls, removed_article_links, load_removed_articles, NEGATIVE_KEYWORDS
 from src.aggregator import fetch_and_filter_feeds
 from src.models.subscriber import EmailSubscriber
 from src.config import config
@@ -27,6 +27,13 @@ from src.config import config
 # Set up logging
 logging.basicConfig(level=logging.INFO,
                    format='[%(asctime)s] %(levelname)s in %(module)s: %(message)s')
+
+# Hero-specific negative keywords (stricter filter for top story)
+HERO_EXCLUDE_KEYWORDS = [
+    "dies", "died", "death", "dead", "dying", "passing", "passed away",
+    "funeral", "obituary", "tribute", "memorial", "mourning", "grief",
+    "killed", "murder", "shooting", "stabbing", "violence", "accident"
+]
 
 # Global flag to prevent multiple refresh threads
 cache_refresh_running = False
@@ -44,6 +51,28 @@ os.makedirs(os.path.join(os.path.dirname(__file__), "static"), exist_ok=True)
 # Initialize global variables
 articles_by_topic = {}
 last_updated = None
+
+
+def is_suitable_for_hero(article):
+    """Check if an article is suitable for the hero position"""
+    if not article:
+        return False
+
+    title = article.get('title', '').lower()
+    summary = article.get('summary', '').lower()
+    combined = f"{title} {summary}"
+
+    # Check for death/negative keywords
+    for keyword in HERO_EXCLUDE_KEYWORDS:
+        if keyword in combined:
+            logging.info(f"Excluding from hero: '{article.get('title', '')}' - contains '{keyword}'")
+            return False
+
+    # Require minimum inspiration score
+    if article.get('inspiration_score', 0) < 7:
+        return False
+
+    return True
 
 
 def normalize_text(text):
@@ -475,6 +504,22 @@ def initialize_app(app):
                                       a.get('topic_name', '') not in favorite_topic_names]
                     supplemental_count = max(8 - len(favorite_articles), 0)
                     all_articles = top_stories + favorite_articles + other_articles[:supplemental_count]
+
+        # Filter hero article: ensure first article is suitable for hero position
+        if all_articles and not selected_topic:  # Only apply hero filter on main feed
+            if not is_suitable_for_hero(all_articles[0]):
+                # Find first suitable article for hero
+                hero_candidate = None
+                for i, article in enumerate(all_articles[1:], start=1):
+                    if is_suitable_for_hero(article):
+                        hero_candidate = article
+                        hero_index = i
+                        break
+
+                # If we found a better hero, move it to position 0
+                if hero_candidate:
+                    all_articles = [hero_candidate] + all_articles[:hero_index] + all_articles[hero_index+1:]
+                    logging.info(f"Promoted better hero: '{hero_candidate.get('title', '')}'")
 
         # Process articles for display
         for article in all_articles:

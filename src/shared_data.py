@@ -39,7 +39,7 @@ POSITIVE_THRESHOLD = 0.50 # Articles must have a compound score > this value (wa
 NEGATIVE_KEYWORDS = [
     "politics", "political", "election", "vote", "government", "parliament", "congress",
     "sex", "sexual", "abuse", "assault",
-    "crime", "murder", "killed", "death", "dead", "shooting", "stabbed", "violence", "violent", "arrest", "police", "theft", "robbery", "fraud",
+    "crime", "murder", "killed", "death", "dead", "dies", "died", "dying", "passing", "passed away", "funeral", "obituary", "shooting", "stabbed", "violence", "violent", "arrest", "police", "theft", "robbery", "fraud",
     "stock market", "shares", "dow jones", "nasdaq", "finance", "economy", "economic", "recession", "inflation", "tariff",
     "war", "conflict", "military", "attack", "bombing", "invasion",
     "disaster", "crash", "crisis", "emergency",
