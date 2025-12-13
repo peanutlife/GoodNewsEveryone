@@ -44,6 +44,7 @@
                     <p class="tagline-context">{{ daily_quote.context }}</p>
                 {% endif %}
             {% else %}
+                <p class="daily-label">✨ Daily Inspiration</p>
                 <p class="tagline">"{{ daily_quote.quote }}"</p>
                 {% if daily_quote.author %}
                     <p class="tagline-author">— {{ daily_quote.author }}</p>

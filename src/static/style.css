@@ -151,11 +151,20 @@ header {
   display: inline-block;
 }
 
+.daily-label {
+  font-size: 0.7rem;
+  color: var(--sunrise-orange);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: var(--space-2) 0 var(--space-1) 0;
+}
+
 .tagline {
   font-size: 0.95rem;
   color: var(--charcoal);
   font-weight: 500;
-  margin: var(--space-2) 0 var(--space-1) 0;
+  margin: var(--space-1) 0 var(--space-1) 0;
   letter-spacing: 0.01em;
   line-height: 1.5;
 }
