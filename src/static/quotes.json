@@ -1,0 +1,540 @@
+{
+  "birthday_quotes": {
+    "01-04": {
+      "person": "Louis Braille",
+      "year": 1809,
+      "quote": "Access to communication in the widest sense is access to knowledge, and that is vitally important for us.",
+      "context": "Inventor of the Braille reading and writing system for the blind"
+    },
+    "01-15": {
+      "person": "Martin Luther King Jr.",
+      "year": 1929,
+      "quote": "Darkness cannot drive out darkness; only light can do that. Hate cannot drive out hate; only love can do that.",
+      "context": "Civil rights leader and advocate for nonviolent social change"
+    },
+    "01-17": {
+      "person": "Michelle Obama",
+      "year": 1964,
+      "quote": "When they go low, we go high.",
+      "context": "Former First Lady, lawyer, and author"
+    },
+    "02-04": {
+      "person": "Rosa Parks",
+      "year": 1913,
+      "quote": "I have learned over the years that when one's mind is made up, this diminishes fear; knowing what must be done does away with fear.",
+      "context": "Civil rights activist who sparked the Montgomery Bus Boycott"
+    },
+    "02-06": {
+      "person": "Bob Marley",
+      "year": 1945,
+      "quote": "One good thing about music, when it hits you, you feel no pain.",
+      "context": "Musician and advocate for peace and social justice"
+    },
+    "02-11": {
+      "person": "Jane Yolen",
+      "year": 1939,
+      "quote": "Exercise the writing muscle every day, even if it is only a letter, notes, a title list, a character sketch, a journal entry. Writers are like dancers, like athletes. Without that exercise, the muscles seize up.",
+      "context": "Prolific children's book author"
+    },
+    "02-27": {
+      "person": "Mr. Rogers (Fred Rogers)",
+      "year": 1928,
+      "quote": "When I was a boy and I would see scary things in the news, my mother would say to me, 'Look for the helpers. You will always find people who are helping.'",
+      "context": "Beloved children's television host and educator"
+    },
+    "03-08": {
+      "person": "International Women's Day",
+      "year": 1911,
+      "quote": "Here's to strong women. May we know them. May we be them. May we raise them.",
+      "context": "Celebrating women's achievements and advocating for equality"
+    },
+    "03-20": {
+      "person": "Mr. Rogers (Fred Rogers)",
+      "year": 1928,
+      "quote": "There are three ways to ultimate success: The first way is to be kind. The second way is to be kind. The third way is to be kind.",
+      "context": "Beloved children's television host"
+    },
+    "03-26": {
+      "person": "Sandra Day O'Connor",
+      "year": 1930,
+      "quote": "We don't accomplish anything in this world alone... and whatever happens is the result of the whole tapestry of one's life and all the weavings of individual threads from one to another that creates something.",
+      "context": "First woman to serve on the U.S. Supreme Court"
+    },
+    "04-04": {
+      "person": "Maya Angelou",
+      "year": 1928,
+      "quote": "There is no greater agony than bearing an untold story inside you.",
+      "context": "Poet, author, and civil rights activist"
+    },
+    "04-22": {
+      "person": "Earth Day",
+      "year": 1970,
+      "quote": "The Earth is what we all have in common.",
+      "context": "Celebrating our planet and environmental protection"
+    },
+    "05-12": {
+      "person": "Florence Nightingale",
+      "year": 1820,
+      "quote": "I attribute my success to this: I never gave or took any excuse.",
+      "context": "Founder of modern nursing"
+    },
+    "06-12": {
+      "person": "Anne Frank",
+      "year": 1929,
+      "quote": "How wonderful it is that nobody need wait a single moment before starting to improve the world.",
+      "context": "Diarist and Holocaust victim whose words inspire hope"
+    },
+    "06-27": {
+      "person": "Helen Keller",
+      "year": 1880,
+      "quote": "Alone we can do so little; together we can do so much.",
+      "context": "Author and disability rights advocate"
+    },
+    "07-18": {
+      "person": "Nelson Mandela",
+      "year": 1918,
+      "quote": "It always seems impossible until it's done.",
+      "context": "Anti-apartheid revolutionary and former President of South Africa"
+    },
+    "08-26": {
+      "person": "Mother Teresa",
+      "year": 1910,
+      "quote": "Spread love everywhere you go. Let no one ever come to you without leaving happier.",
+      "context": "Humanitarian and Nobel Peace Prize laureate"
+    },
+    "09-04": {
+      "person": "Jane Goodall",
+      "year": 1934,
+      "quote": "What you do makes a difference, and you have to decide what kind of difference you want to make.",
+      "context": "Primatologist and conservation advocate"
+    },
+    "10-02": {
+      "person": "Mahatma Gandhi",
+      "year": 1869,
+      "quote": "Be the change that you wish to see in the world.",
+      "context": "Leader of India's independence movement through nonviolent resistance"
+    },
+    "10-11": {
+      "person": "Eleanor Roosevelt",
+      "year": 1884,
+      "quote": "The future belongs to those who believe in the beauty of their dreams.",
+      "context": "First Lady, diplomat, and human rights advocate"
+    },
+    "11-09": {
+      "person": "Carl Sagan",
+      "year": 1934,
+      "quote": "Somewhere, something incredible is waiting to be known.",
+      "context": "Astronomer and science communicator"
+    },
+    "12-05": {
+      "person": "Walt Disney",
+      "year": 1901,
+      "quote": "All our dreams can come true, if we have the courage to pursue them.",
+      "context": "Pioneer of animation and entertainment"
+    },
+    "12-10": {
+      "person": "Ada Lovelace",
+      "year": 1815,
+      "quote": "That brain of mine is something more than merely mortal; as time will show.",
+      "context": "Mathematician and the world's first computer programmer"
+    }
+  },
+  "daily_quotes": [
+    {
+      "quote": "The world is quietly wonderful when you know where to look.",
+      "author": "Project Peanutlife"
+    },
+    {
+      "quote": "Every person you meet is fighting a battle you know nothing about. Be kind.",
+      "author": "Robin Williams"
+    },
+    {
+      "quote": "The best time to plant a tree was 20 years ago. The second best time is now.",
+      "author": "Chinese Proverb"
+    },
+    {
+      "quote": "We rise by lifting others.",
+      "author": "Robert Ingersoll"
+    },
+    {
+      "quote": "In a world where you can be anything, be kind.",
+      "author": "Jennifer Dukes Lee"
+    },
+    {
+      "quote": "Believe you can and you're halfway there.",
+      "author": "Theodore Roosevelt"
+    },
+    {
+      "quote": "What lies behind us and what lies before us are tiny matters compared to what lies within us.",
+      "author": "Ralph Waldo Emerson"
+    },
+    {
+      "quote": "You are never too old to set another goal or to dream a new dream.",
+      "author": "C.S. Lewis"
+    },
+    {
+      "quote": "The best way to predict the future is to create it.",
+      "author": "Peter Drucker"
+    },
+    {
+      "quote": "Act as if what you do makes a difference. It does.",
+      "author": "William James"
+    },
+    {
+      "quote": "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+      "author": "Winston Churchill"
+    },
+    {
+      "quote": "The only impossible journey is the one you never begin.",
+      "author": "Tony Robbins"
+    },
+    {
+      "quote": "Life is 10% what happens to you and 90% how you react to it.",
+      "author": "Charles R. Swindoll"
+    },
+    {
+      "quote": "With the new day comes new strength and new thoughts.",
+      "author": "Eleanor Roosevelt"
+    },
+    {
+      "quote": "Happiness is not by chance, but by choice.",
+      "author": "Jim Rohn"
+    },
+    {
+      "quote": "Do what you can, with what you have, where you are.",
+      "author": "Theodore Roosevelt"
+    },
+    {
+      "quote": "Everything you've ever wanted is on the other side of fear.",
+      "author": "George Addair"
+    },
+    {
+      "quote": "Dream big and dare to fail.",
+      "author": "Norman Vaughan"
+    },
+    {
+      "quote": "It does not matter how slowly you go as long as you do not stop.",
+      "author": "Confucius"
+    },
+    {
+      "quote": "Start where you are. Use what you have. Do what you can.",
+      "author": "Arthur Ashe"
+    },
+    {
+      "quote": "Nothing is impossible. The word itself says 'I'm possible!'",
+      "author": "Audrey Hepburn"
+    },
+    {
+      "quote": "Keep your face always toward the sunshine, and shadows will fall behind you.",
+      "author": "Walt Whitman"
+    },
+    {
+      "quote": "You are enough just as you are.",
+      "author": "Meghan Markle"
+    },
+    {
+      "quote": "In the middle of difficulty lies opportunity.",
+      "author": "Albert Einstein"
+    },
+    {
+      "quote": "The purpose of our lives is to be happy.",
+      "author": "Dalai Lama"
+    },
+    {
+      "quote": "Look deep into nature, and then you will understand everything better.",
+      "author": "Albert Einstein"
+    },
+    {
+      "quote": "The nitrogen in our DNA, the calcium in our teeth, the iron in our blood... we are made of star stuff.",
+      "author": "Carl Sagan"
+    },
+    {
+      "quote": "We are a way for the cosmos to know itself.",
+      "author": "Carl Sagan"
+    },
+    {
+      "quote": "For small creatures such as we, the vastness is bearable only through love.",
+      "author": "Carl Sagan"
+    },
+    {
+      "quote": "The best and most beautiful things in the world cannot be seen or even touched—they must be felt with the heart.",
+      "author": "Helen Keller"
+    },
+    {
+      "quote": "I am not afraid of storms, for I am learning how to sail my ship.",
+      "author": "Louisa May Alcott"
+    },
+    {
+      "quote": "Life isn't about finding yourself. Life is about creating yourself.",
+      "author": "George Bernard Shaw"
+    },
+    {
+      "quote": "The weak can never forgive. Forgiveness is the attribute of the strong.",
+      "author": "Mahatma Gandhi"
+    },
+    {
+      "quote": "Live as if you were to die tomorrow. Learn as if you were to live forever.",
+      "author": "Mahatma Gandhi"
+    },
+    {
+      "quote": "An eye for an eye only ends up making the whole world blind.",
+      "author": "Mahatma Gandhi"
+    },
+    {
+      "quote": "I've learned that people will forget what you said, people will forget what you did, but people will never forget how you made them feel.",
+      "author": "Maya Angelou"
+    },
+    {
+      "quote": "If you don't like something, change it. If you can't change it, change your attitude.",
+      "author": "Maya Angelou"
+    },
+    {
+      "quote": "We may encounter many defeats but we must not be defeated.",
+      "author": "Maya Angelou"
+    },
+    {
+      "quote": "Love recognizes no barriers. It jumps hurdles, leaps fences, penetrates walls to arrive at its destination full of hope.",
+      "author": "Maya Angelou"
+    },
+    {
+      "quote": "Try to be a rainbow in someone's cloud.",
+      "author": "Maya Angelou"
+    },
+    {
+      "quote": "Do the best you can until you know better. Then when you know better, do better.",
+      "author": "Maya Angelou"
+    },
+    {
+      "quote": "No act of kindness, no matter how small, is ever wasted.",
+      "author": "Aesop"
+    },
+    {
+      "quote": "It is during our darkest moments that we must focus to see the light.",
+      "author": "Aristotle"
+    },
+    {
+      "quote": "Whoever is happy will make others happy too.",
+      "author": "Anne Frank"
+    },
+    {
+      "quote": "If you look at what you have in life, you'll always have more.",
+      "author": "Oprah Winfrey"
+    },
+    {
+      "quote": "Perfection is not attainable, but if we chase perfection we can catch excellence.",
+      "author": "Vince Lombardi"
+    },
+    {
+      "quote": "You miss 100% of the shots you don't take.",
+      "author": "Wayne Gretzky"
+    },
+    {
+      "quote": "Whether you think you can or you think you can't, you're right.",
+      "author": "Henry Ford"
+    },
+    {
+      "quote": "The two most important days in your life are the day you are born and the day you find out why.",
+      "author": "Mark Twain"
+    },
+    {
+      "quote": "Your time is limited, so don't waste it living someone else's life.",
+      "author": "Steve Jobs"
+    },
+    {
+      "quote": "If you set your goals ridiculously high and it's a failure, you will fail above everyone else's success.",
+      "author": "James Cameron"
+    },
+    {
+      "quote": "When you reach the end of your rope, tie a knot in it and hang on.",
+      "author": "Franklin D. Roosevelt"
+    },
+    {
+      "quote": "Always remember that you are absolutely unique. Just like everyone else.",
+      "author": "Margaret Mead"
+    },
+    {
+      "quote": "Don't judge each day by the harvest you reap but by the seeds that you plant.",
+      "author": "Robert Louis Stevenson"
+    },
+    {
+      "quote": "Tell me and I forget. Teach me and I remember. Involve me and I learn.",
+      "author": "Benjamin Franklin"
+    },
+    {
+      "quote": "The best preparation for tomorrow is doing your best today.",
+      "author": "H. Jackson Brown Jr."
+    },
+    {
+      "quote": "You can't use up creativity. The more you use, the more you have.",
+      "author": "Maya Angelou"
+    },
+    {
+      "quote": "It is never too late to be what you might have been.",
+      "author": "George Eliot"
+    },
+    {
+      "quote": "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.",
+      "author": "Ralph Waldo Emerson"
+    },
+    {
+      "quote": "Clouds come floating into my life, no longer to carry rain or usher storm, but to add color to my sunset sky.",
+      "author": "Rabindranath Tagore"
+    },
+    {
+      "quote": "Let us sacrifice our today so that our children can have a better tomorrow.",
+      "author": "A.P.J. Abdul Kalam"
+    },
+    {
+      "quote": "The flower that blooms in adversity is the rarest and most beautiful of all.",
+      "author": "Walt Disney"
+    },
+    {
+      "quote": "The only thing we have to fear is fear itself.",
+      "author": "Franklin D. Roosevelt"
+    },
+    {
+      "quote": "I have not failed. I've just found 10,000 ways that won't work.",
+      "author": "Thomas Edison"
+    },
+    {
+      "quote": "A person who never made a mistake never tried anything new.",
+      "author": "Albert Einstein"
+    },
+    {
+      "quote": "The true sign of intelligence is not knowledge but imagination.",
+      "author": "Albert Einstein"
+    },
+    {
+      "quote": "Life is like riding a bicycle. To keep your balance, you must keep moving.",
+      "author": "Albert Einstein"
+    },
+    {
+      "quote": "Try not to become a man of success, but rather try to become a man of value.",
+      "author": "Albert Einstein"
+    },
+    {
+      "quote": "The important thing is not to stop questioning. Curiosity has its own reason for existing.",
+      "author": "Albert Einstein"
+    },
+    {
+      "quote": "If I have seen further it is by standing on the shoulders of Giants.",
+      "author": "Isaac Newton"
+    },
+    {
+      "quote": "We build too many walls and not enough bridges.",
+      "author": "Isaac Newton"
+    },
+    {
+      "quote": "Peace begins with a smile.",
+      "author": "Mother Teresa"
+    },
+    {
+      "quote": "Kind words can be short and easy to speak, but their echoes are truly endless.",
+      "author": "Mother Teresa"
+    },
+    {
+      "quote": "Not all of us can do great things. But we can do small things with great love.",
+      "author": "Mother Teresa"
+    },
+    {
+      "quote": "If you judge people, you have no time to love them.",
+      "author": "Mother Teresa"
+    },
+    {
+      "quote": "Yesterday is gone. Tomorrow has not yet come. We have only today. Let us begin.",
+      "author": "Mother Teresa"
+    },
+    {
+      "quote": "Imagination is more important than knowledge. Knowledge is limited. Imagination encircles the world.",
+      "author": "Albert Einstein"
+    },
+    {
+      "quote": "Change will not come if we wait for some other person or some other time. We are the ones we've been waiting for.",
+      "author": "Barack Obama"
+    },
+    {
+      "quote": "The best way out is always through.",
+      "author": "Robert Frost"
+    },
+    {
+      "quote": "What you get by achieving your goals is not as important as what you become by achieving your goals.",
+      "author": "Zig Ziglar"
+    },
+    {
+      "quote": "A champion is defined not by their wins but by how they can recover when they fall.",
+      "author": "Serena Williams"
+    },
+    {
+      "quote": "You don't have to be great to start, but you have to start to be great.",
+      "author": "Zig Ziglar"
+    },
+    {
+      "quote": "Don't wait. The time will never be just right.",
+      "author": "Napoleon Hill"
+    },
+    {
+      "quote": "Don't watch the clock; do what it does. Keep going.",
+      "author": "Sam Levenson"
+    },
+    {
+      "quote": "A year from now you may wish you had started today.",
+      "author": "Karen Lamb"
+    },
+    {
+      "quote": "You can't build a reputation on what you are going to do.",
+      "author": "Henry Ford"
+    },
+    {
+      "quote": "The secret of getting ahead is getting started.",
+      "author": "Mark Twain"
+    },
+    {
+      "quote": "All progress takes place outside the comfort zone.",
+      "author": "Michael John Bobak"
+    },
+    {
+      "quote": "People who are crazy enough to think they can change the world, are the ones who do.",
+      "author": "Steve Jobs"
+    },
+    {
+      "quote": "Security is mostly a superstition. Life is either a daring adventure or nothing.",
+      "author": "Helen Keller"
+    },
+    {
+      "quote": "The man who has confidence in himself gains the confidence of others.",
+      "author": "Hasidic Proverb"
+    },
+    {
+      "quote": "The only disability in life is a bad attitude.",
+      "author": "Scott Hamilton"
+    },
+    {
+      "quote": "If you're offered a seat on a rocket ship, don't ask what seat! Just get on.",
+      "author": "Sheryl Sandberg"
+    },
+    {
+      "quote": "I alone cannot change the world, but I can cast a stone across the water to create many ripples.",
+      "author": "Mother Teresa"
+    },
+    {
+      "quote": "Each person must live their life as a model for others.",
+      "author": "Rosa Parks"
+    },
+    {
+      "quote": "A No. 2 pencil and a dream can take you anywhere.",
+      "author": "Joyce Meyer"
+    },
+    {
+      "quote": "We must accept finite disappointment, but never lose infinite hope.",
+      "author": "Martin Luther King Jr."
+    },
+    {
+      "quote": "Injustice anywhere is a threat to justice everywhere.",
+      "author": "Martin Luther King Jr."
+    },
+    {
+      "quote": "Our lives begin to end the day we become silent about things that matter.",
+      "author": "Martin Luther King Jr."
+    }
+  ]
+}

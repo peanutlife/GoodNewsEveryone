@@ -60,6 +60,7 @@ class Config:
 
     # API Keys
     OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
+    UNSPLASH_ACCESS_KEY = os.environ.get('UNSPLASH_ACCESS_KEY')
 
     # Email Configuration
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')

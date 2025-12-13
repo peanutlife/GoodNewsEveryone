@@ -12,6 +12,7 @@ import json
 import openai
 import logging
 import hashlib
+import requests
 from src.shared_data import FEED_URLS, NEGATIVE_KEYWORDS, POSITIVE_THRESHOLD, removed_article_links, \
     load_removed_articles
 from urllib.parse import urlparse
@@ -22,18 +23,23 @@ from src.config import config
 # Setup logging
 logger = logging.getLogger(__name__)
 
-# Load OpenAI API Key securely
+# Load API Keys securely
 try:
     current_config = config[os.environ.get('FLASK_ENV', 'default')]
     OPENAI_API_KEY = current_config.OPENAI_API_KEY
+    UNSPLASH_ACCESS_KEY = current_config.UNSPLASH_ACCESS_KEY
 
     if not OPENAI_API_KEY:
         logger.error("OpenAI API key not found in configuration. Some features may not work.")
+
+    if not UNSPLASH_ACCESS_KEY:
+        logger.warning("Unsplash API key not found. Stock image fallback will be disabled.")
 
     client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
 except Exception as e:
     logger.error(f"Error initializing OpenAI client: {e}")
+    UNSPLASH_ACCESS_KEY = None
 
 
     class DummyClient:
@@ -355,6 +361,94 @@ def parse_date(entry):
     return datetime.now()
 
 
+def is_low_quality_image(image_url):
+    """
+    Check if an image is likely low-quality or generic and should be replaced.
+    Returns True if image should be replaced.
+    """
+    if not image_url:
+        return True
+
+    image_url_lower = image_url.lower()
+
+    # Generic patterns/placeholders
+    bad_patterns = [
+        'placeholder', 'default', 'no-image', 'noimage', 'missing',
+        'avatar', 'logo', 'icon', 'favicon', 'pixel', 'dot', 'pattern',
+        '1x1', 'spacer', 'blank', 'generic', 'fallback'
+    ]
+
+    if any(pattern in image_url_lower for pattern in bad_patterns):
+        return True
+
+    # Very small dimensions in filename (likely icons/placeholders)
+    if re.search(r'(\d+)x(\d+)', image_url):
+        dims = re.search(r'(\d+)x(\d+)', image_url)
+        width, height = int(dims.group(1)), int(dims.group(2))
+        if width < 200 or height < 200:
+            return True
+
+    # Common CDN placeholder patterns
+    if 'gravatar.com/avatar' in image_url_lower:
+        return True
+
+    # Favicon services
+    if any(service in image_url_lower for service in ['favicon', 'google.com/s2/favicons']):
+        return True
+
+    return False
+
+
+def search_unsplash_image(query, topic=None):
+    """
+    Search Unsplash for a relevant image based on keywords.
+    Returns image URL if found, None otherwise.
+    """
+    if not UNSPLASH_ACCESS_KEY:
+        return None
+
+    try:
+        # Extract meaningful keywords from query
+        # Remove common words and keep nouns/important terms
+        stop_words = {'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by'}
+        words = query.lower().split()
+        keywords = [w for w in words if w not in stop_words and len(w) > 3]
+
+        # Use topic if provided for better context
+        if topic:
+            search_query = f"{topic} {' '.join(keywords[:3])}"
+        else:
+            search_query = ' '.join(keywords[:4])
+
+        # Call Unsplash API
+        url = "https://api.unsplash.com/search/photos"
+        headers = {"Authorization": f"Client-ID {UNSPLASH_ACCESS_KEY}"}
+        params = {
+            "query": search_query,
+            "per_page": 1,
+            "orientation": "landscape",
+            "content_filter": "high"  # Family-friendly content only
+        }
+
+        response = requests.get(url, headers=headers, params=params, timeout=5)
+
+        if response.status_code == 200:
+            data = response.json()
+            if data.get('results') and len(data['results']) > 0:
+                photo = data['results'][0]
+                # Use 'regular' size for good quality without being too large
+                image_url = photo['urls'].get('regular')
+                logger.info(f"Found Unsplash image for query: '{search_query}'")
+                return image_url
+        else:
+            logger.warning(f"Unsplash API returned status {response.status_code}")
+
+    except Exception as e:
+        logger.warning(f"Error fetching Unsplash image: {e}")
+
+    return None
+
+
 def fetch_and_filter_feeds(feed_urls):
     """
     Fetch RSS feeds incrementally, updating the cache after each feed.
@@ -454,6 +548,15 @@ def fetch_and_filter_feeds(feed_urls):
                                 if image_url:
                                     break
 
+                    # Replace low-quality images with Unsplash photos
+                    if is_low_quality_image(image_url):
+                        logger.info(f"Low quality image detected for '{title[:50]}', searching Unsplash...")
+                        unsplash_image = search_unsplash_image(title, topic_name)
+                        if unsplash_image:
+                            image_url = unsplash_image
+                            logger.info(f"Replaced with Unsplash image")
+
+                    # Final fallback to placeholders if still no image
                     if not image_url:
                         domain = urlparse(link).netloc
                         domain_placeholder = f"/static/placeholders/{topic_name.lower()}.jpg"

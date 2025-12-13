@@ -32,7 +32,23 @@
     <header>
         <div class="brand-section">
             <h1><a href="/">Project Peanutlife 🥜</a></h1>
-            <p class="tagline">Your daily dose of positivity</p>
+
+            {% if daily_quote.type == 'birthday' %}
+                <p class="tagline birthday-tagline">
+                    <span class="birthday-icon">🎂</span>
+                    Today is {{ daily_quote.person }}'s birthday
+                    {% if daily_quote.year %}({{ daily_quote.year }}){% endif %}
+                </p>
+                <p class="tagline-quote">"{{ daily_quote.quote }}"</p>
+                {% if daily_quote.context %}
+                    <p class="tagline-context">{{ daily_quote.context }}</p>
+                {% endif %}
+            {% else %}
+                <p class="tagline">"{{ daily_quote.quote }}"</p>
+                {% if daily_quote.author %}
+                    <p class="tagline-author">— {{ daily_quote.author }}</p>
+                {% endif %}
+            {% endif %}
         </div>
     </header>
 
@@ -91,10 +107,6 @@
                 </div>
             </div>
 
-            <div class="sidebar-section">
-                <h3>ABOUT</h3>
-                <p class="sidebar-info">Project Peanutlife brings you positivity from around the world, using AI to find and rank the most inspiring stories.</p>
-            </div>
         </aside>
 
         <!-- Main Content -->
@@ -407,6 +419,10 @@
 
         <!-- Right Sidebar -->
         <aside class="ad-sidebar">
+            <div class="sidebar-section ad-disclaimer">
+                <p class="sidebar-info-subtle">A few thoughtfully placed ads help us keep this space alive—just enough to cover our costs, never enough to dim your experience.</p>
+            </div>
+
             <div class="sidebar-section">
                 <h3>GET DAILY INSPIRATION</h3>
                 <p class="sidebar-info">Subscribe to receive the top 10 most inspiring stories delivered to your inbox every morning.</p>

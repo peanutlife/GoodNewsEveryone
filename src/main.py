@@ -43,6 +43,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 CACHE_FILE = os.path.join(os.path.dirname(__file__), "static", "articles_cache.json")
 PERMANENT_CACHE_FILE = os.path.join(DATA_DIR, "article_cache.json")
+QUOTES_FILE = os.path.join(os.path.dirname(__file__), "static", "quotes.json")
 
 # Create necessary directories
 os.makedirs(DATA_DIR, exist_ok=True)
@@ -337,6 +338,48 @@ def flatten_articles(articles_by_topic, sort_by_inspiration=True, min_score=None
         flat.sort(key=lambda x: x.get('_published_dt', datetime.utcnow()), reverse=True)
 
     return flat
+
+
+def get_daily_quote():
+    """Get today's inspirational quote - birthday tribute if available, otherwise daily rotation"""
+    try:
+        with open(QUOTES_FILE, 'r', encoding='utf-8') as f:
+            quotes_data = json.load(f)
+
+        today = datetime.utcnow()
+        date_key = today.strftime("%m-%d")  # Format: "01-15" for January 15
+
+        # Check if today is a special birthday
+        if date_key in quotes_data['birthday_quotes']:
+            birthday = quotes_data['birthday_quotes'][date_key]
+            return {
+                'type': 'birthday',
+                'person': birthday['person'],
+                'year': birthday.get('year', ''),
+                'quote': birthday['quote'],
+                'context': birthday.get('context', '')
+            }
+
+        # Otherwise, return a daily rotating quote
+        daily_quotes = quotes_data['daily_quotes']
+        # Use day of year to select quote (same quote all day, rotates daily)
+        day_of_year = today.timetuple().tm_yday
+        quote_index = day_of_year % len(daily_quotes)
+        selected_quote = daily_quotes[quote_index]
+
+        return {
+            'type': 'daily',
+            'quote': selected_quote['quote'],
+            'author': selected_quote['author']
+        }
+
+    except Exception as e:
+        logging.error(f"Error loading daily quote: {e}")
+        # Fallback quote
+        return {
+            'type': 'daily',
+            'quote': 'Take a breath. Relax. Rediscover the good unfolding around us every day.'
+        }
 
 
 def create_app():
@@ -640,6 +683,9 @@ def initialize_app(app):
         end_idx = start_idx + per_page
         paginated_articles = all_articles[start_idx:end_idx]
 
+        # Get today's quote
+        daily_quote = get_daily_quote()
+
         return render_template(
             "index.html",
             articles=paginated_articles,
@@ -651,7 +697,8 @@ def initialize_app(app):
             last_updated=last_updated,
             page=page,
             total_pages=total_pages,
-            total_articles=total_articles
+            total_articles=total_articles,
+            daily_quote=daily_quote
         )
 
     @app.route("/refresh")

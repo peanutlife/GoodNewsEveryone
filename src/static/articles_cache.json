@@ -61877,6 +61877,32 @@
       "tags": []
     },
     {
+      "title": "Ask HN: How can I get better at using AI for programming?",
+      "link": "https://news.ycombinator.com/item?id=46255285",
+      "summary": "<a href=\"https://news.ycombinator.com/item?id=46255285\">Comments</a>",
+      "published": "2025-12-13T15:37:16",
+      "sentiment_score": 0.504,
+      "inspiration_score": 7.5,
+      "inspiration_dimensions": {
+        "composite": 7.5,
+        "emotional": 7.5,
+        "triumph": 7.5,
+        "social": 7.5,
+        "novelty": 7.5,
+        "actionable": 7.5
+      },
+      "is_inspirational": true,
+      "source_name": "news.ycombinator.com",
+      "source_feed": "https://news.ycombinator.com/rss",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "technology",
+      "topic_icon_path": "/openmoji/color/svg/1F4BB.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F4BB.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://www.google.com/s2/favicons?domain=news.ycombinator.com&sz=128",
+      "tags": []
+    },
+    {
       "title": "Why ultra-processed foods make teens eat more when they aren’t hungry",
       "link": "https://www.sciencedaily.com/releases/2025/12/251209043055.htm",
       "summary": "A Virginia Tech study shows that ultra-processed foods may influence adolescents differently from slightly older young adults. Participants aged 18 to 21 ate more at a buffet and snacked even when not hungry after two weeks on an ultra-processed diet. Because eating without hunger predicts future weight gain, these findings hint at a heightened vulnerability during late adolescence.",
@@ -83228,6 +83254,32 @@
       "noun_icon_url": "/openmoji/color/svg/1F3A8.svg",
       "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
       "image_url": "https://images.newscientist.com/wp-content/uploads/2025/10/27114617/SEI_271210797.jpg",
+      "tags": []
+    },
+    {
+      "title": "30 Of The Most Psychedelic-Looking Rugs By Azerbaijani Designer Faig Ahmed",
+      "link": "https://www.boredpanda.com/art-glitch-carpets-faig-ahmed-azerbaijan-msn/",
+      "summary": "The Azerbaijani tradition of weaving carpets is one of the most ancient arts and crafts of the country and dates as far back as the 2nd millennium BC. Because of their high aesthetic value, these vibrant carpets have been used in Azerbaijan to cover floors, decorate interior walls, sofas, chairs, beds, and even tables. Faig Ahmed is an internationally recognized artist from Baku, Azerbaijan who is known for turning these classic rugs into impressive contemporary works of art.",
+      "published": "2025-12-12T13:50:14",
+      "sentiment_score": 0.8442,
+      "inspiration_score": 9.2,
+      "inspiration_dimensions": {
+        "composite": 9.2,
+        "emotional": 9.2,
+        "triumph": 9.2,
+        "social": 9.2,
+        "novelty": 9.2,
+        "actionable": 9.2
+      },
+      "is_inspirational": true,
+      "source_name": "www.boredpanda.com",
+      "source_feed": "https://www.boredpanda.com/feed/",
+      "source_icon_path": "icons/source_default.png",
+      "topic_name": "culture",
+      "topic_icon_path": "/openmoji/color/svg/1F3A8.svg",
+      "noun_icon_url": "/openmoji/color/svg/1F3A8.svg",
+      "noun_icon_attr": "OpenMoji license CC BY-SA 4.0",
+      "image_url": "https://static.boredpanda.com/blog/wp-content/uploads/2020/09/art-glitch-carpets-faig-ahmed-azerbaijan-fb16.png",
       "tags": []
     },
     {
