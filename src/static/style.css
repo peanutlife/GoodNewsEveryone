@@ -1283,7 +1283,17 @@ footer p {
   }
 
   .tagline {
-    display: none;
+    font-size: 0.85rem;
+    margin: var(--space-1) 0;
+  }
+
+  .daily-label {
+    font-size: 0.65rem;
+    margin: var(--space-1) 0 var(--space-1) 0;
+  }
+
+  .tagline-author {
+    font-size: 0.75rem;
   }
 
   .sort-options {

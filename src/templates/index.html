@@ -16,6 +16,19 @@
     <title>Project Peanutlife - Your Daily Feed of Positive News</title>
     <meta name="description" content="Project Peanutlife brings you the most inspiring and uplifting news stories from around the world.">
 
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#FF6B35">
+    <link rel="manifest" href="/static/manifest.json">
+
+    <!-- iOS Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Peanutlife">
+    <link rel="apple-touch-icon" href="/static/icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="/static/icons/icon-192x192.png">
+
     <!-- Fonts & CSS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -543,6 +556,19 @@
                 }
             }
         });
+
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/static/sw.js')
+                    .then((registration) => {
+                        console.log('Service Worker registered successfully:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
     </script>
 </body>
 </html>
