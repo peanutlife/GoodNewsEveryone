@@ -1366,6 +1366,119 @@ footer p {
   }
 }
 
+/* ============================================
+   PAGINATION
+   ============================================ */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin: var(--space-8) 0 var(--space-4);
+  flex-wrap: wrap;
+}
+
+.pagination-btn {
+  padding: var(--space-3) var(--space-5);
+  background: var(--pure-white);
+  color: var(--charcoal);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-size: 0.95rem;
+  box-shadow: var(--shadow-soft);
+  transition: all var(--transition-base);
+  border: 1px solid var(--stone);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.pagination-btn:hover:not(.disabled) {
+  background: var(--sunrise-orange);
+  color: var(--pure-white);
+  box-shadow: var(--shadow-medium);
+  transform: translateY(-2px);
+  border-color: var(--sunrise-orange);
+}
+
+.pagination-btn.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.pagination-numbers {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.pagination-number {
+  min-width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--pure-white);
+  color: var(--charcoal);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  font-size: 0.95rem;
+  box-shadow: var(--shadow-subtle);
+  transition: all var(--transition-base);
+  border: 1px solid var(--stone);
+}
+
+.pagination-number:hover:not(.active) {
+  background: var(--cloud);
+  box-shadow: var(--shadow-soft);
+  transform: translateY(-1px);
+}
+
+.pagination-number.active {
+  background: var(--sunrise-orange);
+  color: var(--pure-white);
+  box-shadow: var(--shadow-warm);
+  border-color: var(--sunrise-orange);
+}
+
+.pagination-ellipsis {
+  color: var(--whisper);
+  padding: 0 var(--space-2);
+  font-weight: 500;
+}
+
+.pagination-info {
+  text-align: center;
+  color: var(--slate);
+  font-size: 0.9rem;
+  margin-bottom: var(--space-6);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .pagination {
+    gap: var(--space-1);
+  }
+
+  .pagination-btn {
+    padding: var(--space-2) var(--space-3);
+    font-size: 0.85rem;
+  }
+
+  .pagination-number {
+    min-width: 36px;
+    height: 36px;
+    font-size: 0.85rem;
+  }
+
+  .pagination-numbers {
+    gap: var(--space-1);
+  }
+}
+
 /* Hide ads in print */
 @media print {
   .ad-block,

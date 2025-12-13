@@ -68,8 +68,8 @@ def is_suitable_for_hero(article):
             logging.info(f"Excluding from hero: '{article.get('title', '')}' - contains '{keyword}'")
             return False
 
-    # Require minimum inspiration score
-    if article.get('inspiration_score', 0) < 7:
+    # Require minimum inspiration score (stricter filter for hero)
+    if article.get('inspiration_score', 0) < 9:
         return False
 
     return True
@@ -514,6 +514,10 @@ def initialize_app(app):
         sort_type = request.args.get('sort', 'top')
         time_filter = request.args.get('time', 'all')
 
+        # Pagination parameters
+        page = request.args.get('page', 1, type=int)
+        per_page = 20
+
         if not articles_by_topic:
             articles_by_topic = article_cache.get("articles", {})
             logging.warning("Using in-memory article_cache as fallback.")
@@ -626,15 +630,28 @@ def initialize_app(app):
 
         topic_icons['all news'] = '/openmoji/color/svg/1F4F0.svg'
 
+        # Calculate pagination
+        total_articles = len(all_articles)
+        total_pages = (total_articles + per_page - 1) // per_page  # Ceiling division
+        page = max(1, min(page, total_pages)) if total_pages > 0 else 1  # Clamp page number
+
+        # Slice articles for current page
+        start_idx = (page - 1) * per_page
+        end_idx = start_idx + per_page
+        paginated_articles = all_articles[start_idx:end_idx]
+
         return render_template(
             "index.html",
-            articles=all_articles,
+            articles=paginated_articles,
             topics=unique_topics,
             topic_icons=topic_icons,
             selected_topic=selected_topic,
             sort=sort_type,
             time_filter=time_filter,
-            last_updated=last_updated
+            last_updated=last_updated,
+            page=page,
+            total_pages=total_pages,
+            total_articles=total_articles
         )
 
     @app.route("/refresh")
