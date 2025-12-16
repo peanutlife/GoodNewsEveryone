@@ -1566,10 +1566,34 @@ footer p {
   }
 }
 
+/* In-feed ads - span full grid width */
+.in-feed-ad {
+  grid-column: 1 / -1;
+  max-width: 728px;
+  margin: var(--space-4) auto;
+  padding: var(--space-4);
+  background: var(--cloud);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-md);
+  text-align: center;
+  min-height: 90px;
+}
+
+.in-feed-ad::before {
+  content: "Sponsored";
+  display: block;
+  font-size: 0.7rem;
+  color: var(--whisper);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-2);
+}
+
 /* Hide ads in print */
 @media print {
   .ad-block,
   .footer-ad,
+  .in-feed-ad,
   ins.adsbygoogle {
     display: none !important;
   }
