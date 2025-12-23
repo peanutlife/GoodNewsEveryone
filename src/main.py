@@ -559,7 +559,7 @@ def initialize_app(app):
 
         # Pagination parameters
         page = request.args.get('page', 1, type=int)
-        per_page = 20
+        per_page = 24  # Divisible by 3 for clean grid layout (8 rows of 3)
 
         if not articles_by_topic:
             articles_by_topic = article_cache.get("articles", {})
@@ -909,6 +909,13 @@ if __name__ == "__main__":
     # Get environment and port
     env = os.environ.get('FLASK_ENV', 'production')
     port = int(os.environ.get("PORT", 5005))
+
+    # Refresh cache immediately on startup in production (ensures fresh articles after deploy)
+    if env == 'production':
+        logging.info("🔄 Starting immediate cache refresh on startup...")
+        refresh_thread = threading.Thread(target=refresh_cache_worker)
+        refresh_thread.daemon = True
+        refresh_thread.start()
 
     # Start the background cache refresh thread
     initial_delay = 60 if env == 'production' else 20
