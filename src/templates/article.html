@@ -20,6 +20,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Google Analytics 4 & Google Ads -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-V4SHHF8RVX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-V4SHHF8RVX');  // Google Analytics 4
+      gtag('config', 'AW-17768371343');  // Google Ads
+    </script>
+
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4295146235414490"
             crossorigin="anonymous"></script>
@@ -204,12 +214,21 @@
         </p>
     </footer>
 
-    <!-- Copy Link to Clipboard Script -->
+    <!-- Copy Link to Clipboard Script & Google Analytics Event Tracking -->
     <script>
+        // Copy link functionality with GA tracking
         document.querySelectorAll('.share-copy').forEach(button => {
             button.addEventListener('click', function() {
                 const url = this.dataset.url;
                 navigator.clipboard.writeText(url).then(() => {
+                    // Track copy link event
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'share', {
+                            'method': 'copy_link',
+                            'content_type': 'article'
+                        });
+                    }
+
                     // Show toast notification
                     const toast = document.createElement('div');
                     toast.className = 'toast';
@@ -225,6 +244,47 @@
                         setTimeout(() => toast.remove(), 300);
                     }, 2000);
                 });
+            });
+        });
+
+        // Track social share button clicks
+        document.querySelectorAll('.share-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const method = this.classList.contains('share-twitter') ? 'twitter' :
+                              this.classList.contains('share-facebook') ? 'facebook' :
+                              this.classList.contains('share-linkedin') ? 'linkedin' :
+                              this.classList.contains('share-email') ? 'email' : 'other';
+
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'share', {
+                        'method': method,
+                        'content_type': 'article'
+                    });
+                }
+            });
+        });
+
+        // Track "Read Full Article" button clicks
+        document.querySelectorAll('.read-full-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'click', {
+                        'event_category': 'engagement',
+                        'event_label': 'read_full_article'
+                    });
+                }
+            });
+        });
+
+        // Track related article clicks
+        document.querySelectorAll('.related-article-card').forEach(card => {
+            card.addEventListener('click', function() {
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'click', {
+                        'event_category': 'engagement',
+                        'event_label': 'related_article'
+                    });
+                }
             });
         });
     </script>
