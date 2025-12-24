@@ -1070,10 +1070,12 @@ if __name__ == "__main__":
 
     # Refresh cache immediately on startup in production (ensures fresh articles after deploy)
     if env == 'production':
-        logging.info("🔄 Starting immediate cache refresh on startup...")
-        refresh_thread = threading.Thread(target=refresh_cache_worker)
-        refresh_thread.daemon = True
-        refresh_thread.start()
+        logging.info("🔄 Refreshing cache synchronously on startup (blocking until complete)...")
+        try:
+            refresh_cache_worker()  # Run synchronously, not in thread
+            logging.info("✅ Startup cache refresh completed successfully")
+        except Exception as e:
+            logging.error(f"❌ Startup cache refresh failed: {e}")
 
     # Start the background cache refresh thread
     initial_delay = 60 if env == 'production' else 20
