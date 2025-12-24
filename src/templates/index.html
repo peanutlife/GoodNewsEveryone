@@ -153,7 +153,7 @@
                             <div class="hero-content">
                                 <h2 class="hero-title topic-{{ hero_article.get('topic_name', 'general')|lower|replace(' ', '-') }}"
                                     style="--topic-color: var(--topic-{{ hero_article.get('topic_name', 'general')|lower|replace(' ', '-') }});">
-                                    <a href="{{ hero_article['link'] }}" target="_blank">{{ hero_article['title'] }}</a>
+                                    <a href="/article/{{ hero_article['article_id'] }}">{{ hero_article['title'] }}</a>
                                 </h2>
                                 <p class="hero-summary">
                                     {{ hero_article['summary'] | striptags | truncate(200) }}
@@ -198,7 +198,7 @@
                                     <article class="inspiration-tile">
                                         <h3 class="post-title topic-{{ article.get('topic_name', 'general')|lower|replace(' ', '-') }}"
                                             style="--topic-color: var(--topic-{{ article.get('topic_name', 'general')|lower|replace(' ', '-') }});">
-                                            <a href="{{ article['link'] }}" target="_blank">{{ article['title'] }}</a>
+                                            <a href="/article/{{ article['article_id'] }}">{{ article['title'] }}</a>
                                         </h3>
                                         <div class="post-metadata">
                                             <a href="/?topic={{ article.get('topic_name', 'general') }}" class="post-topic">
@@ -301,7 +301,7 @@
                                 <div class="post-body">
                                     <h3 class="post-title topic-{{ article.get('topic_name', 'general')|lower|replace(' ', '-') }}"
                                         style="--topic-color: var(--topic-{{ article.get('topic_name', 'general')|lower|replace(' ', '-') }});">
-                                        <a href="{{ article['link'] }}" target="_blank">{{ article['title'] }}</a>
+                                        <a href="/article/{{ article['article_id'] }}">{{ article['title'] }}</a>
                                     </h3>
                                     <p class="post-summary">
                                         {{ article['summary'] | striptags | truncate(150) }}
@@ -310,12 +310,12 @@
 
                                 <div class="post-actions">
                                     <div class="action-buttons">
-                                        <button class="action-button share-btn" data-url="{{ article['link'] }}" data-title="{{ article['title'] }}">
+                                        <button class="action-button share-btn" data-url="{{ url_for('article_detail', article_id=article['article_id'], _external=True) }}" data-title="{{ article['title'] }}">
                                             <i class="fas fa-share-alt"></i> Share
                                         </button>
 
-                                        <a href="{{ article['link'] }}" target="_blank" class="action-button read-btn">
-                                            <i class="fas fa-book-open"></i> Read
+                                        <a href="/article/{{ article['article_id'] }}" class="action-button read-btn">
+                                            <i class="fas fa-book-open"></i> Read More
                                         </a>
                                     </div>
 

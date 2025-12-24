@@ -1574,3 +1574,429 @@ footer p {
     display: none !important;
   }
 }
+
+/* ============================================
+   ARTICLE DETAIL PAGE STYLES
+   ============================================ */
+
+.article-page-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4);
+}
+
+.article-detail {
+  background: var(--pure-white);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-soft);
+  margin-bottom: var(--space-8);
+}
+
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.875rem;
+  color: var(--slate);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.article-topic {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--sunrise-orange);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--transition-base);
+}
+
+.article-topic:hover {
+  color: var(--morning-gold);
+}
+
+.topic-icon-inline {
+  width: 16px;
+  height: 16px;
+}
+
+.meta-separator {
+  color: var(--stone);
+}
+
+.article-source,
+.article-time {
+  color: var(--whisper);
+}
+
+.article-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--midnight);
+  margin: var(--space-4) 0 var(--space-6);
+}
+
+.article-image-hero {
+  width: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: var(--space-6);
+  box-shadow: var(--shadow-soft);
+}
+
+.article-image-hero img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.article-share {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) 0;
+  border-top: 1px solid var(--stone);
+  border-bottom: 1px solid var(--stone);
+  margin-bottom: var(--space-6);
+}
+
+.share-label {
+  font-weight: 600;
+  color: var(--midnight);
+  font-size: 0.875rem;
+}
+
+.share-buttons {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.share-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  font-size: 1rem;
+}
+
+.share-twitter {
+  background: #1DA1F2;
+  color: white;
+}
+
+.share-twitter:hover {
+  background: #1a8cd8;
+  transform: translateY(-2px);
+}
+
+.share-facebook {
+  background: #4267B2;
+  color: white;
+}
+
+.share-facebook:hover {
+  background: #365899;
+  transform: translateY(-2px);
+}
+
+.share-linkedin {
+  background: #0077B5;
+  color: white;
+}
+
+.share-linkedin:hover {
+  background: #006399;
+  transform: translateY(-2px);
+}
+
+.share-email {
+  background: var(--slate);
+  color: white;
+}
+
+.share-email:hover {
+  background: var(--midnight);
+  transform: translateY(-2px);
+}
+
+.share-copy {
+  background: var(--stone);
+  color: var(--midnight);
+}
+
+.share-copy:hover {
+  background: var(--whisper);
+  transform: translateY(-2px);
+}
+
+.article-content {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: var(--midnight);
+  margin-bottom: var(--space-8);
+}
+
+.article-content p {
+  margin-bottom: var(--space-4);
+}
+
+/* Why It Matters Banner - Fluid Design */
+.why-matters-banner {
+  background: linear-gradient(135deg,
+    rgba(255, 245, 225, 0.6) 0%,
+    rgba(255, 228, 181, 0.5) 100%);
+  border-left: 4px solid var(--sunrise-orange);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  margin: var(--space-6) 0;
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-start;
+  backdrop-filter: blur(10px);
+  transition: all var(--transition-base);
+}
+
+.why-matters-banner:hover {
+  background: linear-gradient(135deg,
+    rgba(255, 245, 225, 0.8) 0%,
+    rgba(255, 228, 181, 0.7) 100%);
+  transform: translateX(4px);
+}
+
+.why-matters-icon {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.why-matters-banner-content {
+  flex: 1;
+}
+
+.why-matters-banner-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--sunrise-orange);
+  margin: 0 0 var(--space-2) 0;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.85;
+}
+
+.why-matters-banner-text {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--slate);
+  margin: 0;
+  font-weight: 400;
+}
+
+.read-full-article {
+  text-align: center;
+  padding: var(--space-6);
+  background: var(--cloud);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-8);
+}
+
+.read-full-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  background: var(--sunrise-orange);
+  color: white;
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.125rem;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-soft);
+}
+
+.read-full-btn:hover {
+  background: var(--morning-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+}
+
+.source-attribution {
+  margin-top: var(--space-3);
+  font-size: 0.875rem;
+  color: var(--whisper);
+}
+
+.related-articles-section {
+  margin-top: var(--space-8);
+  padding-top: var(--space-8);
+  border-top: 2px solid var(--stone);
+}
+
+.section-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--midnight);
+  margin-bottom: var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.section-title i {
+  color: var(--sunrise-orange);
+}
+
+.related-articles-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.related-article-card {
+  background: var(--pure-white);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  transition: all var(--transition-base);
+  text-decoration: none;
+  display: block;
+  border: 1px solid var(--stone);
+}
+
+.related-article-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.related-article-image {
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+}
+
+.related-article-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-base);
+}
+
+.related-article-card:hover .related-article-image img {
+  transform: scale(1.05);
+}
+
+.related-article-content {
+  padding: var(--space-4);
+}
+
+.related-article-meta {
+  margin-bottom: var(--space-2);
+}
+
+.related-topic {
+  font-size: 0.75rem;
+  color: var(--sunrise-orange);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.related-article-title {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--midnight);
+  margin-bottom: var(--space-2);
+}
+
+.related-article-summary {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--slate);
+  margin: 0;
+}
+
+.view-more-container {
+  text-align: center;
+  margin-top: var(--space-6);
+}
+
+.view-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  background: var(--cloud);
+  color: var(--midnight);
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  transition: all var(--transition-base);
+  border: 2px solid var(--stone);
+}
+
+.view-more-btn:hover {
+  background: var(--stone);
+  border-color: var(--whisper);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .article-page-container {
+    padding: var(--space-4) var(--space-3);
+  }
+
+  .article-detail {
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .article-title {
+    font-size: 1.75rem;
+  }
+
+  .article-share {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .article-content {
+    font-size: 1rem;
+  }
+
+  .why-matters-banner {
+    padding: var(--space-4);
+    gap: var(--space-3);
+  }
+
+  .why-matters-icon {
+    font-size: 1.5rem;
+  }
+
+  .why-matters-banner-title {
+    font-size: 0.75rem;
+  }
+
+  .why-matters-banner-text {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  .related-articles-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+}

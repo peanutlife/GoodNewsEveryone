@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ article['title'] }} | Peanutlife - Good News Every Day</title>
+    <meta name="description" content="{{ article['summary'] | striptags | truncate(155) }}">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="{{ article['title'] }}">
+    <meta property="og:description" content="{{ article['summary'] | striptags | truncate(200) }}">
+    <meta property="og:image" content="{{ article.get('image_url', '') }}">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4295146235414490"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-content">
+            <a href="/" class="site-logo">
+                <span class="logo-icon">🥜</span>
+                <span class="logo-text">Peanutlife</span>
+            </a>
+            <p class="site-tagline">Good News Every Day</p>
+        </div>
+    </header>
+
+    <!-- Top Banner Ad -->
+    <div class="ad-block" style="max-width: 728px; margin: var(--space-4) auto;">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-4295146235414490"
+             data-ad-slot="5585311271"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <!-- Main Content -->
+    <main class="article-page-container">
+        <article class="article-detail">
+            <!-- Article Metadata -->
+            <div class="article-meta">
+                <a href="/?topic={{ article.get('topic_name', 'general') }}" class="article-topic">
+                    {% if article.get('topic_icon_path') %}
+                        <img src="{{ url_for('static', filename=article['topic_icon_path']) }}" alt="topic" class="topic-icon-inline">
+                    {% endif %}
+                    {{ article.get('topic_name', 'General')|title }}
+                </a>
+                <span class="meta-separator">•</span>
+                <span class="article-source">{{ article.get('source_name', 'Unknown Source') }}</span>
+                <span class="meta-separator">•</span>
+                <span class="article-time">{{ article['published'] | format_datetime }}</span>
+            </div>
+
+            <!-- Article Title -->
+            <h1 class="article-title">{{ article['title'] }}</h1>
+
+            <!-- Hero Image -->
+            {% if article.get('image_url') %}
+                <div class="article-image-hero">
+                    <img src="{{ article['image_url'] }}" alt="{{ article['title'] }}">
+                </div>
+            {% endif %}
+
+            <!-- Why This Matters Banner - After Hero Image -->
+            <div class="why-matters-banner">
+                <div class="why-matters-icon">💡</div>
+                <div class="why-matters-banner-content">
+                    <h3 class="why-matters-banner-title">Why This Matters</h3>
+                    <p class="why-matters-banner-text">
+                        {{ article.get('why_it_matters', 'This story represents the kind of positive change happening around the world.') }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Social Share Buttons -->
+            <div class="article-share">
+                <span class="share-label">Share this story:</span>
+                <div class="share-buttons">
+                    <a href="https://twitter.com/intent/tweet?url={{ request.url | urlencode }}&text={{ article['title'] | urlencode }}"
+                       target="_blank" class="share-btn share-twitter" title="Share on Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.url | urlencode }}"
+                       target="_blank" class="share-btn share-facebook" title="Share on Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.url | urlencode }}&title={{ article['title'] | urlencode }}"
+                       target="_blank" class="share-btn share-linkedin" title="Share on LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="mailto:?subject={{ article['title'] | urlencode }}&body={{ request.url | urlencode }}"
+                       class="share-btn share-email" title="Share via Email">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    <button class="share-btn share-copy" data-url="{{ request.url }}" title="Copy Link">
+                        <i class="fas fa-link"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Article Summary/Content -->
+            <div class="article-content">
+                {{ article['summary'] | striptags | truncate(600, True, '...') }}
+            </div>
+
+            <!-- Read Full Article CTA -->
+            <div class="read-full-article">
+                <a href="{{ article['link'] }}" target="_blank" rel="noopener noreferrer" class="read-full-btn">
+                    <i class="fas fa-book-open"></i>
+                    Read Full Article at {{ article.get('source_name', 'Source') }}
+                    <i class="fas fa-external-link-alt"></i>
+                </a>
+                <p class="source-attribution">
+                    Original story published by {{ article.get('source_name', 'the source') }}.
+                    Peanutlife curates and shares uplifting news to brighten your day.
+                </p>
+            </div>
+        </article>
+
+        <!-- In-Content Ad -->
+        <div class="ad-block" style="max-width: 728px; margin: var(--space-8) auto;">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4295146235414490"
+                 data-ad-slot="5585311271"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <!-- Related Articles -->
+        {% if related_articles %}
+        <section class="related-articles-section">
+            <h2 class="section-title">
+                <i class="fas fa-newspaper"></i> More Uplifting Stories You'll Love
+            </h2>
+
+            <div class="related-articles-grid">
+                {% for related in related_articles %}
+                <a href="/article/{{ related['article_id'] }}" class="related-article-card">
+                    {% if related.get('image_url') %}
+                        <div class="related-article-image">
+                            <img src="{{ related['image_url'] }}" alt="{{ related['title'] }}">
+                        </div>
+                    {% endif %}
+                    <div class="related-article-content">
+                        <div class="related-article-meta">
+                            <span class="related-topic">{{ related.get('topic_name', 'General')|title }}</span>
+                        </div>
+                        <h3 class="related-article-title">{{ related['title'] }}</h3>
+                        <p class="related-article-summary">
+                            {{ related['summary'] | striptags | truncate(120) }}
+                        </p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+
+            <div class="view-more-container">
+                <a href="/" class="view-more-btn">
+                    <i class="fas fa-arrow-left"></i> Back to All Stories
+                </a>
+            </div>
+        </section>
+        {% endif %}
+    </main>
+
+    <!-- Footer Ad -->
+    <div class="footer-ad">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-4295146235414490"
+             data-ad-slot="5585311271"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2024 Peanutlife. Spreading positivity, one story at a time.</p>
+        <p class="footer-links">
+            <a href="/">Home</a> •
+            <a href="mailto:contact@peanutlife.com">Contact</a>
+        </p>
+    </footer>
+
+    <!-- Copy Link to Clipboard Script -->
+    <script>
+        document.querySelectorAll('.share-copy').forEach(button => {
+            button.addEventListener('click', function() {
+                const url = this.dataset.url;
+                navigator.clipboard.writeText(url).then(() => {
+                    // Show toast notification
+                    const toast = document.createElement('div');
+                    toast.className = 'toast';
+                    toast.textContent = 'Link copied to clipboard!';
+                    document.body.appendChild(toast);
+
+                    setTimeout(() => {
+                        toast.classList.add('show');
+                    }, 100);
+
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                        setTimeout(() => toast.remove(), 300);
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

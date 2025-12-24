@@ -9,6 +9,7 @@ import hashlib
 import logging
 from datetime import datetime, timedelta
 from urllib.parse import urlparse
+from openai import OpenAI
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
@@ -382,6 +383,74 @@ def get_daily_quote():
         }
 
 
+def generate_why_it_matters(article_title, article_summary, topic_name):
+    """Generate a custom 'Why It Matters' section using OpenAI API"""
+    try:
+        # Get API key from config
+        openai_api_key = config['development'].OPENAI_API_KEY
+        if not openai_api_key:
+            logging.warning("OpenAI API key not configured, using fallback message")
+            return get_fallback_why_it_matters(topic_name)
+
+        # Initialize OpenAI client
+        client = OpenAI(api_key=openai_api_key)
+
+        # Create the prompt
+        prompt = f"""You are writing for Peanutlife, a website that curates positive, uplifting news.
+
+Article Title: {article_title}
+Article Summary: {article_summary[:500]}
+Topic: {topic_name}
+
+Write a compelling 2-3 sentence "Why This Matters" section that:
+- Explains the broader significance or impact of this story
+- Connects it to hope, progress, or positive change
+- Is specific to this article (use concrete details, numbers if mentioned)
+- Uses warm, inspiring tone
+- Avoids generic phrases
+
+Example good outputs:
+- "This breakthrough could bring clean energy to 2 million homes in foggy regions, reducing carbon emissions by 40% while cutting energy costs for families."
+- "Small acts of kindness like this demonstrate how community support can transform lives and inspire others to contribute to local change."
+
+Write only the "Why This Matters" text, nothing else:"""
+
+        # Call OpenAI API
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a writer for an uplifting news website. Write concise, specific, inspiring explanations."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=150,
+            temperature=0.7
+        )
+
+        why_it_matters = response.choices[0].message.content.strip()
+        logging.info(f"Generated 'Why It Matters' for article: {article_title[:50]}...")
+        return why_it_matters
+
+    except Exception as e:
+        logging.error(f"Error generating 'Why It Matters' with OpenAI: {e}")
+        return get_fallback_why_it_matters(topic_name)
+
+
+def get_fallback_why_it_matters(topic_name):
+    """Fallback 'Why It Matters' messages when OpenAI is unavailable"""
+    fallbacks = {
+        'environment': "Stories like this show real progress in protecting our planet and fighting climate change, giving us hope for a sustainable future.",
+        'health': "Medical breakthroughs like this offer hope to patients worldwide and represent years of dedicated research improving lives.",
+        'technology': "Innovations like this demonstrate how technology can solve real-world problems and make daily life better for millions.",
+        'science': "Scientific discoveries like this expand human knowledge and open new possibilities for addressing global challenges.",
+        'business': "Entrepreneurial stories like this show how innovation and determination can create positive change and opportunities.",
+        'relationships': "Stories of human connection like this remind us of the power of empathy, kindness, and community support.",
+        'general': "Stories like this remind us of the positive change happening around the world, giving us hope and inspiring us to contribute to a better future."
+    }
+
+    topic_lower = topic_name.lower() if topic_name else 'general'
+    return fallbacks.get(topic_lower, fallbacks['general'])
+
+
 def create_app():
     """Create and configure the Flask application"""
     app = Flask(
@@ -657,6 +726,8 @@ def initialize_app(app):
                     emoji = ''
             decorated_title = f"[{emoji} {article.get('topic_name', 'General').title()}] {article['title']}"
             article['decorated_title'] = decorated_title
+            # Add article ID for internal linking
+            article['article_id'] = str(hash(article['link']))
 
         # Get unique topics
         unique_topics = list(articles_by_topic.keys())
@@ -699,6 +770,81 @@ def initialize_app(app):
             total_pages=total_pages,
             total_articles=total_articles,
             daily_quote=daily_quote
+        )
+
+    @app.route("/article/<article_id>")
+    def article_detail(article_id):
+        """Display individual article page with full summary and related articles."""
+        global articles_by_topic
+
+        # Reload cache if needed
+        try:
+            if os.path.exists(PERMANENT_CACHE_FILE):
+                with open(PERMANENT_CACHE_FILE, 'r', encoding='utf-8') as f:
+                    cache_data = json.load(f)
+                    articles_by_topic = cache_data.get("articles", {})
+        except Exception as e:
+            logging.warning(f"Error loading cache file: {e}")
+
+        if not articles_by_topic:
+            articles_by_topic = article_cache.get("articles", {})
+
+        # Find the article by ID (using link as unique identifier)
+        all_articles = flatten_articles(articles_by_topic, sort_by_inspiration=True)
+
+        target_article = None
+        for article in all_articles:
+            # Create a simple ID from the link hash
+            current_id = str(hash(article['link']))
+            if current_id == article_id:
+                target_article = article
+                break
+
+        if not target_article:
+            return "Article not found", 404
+
+        # Get related articles from the same topic
+        related_articles = []
+        topic_name = target_article.get('topic_name', '')
+
+        for article in all_articles:
+            if article['link'] != target_article['link']:
+                if article.get('topic_name', '') == topic_name:
+                    related_articles.append(article)
+                    if len(related_articles) >= 6:
+                        break
+
+        # If not enough from same topic, add from other topics
+        if len(related_articles) < 6:
+            for article in all_articles:
+                if article['link'] != target_article['link'] and article not in related_articles:
+                    related_articles.append(article)
+                    if len(related_articles) >= 6:
+                        break
+
+        # Generate article IDs for related articles
+        for article in related_articles:
+            article['article_id'] = str(hash(article['link']))
+
+        # Generate "Why It Matters" section if not cached
+        if 'why_it_matters' not in target_article or not target_article['why_it_matters']:
+            target_article['why_it_matters'] = generate_why_it_matters(
+                target_article.get('title', ''),
+                target_article.get('summary', ''),
+                target_article.get('topic_name', 'General')
+            )
+            # TODO: Cache this back to permanent storage to avoid regenerating
+            logging.info(f"Generated new 'Why It Matters' for: {target_article.get('title', '')[:50]}")
+
+        # Get daily quote
+        daily_quote = get_daily_quote()
+
+        return render_template(
+            'article.html',
+            article=target_article,
+            related_articles=related_articles,
+            daily_quote=daily_quote,
+            last_updated=last_updated
         )
 
     @app.route("/refresh")
@@ -815,6 +961,8 @@ def initialize_app(app):
                     emoji = ''
             decorated_title = f"[{emoji} {article.get('topic_name', 'General').title()}] {article['title']}"
             article['decorated_title'] = decorated_title
+            # Add article ID for internal linking
+            article['article_id'] = str(hash(article['link']))
 
         # Get unique topics
         unique_topics = list(articles_by_topic.keys())
