@@ -81,9 +81,9 @@
                 <div class="why-matters-icon">💡</div>
                 <div class="why-matters-banner-content">
                     <h3 class="why-matters-banner-title">Why This Matters</h3>
-                    <p class="why-matters-banner-text">
-                        {{ article.get('why_it_matters', 'This story represents the kind of positive change happening around the world.') }}
-                    </p>
+                    <div class="why-matters-banner-text">
+                        {{ article.get('why_it_matters', 'This story represents the kind of positive change happening around the world.') | safe }}
+                    </div>
                 </div>
             </div>
 

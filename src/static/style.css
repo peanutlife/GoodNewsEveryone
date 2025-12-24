@@ -1799,6 +1799,15 @@ footer p {
   color: var(--slate);
   margin: 0;
   font-weight: 400;
+  white-space: pre-wrap;
+}
+
+.why-matters-banner-text p {
+  margin: 0 0 var(--space-3) 0;
+}
+
+.why-matters-banner-text p:last-child {
+  margin-bottom: 0;
 }
 
 .read-full-article {
