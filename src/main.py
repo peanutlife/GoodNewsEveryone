@@ -455,6 +455,12 @@ def get_fallback_why_it_matters(topic_name):
     return fallbacks.get(topic_lower, fallbacks['general'])
 
 
+def generate_article_id(article_link):
+    """Generate a stable, consistent article ID from the article link URL"""
+    # Use MD5 hash for stable IDs across sessions (hash() is not stable)
+    return hashlib.md5(article_link.encode('utf-8')).hexdigest()[:16]
+
+
 def create_app():
     """Create and configure the Flask application"""
     app = Flask(
@@ -731,7 +737,7 @@ def initialize_app(app):
             decorated_title = f"[{emoji} {article.get('topic_name', 'General').title()}] {article['title']}"
             article['decorated_title'] = decorated_title
             # Add article ID for internal linking
-            article['article_id'] = str(hash(article['link']))
+            article['article_id'] = generate_article_id(article['link'])
 
         # Get unique topics
         unique_topics = list(articles_by_topic.keys())
@@ -798,8 +804,8 @@ def initialize_app(app):
 
         target_article = None
         for article in all_articles:
-            # Create a simple ID from the link hash
-            current_id = str(hash(article['link']))
+            # Create a stable ID from the link using MD5
+            current_id = generate_article_id(article['link'])
             if current_id == article_id:
                 target_article = article
                 break
@@ -828,7 +834,7 @@ def initialize_app(app):
 
         # Generate article IDs for related articles
         for article in related_articles:
-            article['article_id'] = str(hash(article['link']))
+            article['article_id'] = generate_article_id(article['link'])
 
         # Generate "Why It Matters" section if not cached
         if 'why_it_matters' not in target_article or not target_article['why_it_matters']:
@@ -966,7 +972,7 @@ def initialize_app(app):
             decorated_title = f"[{emoji} {article.get('topic_name', 'General').title()}] {article['title']}"
             article['decorated_title'] = decorated_title
             # Add article ID for internal linking
-            article['article_id'] = str(hash(article['link']))
+            article['article_id'] = generate_article_id(article['link'])
 
         # Get unique topics
         unique_topics = list(articles_by_topic.keys())
