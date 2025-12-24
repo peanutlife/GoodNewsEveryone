@@ -385,6 +385,10 @@ def get_daily_quote():
 
 def generate_why_it_matters(article_title, article_summary, topic_name):
     """Generate a custom 'Why It Matters' section using OpenAI API"""
+    # TEMPORARILY DISABLED: Using fallback templates to avoid API costs
+    # TODO: Re-enable with proper caching to permanent storage
+    return get_fallback_why_it_matters(topic_name)
+
     try:
         # Get API key from config
         openai_api_key = config['development'].OPENAI_API_KEY
