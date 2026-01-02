@@ -1383,7 +1383,9 @@ footer p {
 
 /* Ad Container - Makes ads less intrusive */
 .ad-block {
+  width: 100%;
   max-width: 728px;
+  min-width: 300px;
   margin: var(--space-6) auto;
   padding: var(--space-4);
   background: var(--cloud);
@@ -1433,7 +1435,9 @@ footer p {
 /* Mobile ad adjustments */
 @media (max-width: 768px) {
   .ad-block {
+    width: 100%;
     max-width: 100%;
+    min-width: 280px;
     margin: var(--space-4) 0;
     padding: var(--space-3);
   }
