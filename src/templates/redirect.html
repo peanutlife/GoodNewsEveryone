@@ -61,6 +61,27 @@
             line-height: 1.4;
         }
 
+        .article-preview {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+        }
+
+        .article-preview p {
+            color: #555;
+            line-height: 1.6;
+            margin: 0 0 10px 0;
+        }
+
+        .source-attribution {
+            color: #888;
+            font-size: 14px;
+            font-style: italic;
+        }
+
         .countdown {
             font-size: 48px;
             font-weight: bold;
@@ -150,6 +171,16 @@
             <h2>{{ article_title }}</h2>
         </div>
 
+        <!-- Article Preview -->
+        {% if article_summary %}
+        <div class="article-preview">
+            <p>{{ article_summary }}</p>
+            {% if source_name %}
+            <p class="source-attribution"><strong>Source:</strong> {{ source_name }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
+
         <!-- Ad Space -->
         <div class="ad-container">
             <ins class="adsbygoogle"
@@ -161,10 +192,10 @@
         </div>
 
         <!-- Countdown -->
-        <div class="countdown" id="countdown">3</div>
-        <p class="countdown-text" id="countdown-text">Redirecting in <span id="seconds">3</span> seconds...</p>
+        <div class="countdown" id="countdown">10</div>
+        <p class="countdown-text" id="countdown-text">Redirecting in <span id="seconds">10</span> seconds...</p>
 
-        <!-- Skip Button (enabled after 1 second) -->
+        <!-- Skip Button (enabled after 3 seconds) -->
         <a href="{{ target_url }}" id="skip-btn" class="skip-button disabled">
             Continue to Article →
         </a>
@@ -178,8 +209,8 @@
         // Push ad
         (adsbygoogle = window.adsbygoogle || []).push({});
 
-        // Countdown and redirect
-        let timeLeft = 3;
+        // Countdown and redirect - 10 second timer
+        let timeLeft = 10;
         const countdownEl = document.getElementById('countdown');
         const secondsEl = document.getElementById('seconds');
         const skipBtn = document.getElementById('skip-btn');
@@ -208,11 +239,11 @@
             }
         }, 1000);
 
-        // Enable skip button after 1 second
+        // Enable skip button after 3 seconds (allows ad to load)
         setTimeout(() => {
             skipBtn.classList.remove('disabled');
             console.log('Skip button enabled');
-        }, 1000);
+        }, 3000);
 
         // Track redirect in Google Analytics
         if (typeof gtag !== 'undefined') {

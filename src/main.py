@@ -935,13 +935,17 @@ def initialize_app(app):
         """Interstitial page before redirecting to external article"""
         target_url = request.args.get('url')
         article_title = request.args.get('title', 'Read Full Story')
+        article_summary = request.args.get('summary', '')
+        source_name = request.args.get('source', '')
 
         if not target_url:
             return redirect(url_for('index'))
 
         return render_template('redirect.html',
                              target_url=target_url,
-                             article_title=article_title)
+                             article_title=article_title,
+                             article_summary=article_summary,
+                             source_name=source_name)
 
     @app.route("/refresh")
     def refresh_articles():
