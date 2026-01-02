@@ -161,12 +161,10 @@
         </div>
 
         <!-- Countdown -->
-        <div class="countdown" id="countdown">
-            <div class="spinner"></div>
-        </div>
+        <div class="countdown" id="countdown">3</div>
         <p class="countdown-text" id="countdown-text">Redirecting in <span id="seconds">3</span> seconds...</p>
 
-        <!-- Skip Button (enabled after 3 seconds) -->
+        <!-- Skip Button (enabled after 1 second) -->
         <a href="{{ target_url }}" id="skip-btn" class="skip-button disabled">
             Continue to Article →
         </a>
@@ -188,26 +186,32 @@
         const countdownText = document.getElementById('countdown-text');
         const targetUrl = {{ target_url|tojson }};
 
+        console.log('Redirect page loaded. Target URL:', targetUrl);
+
         // Update countdown every second
         const interval = setInterval(() => {
             timeLeft--;
+            console.log('Countdown:', timeLeft);
+
+            // Update both the big countdown and the text
+            countdownEl.textContent = timeLeft;
             secondsEl.textContent = timeLeft;
 
-            if (timeLeft === 0) {
+            if (timeLeft <= 0) {
                 clearInterval(interval);
+                console.log('Redirecting to:', targetUrl);
                 countdownText.textContent = 'Redirecting now...';
                 countdownEl.innerHTML = '<div class="spinner"></div>';
 
-                // Redirect after a brief moment
-                setTimeout(() => {
-                    window.location.href = targetUrl;
-                }, 500);
+                // Redirect immediately
+                window.location.href = targetUrl;
             }
         }, 1000);
 
         // Enable skip button after 1 second
         setTimeout(() => {
             skipBtn.classList.remove('disabled');
+            console.log('Skip button enabled');
         }, 1000);
 
         // Track redirect in Google Analytics

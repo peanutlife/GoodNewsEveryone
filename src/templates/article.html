@@ -227,7 +227,7 @@
 
             <!-- Read Full Article CTA -->
             <div class="read-full-article">
-                <a href="{{ article['link'] }}" target="_blank" rel="noopener noreferrer" class="read-full-btn">
+                <a href="{{ url_for('redirect_out', url=article['link'], title=article['title']) }}" class="read-full-btn">
                     <i class="fas fa-book-open"></i>
                     Read Full Article at {{ article.get('source_name', 'Source') }}
                     <i class="fas fa-external-link-alt"></i>
