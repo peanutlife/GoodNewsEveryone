@@ -179,8 +179,8 @@
                 {% endif %}
 
                 <div class="pick-footer">
-                    <a href="/article/{{ pick.get('article_slug', pick['article_id']) }}" class="pick-read-btn">
-                        <i class="fas fa-book-open"></i> Read Story
+                    <a href="{{ url_for('redirect_out', url=pick['link'], title=pick['title']) }}" class="pick-read-btn">
+                        <i class="fas fa-external-link-alt"></i> Read Full Story
                     </a>
                     <span class="pick-source">{{ pick.get('source_name', 'Source') }}</span>
                 </div>

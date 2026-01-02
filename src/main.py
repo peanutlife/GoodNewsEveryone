@@ -930,6 +930,19 @@ def initialize_app(app):
             last_updated=last_updated
         )
 
+    @app.route("/out")
+    def redirect_out():
+        """Interstitial page before redirecting to external article"""
+        target_url = request.args.get('url')
+        article_title = request.args.get('title', 'Read Full Story')
+
+        if not target_url:
+            return redirect(url_for('index'))
+
+        return render_template('redirect.html',
+                             target_url=target_url,
+                             article_title=article_title)
+
     @app.route("/refresh")
     def refresh_articles():
         """Force a refresh of articles"""
