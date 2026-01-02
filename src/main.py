@@ -41,7 +41,17 @@ cache_refresh_running = False
 
 # Define paths
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-DATA_DIR = os.path.join(BASE_DIR, "data")
+
+# Use Render persistent disk if available, otherwise local data dir
+if os.path.exists("/data"):
+    # Render persistent disk
+    DATA_DIR = "/data"
+    logging.info("✅ Using Render persistent disk: /data")
+else:
+    # Local development
+    DATA_DIR = os.path.join(BASE_DIR, "data")
+    logging.info("📁 Using local data directory")
+
 CACHE_FILE = os.path.join(os.path.dirname(__file__), "static", "articles_cache.json")
 PERMANENT_CACHE_FILE = os.path.join(DATA_DIR, "article_cache.json")
 QUOTES_FILE = os.path.join(os.path.dirname(__file__), "static", "quotes.json")
