@@ -55,14 +55,14 @@
     {
       "@context": "https://schema.org",
       "@type": "NewsArticle",
-      "headline": "{{ article['title'] | striptags | escapejs }}",
-      "description": "{{ article['summary'] | striptags | truncate(200) | escapejs }}",
-      "image": "{{ article.get('image_url', '') }}",
-      "datePublished": "{{ article['published'] }}",
-      "dateModified": "{{ article['published'] }}",
+      "headline": {{ article['title'] | striptags | tojson }},
+      "description": {{ (article['summary'] | striptags | truncate(200)) | tojson }},
+      "image": {{ article.get('image_url', '') | tojson }},
+      "datePublished": {{ article['published'] | tojson }},
+      "dateModified": {{ article['published'] | tojson }},
       "author": {
         "@type": "Organization",
-        "name": "{{ article.get('source_name', 'Peanutlife') }}",
+        "name": {{ article.get('source_name', 'Peanutlife') | tojson }},
         "url": "https://peanutlife.com"
       },
       "publisher": {
@@ -75,10 +75,10 @@
       },
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "{{ request.url }}"
+        "@id": {{ request.url | tojson }}
       },
-      "articleSection": "{{ article.get('topic_name', 'News') }}",
-      "keywords": "positive news, uplifting stories, good news, {{ article.get('topic_name', 'inspiration') }}"
+      "articleSection": {{ article.get('topic_name', 'News') | tojson }},
+      "keywords": {{ ("positive news, uplifting stories, good news, " + article.get('topic_name', 'inspiration')) | tojson }}
     }
     </script>
 
@@ -92,19 +92,19 @@
           "@type": "ListItem",
           "position": 1,
           "name": "Home",
-          "item": "{{ url_for('index', _external=True) }}"
+          "item": {{ url_for('index', _external=True) | tojson }}
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "{{ article.get('topic_name', 'News') | title }}",
-          "item": "{{ url_for('index', topic=article.get('topic_name', 'general'), _external=True) }}"
+          "name": {{ (article.get('topic_name', 'News') | title) | tojson }},
+          "item": {{ url_for('index', topic=article.get('topic_name', 'general'), _external=True) | tojson }}
         },
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "{{ article['title'] | striptags | truncate(60) }}",
-          "item": "{{ request.url }}"
+          "name": {{ (article['title'] | striptags | truncate(60)) | tojson }},
+          "item": {{ request.url | tojson }}
         }
       ]
     }
