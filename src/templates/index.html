@@ -13,8 +13,27 @@
 </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Project Peanutlife - Your Daily Feed of Positive News</title>
-    <meta name="description" content="Project Peanutlife brings you the most inspiring and uplifting news stories from around the world.">
+    <title>Peanutlife - Uplifting News & Inspiring Stories Daily | Positive News Today</title>
+    <meta name="description" content="Discover inspiring news and uplifting stories every day. Peanutlife curates the most positive news from around the world across topics like health, environment, technology, and human kindness. Start your day with good news!">
+    <meta name="keywords" content="positive news, good news, uplifting stories, inspiring news, happy news, feel-good stories, optimistic news, hopeful news">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ request.url }}">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Peanutlife - Uplifting News & Inspiring Stories Daily">
+    <meta property="og:description" content="Discover inspiring news and uplifting stories every day. Peanutlife curates the most positive news from around the world.">
+    <meta property="og:image" content="https://peanutlife.com/static/icons/icon-512x512.png">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:site_name" content="Peanutlife">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Peanutlife - Uplifting News & Inspiring Stories Daily">
+    <meta name="twitter:description" content="Discover inspiring news and uplifting stories every day. Start your day with good news!">
+    <meta name="twitter:image" content="https://peanutlife.com/static/icons/icon-512x512.png">
+    <meta name="twitter:site" content="@peanutlife">
 
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#FF6B35">
@@ -38,6 +57,52 @@
 
     <!-- AdSense loader (load once) -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4295146235414490" crossorigin="anonymous"></script>
+
+    <!-- JSON-LD Structured Data for Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Peanutlife",
+      "alternateName": "Project Peanutlife",
+      "url": "https://peanutlife.com",
+      "logo": "https://peanutlife.com/static/icons/icon-512x512.png",
+      "description": "Peanutlife curates the most inspiring and uplifting news stories from around the world. Discover positive news daily.",
+      "sameAs": [
+        "https://twitter.com/peanutlife",
+        "https://facebook.com/peanutlife"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "contact@peanutlife.com",
+        "contactType": "Customer Service"
+      }
+    }
+    </script>
+
+    <!-- JSON-LD Structured Data for Website -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Peanutlife",
+      "url": "https://peanutlife.com",
+      "description": "Your daily source for uplifting news and inspiring stories from around the world.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Peanutlife",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://peanutlife.com/static/icons/icon-512x512.png"
+        }
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://peanutlife.com/?topic={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
 </head>
 
 <body>
@@ -146,14 +211,14 @@
                         <article class="hero-article">
                             {% if hero_article.get('image_url') %}
                                 <div class="hero-image">
-                                    <img src="{{ hero_article['image_url'] }}" alt="{{ hero_article['title'] }}">
+                                    <img src="{{ hero_article['image_url'] }}" alt="{{ hero_article['title'] }}" loading="eager">
                                 </div>
                             {% endif %}
 
                             <div class="hero-content">
                                 <h2 class="hero-title topic-{{ hero_article.get('topic_name', 'general')|lower|replace(' ', '-') }}"
                                     style="--topic-color: var(--topic-{{ hero_article.get('topic_name', 'general')|lower|replace(' ', '-') }});">
-                                    <a href="/article/{{ hero_article['article_id'] }}">{{ hero_article['title'] }}</a>
+                                    <a href="/article/{{ hero_article.get('article_slug', hero_article['article_id']) }}">{{ hero_article['title'] }}</a>
                                 </h2>
                                 <p class="hero-summary">
                                     {{ hero_article['summary'] | striptags | truncate(200) }}
@@ -198,7 +263,7 @@
                                     <article class="inspiration-tile">
                                         <h3 class="post-title topic-{{ article.get('topic_name', 'general')|lower|replace(' ', '-') }}"
                                             style="--topic-color: var(--topic-{{ article.get('topic_name', 'general')|lower|replace(' ', '-') }});">
-                                            <a href="/article/{{ article['article_id'] }}">{{ article['title'] }}</a>
+                                            <a href="/article/{{ article.get('article_slug', article['article_id']) }}">{{ article['title'] }}</a>
                                         </h3>
                                         <div class="post-metadata">
                                             <a href="/?topic={{ article.get('topic_name', 'general') }}" class="post-topic">
@@ -270,7 +335,7 @@
                         <div class="post">
                             {% if article.get('image_url') %}
                                 <div class="post-image">
-                                    <img src="{{ article['image_url'] }}" alt="Article image">
+                                    <img src="{{ article['image_url'] }}" alt="{{ article['title'] }}" loading="lazy">
                                 </div>
                             {% endif %}
 
@@ -301,7 +366,7 @@
                                 <div class="post-body">
                                     <h3 class="post-title topic-{{ article.get('topic_name', 'general')|lower|replace(' ', '-') }}"
                                         style="--topic-color: var(--topic-{{ article.get('topic_name', 'general')|lower|replace(' ', '-') }});">
-                                        <a href="/article/{{ article['article_id'] }}">{{ article['title'] }}</a>
+                                        <a href="/article/{{ article.get('article_slug', article['article_id']) }}">{{ article['title'] }}</a>
                                     </h3>
                                     <p class="post-summary">
                                         {{ article['summary'] | striptags | truncate(150) }}
@@ -310,11 +375,11 @@
 
                                 <div class="post-actions">
                                     <div class="action-buttons">
-                                        <button class="action-button share-btn" data-url="{{ url_for('article_detail', article_id=article['article_id'], _external=True) }}" data-title="{{ article['title'] }}">
+                                        <button class="action-button share-btn" data-url="{{ url_for('article_detail', article_id=article.get('article_slug', article['article_id']), _external=True) }}" data-title="{{ article['title'] }}">
                                             <i class="fas fa-share-alt"></i> Share
                                         </button>
 
-                                        <a href="/article/{{ article['article_id'] }}" class="action-button read-btn">
+                                        <a href="/article/{{ article.get('article_slug', article['article_id']) }}" class="action-button read-btn">
                                             <i class="fas fa-book-open"></i> Read More
                                         </a>
                                     </div>

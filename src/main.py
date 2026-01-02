@@ -461,6 +461,27 @@ def generate_article_id(article_link):
     return hashlib.md5(article_link.encode('utf-8')).hexdigest()[:16]
 
 
+def generate_article_slug(title):
+    """Generate SEO-friendly URL slug from article title"""
+    import unicodedata
+
+    # Normalize unicode characters
+    slug = unicodedata.normalize('NFKD', title)
+    slug = slug.encode('ascii', 'ignore').decode('ascii')
+
+    # Convert to lowercase and replace spaces with hyphens
+    slug = slug.lower()
+    slug = re.sub(r'[^\w\s-]', '', slug)  # Remove non-word chars except hyphens
+    slug = re.sub(r'[-\s]+', '-', slug)   # Replace multiple spaces/hyphens with single hyphen
+    slug = slug.strip('-')                 # Remove leading/trailing hyphens
+
+    # Limit length to 60 characters
+    if len(slug) > 60:
+        slug = slug[:60].rsplit('-', 1)[0]  # Cut at last word boundary
+
+    return slug or 'article'  # Fallback if slug is empty
+
+
 def create_app():
     """Create and configure the Flask application"""
     app = Flask(
@@ -736,8 +757,9 @@ def initialize_app(app):
                     emoji = ''
             decorated_title = f"[{emoji} {article.get('topic_name', 'General').title()}] {article['title']}"
             article['decorated_title'] = decorated_title
-            # Add article ID for internal linking
+            # Add article ID and slug for internal linking
             article['article_id'] = generate_article_id(article['link'])
+            article['article_slug'] = generate_article_slug(article['title'])
 
         # Get unique topics
         unique_topics = list(articles_by_topic.keys())
@@ -784,7 +806,13 @@ def initialize_app(app):
 
     @app.route("/article/<article_id>")
     def article_detail(article_id):
-        """Display individual article page with full summary and related articles."""
+        """Display individual article page - supports both legacy IDs and SEO slugs.
+
+        Legacy URL: /article/a1b2c3d4e5f6 (MD5 hash)
+        SEO URL: /article/inspiring-story-about-kindness (slug)
+
+        For legacy IDs, redirects to SEO URL.
+        """
         global articles_by_topic
 
         # Reload cache if needed
@@ -799,19 +827,36 @@ def initialize_app(app):
         if not articles_by_topic:
             articles_by_topic = article_cache.get("articles", {})
 
-        # Find the article by ID (using link as unique identifier)
+        # Find the article by ID or slug
         all_articles = flatten_articles(articles_by_topic, sort_by_inspiration=True)
 
         target_article = None
-        for article in all_articles:
-            # Create a stable ID from the link using MD5
-            current_id = generate_article_id(article['link'])
-            if current_id == article_id:
-                target_article = article
-                break
+        is_legacy_id = False
+
+        # Check if this is a legacy MD5 ID (16 hex characters)
+        if len(article_id) == 16 and all(c in '0123456789abcdef' for c in article_id):
+            is_legacy_id = True
+            # Find article by legacy ID
+            for article in all_articles:
+                current_id = generate_article_id(article['link'])
+                if current_id == article_id:
+                    target_article = article
+                    break
+        else:
+            # Find article by slug
+            for article in all_articles:
+                article_slug = generate_article_slug(article['title'])
+                if article_slug == article_id:
+                    target_article = article
+                    break
 
         if not target_article:
             return "Article not found", 404
+
+        # If accessed via legacy ID, redirect to SEO-friendly slug URL
+        if is_legacy_id:
+            new_slug = generate_article_slug(target_article['title'])
+            return redirect(url_for('article_detail', article_id=new_slug), code=301)
 
         # Get related articles from the same topic
         related_articles = []
@@ -832,9 +877,10 @@ def initialize_app(app):
                     if len(related_articles) >= 6:
                         break
 
-        # Generate article IDs for related articles
+        # Generate article IDs and slugs for related articles
         for article in related_articles:
             article['article_id'] = generate_article_id(article['link'])
+            article['article_slug'] = generate_article_slug(article['title'])
 
         # Generate "Why It Matters" section if not cached
         if 'why_it_matters' not in target_article or not target_article['why_it_matters']:
@@ -971,8 +1017,9 @@ def initialize_app(app):
                     emoji = ''
             decorated_title = f"[{emoji} {article.get('topic_name', 'General').title()}] {article['title']}"
             article['decorated_title'] = decorated_title
-            # Add article ID for internal linking
+            # Add article ID and slug for internal linking
             article['article_id'] = generate_article_id(article['link'])
+            article['article_slug'] = generate_article_slug(article['title'])
 
         # Get unique topics
         unique_topics = list(articles_by_topic.keys())
@@ -1033,27 +1080,80 @@ def initialize_app(app):
 
     @app.route('/sitemap.xml')
     def sitemap():
-        """Generate sitemap for search engines."""
+        """Generate dynamic sitemap for search engines with all articles."""
         from flask import Response
+        global articles_by_topic
 
+        # Reload cache if needed
+        try:
+            if os.path.exists(PERMANENT_CACHE_FILE):
+                with open(PERMANENT_CACHE_FILE, 'r', encoding='utf-8') as f:
+                    cache_data = json.load(f)
+                    articles_by_topic = cache_data.get("articles", {})
+        except Exception as e:
+            logging.warning(f"Error loading cache for sitemap: {e}")
+
+        if not articles_by_topic:
+            articles_by_topic = article_cache.get("articles", {})
+
+        # Get all articles
+        all_articles = flatten_articles(articles_by_topic, sort_by_inspiration=True)
+
+        # Start building sitemap XML
         sitemap_xml = '''<?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-        <url>
-            <loc>https://peanutlife.com/</loc>
-            <changefreq>hourly</changefreq>
-            <priority>1.0</priority>
-        </url>
-        <url>
-            <loc>https://peanutlife.com/auth/signup</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.8</priority>
-        </url>
-        <url>
-            <loc>https://peanutlife.com/auth/subscribe</loc>
-            <changefreq>monthly</changefreq>
-            <priority>0.8</priority>
-        </url>
-    </urlset>'''
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://peanutlife.com/</loc>
+        <changefreq>hourly</changefreq>
+        <priority>1.0</priority>
+        <lastmod>''' + datetime.utcnow().strftime('%Y-%m-%d') + '''</lastmod>
+    </url>
+    <url>
+        <loc>https://peanutlife.com/auth/signup</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://peanutlife.com/auth/subscribe</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>'''
+
+        # Add all unique topics
+        unique_topics = list(articles_by_topic.keys())
+        for topic in unique_topics:
+            sitemap_xml += f'''
+    <url>
+        <loc>https://peanutlife.com/?topic={topic}</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>'''
+
+        # Add all article pages (limit to most recent 1000 for sitemap size)
+        for article in all_articles[:1000]:
+            article_slug = generate_article_slug(article['title'])
+            article_date = article.get('published', datetime.utcnow().isoformat())
+
+            # Parse the date and format it
+            try:
+                if isinstance(article_date, str):
+                    pub_date = datetime.fromisoformat(article_date)
+                else:
+                    pub_date = article_date
+                lastmod = pub_date.strftime('%Y-%m-%d')
+            except:
+                lastmod = datetime.utcnow().strftime('%Y-%m-%d')
+
+            sitemap_xml += f'''
+    <url>
+        <loc>https://peanutlife.com/article/{article_slug}</loc>
+        <lastmod>{lastmod}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+    </url>'''
+
+        sitemap_xml += '''
+</urlset>'''
 
         return Response(sitemap_xml, mimetype='application/xml')
 
