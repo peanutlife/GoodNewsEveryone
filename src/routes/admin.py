@@ -12,8 +12,9 @@ from src.config import config
 # Configure logging
 logger = logging.getLogger(__name__)
 
-# Admin blueprint
-admin_bp = Blueprint("admin", __name__, template_folder="../templates/admin", url_prefix="/admin")
+# Admin blueprint with dynamic URL prefix from environment
+ADMIN_PATH = os.environ.get('ADMIN_PATH', '/admin')
+admin_bp = Blueprint("admin", __name__, template_folder="../templates/admin", url_prefix=ADMIN_PATH)
 
 # --- Helper functions ---
 def get_admin_credentials():

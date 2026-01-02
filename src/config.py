@@ -57,6 +57,7 @@ class Config:
     # Admin
     ADMIN_USER = os.environ.get('ADMIN_USER')
     ADMIN_PASS = os.environ.get('ADMIN_PASS')
+    ADMIN_PATH = os.environ.get('ADMIN_PATH', '/admin')  # Default to /admin if not set
 
     # API Keys
     OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
