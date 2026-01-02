@@ -131,6 +131,65 @@
         </div>
     </header>
 
+    <!-- Editor's Picks Section (Full Width Above Main Layout) -->
+    {% if editors_picks and page == 1 and not selected_topic %}
+    <section class="editors-picks-hero">
+        <div class="editors-picks-header">
+            <div class="picks-badge">
+                <i class="fas fa-star"></i>
+                TODAY'S EDITOR'S PICKS
+            </div>
+            <p class="picks-subtitle">Curated by Peanutlife · {{ now.strftime('%B %d, %Y') }}</p>
+        </div>
+
+        <div class="editors-picks-grid">
+            {% for pick in editors_picks %}
+            <article class="editors-pick-card">
+                {% if pick.pick_category %}
+                <div class="pick-category">
+                    {% if pick.pick_category == 'science' %}🔬 SCIENCE
+                    {% elif pick.pick_category == 'planet' %}🌍 PLANET
+                    {% elif pick.pick_category == 'people' %}❤️ PEOPLE
+                    {% elif pick.pick_category == 'kindness' %}🤝 KINDNESS
+                    {% elif pick.pick_category == 'innovation' %}💡 INNOVATION
+                    {% elif pick.pick_category == 'achievement' %}🏆 ACHIEVEMENT
+                    {% elif pick.pick_category == 'animals' %}🐾 ANIMALS
+                    {% elif pick.pick_category == 'culture' %}🎨 CULTURE
+                    {% elif pick.pick_category == 'social' %}👥 SOCIAL PROGRESS
+                    {% elif pick.pick_category == 'triumph' %}💪 TRIUMPH
+                    {% else %}📰 NEWS{% endif %}
+                </div>
+                {% endif %}
+
+                {% if pick.get('image_url') %}
+                <div class="pick-image">
+                    <img src="{{ pick['image_url'] }}" alt="{{ pick['title'] }}" loading="eager">
+                </div>
+                {% endif %}
+
+                <h3 class="pick-title">
+                    <a href="/article/{{ pick.get('article_slug', pick['article_id']) }}">{{ pick['title'] }}</a>
+                </h3>
+
+                {% if pick.editors_note %}
+                <div class="pick-note">
+                    <strong>📝 Why It Matters:</strong>
+                    <p>{{ pick.editors_note }}</p>
+                </div>
+                {% endif %}
+
+                <div class="pick-footer">
+                    <a href="/article/{{ pick.get('article_slug', pick['article_id']) }}" class="pick-read-btn">
+                        <i class="fas fa-book-open"></i> Read Story
+                    </a>
+                    <span class="pick-source">{{ pick.get('source_name', 'Source') }}</span>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
     <!-- Main Layout Container -->
     <div class="layout-container">
         <!-- Left Sidebar -->

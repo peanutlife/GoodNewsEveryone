@@ -146,6 +146,7 @@
             <nav class="admin-nav">
                 <span>Welcome, {{ username }}!</span>
                 <a href="{{ url_for("admin.dashboard") }}">Dashboard Home</a>
+                <a href="{{ url_for("admin.editors_picks") }}" style="background: #FF6B35; color: white; padding: 0.5rem 1rem; border-radius: 4px; font-weight: 600;">📝 Editor's Picks</a>
                 <a href="{{ url_for("admin.manage_feeds") }}">Manage Feeds</a>
                 <a href="{{ url_for("admin.logout") }}">Logout</a>
             </nav>

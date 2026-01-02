@@ -337,6 +337,14 @@ def flatten_articles(articles_by_topic, sort_by_inspiration=True, min_score=None
             else:
                 article['_published_dt'] = datetime.utcnow()
 
+            # Initialize editor's pick fields if not present
+            if 'is_editors_pick' not in article:
+                article['is_editors_pick'] = False
+            if 'editors_note' not in article:
+                article['editors_note'] = ''
+            if 'pick_category' not in article:
+                article['pick_category'] = ''
+
             flat.append(article)
 
     if sort_by_inspiration:
@@ -607,6 +615,11 @@ def initialize_app(app):
     app.register_blueprint(auth_bp)
 
     # Register template filters
+    @app.template_filter("md5_hash")
+    def md5_hash_filter(text):
+        """Generate MD5 hash for template use"""
+        return hashlib.md5(str(text).encode('utf-8')).hexdigest()[:8]
+
     @app.template_filter("format_datetime")
     def format_datetime_filter(iso_string):
         try:
@@ -799,6 +812,9 @@ def initialize_app(app):
         # Get today's quote
         daily_quote = get_daily_quote()
 
+        # Get editor's picks (top 5 articles marked as editor's picks)
+        editors_picks = [a for a in all_articles if a.get('is_editors_pick', False)][:5]
+
         return render_template(
             "index.html",
             articles=paginated_articles,
@@ -811,7 +827,8 @@ def initialize_app(app):
             page=page,
             total_pages=total_pages,
             total_articles=total_articles,
-            daily_quote=daily_quote
+            daily_quote=daily_quote,
+            editors_picks=editors_picks
         )
 
     @app.route("/article/<article_id>")

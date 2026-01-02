@@ -190,3 +190,124 @@ def remove_article():
 
     # Redirect back to the dashboard
     return redirect(url_for("admin.dashboard"))
+
+
+# --- Editor's Picks Routes ---
+
+@admin_bp.route("/editors-picks", methods=["GET"])
+@login_required
+def editors_picks():
+    """Manage Editor's Picks - select top 5 daily articles"""
+    import json
+    from datetime import datetime
+    
+    # Load articles from cache
+    cache_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "..", "data", "article_cache.json")
+    
+    try:
+        with open(cache_file, 'r', encoding='utf-8') as f:
+            cache_data = json.load(f)
+            articles_by_topic = cache_data.get("articles", {})
+    except Exception as e:
+        logger.error(f"Error loading cache: {e}")
+        articles_by_topic = {}
+    
+    # Flatten articles
+    all_articles = []
+    for topic, articles in articles_by_topic.items():
+        for article in articles:
+            # Add topic info
+            article['topic'] = topic
+            # Check if already an editor's pick
+            if 'is_editors_pick' not in article:
+                article['is_editors_pick'] = False
+            all_articles.append(article)
+    
+    # Sort by inspiration score (highest first)
+    all_articles.sort(key=lambda x: x.get('inspiration_score', 0), reverse=True)
+    
+    # Get current editor's picks
+    current_picks = [a for a in all_articles if a.get('is_editors_pick', False)]
+    
+    # Category options
+    categories = [
+        {'emoji': '🔬', 'name': 'Science', 'id': 'science'},
+        {'emoji': '🌍', 'name': 'Planet', 'id': 'planet'},
+        {'emoji': '❤️', 'name': 'People', 'id': 'people'},
+        {'emoji': '🤝', 'name': 'Kindness', 'id': 'kindness'},
+        {'emoji': '💡', 'name': 'Innovation', 'id': 'innovation'},
+        {'emoji': '🏆', 'name': 'Achievement', 'id': 'achievement'},
+        {'emoji': '🐾', 'name': 'Animals', 'id': 'animals'},
+        {'emoji': '🎨', 'name': 'Culture', 'id': 'culture'},
+        {'emoji': '👥', 'name': 'Social Progress', 'id': 'social'},
+        {'emoji': '💪', 'name': 'Overcoming Odds', 'id': 'triumph'},
+    ]
+    
+    return render_template("admin/editors_picks.html", 
+                          articles=all_articles[:50],  # Show top 50 candidates
+                          current_picks=current_picks,
+                          categories=categories,
+                          today=datetime.utcnow().strftime('%B %d, %Y'))
+
+
+@admin_bp.route("/editors-picks/save", methods=["POST"])
+@login_required
+def save_editors_picks():
+    """Save editor's picks selections"""
+    import json
+    import hashlib
+    
+    # Get form data
+    selected_articles = request.form.getlist('selected_articles')  # List of article links
+    editors_notes = {}
+    pick_categories = {}
+    
+    # Get notes and categories for each selected article
+    for link in selected_articles:
+        # Create a safe key from the link
+        link_hash = hashlib.md5(link.encode('utf-8')).hexdigest()[:8]
+        note_key = f'note_{link_hash}'
+        category_key = f'category_{link_hash}'
+        
+        editors_notes[link] = request.form.get(note_key, '')
+        pick_categories[link] = request.form.get(category_key, '')
+    
+    # Load cache
+    cache_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "..", "data", "article_cache.json")
+    
+    try:
+        with open(cache_file, 'r', encoding='utf-8') as f:
+            cache_data = json.load(f)
+        
+        # Update articles
+        articles_by_topic = cache_data.get("articles", {})
+        
+        # First, clear all existing editor's picks
+        for topic in articles_by_topic:
+            for article in articles_by_topic[topic]:
+                article['is_editors_pick'] = False
+                article['editors_note'] = ''
+                article['pick_category'] = ''
+        
+        # Now set the new editor's picks
+        for topic in articles_by_topic:
+            for article in articles_by_topic[topic]:
+                if article['link'] in selected_articles:
+                    article['is_editors_pick'] = True
+                    article['editors_note'] = editors_notes.get(article['link'], '')
+                    article['pick_category'] = pick_categories.get(article['link'], '')
+                    logger.info(f"Set editor's pick: {article['title']}")
+        
+        # Save back to cache
+        cache_data['articles'] = articles_by_topic
+        with open(cache_file, 'w', encoding='utf-8') as f:
+            json.dump(cache_data, f, ensure_ascii=False, indent=2)
+        
+        flash(f"Successfully saved {len(selected_articles)} editor's picks!", "success")
+        logger.info(f"Saved {len(selected_articles)} editor's picks")
+        
+    except Exception as e:
+        logger.error(f"Error saving editor's picks: {e}")
+        flash(f"Error saving editor's picks: {str(e)}", "danger")
+    
+    return redirect(url_for('admin.editors_picks'))
