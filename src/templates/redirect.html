@@ -209,9 +209,6 @@
     </div>
 
     <script>
-        // Push ad
-        (adsbygoogle = window.adsbygoogle || []).push({});
-
         // Drudge Report model: Fast redirect with ad impression
         let timeLeft = 5;  // Reduced to 5 seconds
         const countdownEl = document.getElementById('countdown');
@@ -255,6 +252,13 @@
                 'event_category': 'engagement',
                 'event_label': targetUrl
             });
+        }
+
+        // Push ad after countdown starts (prevents blocking)
+        try {
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (e) {
+            console.log('AdSense error (non-fatal):', e);
         }
     </script>
 </body>
