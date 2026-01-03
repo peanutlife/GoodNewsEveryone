@@ -195,8 +195,8 @@
         </div>
 
         <!-- Countdown -->
-        <div class="countdown" id="countdown">10</div>
-        <p class="countdown-text" id="countdown-text">Redirecting in <span id="seconds">10</span> seconds...</p>
+        <div class="countdown" id="countdown">5</div>
+        <p class="countdown-text" id="countdown-text">Redirecting in <span id="seconds">5</span> seconds...</p>
 
         <!-- Skip Button (enabled after 3 seconds) -->
         <a href="{{ target_url }}" id="skip-btn" class="skip-button disabled">
@@ -212,8 +212,8 @@
         // Push ad
         (adsbygoogle = window.adsbygoogle || []).push({});
 
-        // Countdown and redirect - 10 second timer
-        let timeLeft = 10;
+        // Drudge Report model: Fast redirect with ad impression
+        let timeLeft = 5;  // Reduced to 5 seconds
         const countdownEl = document.getElementById('countdown');
         const secondsEl = document.getElementById('seconds');
         const skipBtn = document.getElementById('skip-btn');
@@ -221,6 +221,13 @@
         const targetUrl = {{ target_url|tojson }};
 
         console.log('Redirect page loaded. Target URL:', targetUrl);
+
+        // Update initial display
+        countdownEl.textContent = timeLeft;
+        secondsEl.textContent = timeLeft;
+
+        // Enable skip button immediately
+        skipBtn.classList.remove('disabled');
 
         // Update countdown every second
         const interval = setInterval(() => {
@@ -241,12 +248,6 @@
                 window.location.href = targetUrl;
             }
         }, 1000);
-
-        // Enable skip button after 3 seconds (allows ad to load)
-        setTimeout(() => {
-            skipBtn.classList.remove('disabled');
-            console.log('Skip button enabled');
-        }, 3000);
 
         // Track redirect in Google Analytics
         if (typeof gtag !== 'undefined') {
