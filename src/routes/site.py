@@ -304,6 +304,25 @@ def pipeline_run():
     return jsonify({"ok": True, "message": "run started; watch /_pipeline"}), 202
 
 
+def _admin_ok() -> bool:
+    import hmac
+    from flask import current_app
+    auth = request.authorization
+    user, pw = current_app.config.get("ADMIN_USER"), current_app.config.get("ADMIN_PASS")
+    return bool(auth and user and pw and hmac.compare_digest(auth.username or "", user) and hmac.compare_digest(auth.password or "", pw))
+
+
+@site_bp.route("/_pipeline/digest", methods=["POST"])
+def pipeline_digest():
+    """Send the morning email now. ?to=you@example.com sends a single test copy; without it, sends to everyone due."""
+    from src.digest import send_digest
+    if not _admin_ok():
+        return jsonify({"error": "admin credentials required"}), 401, {"WWW-Authenticate": 'Basic realm="peanut"'}
+    to = (request.args.get("to") or "").strip() or None
+    force = request.args.get("force") == "1"
+    return jsonify(send_digest(test_email=to, force=force))
+
+
 @site_bp.route("/_pipeline")
 def pipeline_status():
     """Token usage and estimated spend, per UTC day, for the Claude calls the pipeline made."""

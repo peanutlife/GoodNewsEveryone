@@ -218,3 +218,39 @@ def test_pipeline_run_endpoint_requires_admin(client, app):
     assert client.post("/_pipeline/run", auth=("admin", "wrong")).status_code == 401
     r = client.get("/_pipeline")
     assert r.status_code == 200 and "scheduler" in r.get_json()
+
+
+# ---------- digest ----------
+
+def test_digest_builds_and_sends_once_per_day(app, monkeypatch):
+    from src import digest
+    from src.models.subscriber import EmailSubscriber
+    sections = list(SECTIONS)
+    for i in range(20):
+        db.session.add(_article(i, section=sections[i % len(sections)], source=f"Src{i % 7}"))
+    db.session.add(EmailSubscriber(email="a@example.com", unsubscribe_token="tok-a", is_active=True))
+    db.session.add(EmailSubscriber(email="b@example.com", unsubscribe_token="tok-b", is_active=False))
+    db.session.commit()
+    ed = build_edition("global", date.today(), dry_run=True)
+    html_out = digest.build_html(ed, Article.query.filter(Article.id.in_(ed.picks)).all(), "https://x/unsub")
+    assert "Story" in html_out and "unsub" in html_out and "caught up" in html_out
+
+    sent = []
+    monkeypatch.setattr(digest, "DIGEST_HOUR", 0)
+    import src.email_service as es
+    monkeypatch.setattr(es.EmailService, "send_email", lambda self, to, subject, html, text_content=None: sent.append((to, subject)) or True)
+    monkeypatch.setattr("src.config.config", {"testing": type("C", (), {"MAIL_USERNAME": "u", "MAIL_PASSWORD": "p", "MAIL_SERVER": "s", "MAIL_PORT": 1, "MAIL_USE_TLS": False, "MAIL_DEFAULT_SENDER": "n@x"})(), "production": None})
+    monkeypatch.setenv("FLASK_ENV", "testing")
+    assert digest.digest_due() is True
+    r = digest.send_digest()
+    assert r["sent"] == 1 and [s[0] for s in sent] == ["a@example.com"]
+    assert digest.digest_due() is False  # everyone active has today's
+    assert digest.send_digest()["skipped"] == 1
+
+
+def test_subscribe_redirects_to_new_home(client, app):
+    r = client.post("/subscribe", data={"email": "new@example.com"})
+    assert r.status_code == 302 and r.headers["Location"].endswith("/")
+    r = client.get("/")
+    assert b"Thank you" in r.data
+    assert client.post("/_pipeline/digest").status_code == 401

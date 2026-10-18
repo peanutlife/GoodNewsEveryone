@@ -208,18 +208,18 @@ def subscribe():
         # Validate email
         if not email or '@' not in email:
             flash('Please enter a valid email address', 'danger')
-            return redirect(url_for('auth.subscribe'))
+            return redirect(url_for('site.home'))
 
         # Check if already subscribed
         existing = EmailSubscriber.query.filter_by(email=email).first()
         if existing:
             if existing.is_active:
-                flash('This email is already subscribed!', 'info')
+                flash('This email is already subscribed. Tomorrow\'s ten will arrive as usual.', 'info')
             else:
                 existing.is_active = True
                 db.session.commit()
-                flash('Welcome back! Your subscription has been reactivated.', 'success')
-            return redirect(url_for('index'))
+                flash('Welcome back. Tomorrow\'s ten will be in your inbox.', 'success')
+            return redirect(url_for('site.home'))
 
         # Create new subscriber
         subscriber = EmailSubscriber(
@@ -229,10 +229,10 @@ def subscribe():
         db.session.add(subscriber)
         db.session.commit()
 
-        flash('Thank you for subscribing! You\'ll receive daily positive news in your inbox.', 'success')
-        return redirect(url_for('index'))
+        flash('Thank you. Ten good things and the editor\'s letter will arrive each morning.', 'success')
+        return redirect(url_for('site.home'))
 
-    return render_template('subscribe.html')
+    return redirect(url_for('site.home', _anchor='subscribe'))
 
 
 @auth_bp.route('/unsubscribe/<token>')
@@ -242,11 +242,11 @@ def unsubscribe(token):
     if subscriber:
         subscriber.is_active = False
         db.session.commit()
-        flash('You have been unsubscribed. We\'re sorry to see you go!', 'info')
+        flash('Unsubscribed. No more emails from us.', 'info')
     else:
         flash('Invalid unsubscribe link', 'danger')
 
-    return redirect(url_for('index'))
+    return redirect(url_for('site.home'))
 
 def init_topics():
     """Initialize topics for adult audience"""

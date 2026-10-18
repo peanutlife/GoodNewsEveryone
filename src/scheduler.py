@@ -28,7 +28,7 @@ LOCK_KEY = 7_430_921  # arbitrary constant for pg_try_advisory_lock
 CHECK_EVERY = int(os.environ.get("PEANUT_SCHEDULER_INTERVAL", "3600"))
 RUN_AFTER_HOUR = int(os.environ.get("PEANUT_PIPELINE_HOUR", "5"))  # UTC
 
-STATE = {"enabled": False, "thread_alive": False, "started_at": None, "last_check": None,
+STATE = {"last_digest": None, "enabled": False, "thread_alive": False, "started_at": None, "last_check": None,
          "next_check": None, "checks": 0, "runs": 0, "last_decision": None, "last_error": None}
 _run_lock = threading.Lock()
 
@@ -90,6 +90,32 @@ def _run_once(app, force: bool = False) -> str:
         _run_lock.release()
 
 
+def _maybe_send_digest(app) -> None:
+    from src.digest import digest_due, send_digest
+    from src.models.user import db
+    with app.app_context():
+        try:
+            if not digest_due():
+                return
+            lock_conn = None
+            got = True
+            try:
+                if db.engine.dialect.name == "postgresql":
+                    lock_conn = db.engine.connect().execution_options(isolation_level="AUTOCOMMIT")
+                    got = bool(lock_conn.execute(text("SELECT pg_try_advisory_lock(:k)"), {"k": LOCK_KEY + 1}).scalar())
+                if got:
+                    STATE["last_digest"] = send_digest()
+            finally:
+                if lock_conn is not None:
+                    if got:
+                        lock_conn.execute(text("SELECT pg_advisory_unlock(:k)"), {"k": LOCK_KEY + 1})
+                    lock_conn.close()
+        except Exception as e:  # noqa: BLE001
+            logger.exception("Digest send failed")
+            from src.models.article import log_event
+            log_event("error", f"digest failed: {type(e).__name__}: {e}")
+
+
 def trigger(app) -> threading.Thread:
     """Start a forced run in the background (used by POST /_pipeline/run)."""
     t = threading.Thread(target=lambda: STATE.update(last_decision=_run_once(app, force=True)),
@@ -112,6 +138,7 @@ def start(app, initial_delay: int = 30) -> threading.Thread | None:
                 with app.app_context():
                     from src.models.article import log_event
                     log_event("decision", STATE["last_decision"] or "")
+                _maybe_send_digest(app)
             except Exception as e:  # noqa: BLE001 - keep the thread alive no matter what
                 logger.exception("Scheduler check failed")
                 STATE["last_error"] = f"{datetime.utcnow().isoformat(timespec='seconds')} {type(e).__name__}: {e}\n{traceback.format_exc()[-1200:]}"

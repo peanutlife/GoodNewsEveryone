@@ -45,6 +45,7 @@
     </div>
   </div>
 </header>
+{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="wrap" style="padding-top:14px">{% for cat, m in messages %}<div class="box" role="status" style="padding:14px 18px;{% if cat == 'danger' %}border-color:#C97B5A{% endif %}">{{ m }}</div>{% endfor %}</div>{% endif %}{% endwith %}
 {% block body %}{% endblock %}
 <footer class="ftr" id="about">
   <div class="wrap">

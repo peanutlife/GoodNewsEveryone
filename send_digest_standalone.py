@@ -133,7 +133,18 @@ def update_subscriber_stats(engine, subscriber_id):
 
 
 def send_daily_digest(test_mode=False, test_email=None):
-    """Send daily digest to all active subscribers"""
+    """Send today's ten (new edition-based email). Kept for the old cron entry point."""
+    from src.main import create_app
+    from src.digest import send_digest
+    app = create_app()
+    with app.app_context():
+        result = send_digest(test_email=test_email if test_mode else None)
+    logger.info("Digest result: %s", result)
+    return result
+
+
+def _legacy_send_daily_digest(test_mode=False, test_email=None):
+    """Old cache-based digest, no longer used."""
 
     # Get configuration
     env = os.environ.get('FLASK_ENV', 'production')

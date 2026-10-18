@@ -39,7 +39,7 @@
 {%- endmacro %}
 
 {% macro subscribe_box(title='Ten good things, every morning', blurb='One email at a time you pick. No tracking pixels, no "we miss you" emails, unsubscribe in one tap.') -%}
-<form class="box" method="post" action="{{ url_for('auth.subscribe') }}">
+<form class="box" id="subscribe" method="post" action="{{ url_for('auth.subscribe') }}">
   <h3>{{ title }}</h3>
   <p class="meta" style="font-size:14px">{{ blurb }}</p>
   <label for="em-{{ title|length }}">Email</label>

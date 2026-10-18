@@ -20,16 +20,18 @@ class EmailService:
         self.password = config.MAIL_PASSWORD
         self.sender = config.MAIL_DEFAULT_SENDER
 
-    def send_email(self, to_email, subject, html_content):
-        """Send an email"""
+    def send_email(self, to_email, subject, html_content, text_content=None):
+        """Send an email (multipart: plain text first, then HTML)."""
         try:
             msg = MIMEMultipart('alternative')
             msg['Subject'] = subject
-            msg['From'] = self.sender
+            msg['From'] = self.sender if '<' in str(self.sender) else f"Peanutlife <{self.sender}>"
             msg['To'] = to_email
+            msg['List-Unsubscribe'] = '<mailto:' + str(self.username or self.sender) + '?subject=unsubscribe>'
 
-            # Attach HTML content
-            html_part = MIMEText(html_content, 'html')
+            if text_content:
+                msg.attach(MIMEText(text_content, 'plain', 'utf-8'))
+            html_part = MIMEText(html_content, 'html', 'utf-8')
             msg.attach(html_part)
 
             # Send email
