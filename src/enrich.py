@@ -24,11 +24,13 @@ logger = logging.getLogger(__name__)
 
 # Bulk per-article pass: cheap and good enough for classification plus short copy.
 RECENT_ERRORS: list[str] = []  # last few API failures, shown on /_pipeline
+BATCH_ERRORS: list[str] = []  # failures from the most recent enrich_many/triage_many call (worker threads have no app context)
 
 
 def _note_error(msg: str) -> None:
     RECENT_ERRORS.append(f"{datetime.utcnow().isoformat(timespec='seconds')} {msg}"[:400])
     del RECENT_ERRORS[:-8]
+    BATCH_ERRORS.append(msg[:400])
     try:
         from src.models.article import log_event
         log_event("error", msg)
@@ -51,25 +53,25 @@ ENRICH_SCHEMA = {
     "type": "object",
     "properties": {
         "is_good_news": {"type": "boolean"},
-        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "confidence": {"type": "number"},
         "reject_reason": {"type": "string"},
-        "score": {"type": "number", "minimum": 0, "maximum": 10,
+        "score": {"type": "number",
                   "description": "Editorial strength: 9-10 lead story, 7-8 solid, 5-6 filler, under 5 skip"},
         "section": {"type": "string", "enum": list(SECTIONS.keys())},
         "story_region": {"type": "string", "enum": REGIONS},
         "kid_safe": {"type": "boolean"},
         "tone": {"type": "string", "enum": TONES},
-        "read_minutes": {"type": "integer", "minimum": 1, "maximum": 20},
+        "read_minutes": {"type": "integer"},
         "headline": {"type": "string"},
         "one_line": {"type": "string"},
-        "in_short": {"type": "array", "items": {"type": "string"}, "maxItems": 3},
+        "in_short": {"type": "array", "items": {"type": "string"}},
         "why_card": {"type": "string"},
         "why_long": {"type": "string"},
         "before": {"type": "string"},
         "now": {"type": "string"},
         "action": {"type": "string"},
         "kid_version": {"type": "string"},
-        "keywords": {"type": "array", "items": {"type": "string"}, "maxItems": 6},
+        "keywords": {"type": "array", "items": {"type": "string"}},
     },
     "required": ["is_good_news", "confidence", "reject_reason", "score", "section", "story_region",
                  "kid_safe", "tone", "read_minutes", "headline", "one_line", "in_short", "why_card",
@@ -215,6 +217,7 @@ def triage_many(articles: list[dict], dry_run: bool = False, concurrency: int = 
     if dry_run or not has_api_key():
         return [dry_triage(a) for a in articles]
     client = _client()
+    BATCH_ERRORS.clear()
     chunks = [articles[i:i + TRIAGE_BATCH] for i in range(0, len(articles), TRIAGE_BATCH)]
 
     def work(chunk):
@@ -276,6 +279,11 @@ def enrich_one(a: dict, client: anthropic.Anthropic | None = None) -> dict:
     except json.JSONDecodeError:
         logger.warning("Unparseable enrichment for %s (request %s)", a.get("link"), response._request_id)
         return _rejected("unparseable response")
+    data["confidence"] = min(1.0, max(0.0, float(data.get("confidence") or 0)))
+    data["score"] = min(10.0, max(0.0, float(data.get("score") or 0)))
+    data["read_minutes"] = min(20, max(1, int(data.get("read_minutes") or 3)))
+    data["in_short"] = list(data.get("in_short") or [])[:3]
+    data["keywords"] = list(data.get("keywords") or [])[:6]
     data["_model"] = ENRICH_MODEL
     data["_usage"] = {
         "input": response.usage.input_tokens,
@@ -341,6 +349,7 @@ def enrich_many(articles: list[dict], dry_run: bool = False, concurrency: int = 
             logger.warning("No Anthropic credentials found; using dry-run enrichment")
         return [dry_enrichment(a) for a in articles]
     client = _client()
+    BATCH_ERRORS.clear()
 
     def work(a):
         try:
@@ -382,11 +391,9 @@ def write_edition_copy(edition_name: str, picks: list[dict], section_lists: dict
         for p in items[:6]:
             lines.append(f"  - {p['title']}")
     client = _client()
-    response = client.beta.messages.create(
+    response = client.messages.create(
         model=EDITOR_MODEL,
         max_tokens=4096,
-        betas=["server-side-fallback-2026-07-01"],
-        fallbacks="default",
         system=[{"type": "text", "text": EDITOR_SYSTEM, "cache_control": {"type": "ephemeral"}}],
         messages=[{"role": "user", "content": "\n".join(lines)}],
         output_config={"effort": "medium", "format": {"type": "json_schema", "schema": EDITOR_SCHEMA}},

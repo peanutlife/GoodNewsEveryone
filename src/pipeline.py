@@ -17,7 +17,7 @@ import feedparser
 import requests
 
 from src.edition import config as sources_config
-from src.enrich import article_id, enrich_many, slugify, triage_many
+from src.enrich import BATCH_ERRORS, article_id, enrich_many, slugify, triage_many
 from src.models.article import Article, log_event
 from src.models.user import db
 
@@ -178,6 +178,14 @@ def store_new(items: list[dict]) -> list[Article]:
 QUALITY_RANK = {"high": 0, "standard": 1, "low": 2}
 
 
+def _log_batch_errors(stage: str) -> None:
+    if not BATCH_ERRORS:
+        return
+    from collections import Counter
+    top = Counter(BATCH_ERRORS).most_common(3)
+    log_event("error", f"{stage}: {len(BATCH_ERRORS)} failed; " + " || ".join(f"{n}x {m}" for m, n in top))
+
+
 def triage_pending(limit: int = 3000, dry_run: bool = False) -> dict:
     """Stage 1: vet every un-triaged article from its title in batched calls. Cheap.
 
@@ -195,6 +203,7 @@ def triage_pending(limit: int = 3000, dry_run: bool = False) -> dict:
         dicts = [{"title": a.title, "summary": a.summary or "", "source_name": a.source_name,
                   "source_region": a.source_region, "link": a.link} for a in chunk]
         results = triage_many(dicts, dry_run=dry_run)
+        _log_batch_errors("triage")
         now = datetime.utcnow()
         for a, r in zip(chunk, results):
             if r is None:
@@ -238,6 +247,7 @@ def enrich_pending(limit: int = ENRICH_LIMIT, dry_run: bool = False) -> int:
             "source_name": a.source_name, "source_region": a.source_region,
         } for a in chunk]
         results = enrich_many(dicts, dry_run=dry_run)
+        _log_batch_errors("enrich")
         done += _apply_enrichment(chunk, results)
         db.session.commit()
         PROGRESS["done"] = min(start + BATCH, len(pending))
