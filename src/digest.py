@@ -181,10 +181,19 @@ def send_digest(edition: str = DIGEST_EDITION, test_email: str | None = None, fo
     return {"sent": sent, "failed": failed, "skipped": skipped, "edition": edition, "day": ed.day.isoformat(), "error": svc.last_error}
 
 
+BACKOFF_HOURS = 3  # after a mail-server failure, don't retry every hour from every process
+
+
 def digest_due() -> bool:
-    """True when it's past the send hour and someone still hasn't had today's edition."""
+    """True when it's past the send hour, someone still hasn't had today's edition, and we aren't backing off."""
+    from datetime import timedelta
     from src.editions import latest_edition
+    from src.models.article import PipelineEvent
     if os.environ.get("PEANUT_DIGEST", "1") != "1" or datetime.utcnow().hour < DIGEST_HOUR:
+        return False
+    recent_failure = (PipelineEvent.query.filter(PipelineEvent.kind == "error", PipelineEvent.message.like("digest%"),
+                                                 PipelineEvent.at >= datetime.utcnow() - timedelta(hours=BACKOFF_HOURS)).first())
+    if recent_failure:
         return False
     ed = latest_edition(DIGEST_EDITION)
     if not ed or ed.day != datetime.utcnow().date():
