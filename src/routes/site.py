@@ -35,7 +35,7 @@ def _edition_context():
     g.edition, g.edition_how = detect_edition(request)
     country = (request.headers.get("CF-IPCountry") or request.headers.get("X-Vercel-IP-Country")
                or request.headers.get("X-Country-Code") or request.headers.get("CloudFront-Viewer-Country") or "").upper()
-    g.edition_here = edition_for_country(country) or "global"
+    g.edition_here = (edition_for_country(country) or "global") if country else None  # None = no geo header, no hint
 
 
 @site_bp.app_context_processor
@@ -43,8 +43,9 @@ def _inject():
     return {
         "edition": getattr(g, "edition", "global"),
         "edition_name": edition_name(getattr(g, "edition", "global")),
-        "edition_here": getattr(g, "edition_here", "global"),
-        "edition_here_name": edition_name(getattr(g, "edition_here", "global")),
+        "edition_here": getattr(g, "edition_here", None),
+        "edition_here_name": edition_name(getattr(g, "edition_here", None) or "global"),
+        "edition_how": getattr(g, "edition_how", ""),
         "editions": [(e, edition_name(e)) for e in EDITIONS],
         "SECTIONS": SECTIONS,
         "greeting": _greeting(),
