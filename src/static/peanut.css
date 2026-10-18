@@ -342,7 +342,7 @@ img { max-width: 100%; height: auto; }
 .counter { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--muted); margin-bottom: 10px; }
 .counter b { font-family: var(--display); font-weight: 600; font-size: 15px; color: var(--accent); }
 .counter .c-item::before { content: "●"; font-size: 7px; color: var(--line-2); margin-right: 8px; vertical-align: middle; }
-.counter .c-item:first-child::before { content: "🫶"; font-size: 14px; }
+.counter .c-item:first-child::before { content: "📚"; font-size: 14px; }
 
 /* Ticker: items slide under the label instead of fading at the left edge */
 .tk-track { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 32px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 32px), transparent); }

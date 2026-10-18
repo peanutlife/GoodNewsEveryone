@@ -89,10 +89,14 @@ def _stats() -> dict:
         today = now.date()
         readers_today = db.session.query(Visit).filter(Visit.day == today).count()
         readers_week = db.session.query(Visit).filter(Visit.day >= today - timedelta(days=6)).count()
-        vetted_today = Article.query.filter(Article.fetched_at >= datetime.combine(today, datetime.min.time())).count()
+        midnight = datetime.combine(today, datetime.min.time())
+        vetted_today = Article.query.filter(Article.fetched_at >= midnight).count()
+        vetted_week = Article.query.filter(Article.fetched_at >= midnight - timedelta(days=6)).count()
+        vetted_total = Article.query.count()
         from src.edition import config as _cfg
         sources = len(_cfg().get("sources", []))
-        value = {"readers_today": readers_today, "readers_week": readers_week, "vetted_today": vetted_today, "sources": sources}
+        value = {"readers_today": readers_today, "readers_week": readers_week, "vetted_today": vetted_today,
+                 "vetted_week": vetted_week, "vetted_total": vetted_total, "sources": sources, "since": "May 2025"}
     except Exception:  # noqa: BLE001
         db.session.rollback()
         value = {}

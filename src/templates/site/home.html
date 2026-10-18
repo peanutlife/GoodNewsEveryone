@@ -10,10 +10,11 @@
 </nav>
 <div class="wrap">{{ m.ad('ad-lead', note='') }}</div>
 <div class="wrap dateline">
-  {% if stats %}<div class="counter" title="Counted by a random cookie per reader per day. No IP addresses, nothing shared.">
-    <span class="c-item"><b>{{ '{:,}'.format(stats.readers_today) }}</b> {% if stats.readers_today == 1 %}reader{% else %}readers{% endif %} got their good news today</span>
-    <span class="c-item"><b>{{ '{:,}'.format(stats.vetted_today) }}</b> stories read this morning · <b>10</b> chosen</span>
+  {% if stats %}<div class="counter" title="Real numbers from our own database. Readers are counted by a random cookie per person per day, never by IP address.">
+    <span class="c-item"><b>{{ '{:,}'.format(stats.vetted_week) }}</b> stories read this week · <b>10</b> chosen each morning</span>
     <span class="c-item"><b>{{ stats.sources }}</b> sources</span>
+    {% if stats.readers_week >= 25 %}<span class="c-item"><b>{{ '{:,}'.format(stats.readers_week) }}</b> readers this week</span>{% endif %}
+    <span class="c-item">Good news since <b>{{ stats.since }}</b></span>
   </div>{% endif %}
   <h1><span class="emo">{% if 'morning' in greeting %}🌅{% elif 'afternoon' in greeting %}☀️{% else %}🌙{% endif %}</span> {{ greeting }} Here are {% if is_yesterday %}yesterday's{% else %}today's{% endif %} ten good things.</h1>
   <p class="meta">
