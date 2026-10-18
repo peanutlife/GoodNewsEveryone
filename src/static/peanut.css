@@ -379,3 +379,17 @@ img { max-width: 100%; height: auto; }
 .bn-top span.l { font-family: var(--display); font-size: 12.5px; letter-spacing: .04em; font-weight: 600; }
 .bn-top .now span.l { color: var(--nature-fg); }
 @media (max-width: 599px) { .bn-top { grid-template-columns: 1fr; } }
+
+/* Feeling check-in */
+.feelbox { background: #FFF4F6; border-color: #F3D6DE; gap: 10px; }
+.feelbox .kick { color: var(--kindness-fg); }
+.feel-opts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.feel-opts button { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; border-radius: 12px; border: 1px solid var(--line-2); background: var(--card); cursor: pointer; color: var(--ink-2); font-size: 11px; font-weight: 700; line-height: 1.15; text-align: center; }
+.feel-opts button i { font-style: normal; font-size: 24px; line-height: 1; }
+.feel-opts button:hover { border-color: var(--kindness-fg); }
+.feel-opts button[aria-pressed="true"] { background: var(--kindness-bg); border-color: var(--kindness-fg); color: var(--kindness-fg); box-shadow: inset 0 0 0 1px var(--kindness-fg); }
+.feel-tally { font-weight: 700; color: var(--ink-2); }
+.feel-week { display: flex; align-items: center; gap: 6px; font-size: 16px; }
+.feel-week b { font-size: 12px; color: var(--muted); margin-right: 4px; font-family: var(--display); font-weight: 600; }
+.feel-week span { width: 22px; text-align: center; }
+.feel-week b { white-space: nowrap; }

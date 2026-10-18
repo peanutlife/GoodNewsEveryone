@@ -69,3 +69,15 @@
   <button type="submit" class="btn">Subscribe</button>
 </form>
 {%- endmacro %}
+
+{% macro feel_box(compact=False) -%}
+<section class="box feelbox" id="feel" data-day="{{ feel.day }}">
+  <span class="kick"><i>💬</i>How do you feel after today's ten?</span>
+  <div class="feel-opts" role="group" aria-label="How do you feel">
+    {% for key, f in FEELINGS.items() %}<button type="button" data-feel="{{ key }}" aria-pressed="false"><i>{{ f.icon }}</i><span>{{ f.label }}</span></button>{% endfor %}
+  </div>
+  <p class="meta feel-tally" id="feel-tally">{% if feel.total %}{{ feel.lifted_pct }}% of {{ feel.total }} readers felt calmer or better today.{% else %}Be the first to say how today's ten landed.{% endif %}</p>
+  <div class="feel-week" id="feel-week" aria-label="Your last seven days"></div>
+  <p class="meta" style="font-size:12px">Anonymous. We keep one answer per reader per day and no names. Your own trail stays on this device.</p>
+</section>
+{%- endmacro %}

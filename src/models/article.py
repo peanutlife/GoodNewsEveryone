@@ -171,3 +171,21 @@ def count_visit(day, vid: str) -> None:
         db.session.commit()
     except Exception:  # noqa: BLE001  (duplicate key, or a hiccup; never break the page for a counter)
         db.session.rollback()
+
+
+FEELINGS = {
+    "calmer": {"icon": "😌", "label": "Calmer"},
+    "better": {"icon": "🙂", "label": "Better"},
+    "same": {"icon": "😐", "label": "About the same"},
+    "meh": {"icon": "😕", "label": "Not really"},
+}
+
+
+class Feeling(db.Model):
+    """How a reader felt after today's ten. One row per reader per day, keyed by the random visit cookie."""
+    __tablename__ = "feelings"
+    day = db.Column(db.Date, primary_key=True)
+    vid = db.Column(db.String(32), primary_key=True)
+    feeling = db.Column(db.String(12), nullable=False)
+    edition = db.Column(db.String(16))
+    at = db.Column(db.DateTime, default=datetime.utcnow)

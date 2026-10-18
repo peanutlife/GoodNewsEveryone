@@ -264,3 +264,14 @@ def test_reader_counter_counts_once_per_day(client, app):
     client.get("/")
     with app.app_context():
         assert Visit.query.count() == 1
+
+
+def test_feeling_is_one_per_reader_per_day(client, app):
+    from src.models.article import Feeling
+    r = client.post("/api/feel", json={"feeling": "better"})
+    assert r.status_code == 200 and r.get_json()["tally"]["total"] == 1
+    r = client.post("/api/feel", json={"feeling": "calmer"})
+    assert r.get_json()["tally"]["lifted_pct"] == 100
+    assert client.post("/api/feel", json={"feeling": "angry"}).status_code == 400
+    with app.app_context():
+        assert Feeling.query.count() == 1 and Feeling.query.first().feeling == "calmer"

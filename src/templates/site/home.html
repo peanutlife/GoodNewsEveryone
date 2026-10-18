@@ -57,8 +57,9 @@
               <h2>🎉 That's {% if one_story %}your one{% else %}today's ten{% endif %}. You're all caught up.</h2>
               <p class="why">Nothing else to scroll here, on purpose. Tomorrow brings ten more. {% if one_story %}<a href="{{ url_for('site.home') }}" class="act">Show all ten</a>{% endif %}</p>
               <div class="walk-acts">
+                <a href="#feel" class="btn">Say how you feel 💬</a>
+                <a href="#one-good-thing" class="btn2">Write down one good thing 🌱</a>
                 <button type="button" class="btn2 restart">Start again</button>
-                <a href="#one-good-thing" class="btn">Write down one good thing 🌱</a>
               </div>
             </div>
           </article>
@@ -121,6 +122,7 @@
     </section>
     {% endif %}
 
+    {{ m.feel_box() }}
     {{ m.subscribe_box() }}
     {{ m.ad('ad-rect') }}
 
@@ -209,6 +211,27 @@
   show(cur, false);
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
   window.addEventListener('load', layout);
+})();
+(function(){
+  var box=document.getElementById('feel'); if(!box) return;
+  var KEY='peanut.feel', day=box.dataset.day, btns=[].slice.call(box.querySelectorAll('button[data-feel]')), tally=document.getElementById('feel-tally'), week=document.getElementById('feel-week');
+  var ICON={calmer:'😌',better:'🙂',same:'😐',meh:'😕'};
+  function load(){try{return JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){return {};}}
+  function mark(k){ btns.forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.feel===k ? 'true':'false'); }); }
+  function drawWeek(){
+    var mine=load(), out=[], d=new Date();
+    for(var i=6;i>=0;i--){ var x=new Date(d); x.setDate(d.getDate()-i); var k=x.toISOString().slice(0,10); out.push('<span title="'+k+'">'+(ICON[mine[k]]||'·')+'</span>'); }
+    week.innerHTML='<b>Your week</b>'+out.join('');
+  }
+  var mine=load(); if(mine[day]) mark(mine[day]); drawWeek();
+  btns.forEach(function(b){ b.onclick=function(){
+    var k=b.dataset.feel; mark(k); mine=load(); mine[day]=k; try{localStorage.setItem(KEY, JSON.stringify(mine));}catch(e){} drawWeek();
+    fetch('/api/feel',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({feeling:k})})
+      .then(function(r){return r.json();}).then(function(j){
+        if(j && j.tally && j.tally.total){ tally.textContent=j.tally.lifted_pct+'% of '+j.tally.total+' reader'+(j.tally.total===1?'':'s')+' felt calmer or better today.'; }
+        toast('Thanks. Noted for today.');
+      }).catch(function(){ toast('Saved on this device.'); });
+  };});
 })();
 (function(){
   var b=document.getElementById('letter-body'), btn=document.getElementById('letter-more'); if(!b||!btn) return;

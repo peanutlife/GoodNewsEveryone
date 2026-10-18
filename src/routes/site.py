@@ -13,7 +13,7 @@ from flask import Blueprint, abort, g, jsonify, make_response, redirect, render_
 from src.edition import edition_for_country, COOKIE_MAX_AGE, COOKIE_NAME, EDITIONS, detect_edition, edition_name
 from src.editions import mood_sort, articles_by_ids, latest_edition, previous_edition
 from src.enrich import ENRICH_MODEL, STYLE_GUIDE, has_api_key
-from src.models.article import SECTIONS, SECTION_META, Article, Follow, Visit, count_visit
+from src.models.article import SECTIONS, SECTION_META, FEELINGS, Article, Feeling, Follow, Visit, count_visit
 from src.models.user import db
 
 logger = logging.getLogger(__name__)
@@ -52,7 +52,77 @@ def _inject():
         "greeting": _greeting(),
         "ticker": _ticker(getattr(g, "edition", "global")),
         "stats": _stats(),
+        "FEELINGS": FEELINGS,
+        "feel": feeling_tally(),
     }
+
+
+_FEEL_CACHE: dict = {"at": None, "value": {}}
+
+
+def feeling_tally(day=None, force: bool = False) -> dict:
+    """Today's anonymous tally: how readers said they felt after the ten. Cached a minute per process."""
+    now = datetime.utcnow()
+    day = day or now.date()
+    if not force and _FEEL_CACHE["at"] and (now - _FEEL_CACHE["at"]).total_seconds() < 60 and _FEEL_CACHE["value"].get("day") == day.isoformat():
+        return _FEEL_CACHE["value"]
+    try:
+        rows = db.session.query(Feeling.feeling, db.func.count()).filter(Feeling.day == day).group_by(Feeling.feeling).all()
+        counts = {k: 0 for k in FEELINGS}
+        for k, c in rows:
+            if k in counts:
+                counts[k] = int(c)
+        total = sum(counts.values())
+        lifted = counts["calmer"] + counts["better"]
+        value = {"day": day.isoformat(), "counts": counts, "total": total,
+                 "lifted_pct": round(100 * lifted / total) if total else None}
+    except Exception:  # noqa: BLE001
+        db.session.rollback()
+        value = {"day": day.isoformat(), "counts": {}, "total": 0, "lifted_pct": None}
+    _FEEL_CACHE.update(at=now, value=value)
+    return value
+
+
+def _feelings_by_day(days: int = 14) -> dict:
+    since = datetime.utcnow().date() - timedelta(days=days)
+    try:
+        rows = (db.session.query(Feeling.day, Feeling.feeling, db.func.count())
+                .filter(Feeling.day >= since).group_by(Feeling.day, Feeling.feeling).all())
+    except Exception:  # noqa: BLE001
+        db.session.rollback()
+        return {}
+    out: dict = {}
+    for day, feeling, c in rows:
+        out.setdefault(day.isoformat(), {})[feeling] = int(c)
+    return dict(sorted(out.items(), reverse=True))
+
+
+@site_bp.route("/api/feel", methods=["POST"])
+def feel():
+    """Record how this reader feels today. Anonymous: keyed by the random visit cookie, no text, no identity."""
+    data = request.get_json(silent=True) or {}
+    feeling = str(data.get("feeling", ""))
+    if feeling not in FEELINGS:
+        return jsonify({"error": "unknown feeling"}), 400
+    vid = request.cookies.get(VISIT_COOKIE) or ""
+    new_cookie = None
+    if not re.fullmatch(r"[A-Za-z0-9_-]{16,32}", vid):
+        vid = new_cookie = secrets.token_urlsafe(18)[:24]
+    today = datetime.utcnow().date()
+    try:
+        row = db.session.get(Feeling, (today, vid))
+        if row:
+            row.feeling, row.at = feeling, datetime.utcnow()
+        else:
+            db.session.add(Feeling(day=today, vid=vid, feeling=feeling, edition=getattr(g, "edition", None)))
+        db.session.commit()
+    except Exception:  # noqa: BLE001
+        db.session.rollback()
+        return jsonify({"error": "could not save"}), 500
+    resp = make_response(jsonify({"ok": True, "tally": feeling_tally(force=True)}))
+    if new_cookie:
+        resp.set_cookie(VISIT_COOKIE, new_cookie, max_age=COOKIE_MAX_AGE, samesite="Lax")
+    return resp
 
 
 VISIT_COOKIE = "pv"
@@ -520,5 +590,6 @@ def pipeline_status():
                    "debug": bool(current_app.debug), "pid": _os.getpid()},
         "events": events,
         "latest_editions": latest,
+        "feelings": _feelings_by_day(),
         "prices_note": "Estimated from list prices per million tokens; the Anthropic console is the bill of record.",
     })
