@@ -64,10 +64,19 @@
     </section>
     {% endif %}
 
-    {% if follow_ups %}
-    <section class="panel">
-      <h2>What happened next</h2>
-      {% for f in follow_ups %}<a href="{{ url_for('site.story', slug=f.slug) }}" style="font-weight:600">{{ f.published.strftime('%-d %b') if f.published }} · {{ (f.enrichment or {}).get('headline') or f.title }}</a>{% endfor %}
+    {% if thread %}
+    <section class="panel thread" id="thread">
+      <h2>📜 The story so far</h2>
+      <p class="meta" style="font-size:13px">{{ thread|length }} chapters. Tap ♥ and we keep adding to this as the story moves on.</p>
+      <ol class="tl">
+        {% for c in thread %}{% set ce = c.enrichment or {} %}
+        <li class="{% if c.id == a.id %}here{% endif %}">
+          <span class="d">{{ c.published.strftime('%-d %b %Y') if c.published else '' }}</span>
+          {% if c.id == a.id %}<strong>{{ ce.get('headline') or c.title }}</strong> <span class="meta">(this story)</span>{% else %}<a href="{{ url_for('site.story', slug=c.slug) }}">{{ ce.get('headline') or c.title }}</a>{% endif %}
+          {% if not loop.first and ce.get('chapter_note') %}<span class="note">{{ ce.chapter_note }}</span>{% elif loop.first %}<span class="note">Where it started.</span>{% endif %}
+        </li>
+        {% endfor %}
+      </ol>
     </section>
     {% endif %}
 
@@ -77,16 +86,10 @@
       <a class="btn2" href="mailto:?subject={{ (e.get('headline') or a.title)|urlencode }}&body={{ request.url|urlencode }}">Email</a>
       <a class="btn2" href="https://wa.me/?text={{ (e.get('headline') or a.title)|urlencode }}%20{{ request.url|urlencode }}" target="_blank" rel="noopener">WhatsApp</a>
       <span style="flex:1"></span>
-      <button type="button" class="btn2" onclick="document.getElementById('follow').hidden=false;this.hidden=true">Follow this story</button>
+      {{ m.like_btn(root) }}
       <a href="mailto:contact@peanutlife.com?subject=Not%20good%20news%3A%20{{ a.id }}" class="meta" style="font-weight:700">Not good news? Tell us</a>
     </section>
-    <form class="box" id="follow" hidden onsubmit="return followStory(event)">
-      <h3>Tell me when this story has a next chapter</h3>
-      <p class="meta">One email if and when the story moves on. Nothing else.</p>
-      <label for="fem">Email</label>
-      <input id="fem" type="email" required placeholder="you@example.com">
-      <button type="submit" class="btn">Follow</button>
-    </form>
+    <p class="meta follow-hint" style="font-size:13px;margin-top:-6px">♥ keeps this story on <a href="{{ url_for('account.me') }}" class="act">your page</a>, and when it has a next chapter you'll see it there{% if not current_user.is_authenticated %}. <a href="{{ url_for('account.signin') }}" class="act">Sign in</a> and we'll also email you, once per chapter{% else %}, and in one email{% endif %}.</p>
 
     {% if next_items %}
     <section>
@@ -112,7 +115,5 @@
 <script>
 function askStory(ev){ev.preventDefault();var q=document.getElementById('q'),box=document.getElementById('answer');box.className='answer show';box.textContent='Thinking…';
 fetch('/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({article_id:'{{ a.id }}',question:q.value})}).then(function(r){return r.json()}).then(function(d){box.innerHTML=(d.answer||d.error||'No answer.').replace(/</g,'&lt;')+(d.source?' <a href="'+d.source+'" target="_blank" rel="noopener" class="act">Source →</a>':'');}).catch(function(){box.textContent='Could not reach the editor.';});return false;}
-function followStory(ev){ev.preventDefault();var em=document.getElementById('fem').value;
-fetch('/follow',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({article_id:'{{ a.id }}',email:em})}).then(function(r){return r.json()}).then(function(d){toast(d.message||d.error||'Done');if(d.ok){document.getElementById('follow').hidden=true;}});return false;}
 </script>
 {% endblock %}

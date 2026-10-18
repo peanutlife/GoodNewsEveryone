@@ -296,3 +296,74 @@ def test_signin_link_creates_account_and_syncs_journal(client, app):
     assert client.get("/api/journal").get_json()["entries"][0]["t"] == "Better soup."
     r = client.post("/api/feel", json={"feeling": "calmer"})
     assert r.status_code == 200
+
+
+def test_like_follows_reader_and_shows_on_my_page(client, app):
+    from src.models.article import Like
+    with app.app_context():
+        db.session.add_all([_article(1, section="nature"), _article(2, section="science")])
+        db.session.commit()
+    assert client.post("/api/like", json={"article_id": "nope"}).status_code == 404
+    r = client.post("/api/like", json={"article_id": "id001", "on": True})
+    assert r.status_code == 200 and r.get_json()["liked"] is True and r.get_json()["signed_in"] is False
+    assert client.post("/api/like", json={"article_id": "id001", "on": True}).status_code == 200  # idempotent
+    with app.app_context():
+        assert Like.query.count() == 1 and Like.query.first().user_id is None
+    # the heart is painted on the story page for this device
+    html = client.get("/story/story-1").get_data(as_text=True)
+    assert 'data-like="id001"' in html and 'class="like on"' in html
+    # signing in claims the heart for the account
+    with app.test_request_context():
+        from src.routes.account import make_signin_token
+        token = make_signin_token("fan@example.com")
+    client.get(f"/signin/{token}")
+    with app.app_context():
+        assert Like.query.first().user_id is not None
+    html = client.get("/me").get_data(as_text=True)
+    assert "Stories you're following" in html and "Story 1" in html and "Watching for a next chapter" in html
+    # un-heart
+    assert client.post("/api/like", json={"article_id": "id001", "on": False}).get_json()["liked"] is False
+    with app.app_context():
+        assert Like.query.count() == 0
+
+
+def test_chapter_linking_builds_a_thread(client, app):
+    from src.chapters import link_chapters, candidates_for, tracked_roots
+    from src.models.article import Like, thread_for
+    with app.app_context():
+        root = _article(10, section="nature", hours_ago=24 * 20)
+        root.enrichment = {"headline": "Otters return to the Thames", "keywords": ["otters", "thames", "river", "wildlife"]}
+        later = _article(11, section="nature", hours_ago=2)
+        later.enrichment = {"headline": "Thames otters have their first pups", "keywords": ["otters", "thames", "pups"]}
+        other = _article(12, section="sports", hours_ago=2)
+        other.enrichment = {"headline": "Local club wins the cup", "keywords": ["football", "cup"]}
+        db.session.add_all([root, later, other])
+        db.session.add(Like(vid="abcdefghijklmnopqrstuv", article_id="id010"))
+        db.session.commit()
+        assert set(tracked_roots()) == {"id010"}
+        assert [c.id for c in candidates_for(later, tracked_roots())] == ["id010"]
+        assert candidates_for(other, tracked_roots()) == []
+        asked = []
+
+        def judge(new, cands):
+            asked.append(new.id)
+            return {"continues": cands[0].id, "what_changed": "The otters now have pups."}
+
+        assert link_chapters(judge=judge) == 1
+        assert asked == ["id011"]  # the football story never reached Claude
+        assert link_chapters(judge=judge) == 0  # already checked, not asked again
+        later = db.session.get(Article, "id011")
+        assert later.follows_id == "id010" and later.enrichment["chapter_note"] == "The otters now have pups."
+        assert [a.id for a in thread_for(db.session.get(Article, "id010"))] == ["id010", "id011"]
+    html = client.get("/story/story-11").get_data(as_text=True)
+    assert "The story so far" in html and "Otters return to the Thames" in html and "The otters now have pups." in html
+    # the reader who hearted the root sees a new-chapter badge on their page
+    client.set_cookie("pv", "abcdefghijklmnopqrstuv")
+    with app.test_request_context():
+        from src.routes.account import make_signin_token
+        token = make_signin_token("fan@example.com")
+    client.get(f"/signin/{token}")
+    html = client.get("/me").get_data(as_text=True)
+    assert "1 new chapter" in html and "Thames otters have their first pups" in html
+    html = client.get("/me").get_data(as_text=True)  # seen now: badge gone, chapter count stays
+    assert "new chapter" not in html and "2 chapters" in html

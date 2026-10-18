@@ -72,6 +72,12 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2200);}
+document.addEventListener('click',function(ev){var b=ev.target.closest('[data-like]');if(!b)return;ev.preventDefault();ev.stopPropagation();
+var on=!b.classList.contains('on');b.disabled=true;
+fetch('/api/like',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({article_id:b.dataset.like,on:on})}).then(function(r){return r.json()}).then(function(d){b.disabled=false;if(!d.ok){toast(d.error||'Could not save');return;}
+document.querySelectorAll('[data-like="'+b.dataset.like+'"]').forEach(function(x){x.classList.toggle('on',on);x.setAttribute('aria-pressed',on?'true':'false');x.querySelector('i').textContent=on?'♥':'♡';var s=x.querySelector('span');if(s)s.textContent=on?'Following':'Follow this story';});
+toast(on?(d.signed_in?'Following. New chapters go to your page and your inbox.':'Following. New chapters appear on your page. Sign in to get them by email.'):'Unfollowed.');
+if(window.gtag)gtag('event',on?'like':'unlike',{story:b.dataset.like});}).catch(function(){b.disabled=false;toast('Could not save');});});
 </script>
 {% block scripts %}{% endblock %}
 </body>

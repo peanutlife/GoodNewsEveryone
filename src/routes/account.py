@@ -14,7 +14,8 @@ from flask import Blueprint, current_app, flash, jsonify, redirect, render_templ
 from flask_login import current_user, login_required, login_user, logout_user
 from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
 
-from src.models.article import FEELINGS, Feeling, JournalEntry
+from src.chapters import chapter_time
+from src.models.article import FEELINGS, Article, Feeling, JournalEntry, Like, thread_root, thread_for
 from src.models.subscriber import EmailSubscriber
 from src.models.user import User, db
 
@@ -108,6 +109,9 @@ def signin_token(token: str):
     user = _get_or_create_user(email)
     login_user(user, remember=True, duration=timedelta(days=90))
     user.last_login = datetime.utcnow()
+    vid = request.cookies.get("pv") or ""
+    if vid:  # hearts tapped on this device before signing in now belong to the account
+        Like.query.filter(Like.vid == vid, Like.user_id.is_(None)).update({Like.user_id: user.id})
     db.session.commit()
     flash("You're signed in. Your feelings and your journal now follow you between devices.", "success")
     return redirect(url_for("account.me"))
@@ -132,8 +136,51 @@ def me():
     for v in feelings.values():
         if v in counts:
             counts[v] += 1
+    threads, for_you, fav = _followed_threads(), [], []
+    if threads:
+        fav, for_you = _for_you([t["root"] for t in threads] + [c for t in threads for c in t["chapters"]])
     return render_template("site/me.html", days=days, feelings=feelings, entries=entries, counts=counts,
-                           subscribed=bool(sub and sub.is_active))
+                           subscribed=bool(sub and sub.is_active), threads=threads, for_you=for_you, fav=fav)
+
+
+def _followed_threads() -> list[dict]:
+    """Every story this reader hearted, grouped into threads, newest activity first. Marks chapters they haven't seen."""
+    vid = request.cookies.get("pv") or ""
+    likes = Like.query.filter(db.or_(Like.user_id == current_user.id, Like.vid == vid)).order_by(Like.created_at.desc()).all()
+    now = datetime.utcnow()
+    out: dict[str, dict] = {}
+    for lk in likes:
+        a = db.session.get(Article, lk.article_id)
+        if not a:
+            continue
+        root = thread_root(a)
+        if root.id in out:
+            continue
+        chapters = thread_for(root)[1:]
+        since = lk.seen_at or lk.created_at or now
+        new = [c for c in chapters if chapter_time(c) > since]
+        out[root.id] = {"root": root, "liked": lk.created_at, "chapters": chapters, "new": len(new),
+                        "last": (chapters[-1].published if chapters else root.published) or now}
+        lk.seen_at = now
+    db.session.commit()
+    return sorted(out.values(), key=lambda t: (t["new"], t["last"]), reverse=True)
+
+
+def _for_you(liked: list[Article]) -> tuple[list[tuple[str, int]], list[Article]]:
+    """Sections this reader hearts most, and recent good stories from them they haven't seen."""
+    counts: dict[str, int] = {}
+    for a in liked:
+        if a.section:
+            counts[a.section] = counts.get(a.section, 0) + 1
+    fav = sorted(counts.items(), key=lambda kv: -kv[1])[:3]
+    if not fav:
+        return [], []
+    seen = {a.id for a in liked}
+    since = datetime.utcnow() - timedelta(days=14)
+    rows = (Article.query.filter(Article.is_good_news.is_(True), Article.section.in_([s for s, _ in fav]),
+                                 Article.published >= since, Article.id.notin_(list(seen)))
+            .order_by(Article.score.desc(), Article.published.desc()).limit(6).all())
+    return fav, rows
 
 
 @account_bp.route("/api/journal", methods=["GET", "POST"])

@@ -18,6 +18,11 @@
 {% if w %}<p class="why"><span class="pn">The Good News Desk likes this one:</span> {{ w }}</p>{% endif %}
 {%- endmacro %}
 
+{% macro like_btn(a, small=False) -%}
+{% set on = a.id in liked %}
+<button type="button" class="like{% if small %} sm{% endif %}{% if on %} on{% endif %}" data-like="{{ a.id }}" aria-pressed="{{ 'true' if on else 'false' }}" title="Keep an eye on this story"><i aria-hidden="true">{{ '♥' if on else '♡' }}</i><span>{{ 'Following' if on else 'Follow this story' }}</span></button>
+{%- endmacro %}
+
 {% macro byline() -%}
 <span class="byline">Read and summarised by Claude, our robot with a library card. Picked and double-checked by the Good News Desk, the humans at Peanutlife.</span>
 {%- endmacro %}

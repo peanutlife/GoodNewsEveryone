@@ -91,6 +91,11 @@ def _run_once(app, force: bool = False) -> str:
                 logger.info("Building editions %s for %s (%s)", missing or "forced", today,
                             "Claude" if has_api_key() else "dry run")
                 run(dry_run=not has_api_key())
+                try:
+                    from src.chapters import notify_chapters
+                    notify_chapters()
+                except Exception as e:  # noqa: BLE001
+                    logger.warning("chapter emails failed: %r", e)
                 return f"built {missing or 'all'} for {today}"
             except Exception as e:  # noqa: BLE001
                 logger.exception("Scheduled pipeline run failed")

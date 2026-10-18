@@ -13,7 +13,7 @@ from flask import Blueprint, abort, g, jsonify, make_response, redirect, render_
 from src.edition import edition_for_country, COOKIE_MAX_AGE, COOKIE_NAME, EDITIONS, detect_edition, edition_name
 from src.editions import mood_sort, articles_by_ids, latest_edition, previous_edition
 from src.enrich import ENRICH_MODEL, STYLE_GUIDE, has_api_key
-from src.models.article import SECTIONS, SECTION_META, FEELINGS, Article, Feeling, Follow, Visit, count_visit
+from src.models.article import SECTIONS, SECTION_META, FEELINGS, Article, Feeling, Follow, Like, Visit, count_visit, thread_root, thread_for
 from src.models.user import db
 
 logger = logging.getLogger(__name__)
@@ -54,7 +54,59 @@ def _inject():
         "stats": _stats(),
         "FEELINGS": FEELINGS,
         "feel": feeling_tally(),
+        "liked": liked_ids(),
     }
+
+
+def liked_ids() -> set[str]:
+    """Story ids this reader has hearted: by account when signed in, else by the visit cookie."""
+    try:
+        from flask_login import current_user
+        uid = current_user.id if getattr(current_user, "is_authenticated", False) else None
+        vid = request.cookies.get(VISIT_COOKIE) or ""
+        if uid:
+            q = Like.query.filter(db.or_(Like.user_id == uid, Like.vid == vid))
+        elif vid:
+            q = Like.query.filter(Like.vid == vid)
+        else:
+            return set()
+        return {r.article_id for r in q.with_entities(Like.article_id).all()}
+    except Exception:  # noqa: BLE001  (a heart is never worth a 500)
+        return set()
+
+
+@site_bp.route("/api/like", methods=["POST"])
+def like():
+    """♥ a story (or un-♥ it). Anonymous by cookie; tied to the account when signed in so it follows the reader."""
+    data = request.get_json(silent=True) or {}
+    aid = str(data.get("article_id", ""))[:32]
+    on = bool(data.get("on", True))
+    a = db.session.get(Article, aid) if aid else None
+    if not a:
+        return jsonify({"error": "unknown story"}), 404
+    vid = request.cookies.get(VISIT_COOKIE) or ""
+    new_cookie = None
+    if not re.fullmatch(r"[A-Za-z0-9_-]{16,32}", vid):
+        vid = new_cookie = secrets.token_urlsafe(18)[:24]
+    from flask_login import current_user
+    uid = current_user.id if getattr(current_user, "is_authenticated", False) else None
+    try:
+        q = Like.query.filter(Like.article_id == aid)
+        row = q.filter(db.or_(Like.vid == vid, Like.user_id == uid)).first() if uid else q.filter(Like.vid == vid).first()
+        if on and not row:
+            db.session.add(Like(vid=vid, user_id=uid, article_id=aid))
+        elif on and row and uid and not row.user_id:
+            row.user_id = uid
+        elif not on and row:
+            db.session.delete(row)
+        db.session.commit()
+    except Exception:  # noqa: BLE001
+        db.session.rollback()
+        return jsonify({"error": "could not save"}), 500
+    resp = make_response(jsonify({"ok": True, "liked": on, "signed_in": bool(uid)}))
+    if new_cookie:
+        resp.set_cookie(VISIT_COOKIE, new_cookie, max_age=COOKIE_MAX_AGE, samesite="Lax")
+    return resp
 
 
 _FEEL_CACHE: dict = {"at": None, "value": {}}
@@ -323,9 +375,11 @@ def story(slug):
                                            Article.id != a.id).order_by(Article.published.desc()).limit(2).all())
     more = (Article.query.filter(Article.is_good_news.is_(True), Article.section == a.section, Article.id != a.id)
             .order_by(Article.score.desc()).limit(4).all())
-    follow_ups = Article.query.filter_by(follows_id=a.id).order_by(Article.published.desc()).all()
+    root = thread_root(a)
+    thread = thread_for(root)
     return render_template("site/story.html", a=a, e=a.enrichment or {}, position=position,
-                           total=len(picks), next_items=next_items, more=more, follow_ups=follow_ups)
+                           total=len(picks), next_items=next_items, more=more,
+                           thread=thread if len(thread) > 1 else [], root=root)
 
 
 @site_bp.route("/dial")

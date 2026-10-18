@@ -353,6 +353,11 @@ def run(dry_run: bool = False, limit: int = ENRICH_LIMIT, editions_only: bool = 
             log_event("stage", f"pictures found for {backfill_images()} stories")
         except Exception as e:  # pictures are nice to have, never a reason to fail the run
             log_event("error", f"image backfill failed: {e!r}")
+        try:
+            from src.chapters import link_chapters
+            log_event("stage", f"next chapters found for {link_chapters(dry_run=dry_run)} stories")
+        except Exception as e:  # same: a thread is a bonus, not the paper
+            log_event("error", f"chapter linking failed: {e!r}")
         logger.info("Enriched %d articles (%s)", n, "dry run" if dry_run else "Claude")
     PROGRESS["stage"] = "building editions"
     built = build_all_editions(dry_run=dry_run)
@@ -372,6 +377,9 @@ def main():
     p.add_argument("--editions-only", action="store_true", help="Skip fetch/enrich; rebuild today's editions")
     pi = sub.add_parser("images", help="Fetch og:image for good-news stories that arrived without a picture")
     pi.add_argument("--limit", type=int, default=60)
+    pc = sub.add_parser("chapters", help="Link newly enriched stories to earlier ones they continue, then email followers")
+    pc.add_argument("--dry-run", action="store_true")
+    pc.add_argument("--limit", type=int, default=150)
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     from src.main import create_app
@@ -383,6 +391,10 @@ def main():
                 limit_sources=args.limit_sources)
         elif args.cmd == "images":
             print(f"pictures found for {backfill_images(limit=args.limit)} stories")
+        elif args.cmd == "chapters":
+            from src.chapters import link_chapters, notify_chapters
+            print(f"next chapters found for {link_chapters(limit=args.limit, dry_run=args.dry_run)} stories")
+            print(f"emails: {notify_chapters()}")
         else:
             parser.print_help()
 

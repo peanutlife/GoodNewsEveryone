@@ -43,10 +43,11 @@
               <div class="top"><span class="num">{{ loop.index }}</span>{{ m.kicker(a) }}</div>
               <h2><a href="{{ url_for('site.story', slug=a.slug) }}">{{ e.get('headline') or a.title }}</a></h2>
               {{ m.peanut_why(e) }}
-              <span class="meta">{{ a.source_name }} · {{ a.read_minutes or 3 }} min read</span>
+              <span class="meta">{{ a.source_name }} · {{ a.read_minutes or 3 }} min read{% if a.follows_id %} · <a href="{{ url_for('site.story', slug=a.slug) }}#thread" class="act">📜 A story we've been following moves on</a>{% endif %}</span>
               <div class="walk-acts">
                 <button type="button" class="btn2 prev" {% if loop.first %}disabled{% endif %}>← Back</button>
                 <a href="{{ url_for('site.story', slug=a.slug) }}" class="btn2">Read the full story</a>
+                {{ m.like_btn(a, small=True) }}
                 <button type="button" class="btn next">{% if loop.last %}Finish 🎉{% else %}Next →{% endif %}</button>
               </div>
             </div>

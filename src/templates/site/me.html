@@ -1,9 +1,43 @@
 {% extends "site/base.html" %}
+{% import "site/_macros.html" as m with context %}
 {% block title %}My page | Peanutlife{% endblock %}
 {% block body %}
 <main class="wrap main">
   <div class="col">
     <div class="dateline" style="padding-top:0"><h1>🥜 Your good news</h1><p class="meta">{{ current_user.email }} · <a href="{{ url_for('account.signout') }}" class="act">Sign out</a></p></div>
+
+    <section class="threads" id="following">
+      <h2><span class="emo">♥</span> Stories you're following</h2>
+      {% if threads %}
+      <p class="meta">We watch for the next chapter of each one and add it here{% if current_user.is_authenticated %}, plus one email when it lands{% endif %}.</p>
+      <div class="tlist">
+        {% for t in threads %}{% set re_ = t.root.enrichment or {} %}
+        <article class="trow{% if t.new %} fresh{% endif %}">
+          {{ m.pic(t.root, 'thumb') }}
+          <div class="txt">
+            <div class="top">{{ m.kicker(t.root) }}{% if t.new %}<span class="badge">{{ t.new }} new chapter{% if t.new > 1 %}s{% endif %}</span>{% elif t.chapters %}<span class="meta">{{ t.chapters|length + 1 }} chapters</span>{% else %}<span class="meta">Watching for a next chapter</span>{% endif %}</div>
+            <h3><a href="{{ url_for('site.story', slug=t.root.slug) }}#thread">{{ re_.get('headline') or t.root.title }}</a></h3>
+            {% if t.chapters %}{% set last = t.chapters[-1] %}{% set le = last.enrichment or {} %}
+            <p class="latest"><span class="d">{{ last.published.strftime('%-d %b') if last.published }}</span> <a href="{{ url_for('site.story', slug=last.slug) }}">{{ le.get('headline') or last.title }}</a>{% if le.get('chapter_note') %} <span class="meta">{{ le.chapter_note }}</span>{% endif %}</p>
+            {% endif %}
+            <div class="acts"><span class="meta">Followed {{ t.liked.strftime('%-d %b') if t.liked }}</span>{{ m.like_btn(t.root, small=True) }}</div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="meta">Nothing yet. Tap ♥ on any story in today's ten and it lands here. When that story moves on, we tell you here first.</p>
+      <a href="{{ url_for('site.home') }}" class="btn2" style="align-self:flex-start">Go to today's ten</a>
+      {% endif %}
+    </section>
+
+    {% if for_you %}
+    <section class="foryou">
+      <h2><span class="emo">🎯</span> More for you</h2>
+      <p class="meta">You heart {% for s, n in fav %}{{ SECTIONS.get(s, s)|lower }}{% if not loop.last %}{% if loop.index == fav|length - 1 %} and {% else %}, {% endif %}{% endif %}{% endfor %} most, so here is the best of the last two weeks from there.</p>
+      <div class="grid" style="grid-template-columns:repeat(2, minmax(0,1fr))">{% for a in for_you %}{{ m.row(a) }}{% endfor %}</div>
+    </section>
+    {% endif %}
 
     <section class="box feelbox">
       <span class="kick"><i>💬</i>How the last 30 days felt</span>
@@ -27,7 +61,7 @@
     </div>
     <div class="box">
       <h3>🤝 What we keep</h3>
-      <ul><li>Your email, to send you links and the morning ten.</li><li>One feeling per day, if you tap one.</li><li>Your "one good thing" notes.</li><li>Nothing else. No reading history, no ads profile.</li></ul>
+      <ul><li>Your email, to send you links and the morning ten.</li><li>The stories you ♥, so we can follow them for you and pick "more for you" by section.</li><li>One feeling per day, if you tap one.</li><li>Your "one good thing" notes.</li><li>Nothing else. No reading history, no ads profile. Un-heart a story and it is gone.</li></ul>
     </div>
   </aside>
 </main>

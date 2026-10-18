@@ -201,3 +201,35 @@ class JournalEntry(db.Model):
     text = db.Column(db.Text, nullable=False)
     at = db.Column(db.DateTime, default=datetime.utcnow)
     __table_args__ = (db.UniqueConstraint("user_id", "day", name="uq_journal_user_day"),)
+
+
+class Like(db.Model):
+    """A reader tapped ♥ on a story: keep an eye on it for them. Keyed by the random visit cookie;
+    user_id is set when they are signed in, so the list follows them and we can email a next chapter."""
+    __tablename__ = "likes"
+    id = db.Column(db.Integer, primary_key=True)
+    vid = db.Column(db.String(32), index=True)
+    user_id = db.Column(db.Integer, index=True)
+    article_id = db.Column(db.String(32), db.ForeignKey("articles.id"), nullable=False, index=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    seen_at = db.Column(db.DateTime)      # last time the reader opened My page (new-chapter badges count from here)
+    notified_at = db.Column(db.DateTime)  # last chapter email, so each chapter is mailed once
+    __table_args__ = (db.UniqueConstraint("vid", "article_id", name="uq_like_vid_article"),)
+
+
+def thread_root(a: "Article", hops: int = 8) -> "Article":
+    """Follow follows_id up to the first story in a thread. New chapters point at the root, but be tolerant."""
+    seen = {a.id}
+    while a.follows_id and hops > 0:
+        parent = db.session.get(Article, a.follows_id)
+        if not parent or parent.id in seen:
+            break
+        a, hops = parent, hops - 1
+        seen.add(a.id)
+    return a
+
+
+def thread_for(root: "Article") -> list["Article"]:
+    """The root plus every later chapter, oldest first."""
+    chapters = Article.query.filter_by(follows_id=root.id).order_by(Article.published.asc()).all()
+    return [root] + chapters
