@@ -110,11 +110,14 @@ def feel():
         vid = new_cookie = secrets.token_urlsafe(18)[:24]
     today = datetime.utcnow().date()
     try:
+        from flask_login import current_user
+        uid = current_user.id if getattr(current_user, "is_authenticated", False) else None
         row = db.session.get(Feeling, (today, vid))
         if row:
             row.feeling, row.at = feeling, datetime.utcnow()
+            row.user_id = uid or row.user_id
         else:
-            db.session.add(Feeling(day=today, vid=vid, feeling=feeling, edition=getattr(g, "edition", None)))
+            db.session.add(Feeling(day=today, vid=vid, feeling=feeling, edition=getattr(g, "edition", None), user_id=uid))
         db.session.commit()
     except Exception:  # noqa: BLE001
         db.session.rollback()
@@ -587,6 +590,7 @@ def pipeline_status():
         "recent_errors": RECENT_ERRORS[-8:],
         "config": {"enrich_model": ENRICH_MODEL, "editor_model": EDITOR_MODEL, "api_key_present": has_api_key(),
                    "scheduler": _os.environ.get("PEANUT_SCHEDULER", "1"), "flask_env": _os.environ.get("FLASK_ENV", "production"),
+                   "secret_key_stable": bool(_os.environ.get("FLASK_SECRET_KEY")), "mail_ready": bool(_os.environ.get("MAIL_USERNAME") and _os.environ.get("MAIL_PASSWORD")),
                    "debug": bool(current_app.debug), "pid": _os.getpid()},
         "events": events,
         "latest_editions": latest,

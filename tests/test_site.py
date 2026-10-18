@@ -275,3 +275,24 @@ def test_feeling_is_one_per_reader_per_day(client, app):
     assert client.post("/api/feel", json={"feeling": "angry"}).status_code == 400
     with app.app_context():
         assert Feeling.query.count() == 1 and Feeling.query.first().feeling == "calmer"
+
+
+def test_signin_link_creates_account_and_syncs_journal(client, app):
+    from src.models.article import JournalEntry
+    with app.test_request_context():
+        from src.routes.account import make_signin_token, read_signin_token
+        token = make_signin_token("Reader@Example.com")
+        assert read_signin_token(token) == "reader@example.com"
+        assert read_signin_token("not-a-token") is None
+    assert client.get("/api/journal").status_code in (302, 401)
+    r = client.get(f"/signin/{token}", follow_redirects=False)
+    assert r.status_code == 302 and r.headers["Location"].endswith("/me")
+    assert client.get("/me").status_code == 200
+    assert client.post("/api/journal", json={"day": "2026-10-18", "text": "The soup turned out."}).status_code == 200
+    assert client.post("/api/journal", json={"day": "2026-10-18", "text": "Better soup."}).status_code == 200
+    with app.app_context():
+        rows = JournalEntry.query.all()
+        assert len(rows) == 1 and rows[0].text == "Better soup."
+    assert client.get("/api/journal").get_json()["entries"][0]["t"] == "Better soup."
+    r = client.post("/api/feel", json={"feeling": "calmer"})
+    assert r.status_code == 200

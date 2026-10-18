@@ -393,3 +393,11 @@ img { max-width: 100%; height: auto; }
 .feel-week b { font-size: 12px; color: var(--muted); margin-right: 4px; font-family: var(--display); font-weight: 600; }
 .feel-week span { width: 22px; text-align: center; }
 .feel-week b { white-space: nowrap; }
+
+/* Account */
+.me-link { font-family: var(--display); font-weight: 600; border-radius: 999px; padding: 0 14px; }
+@media (max-width: 699px) { .me-link { display: none; } }
+.feel-grid { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 6px; }
+.feel-grid .fd { display: flex; align-items: center; justify-content: center; aspect-ratio: 1; border-radius: 8px; background: var(--card); border: 1px solid var(--line); font-size: 20px; color: var(--faint); }
+.feel-grid .fd.calmer, .feel-grid .fd.better { background: var(--nature-bg); border-color: #C5DDBF; }
+.feel-grid .fd.same { background: var(--ad); } .feel-grid .fd.meh { background: var(--kindness-bg); }

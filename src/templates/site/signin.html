@@ -1,0 +1,14 @@
+{% extends "site/base.html" %}
+{% block title %}Sign in | Peanutlife{% endblock %}
+{% block body %}
+<main class="wrap main"><div class="col" style="max-width:560px">
+  <form class="box" method="post" action="{{ url_for('account.signin') }}" style="gap:14px">
+    <h1 style="font-family:var(--display);font-size:28px;font-weight:600">🥜 Sign in with a link</h1>
+    <p class="why">No password. We email you a link, you tap it, you're in. Signed in, your daily feeling and your "one good thing" notes follow you between phone and laptop.</p>
+    <label for="si-email">Email</label>
+    <input id="si-email" name="email" type="email" placeholder="you@example.com" required autofocus>
+    <button type="submit" class="btn">Email me a sign-in link</button>
+    <p class="meta" style="font-size:13px">We only ever use your address to send what you ask for. No tracking pixels, no "we miss you" emails.</p>
+  </form>
+</div></main>
+{% endblock %}

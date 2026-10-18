@@ -79,9 +79,9 @@
       </div>
     </section>
 
-    <section class="ogt" id="one-good-thing">
+    <section class="ogt" id="one-good-thing" data-synced="{{ 1 if current_user.is_authenticated else 0 }}">
       <h2><span class="emo">🌱</span> Before you go: one good thing from your own day</h2>
-      <p class="meta" style="font-size:14px;max-width:640px">Writing down one good thing, most days, is one of the best-studied small habits for mood. This stays in your browser. We never see it.</p>
+      <p class="meta" style="font-size:14px;max-width:640px">Writing down one good thing, most days, is one of the best-studied small habits for mood. {% if current_user.is_authenticated %}Saved to your account, where only you can read it.{% else %}This stays in your browser. We never see it. <a href="{{ url_for('account.signin') }}" class="act">Sign in</a> to keep it between devices.{% endif %}</p>
       <label for="ogt">Today</label>
       <textarea id="ogt" rows="2" placeholder="A neighbour waved. The soup turned out."></textarea>
       <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button type="button" class="btn2" id="ogt-save">Keep it</button><button type="button" class="meta" id="ogt-show" style="background:none;border:0;font-weight:700;cursor:pointer">Read your past entries</button></div>
@@ -146,12 +146,16 @@
 <script>
 (function(){
   var KEY='peanut.ogt', ta=document.getElementById('ogt'); if(!ta) return;
+  var synced=document.getElementById('one-good-thing').dataset.synced==='1';
   function load(){try{return JSON.parse(localStorage.getItem(KEY)||'[]');}catch(e){return [];}}
+  if(synced){ fetch('/api/journal').then(function(r){return r.json();}).then(function(j){ if(j&&j.entries&&j.entries.length){ try{localStorage.setItem(KEY, JSON.stringify(j.entries));}catch(e){} } }).catch(function(){}); }
   document.getElementById('ogt-save').onclick=function(){
     var v=ta.value.trim(); if(!v) return;
-    var list=load(); list.unshift({d:new Date().toISOString().slice(0,10), t:v});
+    var d=new Date().toISOString().slice(0,10), list=load().filter(function(x){return x.d!==d;}); list.unshift({d:d, t:v});
     try{localStorage.setItem(KEY, JSON.stringify(list.slice(0,365)));}catch(e){}
-    ta.value=''; toast('Kept. Only on this device.');
+    ta.value='';
+    if(synced){ fetch('/api/journal',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({day:d,text:v})}).then(function(){toast('Kept in your account.');}).catch(function(){toast('Kept on this device.');}); }
+    else { toast('Kept. Only on this device.'); }
   };
   document.getElementById('ogt-show').onclick=function(){
     var box=document.getElementById('ogt-past'), list=load();

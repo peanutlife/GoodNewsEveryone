@@ -591,7 +591,7 @@ def initialize_app(app):
     # Initialize Flask-Login
     login_manager = LoginManager()
     login_manager.init_app(app)
-    login_manager.login_view = 'auth.login'
+    login_manager.login_view = 'account.signin'
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -611,6 +611,7 @@ def initialize_app(app):
                     conn.execute(_sql("ALTER TABLE articles ADD COLUMN IF NOT EXISTS triage VARCHAR(8)"))
                     conn.execute(_sql("ALTER TABLE articles ADD COLUMN IF NOT EXISTS triage_score FLOAT"))
                     conn.execute(_sql("ALTER TABLE articles ADD COLUMN IF NOT EXISTS triaged_at TIMESTAMP"))
+                    conn.execute(_sql("ALTER TABLE feelings ADD COLUMN IF NOT EXISTS user_id INTEGER"))
                     conn.execute(_sql("CREATE INDEX IF NOT EXISTS ix_articles_triage ON articles (triage)"))
 
             from sqlalchemy import inspect
@@ -626,6 +627,8 @@ def initialize_app(app):
     app.register_blueprint(site_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(auth_bp)
+    from src.routes.account import account_bp
+    app.register_blueprint(account_bp)
 
     # Register template filters
     @app.template_filter("md5_hash")

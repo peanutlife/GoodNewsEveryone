@@ -189,3 +189,15 @@ class Feeling(db.Model):
     feeling = db.Column(db.String(12), nullable=False)
     edition = db.Column(db.String(16))
     at = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, index=True)  # set when the reader is signed in, so the trail follows them
+
+
+class JournalEntry(db.Model):
+    """'One good thing' entries for signed-in readers. Private to the account; never shown to anyone else."""
+    __tablename__ = "journal_entries"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, index=True, nullable=False)
+    day = db.Column(db.Date, nullable=False)
+    text = db.Column(db.Text, nullable=False)
+    at = db.Column(db.DateTime, default=datetime.utcnow)
+    __table_args__ = (db.UniqueConstraint("user_id", "day", name="uq_journal_user_day"),)

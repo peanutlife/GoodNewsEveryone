@@ -41,6 +41,7 @@
       <div class="seg" aria-label="Edition">
         {% for key, name in editions %}<a href="{{ url_for('site.choose_edition', edition=key) }}" class="{% if key == edition %}on{% endif %}">{{ name }}</a>{% endfor %}
       </div>
+      {% if current_user.is_authenticated %}<a href="{{ url_for('account.me') }}" class="btn2 me-link" style="height:40px">🥜 My page</a>{% else %}<a href="{{ url_for('account.signin') }}" class="btn2 me-link" style="height:40px">Sign in</a>{% endif %}
       <a href="{{ url_for('auth.subscribe') }}" class="btn" style="height:40px">Morning email</a>
     </div>
   </div>

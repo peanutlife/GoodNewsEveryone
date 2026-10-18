@@ -1,0 +1,34 @@
+{% extends "site/base.html" %}
+{% block title %}My page | Peanutlife{% endblock %}
+{% block body %}
+<main class="wrap main">
+  <div class="col">
+    <div class="dateline" style="padding-top:0"><h1>🥜 Your good news</h1><p class="meta">{{ current_user.email }} · <a href="{{ url_for('account.signout') }}" class="act">Sign out</a></p></div>
+
+    <section class="box feelbox">
+      <span class="kick"><i>💬</i>How the last 30 days felt</span>
+      <div class="feel-grid">{% for d in days %}<span class="fd {{ feelings.get(d, '') }}" title="{{ d.strftime('%-d %b') }}">{{ FEELINGS[feelings[d]].icon if feelings.get(d) else '·' }}</span>{% endfor %}</div>
+      <p class="meta">{% for k, f in FEELINGS.items() %}{{ f.icon }} {{ f.label }} × {{ counts[k] }}{% if not loop.last %} · {% endif %}{% endfor %}</p>
+      <p class="meta" style="font-size:12px">Only you can see this. The site's public number is a daily total with no names attached.</p>
+    </section>
+
+    <section class="ogt">
+      <h2><span class="emo">🌱</span> Your one good things</h2>
+      {% if entries %}
+      <div class="past">{% for e in entries %}<div><span class="meta">{{ e.day.strftime('%-d %b %Y') }}</span> {{ e.text }}</div>{% endfor %}</div>
+      {% else %}<p class="meta">Nothing kept yet. The box at the bottom of today's ten saves here while you're signed in.</p>{% endif %}
+      <a href="{{ url_for('site.home') }}#one-good-thing" class="btn2" style="align-self:flex-start">Write today's</a>
+    </section>
+  </div>
+  <aside class="rail">
+    <div class="box">
+      <h3>📬 Morning email</h3>
+      {% if subscribed %}<p class="meta">You get the ten every morning. <a href="{{ url_for('site.promise') }}" class="act">How it behaves</a></p>{% else %}<p class="meta">Not on the list yet.</p><a href="{{ url_for('auth.subscribe') }}#subscribe" class="btn">Send me tomorrow's ten</a>{% endif %}
+    </div>
+    <div class="box">
+      <h3>🤝 What we keep</h3>
+      <ul><li>Your email, to send you links and the morning ten.</li><li>One feeling per day, if you tap one.</li><li>Your "one good thing" notes.</li><li>Nothing else. No reading history, no ads profile.</li></ul>
+    </div>
+  </aside>
+</main>
+{% endblock %}
