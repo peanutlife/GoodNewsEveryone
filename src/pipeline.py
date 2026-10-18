@@ -263,6 +263,50 @@ def enrich_pending(limit: int = ENRICH_LIMIT, dry_run: bool = False) -> int:
     return done
 
 
+_OG_RE = re.compile(r'<meta[^>]+(?:property|name)=["\'](?:og:image(?::secure_url)?|twitter:image(?::src)?)["\'][^>]+content=["\']([^"\']+)["\']', re.I)
+_OG_RE_REV = re.compile(r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+(?:property|name)=["\'](?:og:image(?::secure_url)?|twitter:image(?::src)?)["\']', re.I)
+
+
+def find_page_image(url: str, session: requests.Session | None = None) -> str | None:
+    """Fetch the first 200 KB of an article page and return its og:image, if any. No AI involved."""
+    session = session or requests.Session()
+    try:
+        with session.get(url, timeout=10, headers={"User-Agent": USER_AGENT, "Accept": "text/html"}, stream=True, allow_redirects=True) as resp:
+            if resp.status_code >= 400 or "html" not in resp.headers.get("Content-Type", ""):
+                return None
+            raw = b""
+            for chunk in resp.iter_content(32 * 1024):
+                raw += chunk
+                if len(raw) > 200_000:
+                    break
+    except requests.RequestException:
+        return None
+    text = raw.decode("utf-8", "ignore")
+    m = _OG_RE.search(text) or _OG_RE_REV.search(text)
+    if not m:
+        return None
+    img = html.unescape(m.group(1).strip())
+    return img if img.startswith("http") else None
+
+
+def backfill_images(limit: int = 60) -> int:
+    """Give good-news stories without a feed image a picture from the article page itself.
+    image_url "" means we looked and found nothing, so each page is fetched at most once."""
+    rows = (Article.query.filter(Article.is_good_news.is_(True), Article.image_url.is_(None))
+            .order_by(Article.score.desc(), Article.published.desc()).limit(limit).all())
+    if not rows:
+        return 0
+    session = requests.Session()
+    found = 0
+    for a in rows:
+        img = find_page_image(a.link, session)
+        a.image_url = img or ""
+        found += 1 if img else 0
+    db.session.commit()
+    logger.info("Image backfill: %d of %d pages had a picture", found, len(rows))
+    return found
+
+
 def _apply_enrichment(pending: list[Article], results: list[dict | None]) -> int:
     done = 0
     for a, r in zip(pending, results):
@@ -305,6 +349,10 @@ def run(dry_run: bool = False, limit: int = ENRICH_LIMIT, editions_only: bool = 
         log_event("stage", f"triage {t}")
         n = enrich_pending(limit=limit, dry_run=dry_run)
         log_event("stage", f"enriched {n}")
+        try:
+            log_event("stage", f"pictures found for {backfill_images()} stories")
+        except Exception as e:  # pictures are nice to have, never a reason to fail the run
+            log_event("error", f"image backfill failed: {e!r}")
         logger.info("Enriched %d articles (%s)", n, "dry run" if dry_run else "Claude")
     PROGRESS["stage"] = "building editions"
     built = build_all_editions(dry_run=dry_run)
@@ -322,6 +370,8 @@ def main():
     p.add_argument("--limit", type=int, default=400, help="Max articles to enrich this run")
     p.add_argument("--limit-sources", type=int, default=None, help="Only fetch the first N sources (testing)")
     p.add_argument("--editions-only", action="store_true", help="Skip fetch/enrich; rebuild today's editions")
+    pi = sub.add_parser("images", help="Fetch og:image for good-news stories that arrived without a picture")
+    pi.add_argument("--limit", type=int, default=60)
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     from src.main import create_app
@@ -331,6 +381,8 @@ def main():
         if args.cmd == "run":
             run(dry_run=args.dry_run, limit=args.limit, editions_only=args.editions_only,
                 limit_sources=args.limit_sources)
+        elif args.cmd == "images":
+            print(f"pictures found for {backfill_images(limit=args.limit)} stories")
         else:
             parser.print_help()
 

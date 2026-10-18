@@ -2,62 +2,36 @@
 {% import "site/_macros.html" as m with context %}
 {% block title %}Peanutlife, today's ten good things ({{ edition_name }} edition){% endblock %}
 {% block body %}
+<nav class="secbar" aria-label="Sections">
+  <div class="wrap">
+    <span class="lbl">Sections</span>
+    {% for key, name in SECTIONS.items() %}{% if section_counts.get(key) %}<a href="{{ url_for('site.section', slug=key) }}">{{ name.replace('Good news for ', 'For ').replace('Good news in ', '').replace('Great news in ', '')|capitalize }}<span class="n">{{ section_counts[key] }}</span></a>{% endif %}{% endfor %}
+    <a href="{{ url_for('site.dial') }}" class="dial-link">The dial</a>
+  </div>
+</nav>
 <div class="wrap">{{ m.ad('ad-lead', note='') }}</div>
-<main class="wrap main">
+<div class="wrap dateline">
+  <h1>{{ greeting }} Here are {% if is_yesterday %}yesterday's{% else %}today's{% endif %} ten good things.</h1>
+  <p class="meta">
+    {% if ed %}{{ ed.day.strftime('%A %-d %B %Y') }} · {{ edition_name }} edition · {{ total_minutes }} minutes to read all ten · {{ sources }} sources{% else %}The first edition is being built.{% endif %}
+    {% if not is_yesterday and picks %} · <a href="{{ url_for('site.home', one=1) }}" class="act">Just one story today</a>{% endif %}
+  </p>
+</div>
+<main class="wrap main paper">
   <div class="col">
-    <section class="greet" id="today">
-      <h1>{{ greeting }} Here are {% if is_yesterday %}yesterday's{% else %}today's{% endif %} ten good things.</h1>
-      <p class="meta">
-        {% if ed %}Updated {{ ed.built_at.strftime('%-d %b, %H:%M') }} UTC · {{ total_minutes }} minutes to read all ten · {{ sources }} sources{% else %}The first edition is being built.{% endif %}
-        {% if not is_yesterday and picks %} · <a href="{{ url_for('site.home', one=1) }}" class="act" style="font-size:15px">Just one story today</a>{% endif %}
-      </p>
-      {% if quote and quote.quote %}<p class="quote">“{{ quote.quote }}” <span class="meta" style="font-style:normal">{{ quote.author or quote.person }}</span></p>{% endif %}
-    </section>
-
-    <nav class="strip" aria-label="Sections">
-      <span class="lbl">Also today</span>
-      {% for key, name in SECTIONS.items() %}{% if section_counts.get(key) %}<a href="{{ url_for('site.section', slug=key) }}" class="chip">{{ name.replace('Good news for ', 'For ').replace('Good news in ', '').replace('Great news in ', '')|capitalize }}<span class="n">{{ section_counts[key] }}</span></a>{% endif %}{% endfor %}
-    </nav>
-
-    {% if not is_yesterday and picks %}
-    <section class="mood">
-      <span class="q">What do you need today?</span>
-      <div class="opts">
-        <a href="{{ url_for('site.home', mood='calm') }}" class="{% if mood == 'calm' %}on{% endif %}"><b>Calm</b><span>quiet, slower stories first</span></a>
-        <a href="{{ url_for('site.home', mood='lift') }}" class="{% if mood == 'lift' %}on{% endif %}"><b>Lift</b><span>comebacks and wins first</span></a>
-        <a href="{{ url_for('site.home', mood='surprise') }}" class="{% if mood == 'surprise' %}on{% endif %}"><b>Surprise me</b><span>editor's order</span></a>
-      </div>
-      <span class="meta">Changes the order only. Remembered on this device.</span>
-    </section>
-    {% endif %}
-
-    {% if ed and ed.letter %}
-    <section class="letter">
-      <div class="avatar" aria-hidden="true"></div>
-      <div style="min-width:0">
-        <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap"><h2>{{ ed.letter_title or "Today's letter" }}</h2><span class="meta">From the editor · {{ ed.day.strftime('%A %-d %B') }}</span></div>
-        <p class="body">{{ ed.letter }}</p>
-      </div>
-    </section>
-    {% endif %}
-
     {% if picks %}
     {% set lead = picks[0] %}{% set le = lead.enrichment or {} %}
     <section class="lead">
       <a href="{{ url_for('site.story', slug=lead.slug) }}" class="card big">
         {{ m.pic(lead) }}
         <div class="pad">
-          <div class="top"><span class="num">1</span><span class="meta">{{ lead.source_name }} · {{ SECTIONS.get(lead.section, 'Today') }} · {{ lead.read_minutes or 3 }} min read</span></div>
+          <div class="top"><span class="num">1</span>{{ m.kicker(lead) }}</div>
           <h2>{{ le.get('headline') or lead.title }}</h2>
-          {% if le.get('why_card') %}<p class="why">Why it's good news: {{ le.why_card }}</p>{% endif %}
+          {{ m.peanut_why(le) }}
           {% if le.get('action') %}<p class="act">Something you can do: {{ le.action }}</p>{% endif %}
+          <span class="meta">{{ lead.source_name }} · {{ lead.read_minutes or 3 }} min read</span>
         </div>
       </a>
-      {% if not one_story %}
-      <div class="side">
-        {% for a in picks[1:4] %}{{ m.row(a, loop.index + 1) }}{% endfor %}
-      </div>
-      {% endif %}
     </section>
 
     {% if one_story %}
@@ -66,12 +40,16 @@
       <p>The other nine will still be here if you want them later. <a href="{{ url_for('site.home') }}" style="color:#fff;font-weight:700">Show all ten</a></p>
     </section>
     {% else %}
+    <section class="trio grid">
+      {% for a in picks[1:4] %}{{ m.card(a, loop.index + 1) }}{% endfor %}
+    </section>
+
     <section>
-      <div class="sec-head" style="margin-bottom:18px"><h2>The rest of today's ten</h2>{% if prev %}<a href="{{ url_for('site.yesterday') }}" class="meta">Missed yesterday's? →</a>{% endif %}</div>
-      <div class="grid">
+      <div class="sec-head"><h2>The rest of today's ten</h2>{% if prev %}<a href="{{ url_for('site.yesterday') }}" class="meta">Missed yesterday's? →</a>{% endif %}</div>
+      <div class="grid rest">
         {% for a in picks[4:] %}
           {{ m.card(a, loop.index + 4) }}
-          {% if loop.index == 2 %}{{ m.ad('ad-feed') }}{% endif %}
+          {% if loop.index == 3 %}{{ m.ad('ad-feed') }}{% endif %}
         {% endfor %}
       </div>
     </section>
@@ -97,8 +75,33 @@
   </div>
 
   <aside class="rail">
-    {{ m.ad('ad-rail') }}
+    {% if ed and ed.letter %}
+    <section class="letter" id="letter">
+      <span class="kick">From the editor</span>
+      <h2>{{ ed.letter_title or "Today's letter" }}</h2>
+      <p class="body" id="letter-body">{{ ed.letter }}</p>
+      <button type="button" class="more" id="letter-more" hidden>Read the whole letter</button>
+      <span class="meta">{{ ed.day.strftime('%A %-d %B') }}</span>
+    </section>
+    {% endif %}
+
+    {% if not is_yesterday and picks %}
+    <section class="mood">
+      <span class="kick">What do you need today?</span>
+      <div class="opts">
+        <a href="{{ url_for('site.home', mood='calm') }}" class="{% if mood == 'calm' %}on{% endif %}"><b>Calm</b><span>quiet stories first</span></a>
+        <a href="{{ url_for('site.home', mood='lift') }}" class="{% if mood == 'lift' %}on{% endif %}"><b>Lift</b><span>wins first</span></a>
+        <a href="{{ url_for('site.home', mood='surprise') }}" class="{% if mood == 'surprise' %}on{% endif %}"><b>Surprise</b><span>editor's order</span></a>
+      </div>
+      <span class="meta">Changes the order only. Remembered on this device.</span>
+    </section>
+    {% endif %}
+
     {{ m.subscribe_box() }}
+    {{ m.ad('ad-rect') }}
+
+    {% if quote and quote.quote %}<section class="box quotebox"><span class="kick">A line to keep</span><p class="quote">“{{ quote.quote }}”</p><span class="meta">{{ quote.author or quote.person }}</span></section>{% endif %}
+
     <div class="box">
       <h3>How this page behaves</h3>
       <ul>
@@ -109,7 +112,7 @@
       </ul>
       <a href="{{ url_for('site.promise') }}" class="meta" style="font-weight:700">Our reader promise →</a>
     </div>
-    {{ m.ad('ad-rect') }}
+    {{ m.ad('ad-rail') }}
   </aside>
 </main>
 {% endblock %}
@@ -128,6 +131,12 @@
     var box=document.getElementById('ogt-past'), list=load();
     box.hidden=false; box.innerHTML=list.length?list.map(function(x){return '<div><span class="meta">'+x.d+'</span> '+x.t.replace(/</g,'&lt;')+'</div>';}).join(''):'<div class="meta">Nothing kept yet.</div>';
   };
+})();
+(function(){
+  var b=document.getElementById('letter-body'), btn=document.getElementById('letter-more'); if(!b||!btn) return;
+  b.classList.add('clamp');
+  if(b.scrollHeight>b.clientHeight+8){ btn.hidden=false; btn.onclick=function(){ b.classList.remove('clamp'); btn.hidden=true; }; }
+  else { b.classList.remove('clamp'); }
 })();
 </script>
 {% endblock %}

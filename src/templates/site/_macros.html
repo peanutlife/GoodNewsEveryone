@@ -1,5 +1,18 @@
 {% macro pic(a, cls='pic') -%}
-<div class="{{ cls }}">{% if a.image_url and a.image_url.startswith('http') %}<img src="{{ a.image_url }}" alt="" loading="lazy">{% endif %}</div>
+<div class="{{ cls }} t-{{ a.section or 'progress' }}">{% if a.image_url and a.image_url.startswith('http') %}<img src="{{ a.image_url }}" alt="" loading="lazy">{% else %}<span class="ph" aria-hidden="true">{{ SECTIONS.get(a.section, 'Today').replace('Good news for ', '').replace('Good news in ', '').replace('Great news in ', '')|capitalize }}</span>{% endif %}</div>
+{%- endmacro %}
+
+{% macro kicker(a) -%}
+<span class="kick">{{ SECTIONS.get(a.section, 'Today').replace('Good news for ', 'For ').replace('Good news in ', '').replace('Great news in ', '')|capitalize }}</span>
+{%- endmacro %}
+
+{% macro peanut_why(e, short=True) -%}
+{% set w = e.get('why_card') if short else (e.get('why_long') or e.get('why_card')) %}
+{% if w %}<p class="why"><span class="pn">The Peanut Gallery likes this one:</span> {{ w }}</p>{% endif %}
+{%- endmacro %}
+
+{% macro byline() -%}
+<span class="byline">Read and summarised by Claude, our robot with a library card. Picked and double-checked by the Peanut Gallery, the humans at Peanutlife.</span>
 {%- endmacro %}
 
 {% macro card(a, n=None, show_why=True) -%}
@@ -7,9 +20,10 @@
 <a href="{{ url_for('site.story', slug=a.slug) }}" class="card">
   {{ pic(a) }}
   <div class="pad">
-    <div class="top">{% if n %}<span class="num">{{ n }}</span>{% endif %}<span class="meta">{{ a.source_name }} · {{ SECTIONS.get(a.section, 'Today') }} · {{ a.read_minutes or 3 }} min</span></div>
+    <div class="top">{% if n %}<span class="num">{{ n }}</span>{% endif %}{{ kicker(a) }}</div>
     <h3>{{ e.get('headline') or a.title }}</h3>
-    {% if show_why and e.get('why_card') %}<p class="why" style="font-size:14px">{{ e.why_card }}</p>{% endif %}
+    {% if show_why %}{{ peanut_why(e) }}{% endif %}
+    <span class="meta">{{ a.source_name }} · {{ a.read_minutes or 3 }} min</span>
   </div>
 </a>
 {%- endmacro %}
@@ -19,8 +33,9 @@
 <a href="{{ url_for('site.story', slug=a.slug) }}" class="row">
   {{ pic(a, 'thumb') }}
   <div class="txt">
-    <div class="top">{% if n %}<span class="num">{{ n }}</span>{% endif %}<span class="meta">{{ a.source_name }} · {{ a.read_minutes or 3 }} min</span></div>
+    <div class="top">{% if n %}<span class="num">{{ n }}</span>{% endif %}{{ kicker(a) }}</div>
     <h3>{{ e.get('headline') or a.title }}</h3>
+    <span class="meta">{{ a.source_name }} · {{ a.read_minutes or 3 }} min</span>
   </div>
 </a>
 {%- endmacro %}

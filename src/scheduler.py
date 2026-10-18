@@ -41,6 +41,25 @@ def _missing_editions(today: date) -> list[str]:
     return [e for e in EDITIONS if e not in have]
 
 
+_pictures_done_for: date | None = None
+
+
+def _backfill_pictures(app) -> None:
+    """Once a day, after the editions exist, fetch og:image for stories that arrived without one. Free: no AI calls."""
+    global _pictures_done_for
+    today = datetime.utcnow().date()
+    if _pictures_done_for == today:
+        return
+    _pictures_done_for = today
+    try:
+        from src.pipeline import backfill_images
+        n = backfill_images()
+        if n:
+            STATE["last_reason"] = f"pictures found for {n} stories"
+    except Exception as e:
+        logger.warning("Picture backfill failed: %r", e)
+
+
 def _run_once(app, force: bool = False) -> str:
     """Decide whether to build, and build. Returns a short reason string for the status page."""
     from src.models.user import db
@@ -54,6 +73,7 @@ def _run_once(app, force: bool = False) -> str:
             today = datetime.utcnow().date()
             missing = _missing_editions(today)
             if not missing and not force:
+                _backfill_pictures(app)
                 return f"all editions published for {today}"
             if (not force and datetime.utcnow().hour < RUN_AFTER_HOUR
                     and not _missing_editions(today - timedelta(days=1))):
