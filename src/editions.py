@@ -88,13 +88,24 @@ def section_lists(edition: str, since: datetime) -> dict[str, list[Article]]:
     return out
 
 
-def mood_orders(picks: list[Article]) -> dict[str, list[str]]:
+CALM_SECTIONS = {"nature": 0, "kindness": 0, "culture": 1, "science": 1, "kids": 1, "progress": 2, "politics": 3, "sports": 3}
+LIFT_SECTIONS = {"sports": 0, "kindness": 0, "progress": 0, "science": 1, "politics": 1, "nature": 2, "culture": 2, "kids": 2}
+
+
+def mood_sort(picks: list[Article], mood: str) -> list[Article]:
+    """Reorder the ten for a mood. Surprise = the editor's order. Never adds or drops a story."""
     def tone(a):
         return (a.enrichment or {}).get("tone", "neutral")
-    order = {"calm": 0, "neutral": 1, "lift": 2}
-    calm = sorted(picks, key=lambda a: (order[tone(a)], -(a.score or 0)))
-    lift = sorted(picks, key=lambda a: (-order[tone(a)], -(a.score or 0)))
-    return {"calm": [a.id for a in calm], "lift": [a.id for a in lift], "surprise": [a.id for a in picks]}
+    tone_rank = {"calm": 0, "neutral": 1, "lift": 2}
+    if mood == "calm":
+        return sorted(picks, key=lambda a: (tone_rank[tone(a)], CALM_SECTIONS.get(a.section, 2), -(a.read_minutes or 3), -(a.score or 0)))
+    if mood == "lift":
+        return sorted(picks, key=lambda a: (-tone_rank[tone(a)], LIFT_SECTIONS.get(a.section, 2), (a.read_minutes or 3), -(a.score or 0)))
+    return list(picks)
+
+
+def mood_orders(picks: list[Article]) -> dict[str, list[str]]:
+    return {m: [a.id for a in mood_sort(picks, m)] for m in ("calm", "lift", "surprise")}
 
 
 def build_edition(edition: str, day: date | None = None, dry_run: bool = False) -> Edition:

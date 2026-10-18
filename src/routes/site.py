@@ -10,8 +10,8 @@ from datetime import datetime
 import anthropic
 from flask import Blueprint, abort, g, jsonify, make_response, redirect, render_template, request, url_for
 
-from src.edition import COOKIE_MAX_AGE, COOKIE_NAME, EDITIONS, detect_edition, edition_name
-from src.editions import articles_by_ids, latest_edition, previous_edition
+from src.edition import edition_for_country, COOKIE_MAX_AGE, COOKIE_NAME, EDITIONS, detect_edition, edition_name
+from src.editions import mood_sort, articles_by_ids, latest_edition, previous_edition
 from src.enrich import ENRICH_MODEL, STYLE_GUIDE, has_api_key
 from src.models.article import SECTIONS, Article, Follow
 from src.models.user import db
@@ -33,6 +33,9 @@ def _load_quote():
 @site_bp.before_app_request
 def _edition_context():
     g.edition, g.edition_how = detect_edition(request)
+    country = (request.headers.get("CF-IPCountry") or request.headers.get("X-Vercel-IP-Country")
+               or request.headers.get("X-Country-Code") or request.headers.get("CloudFront-Viewer-Country") or "").upper()
+    g.edition_here = edition_for_country(country) or "global"
 
 
 @site_bp.app_context_processor
@@ -40,6 +43,8 @@ def _inject():
     return {
         "edition": getattr(g, "edition", "global"),
         "edition_name": edition_name(getattr(g, "edition", "global")),
+        "edition_here": getattr(g, "edition_here", "global"),
+        "edition_here_name": edition_name(getattr(g, "edition_here", "global")),
         "editions": [(e, edition_name(e)) for e in EDITIONS],
         "SECTIONS": SECTIONS,
         "greeting": _greeting(),
@@ -81,8 +86,9 @@ def home():
     edition = g.edition
     mood = request.args.get("mood") or request.cookies.get("mood") or "surprise"
     ed, picks, sections, prev = _edition_payload(edition)
-    if ed and mood in (ed.mood_orders or {}):
-        picks = articles_by_ids(ed.mood_orders[mood])
+    if mood not in ("calm", "lift", "surprise"):
+        mood = "surprise"
+    picks = mood_sort(picks, mood)
     total_minutes = sum((a.read_minutes or 3) for a in picks)
     sources = len({a.source_name for a in picks})
     section_counts = {k: len(v) for k, v in sections.items() if v}
@@ -95,6 +101,8 @@ def home():
         _set_edition_cookie(resp, request.args["edition"])
     if request.args.get("mood") in ("calm", "lift", "surprise"):
         resp.set_cookie("mood", request.args["mood"], max_age=COOKIE_MAX_AGE, samesite="Lax")
+    resp.headers["Cache-Control"] = "private, no-store"
+    resp.headers["Vary"] = "Cookie"
     return resp
 
 

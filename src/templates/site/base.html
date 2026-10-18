@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ url_for('static', filename='peanut.css') }}?v=3">
+<link rel="stylesheet" href="{{ url_for('static', filename='peanut.css') }}?v=4">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-V4SHHF8RVX"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-V4SHHF8RVX');</script>
 {% if config.get('ADS_ENABLED', True) %}<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4295146235414490" crossorigin="anonymous"></script>{% endif %}
@@ -45,6 +45,7 @@
     </div>
   </div>
 </header>
+{% if edition_here != edition and request.endpoint in ('site.home', 'site.section', 'site.dial') %}<div class="wrap" style="padding-top:12px"><div class="box" role="status" style="padding:10px 16px;flex-direction:row;align-items:center;gap:12px;flex-wrap:wrap"><span class="meta">You're reading the <strong>{{ edition_name }}</strong> edition. You seem to be in the {{ edition_here_name }} region.</span><a href="{{ url_for('site.choose_edition', edition=edition_here) }}" class="btn2" style="height:34px;font-size:13px">Switch to {{ edition_here_name }}</a></div></div>{% endif %}
 {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="wrap" style="padding-top:14px">{% for cat, m in messages %}<div class="box" role="status" style="padding:14px 18px;{% if cat == 'danger' %}border-color:#C97B5A{% endif %}">{{ m }}</div>{% endfor %}</div>{% endif %}{% endwith %}
 {% block body %}{% endblock %}
 <footer class="ftr" id="about">
