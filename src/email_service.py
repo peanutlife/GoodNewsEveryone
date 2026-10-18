@@ -19,6 +19,7 @@ class EmailService:
         self.username = config.MAIL_USERNAME
         self.password = config.MAIL_PASSWORD
         self.sender = config.MAIL_DEFAULT_SENDER
+        self.last_error = None
 
     def send_email(self, to_email, subject, html_content, text_content=None):
         """Send an email (multipart: plain text first, then HTML)."""
@@ -49,6 +50,7 @@ class EmailService:
 
         except Exception as e:
             logger.error(f"Failed to send email to {to_email}: {e}")
+            self.last_error = f"{type(e).__name__}: {e}"[:400]
             return False
 
     def generate_daily_digest_html(self, articles, unsubscribe_url):

@@ -150,11 +150,15 @@ def send_digest(edition: str = DIGEST_EDITION, test_email: str | None = None, fo
     if test_email:
         ok = svc.send_email(test_email, "[test] " + subject, build_html(ed, picks, f"{SITE}/unsubscribe/test"),
                             text_content=build_text(ed, picks, f"{SITE}/unsubscribe/test"))
-        log_event("info", f"digest test to {test_email}: {'sent' if ok else 'failed'}")
-        return {"sent": int(ok), "failed": int(not ok), "skipped": 0, "test": True}
+        log_event("info", f"digest test to {test_email}: {'sent' if ok else 'failed: ' + str(svc.last_error)}")
+        return {"sent": int(ok), "failed": int(not ok), "skipped": 0, "test": True, "error": svc.last_error}
 
     sent = failed = skipped = 0
+    streak = 0
     for sub in EmailSubscriber.query.filter_by(is_active=True).order_by(EmailSubscriber.id).all():
+        if streak >= 3:
+            log_event("error", f"digest: stopped after 3 consecutive failures; last error: {svc.last_error}")
+            break
         if not force and sub.last_sent_at and sub.last_sent_at.date() >= today:
             skipped += 1
             continue
@@ -167,11 +171,14 @@ def send_digest(edition: str = DIGEST_EDITION, test_email: str | None = None, fo
             sub.last_sent_at = datetime.utcnow()
             sub.total_emails_sent = (sub.total_emails_sent or 0) + 1
             sent += 1
+            streak = 0
         else:
             failed += 1
+            streak += 1
         db.session.commit()
-    log_event("info", f"digest {edition} {ed.day}: sent {sent}, failed {failed}, already had it {skipped}")
-    return {"sent": sent, "failed": failed, "skipped": skipped, "edition": edition, "day": ed.day.isoformat()}
+    log_event("info", f"digest {edition} {ed.day}: sent {sent}, failed {failed}, already had it {skipped}"
+              + (f"; last error: {svc.last_error}" if failed else ""))
+    return {"sent": sent, "failed": failed, "skipped": skipped, "edition": edition, "day": ed.day.isoformat(), "error": svc.last_error}
 
 
 def digest_due() -> bool:

@@ -47,7 +47,13 @@ def _inject():
 
 
 def _greeting() -> str:
-    h = datetime.utcnow().hour
+    from zoneinfo import ZoneInfo
+    from src.edition import config as _cfg
+    tz = (_cfg().get("editions", {}).get(getattr(g, "edition", "global"), {}) or {}).get("tz", "UTC")
+    try:
+        h = datetime.now(ZoneInfo(tz)).hour
+    except Exception:  # noqa: BLE001
+        h = datetime.utcnow().hour
     if h < 12:
         return "Good morning."
     if h < 18:
