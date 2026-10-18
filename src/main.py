@@ -605,6 +605,13 @@ def initialize_app(app):
             logging.info("🔌 Attempting to connect to database...")
             db.create_all()
             init_topics()
+            if db.engine.dialect.name == "postgresql":  # create_all never alters existing tables
+                from sqlalchemy import text as _sql
+                with db.engine.begin() as conn:
+                    conn.execute(_sql("ALTER TABLE articles ADD COLUMN IF NOT EXISTS triage VARCHAR(8)"))
+                    conn.execute(_sql("ALTER TABLE articles ADD COLUMN IF NOT EXISTS triage_score FLOAT"))
+                    conn.execute(_sql("ALTER TABLE articles ADD COLUMN IF NOT EXISTS triaged_at TIMESTAMP"))
+                    conn.execute(_sql("CREATE INDEX IF NOT EXISTS ix_articles_triage ON articles (triage)"))
 
             from sqlalchemy import inspect
             inspector = inspect(db.engine)

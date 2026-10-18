@@ -42,7 +42,12 @@ class Article(db.Model):
     published = db.Column(db.DateTime, index=True)
     fetched_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    # Claude's judgement and writing. Null until enriched.
+    # Stage 1: cheap batched vetting on title + opening lines. Null until triaged.
+    triage = db.Column(db.String(8), index=True)  # yes | maybe | no
+    triage_score = db.Column(db.Float)  # 0-10 quick estimate
+    triaged_at = db.Column(db.DateTime)
+
+    # Stage 2: Claude's full judgement and writing. Null until enriched.
     enriched_at = db.Column(db.DateTime, index=True)
     enrich_model = db.Column(db.String(60))
     is_good_news = db.Column(db.Boolean, index=True)

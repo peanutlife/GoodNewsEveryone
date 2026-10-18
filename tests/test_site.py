@@ -191,3 +191,30 @@ def test_ask_and_follow_endpoints(client, app):
 
 def test_legacy_index_still_served(client):
     assert client.get("/legacy").status_code == 200
+
+
+# ---------- triage ----------
+
+def test_triage_closes_no_rows_and_enrich_reads_yes_first(app):
+    from src.pipeline import triage_pending, enrich_pending
+    good = Article(id="g1", link="https://x.test/g1", title="Village restores wetland and birds return", summary="Volunteers rebuilt the marsh.",
+                   source_name="NPR", source_url="u", source_region="us", source_quality="high", published=datetime.utcnow(), fetched_at=datetime.utcnow())
+    bad = Article(id="b1", link="https://x.test/b1", title="Three killed in highway crash", summary="",
+                  source_name="NPR", source_url="u", source_region="us", source_quality="high", published=datetime.utcnow(), fetched_at=datetime.utcnow())
+    db.session.add_all([good, bad]); db.session.commit()
+    counts = triage_pending(dry_run=True)
+    assert counts["no"] >= 1 and (counts["yes"] + counts["maybe"]) >= 1
+    assert Article.query.get("b1").enrich_model == "triage-no"
+    assert Article.query.get("b1").enriched_at is not None
+    assert Article.query.get("g1").enriched_at is None
+    n = enrich_pending(dry_run=True)
+    assert n == 1
+    assert Article.query.get("g1").enriched_at is not None
+
+
+def test_pipeline_run_endpoint_requires_admin(client, app):
+    assert client.post("/_pipeline/run").status_code == 401
+    app.config.update(ADMIN_USER="admin", ADMIN_PASS="pw")
+    assert client.post("/_pipeline/run", auth=("admin", "wrong")).status_code == 401
+    r = client.get("/_pipeline")
+    assert r.status_code == 200 and "scheduler" in r.get_json()

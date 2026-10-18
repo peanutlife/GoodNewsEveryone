@@ -119,6 +119,120 @@ def slugify(title: str) -> str:
     return slug or "story"
 
 
+TRIAGE_BATCH = int(os.environ.get("PEANUT_TRIAGE_BATCH", "40"))
+
+TRIAGE_SYSTEM = (
+    "You vet news headlines for Peanutlife, a site that publishes only good news: things that got better, "
+    "were repaired, protected, discovered, or done well, and are true. You see the title and the opening "
+    "lines of many articles at once. For each, answer whether it is worth a full read.\n\n"
+    "yes = clearly a good-news story a thoughtful adult would be glad to read (progress, recovery, "
+    "breakthrough, protection, kindness, a law or deal that helps people, a win in sport).\n"
+    "maybe = could be, but the headline alone cannot tell (ambiguous, mixed, or thin).\n"
+    "no = not good news: crime, death, disaster, war, politics-as-contest, celebrity, product launches, "
+    "business results, listicles, how-tos, opinion, horoscopes, deals, or routine reporting.\n\n"
+    "score is 0-10 for how strong a good-news story it would be. section is one of: "
+    + ", ".join(SECTIONS) + ". Be strict: most items are 'no'. Return one entry per input index."
+)
+
+TRIAGE_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "items": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "i": {"type": "integer"},
+                    "verdict": {"type": "string", "enum": ["yes", "maybe", "no"]},
+                    "score": {"type": "number"},
+                    "section": {"type": "string", "enum": list(SECTIONS)},
+                },
+                "required": ["i", "verdict", "score", "section"],
+                "additionalProperties": False,
+            },
+        }
+    },
+    "required": ["items"],
+    "additionalProperties": False,
+}
+
+
+def _triage_prompt(items: list[dict]) -> str:
+    lines = []
+    for i, a in enumerate(items):
+        summary = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", a.get("summary") or "")).strip()[:160]
+        lines.append(f"[{i}] ({a.get('source_name', '')}) {a.get('title', '')}" + (f" :: {summary}" if summary else ""))
+    return "Vet these articles:\n\n" + "\n".join(lines)
+
+
+def dry_triage(a: dict) -> dict:
+    d = dry_enrichment(a)
+    verdict = "no" if not d["is_good_news"] else ("yes" if d["score"] >= 7 else "maybe")
+    return {"verdict": verdict, "score": d["score"], "section": d["section"], "_model": "dry-run", "_usage": None}
+
+
+def triage_batch(items: list[dict], client: anthropic.Anthropic | None = None) -> list[dict | None]:
+    """One Claude call vets up to TRIAGE_BATCH articles from titles alone."""
+    client = client or _client()
+    response = client.messages.create(
+        model=ENRICH_MODEL,
+        max_tokens=4096,
+        system=[{"type": "text", "text": TRIAGE_SYSTEM, "cache_control": {"type": "ephemeral"}}],
+        messages=[{"role": "user", "content": _triage_prompt(items)}],
+        output_config={"effort": "low", "format": {"type": "json_schema", "schema": TRIAGE_SCHEMA}},
+    )
+    out: list[dict | None] = [None] * len(items)
+    if response.stop_reason == "refusal":
+        return out
+    text = next((b.text for b in response.content if b.type == "text"), "")
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError:
+        _note_error(f"unparseable triage response (request {response._request_id})")
+        return out
+    n = max(1, len(items))
+    share = {
+        "input": response.usage.input_tokens / n,
+        "output": response.usage.output_tokens / n,
+        "cache_read": (getattr(response.usage, "cache_read_input_tokens", 0) or 0) / n,
+        "cache_write": (getattr(response.usage, "cache_creation_input_tokens", 0) or 0) / n,
+    }
+    for r in data.get("items", []):
+        i = r.get("i")
+        if isinstance(i, int) and 0 <= i < len(items):
+            out[i] = {"verdict": r["verdict"], "score": float(r.get("score") or 0), "section": r.get("section", "progress"),
+                      "_model": ENRICH_MODEL, "_usage": share}
+    return out
+
+
+def triage_many(articles: list[dict], dry_run: bool = False, concurrency: int = 3) -> list[dict | None]:
+    """Vet articles in batches; returns one dict (or None on failure) per input, in order."""
+    if dry_run or not has_api_key():
+        return [dry_triage(a) for a in articles]
+    client = _client()
+    chunks = [articles[i:i + TRIAGE_BATCH] for i in range(0, len(articles), TRIAGE_BATCH)]
+
+    def work(chunk):
+        try:
+            return triage_batch(chunk, client)
+        except anthropic.RateLimitError as e:
+            _note_error(f"triage rate limited: {e}")
+        except anthropic.APIStatusError as e:
+            _note_error(f"triage API {e.status_code}: {getattr(e, 'message', e)}")
+        except anthropic.APIConnectionError as e:
+            _note_error(f"triage connection: {e}")
+        except Exception as e:  # noqa: BLE001
+            logger.exception("Unexpected triage failure")
+            _note_error(f"triage {type(e).__name__}: {e}")
+        return [None] * len(chunk)
+
+    out: list[dict | None] = []
+    with ThreadPoolExecutor(max_workers=concurrency) as ex:
+        for res in ex.map(work, chunks):
+            out.extend(res)
+    return out
+
+
 def _client() -> anthropic.Anthropic:
     return anthropic.Anthropic()
 

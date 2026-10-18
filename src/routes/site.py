@@ -281,6 +281,29 @@ def _cost(model: str, usage: dict) -> float:
     return sum((usage.get(k) or 0) / 1e6 * p.get(k, 0) for k in ("input", "output", "cache_read", "cache_write"))
 
 
+def _sched_state() -> dict:
+    import threading as _th
+    from src.scheduler import STATE
+    st = dict(STATE)
+    st["thread_alive"] = any(t.name == "peanut-scheduler" and t.is_alive() for t in _th.enumerate())
+    st["run_thread_alive"] = any(t.name == "peanut-manual-run" and t.is_alive() for t in _th.enumerate())
+    return st
+
+
+@site_bp.route("/_pipeline/run", methods=["POST"])
+def pipeline_run():
+    """Kick off a pipeline run now. HTTP basic auth with the admin user and password."""
+    import hmac
+    from flask import current_app
+    from src.scheduler import trigger
+    auth = request.authorization
+    user, pw = current_app.config.get("ADMIN_USER"), current_app.config.get("ADMIN_PASS")
+    if not (auth and user and pw and hmac.compare_digest(auth.username or "", user) and hmac.compare_digest(auth.password or "", pw)):
+        return jsonify({"error": "admin credentials required"}), 401, {"WWW-Authenticate": 'Basic realm="peanut"'}
+    trigger(current_app._get_current_object())
+    return jsonify({"ok": True, "message": "run started; watch /_pipeline"}), 202
+
+
 @site_bp.route("/_pipeline")
 def pipeline_status():
     """Token usage and estimated spend, per UTC day, for the Claude calls the pipeline made."""
@@ -297,7 +320,23 @@ def pipeline_status():
                                        "tokens": {"input": 0, "output": 0, "cache_read": 0, "cache_write": 0},
                                        "models": {}, "cost_usd": 0.0})
 
-    rows = (Article.query.filter(Article.enriched_at >= since, Article.enrich_model.isnot(None), Article.enrich_model != "dry-run")
+    # Stage 1 (triage): usage is a per-article share of each batched call.
+    trows = (Article.query.filter(Article.triaged_at >= since)
+             .with_entities(Article.triaged_at, Article.triage, Article.enrichment).all())
+    for triaged_at, verdict, enr in trows:
+        b = bucket(triaged_at.date().isoformat())
+        b.setdefault("triage", {"yes": 0, "maybe": 0, "no": 0})
+        b["triage"][verdict] = b["triage"].get(verdict, 0) + 1
+        u = (enr or {}).get("triage_usage") or {}
+        model = (enr or {}).get("triage_model") or ""
+        if u and model != "dry-run":
+            for k in b["tokens"]:
+                b["tokens"][k] += u.get(k) or 0
+            b["cost_usd"] += _cost(model, u)
+
+    # Stage 2 (full read).
+    rows = (Article.query.filter(Article.enriched_at >= since, Article.enrich_model.isnot(None),
+                                 Article.enrich_model.notin_(["dry-run", "triage-no", "skipped"]))
             .with_entities(Article.enriched_at, Article.enrich_model, Article.is_good_news, Article.enrichment).all())
     for enriched_at, model, good, enr in rows:
         b = bucket(enriched_at.date().isoformat())
@@ -323,10 +362,13 @@ def pipeline_status():
 
     for b in by_day.values():
         b["cost_usd"] = round(b["cost_usd"], 4)
+        b["tokens"] = {k: int(v) for k, v in b["tokens"].items()}
 
     from src.pipeline import PROGRESS
     from src.enrich import RECENT_ERRORS, ENRICH_MODEL, EDITOR_MODEL, has_api_key
     pending = Article.query.filter(Article.enriched_at.is_(None)).count()
+    untriaged = Article.query.filter(Article.triage.is_(None), Article.enriched_at.is_(None)).count()
+    awaiting_read = Article.query.filter(Article.enriched_at.is_(None), Article.triage.in_(["yes", "maybe"])).count()
     skipped = Article.query.filter(Article.enrich_model == "skipped").count()
     latest = {e: (lambda r: r and {"day": r.day.isoformat(), "built_at": r.built_at.isoformat(), "picks": len(r.picks or [])})(latest_edition(e))
               for e in EDITIONS}
@@ -334,8 +376,11 @@ def pipeline_status():
         "days": dict(sorted(by_day.items(), reverse=True)),
         "total_cost_usd": round(sum(b["cost_usd"] for b in by_day.values()), 4),
         "pending_enrichment": pending,
+        "untriaged": untriaged,
+        "awaiting_full_read": awaiting_read,
         "skipped": skipped,
         "run": PROGRESS,
+        "scheduler": _sched_state(),
         "recent_errors": RECENT_ERRORS[-8:],
         "config": {"enrich_model": ENRICH_MODEL, "editor_model": EDITOR_MODEL, "api_key_present": has_api_key(),
                    "scheduler": _os.environ.get("PEANUT_SCHEDULER", "1")},

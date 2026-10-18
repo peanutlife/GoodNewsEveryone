@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import argparse
 import logging
+import os
 import html
 import re
 import time
@@ -16,7 +17,7 @@ import feedparser
 import requests
 
 from src.edition import config as sources_config
-from src.enrich import article_id, enrich_many, slugify
+from src.enrich import article_id, enrich_many, slugify, triage_many
 from src.models.article import Article
 from src.models.user import db
 
@@ -24,6 +25,8 @@ logger = logging.getLogger(__name__)
 
 USER_AGENT = "Mozilla/5.0 (compatible; PeanutlifeBot/2.0; +https://peanutlife.com)"
 BATCH = 25  # commit after every 25 enrichments
+ENRICH_LIMIT = int(os.environ.get("PEANUT_ENRICH_LIMIT", "150"))  # full reads per run, after triage
+TRIAGE_COMMIT = 200  # commit triage results every N articles
 SKIP_PENDING_AFTER_DAYS = 2  # backlog older than this is marked skipped instead of enriched later
 PROGRESS = {"stage": "idle", "done": 0, "total": 0, "started": None, "finished": None, "error": None}
 MAX_AGE_DAYS = 7  # slow weekly feeds (Guardian Upside, UN, Our World in Data) still land; the ten uses FRESH_HOURS
@@ -175,12 +178,55 @@ def store_new(items: list[dict]) -> list[Article]:
 QUALITY_RANK = {"high": 0, "standard": 1, "low": 2}
 
 
-def enrich_pending(limit: int = 400, dry_run: bool = False) -> int:
-    """Enrich un-judged articles, best sources first. Returns how many were processed."""
-    pending = (Article.query.filter(Article.enriched_at.is_(None))
-               .order_by(Article.published.desc()).limit(limit * 2).all())
-    pending.sort(key=lambda a: (QUALITY_RANK.get(a.source_quality, 1), -(a.published or datetime.min).timestamp()))
-    pending = pending[:limit]
+def triage_pending(limit: int = 3000, dry_run: bool = False) -> dict:
+    """Stage 1: vet every un-triaged article from its title in batched calls. Cheap.
+
+    'no' rows are closed immediately (enriched_at set, model 'triage-no') so they never
+    reach the full read; 'yes'/'maybe' rows wait for enrich_pending.
+    """
+    pending = (Article.query.filter(Article.triage.is_(None), Article.enriched_at.is_(None))
+               .order_by(Article.published.desc()).limit(limit).all())
+    counts = {"yes": 0, "maybe": 0, "no": 0, "failed": 0}
+    if not pending:
+        return counts
+    PROGRESS.update(stage="triaging", done=0, total=len(pending))
+    for start in range(0, len(pending), TRIAGE_COMMIT):
+        chunk = pending[start:start + TRIAGE_COMMIT]
+        dicts = [{"title": a.title, "summary": a.summary or "", "source_name": a.source_name,
+                  "source_region": a.source_region, "link": a.link} for a in chunk]
+        results = triage_many(dicts, dry_run=dry_run)
+        now = datetime.utcnow()
+        for a, r in zip(chunk, results):
+            if r is None:
+                counts["failed"] += 1
+                continue
+            a.triage = r["verdict"]
+            a.triage_score = float(r.get("score") or 0)
+            a.triaged_at = now
+            a.section = a.section or r.get("section")
+            a.enrichment = dict(a.enrichment or {})
+            a.enrichment["triage_usage"] = r.get("_usage")
+            a.enrichment["triage_model"] = r.get("_model")
+            if r["verdict"] == "no":
+                a.enriched_at = now
+                a.enrich_model = "triage-no"
+                a.is_good_news = False
+                a.score = a.triage_score
+            counts[r["verdict"]] += 1
+        db.session.commit()
+        PROGRESS["done"] = min(start + TRIAGE_COMMIT, len(pending))
+        logger.info("Triaged %d/%d", PROGRESS["done"], len(pending))
+    return counts
+
+
+def enrich_pending(limit: int = ENRICH_LIMIT, dry_run: bool = False) -> int:
+    """Stage 2: full read of the articles triage said yes to (then maybe, if there is room)."""
+    base = Article.query.filter(Article.enriched_at.is_(None))
+    pending = base.filter(Article.triage == "yes").order_by(Article.triage_score.desc(), Article.published.desc()).limit(limit).all()
+    if len(pending) < limit:
+        pending += (base.filter(Article.triage == "maybe").order_by(Article.triage_score.desc(), Article.published.desc())
+                    .limit(limit - len(pending)).all())
+    pending.sort(key=lambda a: (-(a.triage_score or 0), QUALITY_RANK.get(a.source_quality, 1), -(a.published or datetime.min).timestamp()))
     if not pending:
         return 0
     done = 0
@@ -231,7 +277,7 @@ def _apply_enrichment(pending: list[Article], results: list[dict | None]) -> int
     return done
 
 
-def run(dry_run: bool = False, limit: int = 400, editions_only: bool = False, limit_sources: int | None = None):
+def run(dry_run: bool = False, limit: int = ENRICH_LIMIT, editions_only: bool = False, limit_sources: int | None = None):
     from src.editions import build_all_editions
 
     PROGRESS.update(stage="fetching", started=datetime.utcnow().isoformat(timespec="seconds"), finished=None, error=None)
@@ -242,6 +288,8 @@ def run(dry_run: bool = False, limit: int = 400, editions_only: bool = False, li
         logger.info("%d pass the pre-filter", len(items))
         new_rows = store_new(items)
         logger.info("%d new articles stored", len(new_rows))
+        t = triage_pending(dry_run=dry_run)
+        logger.info("Triage: %s", t)
         n = enrich_pending(limit=limit, dry_run=dry_run)
         logger.info("Enriched %d articles (%s)", n, "dry run" if dry_run else "Claude")
     PROGRESS["stage"] = "building editions"
