@@ -30,7 +30,7 @@
         <div class="top"><span class="num">{{ loop.index }}</span><span class="meta">{{ a.source_name }} · {{ SECTIONS.get(a.section, 'Today') }}</span></div>
         <h2>{{ e.get('headline') or a.title }}</h2>
         {% if e.get('one_line') %}<p style="font-size:16px;line-height:1.55">{{ e.one_line }}</p>{% endif %}
-        {% if e.get('why_card') %}<p class="why"><strong style="color:var(--accent)">The Peanut Gallery likes this one:</strong> {{ e.why_card }}</p>{% endif %}
+        {% if e.get('why_card') %}<p class="why"><strong style="color:var(--accent)">The Good News Desk likes this one:</strong> {{ e.why_card }}</p>{% endif %}
         {% if e.get('before') and e.get('now') %}<div class="bn"><div class="before"><span class="l">Before</span><span>{{ e.before }}</span></div><div class="now"><span class="l">Now</span><span>{{ e.now }}</span></div></div>{% endif %}
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:6px">
           <a href="{{ url_for('site.story', slug=a.slug) }}" class="btn2" style="height:40px;font-size:14px">Go deeper</a>

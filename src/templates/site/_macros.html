@@ -15,11 +15,11 @@
 
 {% macro peanut_why(e, short=True) -%}
 {% set w = e.get('why_card') if short else (e.get('why_long') or e.get('why_card')) %}
-{% if w %}<p class="why"><span class="pn">The Peanut Gallery likes this one:</span> {{ w }}</p>{% endif %}
+{% if w %}<p class="why"><span class="pn">The Good News Desk likes this one:</span> {{ w }}</p>{% endif %}
 {%- endmacro %}
 
 {% macro byline() -%}
-<span class="byline">Read and summarised by Claude, our robot with a library card. Picked and double-checked by the Peanut Gallery, the humans at Peanutlife.</span>
+<span class="byline">Read and summarised by Claude, our robot with a library card. Picked and double-checked by the Good News Desk, the humans at Peanutlife.</span>
 {%- endmacro %}
 
 {% macro card(a, n=None, show_why=True) -%}
