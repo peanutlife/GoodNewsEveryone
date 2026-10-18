@@ -5,7 +5,7 @@ import json
 import logging
 import re
 import secrets
-from datetime import datetime
+from datetime import datetime, date, timedelta
 
 import anthropic
 from flask import Blueprint, abort, g, jsonify, make_response, redirect, render_template, request, url_for
@@ -13,7 +13,7 @@ from flask import Blueprint, abort, g, jsonify, make_response, redirect, render_
 from src.edition import edition_for_country, COOKIE_MAX_AGE, COOKIE_NAME, EDITIONS, detect_edition, edition_name
 from src.editions import mood_sort, articles_by_ids, latest_edition, previous_edition
 from src.enrich import ENRICH_MODEL, STYLE_GUIDE, has_api_key
-from src.models.article import SECTIONS, Article, Follow
+from src.models.article import SECTIONS, SECTION_META, Article, Follow, Visit, count_visit
 from src.models.user import db
 
 logger = logging.getLogger(__name__)
@@ -48,8 +48,99 @@ def _inject():
         "edition_how": getattr(g, "edition_how", ""),
         "editions": [(e, edition_name(e)) for e in EDITIONS],
         "SECTIONS": SECTIONS,
+        "SECTION_META": SECTION_META,
         "greeting": _greeting(),
+        "ticker": _ticker(getattr(g, "edition", "global")),
+        "stats": _stats(),
     }
+
+
+VISIT_COOKIE = "pv"
+_COUNTED_ENDPOINTS = {"site.home", "site.section", "site.story", "site.dial", "site.yesterday"}
+_STATS_CACHE: dict = {"at": None, "value": {}}
+
+
+@site_bp.before_app_request
+def _count_reader():
+    """Count one reader per day, by a random cookie id. No IPs, no fingerprinting, nothing shared."""
+    if request.method != "GET" or request.endpoint not in _COUNTED_ENDPOINTS:
+        return
+    vid = request.cookies.get(VISIT_COOKIE) or ""
+    if not re.fullmatch(r"[A-Za-z0-9_-]{16,32}", vid):
+        vid = secrets.token_urlsafe(18)[:24]
+        g.set_visit_cookie = vid
+    count_visit(datetime.utcnow().date(), vid)
+
+
+@site_bp.after_app_request
+def _set_visit_cookie(resp):
+    vid = getattr(g, "set_visit_cookie", None)
+    if vid:
+        resp.set_cookie(VISIT_COOKIE, vid, max_age=COOKIE_MAX_AGE, samesite="Lax")
+    return resp
+
+
+def _stats() -> dict:
+    """Real numbers for the masthead counter, cached for a minute per process."""
+    now = datetime.utcnow()
+    if _STATS_CACHE["at"] and (now - _STATS_CACHE["at"]).total_seconds() < 60:
+        return _STATS_CACHE["value"]
+    try:
+        today = now.date()
+        readers_today = db.session.query(Visit).filter(Visit.day == today).count()
+        readers_week = db.session.query(Visit).filter(Visit.day >= today - timedelta(days=6)).count()
+        vetted_today = Article.query.filter(Article.fetched_at >= datetime.combine(today, datetime.min.time())).count()
+        from src.edition import config as _cfg
+        sources = len(_cfg().get("sources", []))
+        value = {"readers_today": readers_today, "readers_week": readers_week, "vetted_today": vetted_today, "sources": sources}
+    except Exception:  # noqa: BLE001
+        db.session.rollback()
+        value = {}
+    _STATS_CACHE.update(at=now, value=value)
+    return value
+
+
+_TICKER_CACHE: dict = {}
+
+
+def _ticker(edition: str) -> list[dict]:
+    """Today's headline from each section plus the lead of the ten, for the rolling banner.
+    Built from the current published edition only, so yesterday's items disappear with it."""
+    try:
+        ed = latest_edition(edition)
+    except Exception:  # noqa: BLE001
+        return []
+    if not ed:
+        return []
+    key = (edition, ed.id)
+    if key in _TICKER_CACHE:
+        return _TICKER_CACHE[key]
+    items, seen = [], set()
+    picks = ed.picks or []
+    if picks:
+        lead = articles_by_ids(picks[:1])
+        for a in lead:
+            seen.add(a.id)
+            items.append(_tick(a, "Today's lead", "✨", "lead"))
+    for sec, ids in (ed.section_picks or {}).items():
+        meta = SECTION_META.get(sec)
+        if not meta or not ids:
+            continue
+        for a in articles_by_ids(ids[:3]):
+            if a.id in seen:
+                continue
+            seen.add(a.id)
+            items.append(_tick(a, meta["short"], meta["icon"], sec))
+            break
+    _TICKER_CACHE.clear()
+    _TICKER_CACHE[key] = items
+    return items
+
+
+def _tick(a, label, icon, sec):
+    e = a.enrichment or {}
+    return {"label": label, "icon": icon, "sec": sec, "headline": e.get("headline") or a.title,
+            "url": url_for("site.story", slug=a.slug)}
 
 
 def _greeting() -> str:
@@ -342,7 +433,7 @@ def pipeline_digest():
 def pipeline_status():
     """Token usage and estimated spend, per UTC day, for the Claude calls the pipeline made."""
     import os as _os
-    from datetime import datetime, timedelta
+    from datetime import datetime, date, timedelta, timedelta
     from src.models.article import Article, Edition
 
     days = max(1, min(int(request.args.get("days", 7)), 60))

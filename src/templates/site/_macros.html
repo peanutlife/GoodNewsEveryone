@@ -1,9 +1,16 @@
 {% macro pic(a, cls='pic') -%}
-<div class="{{ cls }} t-{{ a.section or 'progress' }}">{% if a.image_url and a.image_url.startswith('http') %}<img src="{{ a.image_url }}" alt="" loading="lazy">{% else %}<span class="ph" aria-hidden="true">{{ SECTIONS.get(a.section, 'Today').replace('Good news for ', '').replace('Good news in ', '').replace('Great news in ', '')|capitalize }}</span>{% endif %}</div>
+{% set sm = SECTION_META.get(a.section) or {'short': 'Today', 'icon': '✨'} %}
+<div class="{{ cls }} t-{{ a.section or 'progress' }}">{% if a.image_url and a.image_url.startswith('http') %}<img src="{{ a.image_url }}" alt="" loading="lazy">{% else %}<span class="ph" aria-hidden="true"><i>{{ sm.icon }}</i>{{ sm.short }}</span>{% endif %}</div>
 {%- endmacro %}
 
 {% macro kicker(a) -%}
-<span class="kick">{{ SECTIONS.get(a.section, 'Today').replace('Good news for ', 'For ').replace('Good news in ', '').replace('Great news in ', '')|capitalize }}</span>
+{% set sm = SECTION_META.get(a.section) or {'short': 'Today', 'icon': '✨'} %}
+<span class="kick c-{{ a.section or 'progress' }}"><i>{{ sm.icon }}</i>{{ sm.short }}</span>
+{%- endmacro %}
+
+{% macro secpill(key, count=None, on=False) -%}
+{% set sm = SECTION_META.get(key) or {'short': key, 'icon': '✨'} %}
+<a href="{{ url_for('site.section', slug=key) }}" class="pill p-{{ key }}{% if on %} on{% endif %}"><i>{{ sm.icon }}</i>{{ sm.short }}{% if count %}<span class="n">{{ count }}</span>{% endif %}</a>
 {%- endmacro %}
 
 {% macro peanut_why(e, short=True) -%}
@@ -55,7 +62,7 @@
 
 {% macro subscribe_box(title='Ten good things, every morning', blurb='One email at a time you pick. No tracking pixels, no "we miss you" emails, unsubscribe in one tap.') -%}
 <form class="box" id="subscribe" method="post" action="{{ url_for('auth.subscribe') }}">
-  <h3>{{ title }}</h3>
+  <h3>📬 {{ title }}</h3>
   <p class="meta" style="font-size:14px">{{ blurb }}</p>
   <label for="em-{{ title|length }}">Email</label>
   <input id="em-{{ title|length }}" name="email" type="email" placeholder="you@example.com" required>

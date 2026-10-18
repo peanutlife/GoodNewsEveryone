@@ -254,3 +254,13 @@ def test_subscribe_redirects_to_new_home(client, app):
     r = client.get("/")
     assert b"Thank you" in r.data
     assert client.post("/_pipeline/digest").status_code == 401
+
+
+def test_reader_counter_counts_once_per_day(client, app):
+    from src.models.article import Visit
+    r = client.get("/")
+    assert "pv=" in r.headers.get("Set-Cookie", "")
+    client.get("/")
+    client.get("/")
+    with app.app_context():
+        assert Visit.query.count() == 1

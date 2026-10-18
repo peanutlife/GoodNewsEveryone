@@ -24,6 +24,18 @@ SECTIONS = {
     "progress": "Progress",
 }
 
+# Short labels and icons for the section widgets. Plain emoji: universal, no dependency, nothing robotic.
+SECTION_META = {
+    "kids": {"short": "For kids", "icon": "🎈"},
+    "politics": {"short": "Politics", "icon": "🏛️"},
+    "nature": {"short": "Nature", "icon": "🌿"},
+    "sports": {"short": "Sports", "icon": "⚽"},
+    "science": {"short": "Science & health", "icon": "🔬"},
+    "kindness": {"short": "Kindness", "icon": "💛"},
+    "culture": {"short": "Culture & ideas", "icon": "🎨"},
+    "progress": {"short": "Progress", "icon": "🚀"},
+}
+
 REGIONS = ["global", "us", "uk", "eu", "east_asia", "south_asia", "africa", "latam"]
 
 
@@ -142,4 +154,20 @@ def log_event(kind: str, message: str) -> None:
         db.session.add(PipelineEvent(kind=kind, message=(message or "")[:2000], pid=os.getpid()))
         db.session.commit()
     except Exception:  # noqa: BLE001
+        db.session.rollback()
+
+
+class Visit(db.Model):
+    """One row per reader per day. The id is a random cookie value, never an IP address or a name."""
+    __tablename__ = "visits"
+    day = db.Column(db.Date, primary_key=True)
+    vid = db.Column(db.String(32), primary_key=True)
+
+
+def count_visit(day, vid: str) -> None:
+    """Best effort: record that this reader was here today. Duplicates are expected and ignored."""
+    try:
+        db.session.add(Visit(day=day, vid=vid))
+        db.session.commit()
+    except Exception:  # noqa: BLE001  (duplicate key, or a hiccup; never break the page for a counter)
         db.session.rollback()

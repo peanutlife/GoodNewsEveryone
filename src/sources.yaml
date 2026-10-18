@@ -319,6 +319,26 @@ sources:
   url: https://reasonstobecheerful.world/feed/
   region: global
   quality: standard
+- name: Stateline
+  url: https://stateline.org/feed/
+  region: us
+  quality: high
+- name: Next City
+  url: https://nextcity.org/feeds/daily
+  region: us
+  quality: standard
+- name: The Fulcrum
+  url: https://thefulcrum.us/feeds/feed.rss
+  region: us
+  quality: standard
+- name: Good Good Good
+  url: https://goodgoodgood.co/articles/rss.xml
+  region: us
+  quality: standard
+- name: The Optimist Daily
+  url: https://www.optimistdaily.com/feed/
+  region: global
+  quality: standard
 - name: Rest of World
   url: https://restofworld.org/feed/latest/
   region: global

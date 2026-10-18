@@ -5,14 +5,14 @@
 {% block body %}
 <nav class="secbar" aria-label="Sections">
   <div class="wrap">
-    <a href="{{ url_for('site.home') }}">Today's ten</a>
-    {% for key, n in SECTIONS.items() %}<a href="{{ url_for('site.section', slug=key) }}" class="{% if key == slug %}on{% endif %}">{{ n.replace('Good news for ', 'For ').replace('Good news in ', '').replace('Great news in ', '')|capitalize }}</a>{% endfor %}
-    <a href="{{ url_for('site.dial') }}" class="dial-link">The dial</a>
+    <a href="{{ url_for('site.home') }}" class="pill p-home"><i>🗞️</i>Today's ten</a>
+    {% for key, n in SECTIONS.items() %}{{ m.secpill(key, on=(key == slug)) }}{% endfor %}
+    <a href="{{ url_for('site.dial') }}" class="pill p-dial dial-link"><i>⏱️</i>The dial</a>
   </div>
 </nav>
 <div class="wrap">{{ m.ad('ad-lead') }}</div>
 <div class="wrap dateline">
-  <h1>{{ name }}</h1>
+  <h1><span class="emo">{{ SECTION_META[slug].icon }}</span> {{ name }}</h1>
   {% if standfirst %}<p class="why" style="font-size:17px;max-width:720px">{{ standfirst }}</p>{% endif %}
   <p class="meta">{{ items|length }} stories this week{% if slug == 'kids' %} · about {{ (minutes * 1.5)|round|int }} minutes read aloud · Suitable for ages 6 and up{% else %} · {{ minutes }} minutes for all of them{% endif %}</p>
 </div>
@@ -35,7 +35,7 @@
     {% if items|length > 1 %}<section class="grid trio">{% for a in items[1:4] %}{{ m.card(a) }}{% endfor %}</section>{% endif %}
     {% if items|length > 4 %}
     <section>
-      <div class="sec-head" style="margin-bottom:18px"><h2>Earlier this week</h2></div>
+      <div class="sec-head"><h2><span class="emo">📅</span> Earlier this week</h2></div>
       <div class="grid">
         {% for a in items[4:] %}{{ m.card(a) }}{% if loop.index == 2 %}{{ m.ad('ad-feed') }}{% endif %}{% endfor %}
       </div>
