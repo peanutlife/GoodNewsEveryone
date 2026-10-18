@@ -58,8 +58,12 @@ def _run_once(app) -> None:
                 return
             logger.info("Building editions %s for %s (%s)", missing, today, "Claude" if has_api_key() else "dry run")
             run(dry_run=not has_api_key())
-        except Exception:
+        except Exception as e:  # noqa: BLE001
             logger.exception("Scheduled pipeline run failed")
+            from src.pipeline import PROGRESS
+            import traceback
+            PROGRESS.update(stage="failed", error=f"{type(e).__name__}: {e}\n{traceback.format_exc()[-1500:]}",
+                            finished=datetime.utcnow().isoformat(timespec="seconds"))
         finally:
             try:
                 if locked and db.engine.dialect.name == "postgresql":

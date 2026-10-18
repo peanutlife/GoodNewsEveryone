@@ -1240,7 +1240,7 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5005))
 
     # Refresh cache immediately on startup in production (ensures fresh articles after deploy)
-    if env == 'production':
+    if env == 'production' and os.environ.get('LEGACY_REFRESH', '0') == '1':
         logging.info("🔄 Refreshing cache synchronously on startup (blocking until complete)...")
         try:
             refresh_cache_worker()  # Run synchronously, not in thread
@@ -1250,7 +1250,8 @@ if __name__ == "__main__":
 
     # Start the background cache refresh thread
     initial_delay = 60 if env == 'production' else 20
-    start_background_refresh(initial_delay=initial_delay, interval=86400)
+    if os.environ.get('LEGACY_REFRESH', '0') == '1':
+        start_background_refresh(initial_delay=initial_delay, interval=86400)
 
     # Log startup info
     logging.info("=" * 60)

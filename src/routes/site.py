@@ -284,6 +284,7 @@ def _cost(model: str, usage: dict) -> float:
 @site_bp.route("/_pipeline")
 def pipeline_status():
     """Token usage and estimated spend, per UTC day, for the Claude calls the pipeline made."""
+    import os as _os
     from datetime import datetime, timedelta
     from src.models.article import Article, Edition
 
@@ -323,13 +324,21 @@ def pipeline_status():
     for b in by_day.values():
         b["cost_usd"] = round(b["cost_usd"], 4)
 
+    from src.pipeline import PROGRESS
+    from src.enrich import RECENT_ERRORS, ENRICH_MODEL, EDITOR_MODEL, has_api_key
     pending = Article.query.filter(Article.enriched_at.is_(None)).count()
+    skipped = Article.query.filter(Article.enrich_model == "skipped").count()
     latest = {e: (lambda r: r and {"day": r.day.isoformat(), "built_at": r.built_at.isoformat(), "picks": len(r.picks or [])})(latest_edition(e))
               for e in EDITIONS}
     return jsonify({
         "days": dict(sorted(by_day.items(), reverse=True)),
         "total_cost_usd": round(sum(b["cost_usd"] for b in by_day.values()), 4),
         "pending_enrichment": pending,
+        "skipped": skipped,
+        "run": PROGRESS,
+        "recent_errors": RECENT_ERRORS[-8:],
+        "config": {"enrich_model": ENRICH_MODEL, "editor_model": EDITOR_MODEL, "api_key_present": has_api_key(),
+                   "scheduler": _os.environ.get("PEANUT_SCHEDULER", "1")},
         "latest_editions": latest,
         "prices_note": "Estimated from list prices per million tokens; the Anthropic console is the bill of record.",
     })

@@ -23,6 +23,14 @@ from src.models.article import REGIONS, SECTIONS
 logger = logging.getLogger(__name__)
 
 # Bulk per-article pass: cheap and good enough for classification plus short copy.
+RECENT_ERRORS: list[str] = []  # last few API failures, shown on /_pipeline
+
+
+def _note_error(msg: str) -> None:
+    RECENT_ERRORS.append(f"{datetime.utcnow().isoformat(timespec='seconds')} {msg}"[:400])
+    del RECENT_ERRORS[:-8]
+
+
 ENRICH_MODEL = os.environ.get("PEANUT_ENRICH_MODEL", "claude-haiku-5-5")
 # Daily letter and standfirsts: small volume, quality matters.
 EDITOR_MODEL = os.environ.get("PEANUT_EDITOR_MODEL", "claude-opus-5-5")
@@ -218,12 +226,18 @@ def enrich_many(articles: list[dict], dry_run: bool = False, concurrency: int = 
     def work(a):
         try:
             return enrich_one(a, client)
-        except anthropic.RateLimitError:
+        except anthropic.RateLimitError as e:
             logger.warning("Rate limited; skipping %s this run", a.get("link"))
+            _note_error(f"rate limited: {e}")
         except anthropic.APIStatusError as e:
             logger.error("API error %s for %s", e.status_code, a.get("link"))
-        except anthropic.APIConnectionError:
+            _note_error(f"API {e.status_code}: {getattr(e, 'message', e)}")
+        except anthropic.APIConnectionError as e:
             logger.error("Connection error for %s", a.get("link"))
+            _note_error(f"connection: {e}")
+        except Exception as e:  # noqa: BLE001 - never let one article kill the batch
+            logger.exception("Unexpected enrichment failure for %s", a.get("link"))
+            _note_error(f"{type(e).__name__}: {e}")
         return None
 
     with ThreadPoolExecutor(max_workers=concurrency) as ex:

@@ -24,6 +24,8 @@ logger = logging.getLogger(__name__)
 
 USER_AGENT = "Mozilla/5.0 (compatible; PeanutlifeBot/2.0; +https://peanutlife.com)"
 BATCH = 25  # commit after every 25 enrichments
+SKIP_PENDING_AFTER_DAYS = 2  # backlog older than this is marked skipped instead of enriched later
+PROGRESS = {"stage": "idle", "done": 0, "total": 0, "started": None, "finished": None, "error": None}
 MAX_AGE_DAYS = 7  # slow weekly feeds (Guardian Upside, UN, Our World in Data) still land; the ten uses FRESH_HOURS
 
 # Cheap pre-filter so Claude never sees obvious non-candidates. Anything that passes is judged by
@@ -182,6 +184,7 @@ def enrich_pending(limit: int = 400, dry_run: bool = False) -> int:
     if not pending:
         return 0
     done = 0
+    PROGRESS.update(stage="enriching", done=0, total=len(pending))
     for start in range(0, len(pending), BATCH):
         chunk = pending[start:start + BATCH]
         dicts = [{
@@ -191,7 +194,16 @@ def enrich_pending(limit: int = 400, dry_run: bool = False) -> int:
         results = enrich_many(dicts, dry_run=dry_run)
         done += _apply_enrichment(chunk, results)
         db.session.commit()
-        logger.info("Enriched %d/%d", min(start + BATCH, len(pending)), len(pending))
+        PROGRESS["done"] = min(start + BATCH, len(pending))
+        logger.info("Enriched %d/%d", PROGRESS["done"], len(pending))
+    # Anything still pending and older than a couple of days will never make the ten; stop carrying it.
+    stale = datetime.utcnow() - timedelta(days=SKIP_PENDING_AFTER_DAYS)
+    skipped = (Article.query.filter(Article.enriched_at.is_(None), Article.published < stale)
+               .update({Article.enriched_at: datetime.utcnow(), Article.enrich_model: "skipped", Article.is_good_news: False},
+                       synchronize_session=False))
+    db.session.commit()
+    if skipped:
+        logger.info("Marked %d stale pending articles as skipped", skipped)
     return done
 
 
@@ -222,6 +234,7 @@ def _apply_enrichment(pending: list[Article], results: list[dict | None]) -> int
 def run(dry_run: bool = False, limit: int = 400, editions_only: bool = False, limit_sources: int | None = None):
     from src.editions import build_all_editions
 
+    PROGRESS.update(stage="fetching", started=datetime.utcnow().isoformat(timespec="seconds"), finished=None, error=None)
     if not editions_only:
         items = fetch_all(limit_sources=limit_sources)
         logger.info("Fetched %d unique entries", len(items))
@@ -231,7 +244,9 @@ def run(dry_run: bool = False, limit: int = 400, editions_only: bool = False, li
         logger.info("%d new articles stored", len(new_rows))
         n = enrich_pending(limit=limit, dry_run=dry_run)
         logger.info("Enriched %d articles (%s)", n, "dry run" if dry_run else "Claude")
+    PROGRESS["stage"] = "building editions"
     built = build_all_editions(dry_run=dry_run)
+    PROGRESS.update(stage="idle", finished=datetime.utcnow().isoformat(timespec="seconds"))
     for ed in built:
         logger.info("Edition %s/%s: %d picks", ed.day, ed.edition, len(ed.picks or []))
 
