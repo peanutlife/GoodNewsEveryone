@@ -31,35 +31,40 @@
         <span class="kick"><i>👣</i>Walk today's ten</span>
         <span class="meta" id="walk-pos">Story 1 of {{ walk|length }}</span>
         <div class="dots" id="walk-dots" aria-hidden="true">{% for a in walk %}<i class="{% if loop.first %}on{% endif %}"></i>{% endfor %}</div>
+        <button type="button" class="play" id="walk-play" aria-pressed="true" title="Stories move on by themselves every few seconds. Click to pause.">⏸ Auto</button>
       </div>
-      {% for a in walk %}{% set e = a.enrichment or {} %}
-      <article class="wcard" data-i="{{ loop.index }}" {% if not loop.first %}hidden{% endif %}>
-        <a href="{{ url_for('site.story', slug=a.slug) }}" class="wpic" tabindex="-1" aria-hidden="true">{{ m.pic(a) }}</a>
-        <div class="pad">
-          <div class="top"><span class="num">{{ loop.index }}</span>{{ m.kicker(a) }}</div>
-          <h2><a href="{{ url_for('site.story', slug=a.slug) }}">{{ e.get('headline') or a.title }}</a></h2>
-          {{ m.peanut_why(e) }}
-          {% if e.get('action') %}<p class="act">Something you can do: {{ e.action }}</p>{% endif %}
-          <span class="meta">{{ a.source_name }} · {{ a.read_minutes or 3 }} min read</span>
-          <div class="walk-acts">
-            <button type="button" class="btn2 prev" {% if loop.first %}disabled{% endif %}>← Back</button>
-            <a href="{{ url_for('site.story', slug=a.slug) }}" class="btn2">Read the full story</a>
-            <button type="button" class="btn next">{% if loop.last %}Finish 🎉{% else %}Next story →{% endif %}</button>
-          </div>
+      <div class="walk-bar" aria-hidden="true"><i id="walk-bar"></i></div>
+      <div class="walk-win" id="walk-win">
+        <div class="walk-track" id="walk-track">
+          {% for a in walk %}{% set e = a.enrichment or {} %}
+          <article class="wcard{% if loop.first %} cur{% endif %}" data-i="{{ loop.index }}">
+            <a href="{{ url_for('site.story', slug=a.slug) }}" class="wpic" tabindex="-1" aria-hidden="true">{{ m.pic(a) }}</a>
+            <div class="pad">
+              <div class="top"><span class="num">{{ loop.index }}</span>{{ m.kicker(a) }}</div>
+              <h2><a href="{{ url_for('site.story', slug=a.slug) }}">{{ e.get('headline') or a.title }}</a></h2>
+              {{ m.peanut_why(e) }}
+              <span class="meta">{{ a.source_name }} · {{ a.read_minutes or 3 }} min read</span>
+              <div class="walk-acts">
+                <button type="button" class="btn2 prev" {% if loop.first %}disabled{% endif %}>← Back</button>
+                <a href="{{ url_for('site.story', slug=a.slug) }}" class="btn2">Read the full story</a>
+                <button type="button" class="btn next">{% if loop.last %}Finish 🎉{% else %}Next →{% endif %}</button>
+              </div>
+            </div>
+          </article>
+          {% endfor %}
+          <article class="wcard wend" data-i="{{ walk|length + 1 }}">
+            <div class="pad">
+              <h2>🎉 That's {% if one_story %}your one{% else %}today's ten{% endif %}. You're all caught up.</h2>
+              <p class="why">Nothing else to scroll here, on purpose. Tomorrow brings ten more. {% if one_story %}<a href="{{ url_for('site.home') }}" class="act">Show all ten</a>{% endif %}</p>
+              <div class="walk-acts">
+                <button type="button" class="btn2 restart">Start again</button>
+                <a href="#one-good-thing" class="btn">Write down one good thing 🌱</a>
+              </div>
+            </div>
+          </article>
         </div>
-      </article>
-      {% endfor %}
-      <article class="wcard wend" data-i="{{ walk|length + 1 }}" hidden>
-        <div class="pad">
-          <h2>🎉 That's {% if one_story %}your one{% else %}today's ten{% endif %}. You're all caught up.</h2>
-          <p class="why">Nothing else to scroll here, on purpose. Tomorrow brings ten more. {% if one_story %}<a href="{{ url_for('site.home') }}" class="act">Show all ten</a>{% endif %}</p>
-          <div class="walk-acts">
-            <button type="button" class="btn2 restart">Start again</button>
-            <a href="#one-good-thing" class="btn">Write down one good thing 🌱</a>
-          </div>
-        </div>
-      </article>
-      <noscript><style>.wcard[hidden]{display:grid!important}.wend{display:none!important}.walk-acts button{display:none}</style></noscript>
+      </div>
+      <noscript><style>.walk-win{overflow-x:auto}.walk-track{transform:none!important}.walk-acts button,.walk-head .play,.walk-bar{display:none}</style></noscript>
     </section>
 
     {% if not one_story %}
@@ -153,31 +158,57 @@
 })();
 (function(){
   var w=document.getElementById('walk'); if(!w) return;
-  var cards=[].slice.call(w.querySelectorAll('.wcard')), n=parseInt(w.dataset.n,10), key=w.dataset.key, cur=1;
+  var win=document.getElementById('walk-win'), track=document.getElementById('walk-track');
+  var cards=[].slice.call(track.querySelectorAll('.wcard')), n=parseInt(w.dataset.n,10), key=w.dataset.key, cur=1;
   var pos=document.getElementById('walk-pos'), dots=[].slice.call(w.querySelectorAll('#walk-dots i'));
-  try{ var saved=parseInt(localStorage.getItem(key)||'1',10); if(saved>=1 && saved<=n+1) cur=saved; }catch(e){}
+  var playBtn=document.getElementById('walk-play'), bar=document.getElementById('walk-bar');
+  var reduce=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var EVERY=7000, timer=null, auto=!reduce, paused=false, t0=0, left=EVERY;
+  try{ var saved=parseInt(localStorage.getItem(key)||'1',10); if(saved>=1 && saved<=n) cur=saved; }catch(e){}
+  function layout(){
+    var c=cards[cur-1]; if(!c) return;
+    var gap=parseFloat(getComputedStyle(track).columnGap||getComputedStyle(track).gap)||16;
+    var x=(win.clientWidth-c.offsetWidth)/2-(c.offsetWidth+gap)*(cur-1);
+    track.style.transform='translateX('+Math.round(x)+'px)';
+  }
   function show(i, focus){
     cur=Math.max(1, Math.min(n+1, i));
-    cards.forEach(function(c){ c.hidden = parseInt(c.dataset.i,10)!==cur; });
+    cards.forEach(function(c){ c.classList.toggle('cur', parseInt(c.dataset.i,10)===cur); });
     dots.forEach(function(d,k){ d.className = k<cur ? 'on' : ''; });
     pos.textContent = cur>n ? 'Done for today' : 'Story '+cur+' of '+n;
-    try{ localStorage.setItem(key, String(cur)); }catch(e){}
+    try{ localStorage.setItem(key, String(Math.min(cur,n))); }catch(e){}
+    layout();
     if(focus){ var c=cards[cur-1]; if(c){ c.setAttribute('tabindex','-1'); c.focus({preventScroll:true}); } }
+    if(cur>n) stopAuto(); else restart();
   }
+  function tick(){ if(cur>n){ stopAuto(); return; } show(cur+1, false); }
+  function restart(){ clearTimeout(timer); left=EVERY; if(auto && !paused){ t0=Date.now(); timer=setTimeout(tick, EVERY); animateBar(EVERY); } else { animateBar(0); } }
+  function pause(){ if(!auto||paused) return; paused=true; clearTimeout(timer); left=Math.max(500, EVERY-(Date.now()-t0)); bar.style.transition='none'; bar.style.width=((EVERY-left)/EVERY*100)+'%'; }
+  function resume(){ if(!auto||!paused) return; paused=false; t0=Date.now()-(EVERY-left); timer=setTimeout(tick, left); animateBar(left); }
+  function animateBar(ms){ if(!bar) return; bar.style.transition='none'; bar.style.width=ms?((EVERY-ms)/EVERY*100)+'%':'0%'; if(ms){ void bar.offsetWidth; bar.style.transition='width '+ms+'ms linear'; bar.style.width='100%'; } }
+  function stopAuto(){ auto=false; clearTimeout(timer); animateBar(0); playBtn.setAttribute('aria-pressed','false'); playBtn.textContent='▶ Auto'; }
+  function startAuto(){ auto=true; paused=false; playBtn.setAttribute('aria-pressed','true'); playBtn.textContent='⏸ Auto'; if(cur>n) show(1,false); else restart(); }
+  playBtn.onclick=function(){ auto ? stopAuto() : startAuto(); };
   w.addEventListener('click', function(ev){
-    var t=ev.target.closest('button'); if(!t) return;
-    if(t.classList.contains('next')) show(cur+1, true);
-    else if(t.classList.contains('prev')) show(cur-1, true);
-    else if(t.classList.contains('restart')) show(1, true);
+    var t=ev.target.closest('button'); 
+    if(t){ if(t.classList.contains('next')) show(cur+1, true); else if(t.classList.contains('prev')) show(cur-1, true); else if(t.classList.contains('restart')) show(1, true); return; }
+    var c=ev.target.closest('.wcard'); if(c && !c.classList.contains('cur')){ ev.preventDefault(); show(parseInt(c.dataset.i,10), false); }
   });
   document.addEventListener('keydown', function(ev){
     if(/input|textarea|select/i.test(ev.target.tagName)) return;
     if(ev.key==='ArrowRight') show(cur+1, true); else if(ev.key==='ArrowLeft') show(cur-1, true);
   });
+  w.addEventListener('mouseenter', pause); w.addEventListener('mouseleave', resume);
+  w.addEventListener('focusin', pause); w.addEventListener('focusout', function(){ setTimeout(function(){ if(!w.contains(document.activeElement)) resume(); }, 0); });
+  document.addEventListener('visibilitychange', function(){ document.hidden ? pause() : resume(); });
   var x0=null;
-  w.addEventListener('touchstart', function(ev){ x0=ev.touches[0].clientX; }, {passive:true});
-  w.addEventListener('touchend', function(ev){ if(x0===null) return; var dx=ev.changedTouches[0].clientX-x0; x0=null; if(Math.abs(dx)>60) show(dx<0?cur+1:cur-1, false); }, {passive:true});
+  w.addEventListener('touchstart', function(ev){ x0=ev.touches[0].clientX; pause(); }, {passive:true});
+  w.addEventListener('touchend', function(ev){ if(x0===null) return; var dx=ev.changedTouches[0].clientX-x0; x0=null; if(Math.abs(dx)>50) show(dx<0?cur+1:cur-1, false); setTimeout(resume, 4000); }, {passive:true});
+  window.addEventListener('resize', layout);
+  if(reduce){ stopAuto(); }
   show(cur, false);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+  window.addEventListener('load', layout);
 })();
 (function(){
   var b=document.getElementById('letter-body'), btn=document.getElementById('letter-more'); if(!b||!btn) return;

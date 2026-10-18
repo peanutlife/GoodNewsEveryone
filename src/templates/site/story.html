@@ -22,13 +22,16 @@
       {% if a.enrich_model and a.enrich_model != 'dry-run' %}{{ m.byline() }}{% endif %}
     </p>
     {% if a.image_url and a.image_url.startswith('http') %}<div class="hero"><img src="{{ a.image_url }}" alt=""></div>{% endif %}
+    {% if e.get('before') and e.get('now') %}
+    <section class="bn bn-top" aria-label="Before and now">
+      <div class="before"><span class="l">⏮ Before</span><span>{{ e.before }}</span></div>
+      <div class="now"><span class="l">✅ Now</span><span>{{ e.now }}</span></div>
+    </section>
+    {% endif %}
 
     <section class="panel">
       {% if e.get('in_short') %}<h2>In short</h2><ul>{% for b in e.in_short %}<li>{{ b }}</li>{% endfor %}</ul>{% endif %}
       {% if e.get('why_long') %}<h2 style="margin-top:6px">Why the Peanut Gallery likes this one</h2><p>{{ e.why_long }}</p>{% endif %}
-      {% if e.get('before') and e.get('now') %}
-      <div class="bn"><div class="before"><span class="l">Before</span><span>{{ e.before }}</span></div><div class="now"><span class="l">Now</span><span>{{ e.now }}</span></div></div>
-      {% endif %}
       {% if e.get('action') %}<p class="act" style="font-size:15px">Something you can do: {{ e.action }}</p>{% endif %}
     </section>
 

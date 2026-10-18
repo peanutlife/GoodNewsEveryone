@@ -346,3 +346,36 @@ img { max-width: 100%; height: auto; }
 
 /* Ticker: items slide under the label instead of fading at the left edge */
 .tk-track { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 32px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 32px), transparent); }
+
+/* Walk deck as a sliding window: current story centred, neighbours peeking at the edges */
+.walk { --cw: 74%; padding-left: 0; padding-right: 0; overflow: hidden; }
+.walk-head { padding: 0 18px; }
+.walk-head .play { margin-left: auto; background: var(--ad); border: 1px solid var(--line-2); border-radius: 999px; height: 30px; padding: 0 12px; font-family: var(--display); font-weight: 600; font-size: 13px; color: var(--ink-2); cursor: pointer; }
+.walk-head .play[aria-pressed="true"] { background: var(--kids-bg); border-color: var(--kids-bg); color: var(--kids-fg); }
+.walk-bar { height: 3px; margin: 0 18px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.walk-bar i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 2px; }
+.walk-win { overflow: hidden; width: 100%; padding: 6px 0 4px; }
+.walk-track { display: flex; gap: 16px; align-items: stretch; transition: transform .55s cubic-bezier(.22,.8,.3,1); will-change: transform; }
+.walk-track .wcard { flex: 0 0 var(--cw); width: var(--cw); display: flex; flex-direction: column; gap: 12px; grid-template-columns: none; background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 12px; opacity: .55; transform: scale(.96); transition: opacity .4s, transform .4s; cursor: pointer; }
+.walk-track .wcard.cur { opacity: 1; transform: none; cursor: auto; background: var(--card); box-shadow: 0 8px 26px rgba(31,42,36,.08); }
+.walk-track .wcard .pic { aspect-ratio: 16/9; border-radius: 10px; }
+.walk-track .wcard h2 { font-size: 22px; }
+.walk-track .wcard .why { font-size: 15px; }
+.walk-track .wcard .pad { padding: 2px 4px 4px; }
+.walk-track .wcard:not(.cur) .walk-acts { visibility: hidden; }
+.walk-track .wend { justify-content: center; }
+.walk-track .wend .pad { padding: 18px 10px; }
+.walk-track .wend h2 { font-size: 26px; }
+@media (min-width: 700px) { .walk-track .wcard h2 { font-size: 24px; } }
+@media (min-width: 960px) { .walk { --cw: 70%; } }
+@media (max-width: 699px) { .walk { --cw: 86%; } .walk-head { padding: 0 14px; } .walk-bar { margin: 0 14px; } .walk-acts { position: static; } .walk-track .wcard { padding: 10px; } }
+@media (prefers-reduced-motion: reduce) { .walk-track, .walk-track .wcard { transition: none; } }
+
+/* Story page: Before / Now sits right under the title and picture */
+.bn-top { gap: 12px; }
+.bn-top div { padding: 14px 16px; border-radius: 12px; font-size: 16px; line-height: 1.5; gap: 6px; }
+.bn-top .before { background: var(--ad); border: 1px solid var(--line-2); }
+.bn-top .now { background: var(--nature-bg); border: 1px solid #C5DDBF; }
+.bn-top span.l { font-family: var(--display); font-size: 12.5px; letter-spacing: .04em; font-weight: 600; }
+.bn-top .now span.l { color: var(--nature-fg); }
+@media (max-width: 599px) { .bn-top { grid-template-columns: 1fr; } }
