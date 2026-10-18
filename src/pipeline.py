@@ -23,6 +23,7 @@ from src.models.user import db
 logger = logging.getLogger(__name__)
 
 USER_AGENT = "Mozilla/5.0 (compatible; PeanutlifeBot/2.0; +https://peanutlife.com)"
+BATCH = 25  # commit after every 25 enrichments
 MAX_AGE_DAYS = 7  # slow weekly feeds (Guardian Upside, UN, Our World in Data) still land; the ten uses FRESH_HOURS
 
 # Cheap pre-filter so Claude never sees obvious non-candidates. Anything that passes is judged by
@@ -180,11 +181,21 @@ def enrich_pending(limit: int = 400, dry_run: bool = False) -> int:
     pending = pending[:limit]
     if not pending:
         return 0
-    dicts = [{
-        "link": a.link, "title": a.title, "summary": a.summary or "", "published": a.published.isoformat() if a.published else "",
-        "source_name": a.source_name, "source_region": a.source_region,
-    } for a in pending]
-    results = enrich_many(dicts, dry_run=dry_run)
+    done = 0
+    for start in range(0, len(pending), BATCH):
+        chunk = pending[start:start + BATCH]
+        dicts = [{
+            "link": a.link, "title": a.title, "summary": a.summary or "", "published": a.published.isoformat() if a.published else "",
+            "source_name": a.source_name, "source_region": a.source_region,
+        } for a in chunk]
+        results = enrich_many(dicts, dry_run=dry_run)
+        done += _apply_enrichment(chunk, results)
+        db.session.commit()
+        logger.info("Enriched %d/%d", min(start + BATCH, len(pending)), len(pending))
+    return done
+
+
+def _apply_enrichment(pending: list[Article], results: list[dict | None]) -> int:
     done = 0
     for a, r in zip(pending, results):
         if r is None:
@@ -205,7 +216,6 @@ def enrich_pending(limit: int = 400, dry_run: bool = False) -> int:
         a.enrichment["tone"] = r.get("tone", "neutral")
         a.enrichment["usage"] = r.get("_usage")
         done += 1
-    db.session.commit()
     return done
 
 

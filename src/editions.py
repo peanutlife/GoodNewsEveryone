@@ -116,7 +116,9 @@ def build_edition(edition: str, day: date | None = None, dry_run: bool = False) 
     row.status = "published"
     row.letter_title = copy.get("letter_title", "")
     row.letter = copy.get("letter", "")
-    row.standfirsts = copy.get("standfirsts", {})
+    row.standfirsts = dict(copy.get("standfirsts", {}) or {})
+    if copy.get("_meta"):
+        row.standfirsts["_meta"] = copy["_meta"]
     row.picks = [a.id for a in picks]
     row.section_picks = {k: [a.id for a in v] for k, v in sections.items()}
     row.mood_orders = mood_orders(picks)

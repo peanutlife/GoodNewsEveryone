@@ -153,7 +153,8 @@ def enrich_one(a: dict, client: anthropic.Anthropic | None = None) -> dict:
     data["_usage"] = {
         "input": response.usage.input_tokens,
         "output": response.usage.output_tokens,
-        "cache_read": getattr(response.usage, "cache_read_input_tokens", 0),
+        "cache_read": getattr(response.usage, "cache_read_input_tokens", 0) or 0,
+        "cache_write": getattr(response.usage, "cache_creation_input_tokens", 0) or 0,
     }
     return data
 
@@ -260,7 +261,17 @@ def write_edition_copy(edition_name: str, picks: list[dict], section_lists: dict
     if response.stop_reason == "refusal":
         raise RuntimeError("Editor call refused")
     text = next((b.text for b in response.content if b.type == "text"), "")
-    return json.loads(text)
+    copy = json.loads(text)
+    copy["_meta"] = {
+        "model": getattr(response, "model", EDITOR_MODEL),
+        "usage": {
+            "input": response.usage.input_tokens,
+            "output": response.usage.output_tokens,
+            "cache_read": getattr(response.usage, "cache_read_input_tokens", 0) or 0,
+            "cache_write": getattr(response.usage, "cache_creation_input_tokens", 0) or 0,
+        },
+    }
+    return copy
 
 
 _DEFAULT_STANDFIRSTS = {

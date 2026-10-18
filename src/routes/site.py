@@ -247,3 +247,89 @@ def edition_debug():
                     "headers": {k: v for k, v in request.headers.items()
                                 if k.lower() in ("cf-ipcountry", "x-vercel-ip-country", "x-country-code",
                                                  "cloudfront-viewer-country", "accept-language", "x-forwarded-for")}})
+
+
+# ---------- pipeline status and cost ----------
+
+# USD per million tokens. Override with PEANUT_PRICES='{"claude-haiku-5-5": {"input": 1, "output": 5, ...}}'.
+# Defaults are the published Haiku 4.5 / Opus 4.5 list prices; check the Anthropic console for the exact bill.
+_DEFAULT_PRICES = {
+    "haiku": {"input": 1.00, "output": 5.00, "cache_read": 0.10, "cache_write": 1.25},
+    "sonnet": {"input": 3.00, "output": 15.00, "cache_read": 0.30, "cache_write": 3.75},
+    "opus": {"input": 5.00, "output": 25.00, "cache_read": 0.50, "cache_write": 6.25},
+}
+
+
+def _price_for(model: str) -> dict:
+    import json as _json
+    import os as _os
+    custom = {}
+    try:
+        custom = _json.loads(_os.environ.get("PEANUT_PRICES", "") or "{}")
+    except ValueError:
+        pass
+    if model in custom:
+        return custom[model]
+    for family, p in _DEFAULT_PRICES.items():
+        if family in (model or ""):
+            return p
+    return _DEFAULT_PRICES["haiku"]
+
+
+def _cost(model: str, usage: dict) -> float:
+    p = _price_for(model)
+    return sum((usage.get(k) or 0) / 1e6 * p.get(k, 0) for k in ("input", "output", "cache_read", "cache_write"))
+
+
+@site_bp.route("/_pipeline")
+def pipeline_status():
+    """Token usage and estimated spend, per UTC day, for the Claude calls the pipeline made."""
+    from datetime import datetime, timedelta
+    from src.models.article import Article, Edition
+
+    days = max(1, min(int(request.args.get("days", 7)), 60))
+    since = datetime.utcnow() - timedelta(days=days)
+    by_day = {}
+
+    def bucket(day):
+        return by_day.setdefault(day, {"articles": 0, "good_news": 0, "letters": 0,
+                                       "tokens": {"input": 0, "output": 0, "cache_read": 0, "cache_write": 0},
+                                       "models": {}, "cost_usd": 0.0})
+
+    rows = (Article.query.filter(Article.enriched_at >= since, Article.enrich_model.isnot(None), Article.enrich_model != "dry-run")
+            .with_entities(Article.enriched_at, Article.enrich_model, Article.is_good_news, Article.enrichment).all())
+    for enriched_at, model, good, enr in rows:
+        b = bucket(enriched_at.date().isoformat())
+        b["articles"] += 1
+        b["good_news"] += 1 if good else 0
+        b["models"][model] = b["models"].get(model, 0) + 1
+        u = (enr or {}).get("usage") or {}
+        for k in b["tokens"]:
+            b["tokens"][k] += u.get(k) or 0
+        b["cost_usd"] += _cost(model, u)
+
+    for ed in Edition.query.filter(Edition.built_at >= since).all():
+        meta = (ed.standfirsts or {}).get("_meta")
+        if not meta:
+            continue
+        b = bucket(ed.built_at.date().isoformat())
+        b["letters"] += 1
+        u = meta.get("usage") or {}
+        for k in b["tokens"]:
+            b["tokens"][k] += u.get(k) or 0
+        b["models"][meta.get("model")] = b["models"].get(meta.get("model"), 0) + 1
+        b["cost_usd"] += _cost(meta.get("model", ""), u)
+
+    for b in by_day.values():
+        b["cost_usd"] = round(b["cost_usd"], 4)
+
+    pending = Article.query.filter(Article.enriched_at.is_(None)).count()
+    latest = {e: (lambda r: r and {"day": r.day.isoformat(), "built_at": r.built_at.isoformat(), "picks": len(r.picks or [])})(latest_edition(e))
+              for e in EDITIONS}
+    return jsonify({
+        "days": dict(sorted(by_day.items(), reverse=True)),
+        "total_cost_usd": round(sum(b["cost_usd"] for b in by_day.values()), 4),
+        "pending_enrichment": pending,
+        "latest_editions": latest,
+        "prices_note": "Estimated from list prices per million tokens; the Anthropic console is the bill of record.",
+    })
