@@ -1,0 +1,49 @@
+{% macro pic(a, cls='pic') -%}
+<div class="{{ cls }}">{% if a.image_url and a.image_url.startswith('http') %}<img src="{{ a.image_url }}" alt="" loading="lazy">{% endif %}</div>
+{%- endmacro %}
+
+{% macro card(a, n=None, show_why=True) -%}
+{% set e = a.enrichment or {} %}
+<a href="{{ url_for('site.story', slug=a.slug) }}" class="card">
+  {{ pic(a) }}
+  <div class="pad">
+    <div class="top">{% if n %}<span class="num">{{ n }}</span>{% endif %}<span class="meta">{{ a.source_name }} · {{ SECTIONS.get(a.section, 'Today') }} · {{ a.read_minutes or 3 }} min</span></div>
+    <h3>{{ e.get('headline') or a.title }}</h3>
+    {% if show_why and e.get('why_card') %}<p class="why" style="font-size:14px">{{ e.why_card }}</p>{% endif %}
+  </div>
+</a>
+{%- endmacro %}
+
+{% macro row(a, n=None) -%}
+{% set e = a.enrichment or {} %}
+<a href="{{ url_for('site.story', slug=a.slug) }}" class="row">
+  {{ pic(a, 'thumb') }}
+  <div class="txt">
+    <div class="top">{% if n %}<span class="num">{{ n }}</span>{% endif %}<span class="meta">{{ a.source_name }} · {{ a.read_minutes or 3 }} min</span></div>
+    <h3>{{ e.get('headline') or a.title }}</h3>
+  </div>
+</a>
+{%- endmacro %}
+
+{% macro ad(kind, label='Advertisement', note='') -%}
+{% if config.get('ADS_ENABLED', True) %}
+<div class="ad {{ kind }}">
+  {% if kind == 'ad-feed' %}<div class="lbl"><b>Sponsored</b><b>Why this ad?</b></div><div class="body">{% endif %}
+  <b>{{ label }}</b>{% if note %}<span>{{ note }}</span>{% endif %}
+  {% set fmt = {'ad-lead': 'horizontal', 'ad-rail': 'vertical', 'ad-anchor': 'horizontal'}.get(kind, 'rectangle') %}
+  <div class="slot"><ins class="adsbygoogle" data-ad-client="ca-pub-4295146235414490" data-ad-slot="5585311271" data-ad-format="{{ fmt }}" data-full-width-responsive="false" style="display:block;width:100%;height:100%"></ins></div>
+  <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+  {% if kind == 'ad-feed' %}</div>{% endif %}
+</div>
+{% endif %}
+{%- endmacro %}
+
+{% macro subscribe_box(title='Ten good things, every morning', blurb='One email at a time you pick. No tracking pixels, no "we miss you" emails, unsubscribe in one tap.') -%}
+<form class="box" method="post" action="{{ url_for('auth.subscribe') }}">
+  <h3>{{ title }}</h3>
+  <p class="meta" style="font-size:14px">{{ blurb }}</p>
+  <label for="em-{{ title|length }}">Email</label>
+  <input id="em-{{ title|length }}" name="email" type="email" placeholder="you@example.com" required>
+  <button type="submit" class="btn">Subscribe</button>
+</form>
+{%- endmacro %}

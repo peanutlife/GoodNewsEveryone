@@ -1,0 +1,73 @@
+{% extends "site/base.html" %}
+{% import "site/_macros.html" as m with context %}
+{% block title %}The dial: today's ten in {{ minutes }} minutes | Peanutlife{% endblock %}
+{% block body %}
+<main class="wrap main">
+  <div class="col">
+    <section class="dial">
+      <h1 style="font-size:28px;font-weight:500">How much time do you have?</h1>
+      <div class="ticks">
+        <div class="track" aria-hidden="true"></div>
+        {% for t, label in levels.items() %}<a href="{{ url_for('site.dial', t=t) }}" class="tick {% if t == minutes %}on{% endif %}"><i></i><b>{{ t }} min</b><span>{{ label }}</span></a>{% endfor %}
+      </div>
+      <p class="meta">Same ten stories at every setting. Only the depth changes. You'll finish in about {{ minutes }} minutes.</p>
+    </section>
+
+    {% if not picks %}
+    <section class="closing"><h2>Today's ten are on their way.</h2></section>
+    {% elif minutes == 1 %}
+    <section class="lines">
+      {% for a in picks %}{% set e = a.enrichment or {} %}
+      <a href="{{ url_for('site.story', slug=a.slug) }}"><span class="num">{{ loop.index }}</span><span><strong>{{ e.get('headline') or a.title }}</strong>{% if e.get('why_card') %} <span class="why">{{ e.why_card }}</span>{% endif %}</span></a>
+      {% endfor %}
+    </section>
+    {% elif minutes == 3 %}
+    <section class="deck" id="deck">
+      <div style="display:flex;justify-content:space-between" class="meta"><span style="font-weight:700" id="pos">Card 1 of {{ picks|length }}</span><span>About 18 seconds each</span></div>
+      <div class="dots" id="dots">{% for a in picks %}<i class="{% if loop.first %}on{% endif %}"></i>{% endfor %}</div>
+      {% for a in picks %}{% set e = a.enrichment or {} %}
+      <article class="dcard" data-i="{{ loop.index }}" {% if not loop.first %}hidden{% endif %}>
+        <div class="top"><span class="num">{{ loop.index }}</span><span class="meta">{{ a.source_name }} · {{ SECTIONS.get(a.section, 'Today') }}</span></div>
+        <h2>{{ e.get('headline') or a.title }}</h2>
+        {% if e.get('one_line') %}<p style="font-size:16px;line-height:1.55">{{ e.one_line }}</p>{% endif %}
+        {% if e.get('why_card') %}<p class="why"><strong style="color:var(--accent)">Why it's good news:</strong> {{ e.why_card }}</p>{% endif %}
+        {% if e.get('before') and e.get('now') %}<div class="bn"><div class="before"><span class="l">Before</span><span>{{ e.before }}</span></div><div class="now"><span class="l">Now</span><span>{{ e.now }}</span></div></div>{% endif %}
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:6px">
+          <a href="{{ url_for('site.story', slug=a.slug) }}" class="btn2" style="height:40px;font-size:14px">Go deeper</a>
+          <button type="button" class="btn2 prev" style="height:40px;font-size:14px">Back</button>
+          <button type="button" class="btn next" style="height:40px;font-size:14px">{% if loop.last %}Done{% else %}Next{% endif %}</button>
+        </div>
+      </article>
+      {% endfor %}
+      <section class="closing" id="deck-end" hidden><h2>Ten cards, then it ends.</h2><p>That's today. <a href="{{ url_for('site.home') }}" style="color:#fff;font-weight:700">Back to the front page</a></p></section>
+    </section>
+    {% elif minutes == 7 %}
+    <section class="grid">{% for a in picks %}{{ m.card(a, loop.index) }}{% endfor %}</section>
+    {% else %}
+    <section style="display:flex;flex-direction:column;gap:22px">
+      {% for a in picks %}{% set e = a.enrichment or {} %}
+      <article class="panel">
+        <div class="top"><span class="num">{{ loop.index }}</span><span class="meta">{{ a.source_name }} · {{ SECTIONS.get(a.section, 'Today') }} · {{ a.read_minutes or 3 }} min</span></div>
+        <h2 style="font-family:var(--serif);font-size:24px;text-transform:none;letter-spacing:0;color:var(--ink)"><a href="{{ url_for('site.story', slug=a.slug) }}">{{ e.get('headline') or a.title }}</a></h2>
+        {% if e.get('in_short') %}<ul>{% for b in e.in_short %}<li>{{ b }}</li>{% endfor %}</ul>{% endif %}
+        {% if e.get('why_long') %}<p>{{ e.why_long }}</p>{% endif %}
+        {% if e.get('action') %}<p class="act" style="font-size:15px">Something you can do: {{ e.action }}</p>{% endif %}
+        <a href="{{ a.link }}" class="act" target="_blank" rel="noopener">Read at {{ a.source_name }} →</a>
+      </article>
+      {% endfor %}
+    </section>
+    {% endif %}
+    <section class="closing"><h2>Short like a feed, finite like a paper.</h2><p>Ten cards, then it ends. Follow a story on its page and we'll tell you when it has a next chapter.</p></section>
+  </div>
+  <aside class="rail">{{ m.ad('ad-rail') }}{{ m.subscribe_box() }}</aside>
+</main>
+{% endblock %}
+{% block scripts %}
+<script>
+(function(){var deck=document.getElementById('deck');if(!deck)return;var cards=[].slice.call(deck.querySelectorAll('.dcard')),i=0,dots=deck.querySelectorAll('#dots i'),pos=document.getElementById('pos');
+function show(n){i=Math.max(0,Math.min(n,cards.length));cards.forEach(function(c,k){c.hidden=k!==i;});dots.forEach(function(d,k){d.className=k<=i?'on':'';});document.getElementById('deck-end').hidden=i<cards.length;if(pos&&i<cards.length)pos.textContent='Card '+(i+1)+' of '+cards.length;window.scrollTo({top:deck.offsetTop-20,behavior:'smooth'});}
+deck.addEventListener('click',function(e){if(e.target.classList.contains('next'))show(i+1);if(e.target.classList.contains('prev'))show(i-1);});
+var x0=null;deck.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;},{passive:true});deck.addEventListener('touchend',function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;if(dx<-60)show(i+1);if(dx>60)show(i-1);x0=null;});
+})();
+</script>
+{% endblock %}

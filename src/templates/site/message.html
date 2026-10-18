@@ -1,0 +1,5 @@
+{% extends "site/base.html" %}
+{% block title %}{{ title }} | Peanutlife{% endblock %}
+{% block body %}
+<main class="wrap main"><div class="col"><section class="closing"><h2>{{ title }}</h2><p>{{ body }}</p><div class="acts"><a href="{{ url_for('site.home') }}" class="btn">Back to today's ten</a></div></section></div></main>
+{% endblock %}

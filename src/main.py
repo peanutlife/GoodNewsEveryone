@@ -23,6 +23,8 @@ from src.routes.auth import auth_bp, init_topics
 from src.shared_data import article_cache, CACHE_DURATION_SECONDS, get_feed_urls, removed_article_links, load_removed_articles, NEGATIVE_KEYWORDS
 from src.aggregator import fetch_and_filter_feeds
 from src.models.subscriber import EmailSubscriber
+from src.models.article import Article, Edition  # noqa: F401  (registers tables for create_all)
+from src.routes.site import site_bp
 from src.config import config
 
 # Set up logging
@@ -611,6 +613,7 @@ def initialize_app(app):
             logging.error(f"Database URI being used: {app.config.get('SQLALCHEMY_DATABASE_URI', 'NOT SET')[:50]}...")
 
     # Register blueprints
+    app.register_blueprint(site_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(auth_bp)
 
@@ -657,9 +660,9 @@ def initialize_app(app):
     def inject_now():
         return {"now": datetime.utcnow(), "request": request}
 
-    @app.route("/")
+    @app.route("/legacy")
     def index():
-        """Serves the main page with flat mixed feed of positive news articles."""
+        """Legacy mixed feed (the new front page lives in src/routes/site.py) with flat mixed feed of positive news articles."""
         global articles_by_topic
         global last_updated
 
@@ -1162,6 +1165,27 @@ def initialize_app(app):
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>'''
+
+        # New site: editions, sections, dial, enriched stories
+        try:
+            from src.models.article import SECTIONS as _SECTIONS, Article as _Article
+            for path in ["/edition/global", "/edition/us", "/edition/asia", "/dial", "/promise", "/yesterday"] + [f"/section/{k}" for k in _SECTIONS]:
+                sitemap_xml += f'''
+    <url>
+        <loc>https://peanutlife.com{path}</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>'''
+            for a in _Article.query.filter(_Article.is_good_news.is_(True), _Article.slug.isnot(None)).order_by(_Article.published.desc()).limit(1500):
+                sitemap_xml += f'''
+    <url>
+        <loc>https://peanutlife.com/story/{a.slug}</loc>
+        <lastmod>{(a.published or a.fetched_at).strftime('%Y-%m-%d')}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>'''
+        except Exception as e:
+            logging.warning(f"sitemap: new-site urls skipped: {e}")
 
         # Add all unique topics
         unique_topics = list(articles_by_topic.keys())

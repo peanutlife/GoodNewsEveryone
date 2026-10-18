@@ -1,0 +1,133 @@
+{% extends "site/base.html" %}
+{% import "site/_macros.html" as m with context %}
+{% block title %}Peanutlife, today's ten good things ({{ edition_name }} edition){% endblock %}
+{% block body %}
+<div class="wrap">{{ m.ad('ad-lead', note='') }}</div>
+<main class="wrap main">
+  <div class="col">
+    <section class="greet" id="today">
+      <h1>{{ greeting }} Here are {% if is_yesterday %}yesterday's{% else %}today's{% endif %} ten good things.</h1>
+      <p class="meta">
+        {% if ed %}Updated {{ ed.built_at.strftime('%-d %b, %H:%M') }} UTC · {{ total_minutes }} minutes to read all ten · {{ sources }} sources{% else %}The first edition is being built.{% endif %}
+        {% if not is_yesterday and picks %} · <a href="{{ url_for('site.home', one=1) }}" class="act" style="font-size:15px">Just one story today</a>{% endif %}
+      </p>
+      {% if quote and quote.quote %}<p class="quote">“{{ quote.quote }}” <span class="meta" style="font-style:normal">{{ quote.author or quote.person }}</span></p>{% endif %}
+    </section>
+
+    <nav class="strip" aria-label="Sections">
+      <span class="lbl">Also today</span>
+      {% for key, name in SECTIONS.items() %}{% if section_counts.get(key) %}<a href="{{ url_for('site.section', slug=key) }}" class="chip">{{ name.replace('Good news for ', 'For ').replace('Good news in ', '').replace('Great news in ', '')|capitalize }}<span class="n">{{ section_counts[key] }}</span></a>{% endif %}{% endfor %}
+    </nav>
+
+    {% if not is_yesterday and picks %}
+    <section class="mood">
+      <span class="q">What do you need today?</span>
+      <div class="opts">
+        <a href="{{ url_for('site.home', mood='calm') }}" class="{% if mood == 'calm' %}on{% endif %}"><b>Calm</b><span>quiet, slower stories first</span></a>
+        <a href="{{ url_for('site.home', mood='lift') }}" class="{% if mood == 'lift' %}on{% endif %}"><b>Lift</b><span>comebacks and wins first</span></a>
+        <a href="{{ url_for('site.home', mood='surprise') }}" class="{% if mood == 'surprise' %}on{% endif %}"><b>Surprise me</b><span>editor's order</span></a>
+      </div>
+      <span class="meta">Changes the order only. Remembered on this device.</span>
+    </section>
+    {% endif %}
+
+    {% if ed and ed.letter %}
+    <section class="letter">
+      <div class="avatar" aria-hidden="true"></div>
+      <div style="min-width:0">
+        <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap"><h2>{{ ed.letter_title or "Today's letter" }}</h2><span class="meta">From the editor · {{ ed.day.strftime('%A %-d %B') }}</span></div>
+        <p class="body">{{ ed.letter }}</p>
+      </div>
+    </section>
+    {% endif %}
+
+    {% if picks %}
+    {% set lead = picks[0] %}{% set le = lead.enrichment or {} %}
+    <section class="lead">
+      <a href="{{ url_for('site.story', slug=lead.slug) }}" class="card big">
+        {{ m.pic(lead) }}
+        <div class="pad">
+          <div class="top"><span class="num">1</span><span class="meta">{{ lead.source_name }} · {{ SECTIONS.get(lead.section, 'Today') }} · {{ lead.read_minutes or 3 }} min read</span></div>
+          <h2>{{ le.get('headline') or lead.title }}</h2>
+          {% if le.get('why_card') %}<p class="why">Why it's good news: {{ le.why_card }}</p>{% endif %}
+          {% if le.get('action') %}<p class="act">Something you can do: {{ le.action }}</p>{% endif %}
+        </div>
+      </a>
+      {% if not one_story %}
+      <div class="side">
+        {% for a in picks[1:4] %}{{ m.row(a, loop.index + 1) }}{% endfor %}
+      </div>
+      {% endif %}
+    </section>
+
+    {% if one_story %}
+    <section class="closing">
+      <h2>That's one. Enough for today.</h2>
+      <p>The other nine will still be here if you want them later. <a href="{{ url_for('site.home') }}" style="color:#fff;font-weight:700">Show all ten</a></p>
+    </section>
+    {% else %}
+    <section>
+      <div class="sec-head" style="margin-bottom:18px"><h2>The rest of today's ten</h2>{% if prev %}<a href="{{ url_for('site.yesterday') }}" class="meta">Missed yesterday's? →</a>{% endif %}</div>
+      <div class="grid">
+        {% for a in picks[4:] %}
+          {{ m.card(a, loop.index + 4) }}
+          {% if loop.index == 2 %}{{ m.ad('ad-feed') }}{% endif %}
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="ogt" id="one-good-thing">
+      <h2>Before you go: one good thing from your own day</h2>
+      <p class="meta" style="font-size:14px;max-width:640px">Writing down one good thing, most days, is one of the best-studied small habits for mood. This stays in your browser. We never see it.</p>
+      <label for="ogt">Today</label>
+      <textarea id="ogt" rows="2" placeholder="A neighbour waved. The soup turned out."></textarea>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button type="button" class="btn2" id="ogt-save">Keep it</button><button type="button" class="meta" id="ogt-show" style="background:none;border:0;font-weight:700;cursor:pointer">Read your past entries</button></div>
+      <div class="past" id="ogt-past" hidden></div>
+    </section>
+
+    <section class="closing">
+      <h2>That's today's ten. You're all caught up.</h2>
+      <p>Tomorrow's ten and a fresh letter arrive each morning. There's nothing else to scroll here, on purpose. The sections above are open all day.</p>
+      <div class="acts"><a href="{{ url_for('auth.subscribe') }}" class="btn">Send me tomorrow's ten</a>{% if prev %}<a href="{{ url_for('site.yesterday') }}" class="btn2 ghost">Read yesterday's ten</a>{% endif %}</div>
+    </section>
+    {% endif %}
+    {% else %}
+    <section class="closing"><h2>Today's ten are on their way.</h2><p>The morning pipeline hasn't published an edition yet. Try again shortly.</p></section>
+    {% endif %}
+  </div>
+
+  <aside class="rail">
+    {{ m.ad('ad-rail') }}
+    {{ m.subscribe_box() }}
+    <div class="box">
+      <h3>How this page behaves</h3>
+      <ul>
+        <li>Ten stories a day, then it stops. No infinite scroll.</li>
+        <li>No autoplay, no pop-ups, no countdowns, no streaks.</li>
+        <li>After 8 pm the page dims and calmer stories lead.</li>
+        <li>Edition: <strong>{{ edition_name }}</strong>. {% for key, name in editions %}{% if key != edition %}<a href="{{ url_for('site.choose_edition', edition=key) }}" class="act">{{ name }}</a> {% endif %}{% endfor %}</li>
+      </ul>
+      <a href="{{ url_for('site.promise') }}" class="meta" style="font-weight:700">Our reader promise →</a>
+    </div>
+    {{ m.ad('ad-rect') }}
+  </aside>
+</main>
+{% endblock %}
+{% block scripts %}
+<script>
+(function(){
+  var KEY='peanut.ogt', ta=document.getElementById('ogt'); if(!ta) return;
+  function load(){try{return JSON.parse(localStorage.getItem(KEY)||'[]');}catch(e){return [];}}
+  document.getElementById('ogt-save').onclick=function(){
+    var v=ta.value.trim(); if(!v) return;
+    var list=load(); list.unshift({d:new Date().toISOString().slice(0,10), t:v});
+    try{localStorage.setItem(KEY, JSON.stringify(list.slice(0,365)));}catch(e){}
+    ta.value=''; toast('Kept. Only on this device.');
+  };
+  document.getElementById('ogt-show').onclick=function(){
+    var box=document.getElementById('ogt-past'), list=load();
+    box.hidden=false; box.innerHTML=list.length?list.map(function(x){return '<div><span class="meta">'+x.d+'</span> '+x.t.replace(/</g,'&lt;')+'</div>';}).join(''):'<div class="meta">Nothing kept yet.</div>';
+  };
+})();
+</script>
+{% endblock %}

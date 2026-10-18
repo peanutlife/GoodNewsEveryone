@@ -1,0 +1,61 @@
+{% extends "site/base.html" %}
+{% import "site/_macros.html" as m with context %}
+{% block title %}{{ name }}, Peanutlife ({{ edition_name }}){% endblock %}
+{% block description %}{{ standfirst or name }}{% endblock %}
+{% block body %}
+<div class="wrap">{{ m.ad('ad-lead') }}</div>
+<main class="wrap main">
+  <div class="col">
+    <nav class="strip" aria-label="Sections" style="border-top:0;padding-top:0">
+      <a href="{{ url_for('site.home') }}" class="chip">Today's ten</a>
+      {% for key, n in SECTIONS.items() %}<a href="{{ url_for('site.section', slug=key) }}" class="chip {% if key == slug %}on{% endif %}">{{ n.replace('Good news for ', 'For ').replace('Good news in ', '').replace('Great news in ', '')|capitalize }}</a>{% endfor %}
+    </nav>
+    <section class="greet">
+      <h1>{{ name }}</h1>
+      {% if standfirst %}<p class="why" style="font-size:18px;max-width:720px;margin-top:8px">{{ standfirst }}</p>{% endif %}
+      <p class="meta">{{ items|length }} stories this week{% if slug == 'kids' %} · about {{ (minutes * 1.5)|round|int }} minutes read aloud · Suitable for ages 6 and up{% else %} · {{ minutes }} minutes for all of them{% endif %}</p>
+    </section>
+
+    {% if items %}
+    {% set lead = items[0] %}{% set le = lead.enrichment or {} %}
+    <section class="lead">
+      <a href="{{ url_for('site.story', slug=lead.slug) }}" class="card big">
+        {{ m.pic(lead) }}
+        <div class="pad">
+          <span class="meta">{{ lead.source_name }} · {{ lead.read_minutes or 3 }} min</span>
+          <h2>{{ le.get('headline') or lead.title }}</h2>
+          {% if slug == 'kids' and le.get('kid_version') %}<p class="why">{{ le.kid_version }}</p>{% elif le.get('why_card') %}<p class="why">{{ le.why_card }}</p>{% endif %}
+        </div>
+      </a>
+      <div class="side">{% for a in items[1:4] %}{{ m.row(a) }}{% endfor %}</div>
+    </section>
+    {% if items|length > 4 %}
+    <section>
+      <div class="sec-head" style="margin-bottom:18px"><h2>Earlier this week</h2></div>
+      <div class="grid">
+        {% for a in items[4:] %}{{ m.card(a) }}{% if loop.index == 2 %}{{ m.ad('ad-feed') }}{% endif %}{% endfor %}
+      </div>
+    </section>
+    {% endif %}
+    {% else %}
+    <section class="closing"><h2>Nothing in {{ name|lower }} yet this week.</h2><p>Stories land here as the morning pipeline finds them.</p></section>
+    {% endif %}
+
+    {% if slug == 'kids' %}
+    <section class="box">
+      <h3>How we pick stories for kids</h3>
+      <p class="why">Nothing about death, injury, crime or disasters, even with a happy ending. Simple sentences, no sarcasm, one idea per story. A grown-up reviews each one before it appears here. Ads on this page are limited to family-safe categories.</p>
+    </section>
+    {% elif slug == 'politics' %}
+    <section class="box">
+      <h3>What counts as good news in politics</h3>
+      <p class="why">Laws passed, deals signed, services delivered, rights extended, corruption fixed. Never candidates, polls, campaigns or one side beating another. If it's about who's winning, it isn't here.</p>
+    </section>
+    {% endif %}
+  </div>
+  <aside class="rail">
+    {{ m.ad('ad-rail') }}
+    {% if slug == 'kids' %}{{ m.subscribe_box("The kids' stories, every Saturday", 'A weekend bundle to read together. No tracking pixels, unsubscribe in one tap.') }}{% else %}{{ m.subscribe_box() }}{% endif %}
+  </aside>
+</main>
+{% endblock %}

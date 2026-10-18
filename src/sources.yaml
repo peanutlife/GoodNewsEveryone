@@ -1,0 +1,681 @@
+editions:
+  global:
+    name: Global
+    regions:
+    - global
+    - us
+    - uk
+    - eu
+    - east_asia
+    - south_asia
+    - africa
+    - latam
+    timezone: UTC
+  us:
+    name: US
+    regions:
+    - us
+    - global
+    timezone: America/New_York
+    countries:
+    - US
+  asia:
+    name: East Asia
+    regions:
+    - east_asia
+    - global
+    timezone: Asia/Tokyo
+    countries:
+    - JP
+    - KR
+    - TW
+    - HK
+    - SG
+    - CN
+    - MO
+    - VN
+    - TH
+    - PH
+    - MY
+    - ID
+sources:
+- name: The Japan Times
+  url: https://www.japantimes.co.jp/feed/
+  region: east_asia
+  quality: high
+- name: The Mainichi
+  url: https://mainichi.jp/rss/etc/english_latest.rss
+  region: east_asia
+  quality: high
+- name: Yonhap News
+  url: https://en.yna.co.kr/RSS/news.xml
+  region: east_asia
+  quality: high
+- name: The Korea Herald
+  url: https://www.koreaherald.com/rss/newsAll
+  region: east_asia
+  quality: high
+- name: The Korea Times
+  url: https://www.koreatimes.co.kr/www/rss/rss.xml
+  region: east_asia
+  quality: high
+- name: South China Morning Post
+  url: https://www.scmp.com/rss/91/feed
+  region: east_asia
+  quality: high
+- name: South China Morning Post
+  url: https://www.scmp.com/rss/318208/feed
+  region: east_asia
+  quality: high
+- name: Taipei Times
+  url: https://www.taipeitimes.com/xml/index.rss
+  region: east_asia
+  quality: high
+- name: The Straits Times
+  url: https://www.straitstimes.com/news/singapore/rss.xml
+  region: east_asia
+  quality: high
+- name: CNA
+  url: https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml
+  region: east_asia
+  quality: high
+- name: Nikkei Asia
+  url: https://asia.nikkei.com/rss/feed/nar
+  region: east_asia
+  quality: high
+- name: Sixth Tone
+  url: https://www.sixthtone.com/rss
+  region: east_asia
+  quality: high
+- name: VnExpress
+  url: https://e.vnexpress.net/rss/news.rss
+  region: east_asia
+  quality: high
+- name: Bangkok Post
+  url: https://www.bangkokpost.com/rss/data/topstories.xml
+  region: east_asia
+  quality: high
+- name: Philstar
+  url: https://www.philstar.com/rss/headlines
+  region: east_asia
+  quality: high
+- name: Hong Kong Free Press
+  url: https://www.hongkongfp.com/feed/
+  region: east_asia
+  quality: high
+- name: nippon.com
+  url: https://www.nippon.com/en/feed/
+  region: east_asia
+  quality: high
+- name: NPR
+  url: https://feeds.npr.org/1001/rss.xml
+  region: us
+  quality: high
+- name: Smithsonian
+  url: https://www.smithsonianmag.com/rss/latest_articles/
+  region: us
+  quality: high
+- name: CBS News
+  url: https://www.cbsnews.com/latest/rss/main
+  region: us
+  quality: high
+- name: "YES! Magazine"
+  url: https://www.yesmagazine.org/feed
+  region: us
+  quality: high
+- name: Axios
+  url: https://www.axios.com/feeds/feed.rss
+  region: us
+  quality: high
+- name: Science News
+  url: https://www.sciencenews.org/feed
+  region: us
+  quality: high
+- name: STAT
+  url: https://www.statnews.com/feed/
+  region: us
+  quality: high
+- name: The Atlantic
+  url: https://www.theatlantic.com/feed/channel/science/
+  region: us
+  quality: high
+- name: Vox
+  url: https://www.vox.com/rss/future-perfect/index.xml
+  region: us
+  quality: high
+- name: Grist
+  url: https://grist.org/fix/feed/
+  region: us
+  quality: high
+- name: Fast Company
+  url: https://www.fastcompany.com/impact/rss
+  region: us
+  quality: high
+- name: PBS NewsHour
+  url: https://www.pbs.org/newshour/feeds/rss/headlines
+  region: us
+  quality: high
+- name: NBC News
+  url: https://feeds.nbcnews.com/nbcnews/public/news
+  region: us
+  quality: high
+- name: The Guardian
+  url: https://www.theguardian.com/world/series/the-upside/rss
+  region: uk
+  quality: high
+- name: The Guardian
+  url: https://www.theguardian.com/environment/rss
+  region: uk
+  quality: high
+- name: BBC
+  url: https://www.bbc.co.uk/news/science_and_environment/rss.xml
+  region: uk
+  quality: high
+- name: BBC
+  url: https://www.bbc.com/news/world/rss.xml
+  region: uk
+  quality: high
+- name: United Nations
+  url: https://www.un.org/en/rss.xml
+  region: global
+  quality: high
+- name: Our World in Data
+  url: https://ourworldindata.org/atom.xml
+  region: global
+  quality: high
+- name: Nature
+  url: https://www.nature.com/nature.rss
+  region: global
+  quality: high
+- name: The New York Times
+  url: https://rss.nytimes.com/services/xml/rss/nyt/Science.xml
+  region: us
+  quality: standard
+- name: The New York Times
+  url: https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml
+  region: us
+  quality: standard
+- name: Times of India
+  url: https://timesofindia.indiatimes.com/rssfeeds/-2128672765.cms
+  region: south_asia
+  quality: standard
+- name: Times of India
+  url: https://timesofindia.indiatimes.com/rssfeeds/2647163.cms
+  region: south_asia
+  quality: standard
+- name: Times of India
+  url: https://timesofindia.indiatimes.com/rssfeeds/2886704.cms
+  region: south_asia
+  quality: standard
+- name: Times of India
+  url: https://timesofindia.indiatimes.com/rssfeeds/66949542.cms
+  region: south_asia
+  quality: standard
+- name: Times of India
+  url: https://timesofindia.indiatimes.com/rssfeeds/913168846.cms
+  region: south_asia
+  quality: standard
+- name: Addicted2Success
+  url: https://addicted2success.com/feed/
+  region: us
+  quality: low
+- name: Ars Technica
+  url: https://arstechnica.com/feed/
+  region: us
+  quality: low
+- name: Civil Eats
+  url: https://civileats.com/feed/
+  region: us
+  quality: standard
+- name: CleanTechnica
+  url: https://cleantechnica.com/feed/
+  region: us
+  quality: standard
+- name: Connie Podesta
+  url: https://conniepodesta.com/feed/
+  region: us
+  quality: low
+- name: Doug Dvorak
+  url: https://dougdvorak.com/feed/
+  region: us
+  quality: low
+- name: BBC
+  url: https://feeds.bbci.co.uk/news/science_and_environment/rss.xml
+  region: uk
+  quality: standard
+- name: BBC
+  url: https://feeds.bbci.co.uk/news/technology/rss.xml
+  region: uk
+  quality: standard
+- name: Food Tank
+  url: https://foodtank.com/feed/
+  region: us
+  quality: standard
+- name: Greater Good Magazine
+  url: https://greatergood.berkeley.edu/feeds/rss_articles
+  region: us
+  quality: standard
+- name: Grist
+  url: https://grist.org/feed/
+  region: us
+  quality: standard
+- name: Harvard Business Review
+  url: https://hbr.org/feed
+  region: us
+  quality: standard
+- name: TED Ideas
+  url: https://ideas.ted.com/feed/
+  region: global
+  quality: standard
+- name: Impossible HQ
+  url: https://impossiblehq.com/feed/
+  region: us
+  quality: low
+- name: Jef Menguin
+  url: https://jefmenguin.com/feed/
+  region: us
+  quality: low
+- name: KRT Consulting
+  url: https://krtconsulting.com/feed/
+  region: us
+  quality: low
+- name: Latinvex
+  url: https://latinvex.com/rss/technology/
+  region: latam
+  quality: standard
+- name: Live Bold and Bloom
+  url: https://liveboldandbloom.com/feed
+  region: us
+  quality: low
+- name: Motivation Africa
+  url: https://motivation.africa/feed/
+  region: africa
+  quality: standard
+- name: Motive of Life
+  url: https://motiveoflife.com/feed/
+  region: us
+  quality: low
+- name: Motivirus
+  url: https://motivirus.com/feed/
+  region: us
+  quality: low
+- name: My Modern Met
+  url: https://mymodernmet.com/feed/
+  region: us
+  quality: standard
+- name: Hacker News
+  url: https://news.ycombinator.com/rss
+  region: us
+  quality: low
+- name: Phys.org
+  url: https://phys.org/rss-feed/
+  region: us
+  quality: standard
+- name: Possibility Change
+  url: https://possibilitychange.com/feed/
+  region: us
+  quality: low
+- name: Reasons to be Cheerful
+  url: https://reasonstobecheerful.world/feed/
+  region: global
+  quality: standard
+- name: Rest of World
+  url: https://restofworld.org/feed/latest/
+  region: global
+  quality: standard
+- name: Silent Motivations
+  url: https://silentmotivations.com/feed/
+  region: us
+  quality: low
+- name: Steffan Lynch
+  url: https://steffanlynch.com/feed/
+  region: us
+  quality: low
+- name: Stephen Guise
+  url: https://stephenguise.com/feed/
+  region: us
+  quality: low
+- name: Stunning Motivation
+  url: https://stunningmotivation.com/feed/
+  region: us
+  quality: low
+- name: TechCrunch
+  url: https://techcrunch.com/feed/
+  region: us
+  quality: low
+- name: The Juicebox
+  url: https://thejuicebox.com/feed/
+  region: us
+  quality: low
+- name: The Strive
+  url: https://thestrive.co/feed/
+  region: us
+  quality: low
+- name: The Utopian Life
+  url: https://theutopianlife.com/feed/
+  region: us
+  quality: low
+- name: Tiny Buddha
+  url: https://tinybuddha.com/feed/
+  region: us
+  quality: standard
+- name: Wait But Why
+  url: https://waitbutwhy.com/feed
+  region: us
+  quality: standard
+- name: Al Jazeera
+  url: https://www.aljazeera.com/xml/rss/all.xml
+  region: global
+  quality: standard
+- name: Anthropocene
+  url: https://www.anthropocenemagazine.org/feed/
+  region: global
+  quality: standard
+- name: Architectural Digest
+  url: https://www.architecturaldigest.com/feed/rss
+  region: us
+  quality: low
+- name: Ashoka
+  url: https://www.ashoka.org/en/rss.xml
+  region: global
+  quality: standard
+- name: Atlas Obscura
+  url: https://www.atlasobscura.com/feeds/latest
+  region: us
+  quality: low
+- name: BBC
+  url: https://www.bbc.com/news/rss.xml
+  region: uk
+  quality: standard
+- name: BigSpeak
+  url: https://www.bigspeak.com/feed/
+  region: us
+  quality: low
+- name: Bored Panda
+  url: https://www.boredpanda.com/feed/
+  region: us
+  quality: low
+- name: The Marginalian
+  url: https://www.brainpickings.org/feed/
+  region: us
+  quality: standard
+- name: Canary Media
+  url: https://www.canarymedia.com/feed
+  region: us
+  quality: standard
+- name: "charity: water"
+  url: https://www.charitywater.org/feed/
+  region: global
+  quality: standard
+- name: Core77
+  url: https://www.core77.com/posts/rss
+  region: us
+  quality: low
+- name: Christian Science Monitor
+  url: https://www.csmonitor.com/rss
+  region: us
+  quality: standard
+- name: Curbed
+  url: https://www.curbed.com/rss/index.xml
+  region: us
+  quality: low
+- name: Daily Motivation
+  url: https://www.dailymotivation.site/feed/
+  region: us
+  quality: low
+- name: Daryn Kagan
+  url: https://www.darynkagan.com/feed/
+  region: us
+  quality: low
+- name: designboom
+  url: https://www.designboom.com/feed/
+  region: eu
+  quality: standard
+- name: Dezeen
+  url: https://www.dezeen.com/feed/
+  region: uk
+  quality: standard
+- name: Dumb Little Man
+  url: https://www.dumblittleman.com/feed/
+  region: us
+  quality: low
+- name: DW
+  url: https://www.dw.com/en/rss/rss-en-top/s-9097/rss.xml
+  region: eu
+  quality: standard
+- name: Earth Touch News
+  url: https://www.earthtouchnews.com/feed/
+  region: us
+  quality: standard
+- name: EcoWatch
+  url: https://www.ecowatch.com/feed
+  region: us
+  quality: standard
+- name: Edutopia
+  url: https://www.edutopia.org/rss.xml
+  region: us
+  quality: standard
+- name: Entrepreneur
+  url: https://www.entrepreneur.com/latest.rss
+  region: us
+  quality: low
+- name: ESPN
+  url: https://www.espn.com/espn/rss/news
+  region: us
+  quality: low
+- name: Euronews
+  url: https://www.euronews.com/rss?format=mrss&level=vertical&name=culture
+  region: eu
+  quality: standard
+- name: Euronews
+  url: https://www.euronews.com/rss?format=mrss&level=vertical&name=lifestyle
+  region: eu
+  quality: standard
+- name: Euronews
+  url: https://www.euronews.com/rss?format=mrss&level=vertical&name=sci-tech
+  region: eu
+  quality: standard
+- name: Euronews
+  url: https://www.euronews.com/rss?format=mrss&level=vertical&name=travel
+  region: eu
+  quality: standard
+- name: Fast Company
+  url: https://www.fastcompany.com/latest/rss
+  region: us
+  quality: standard
+- name: Forbes
+  url: https://www.forbes.com/innovation/feed/
+  region: us
+  quality: low
+- name: Global Citizen
+  url: https://www.globalcitizen.org/en/feed/
+  region: global
+  quality: standard
+- name: Goalcast
+  url: https://www.goalcast.com/feed/
+  region: us
+  quality: low
+- name: Good Good Good
+  url: https://www.goodgoodgood.co/articles/rss.xml
+  region: us
+  quality: standard
+- name: Good News Network
+  url: https://www.goodnewsnetwork.org/category/news/inspiring/feed/
+  region: global
+  quality: standard
+- name: Good News Network
+  url: https://www.goodnewsnetwork.org/feed/
+  region: global
+  quality: standard
+- name: GreenBiz
+  url: https://www.greenbiz.com/feed
+  region: us
+  quality: standard
+- name: Healthline
+  url: https://www.healthline.com/rss
+  region: us
+  quality: low
+- name: Inc.
+  url: https://www.inc.com/rss/
+  region: us
+  quality: low
+- name: InspireMore
+  url: https://www.inspiremore.com/feed/
+  region: us
+  quality: standard
+- name: Jane Goodall Institute
+  url: https://www.janegoodall.org/feed/
+  region: global
+  quality: standard
+- name: Khan Academy
+  url: https://www.khanacademy.org/blog/rss.xml
+  region: us
+  quality: low
+- name: Life Beyond Numbers
+  url: https://www.lifebeyondnumbers.com/feed/
+  region: us
+  quality: low
+- name: Lifehack
+  url: https://www.lifehack.org/feed
+  region: us
+  quality: low
+- name: Marc and Angel
+  url: https://www.marcandangel.com/feed/
+  region: us
+  quality: low
+- name: Medical News Today
+  url: https://www.medicalnewstoday.com/rss/news.xml
+  region: us
+  quality: low
+- name: mindbodygreen
+  url: https://www.mindbodygreen.com/rss
+  region: us
+  quality: low
+- name: New Scientist
+  url: https://www.newscientist.com/feed/home
+  region: uk
+  quality: standard
+- name: NPR
+  url: https://www.npr.org/rss/rss.php?id=1001
+  region: us
+  quality: standard
+- name: Nyauri Writes
+  url: https://www.nyauriwrites.com/feed/
+  region: us
+  quality: low
+- name: One Zero Eight
+  url: https://www.onezeroeight.com/feed/
+  region: us
+  quality: low
+- name: Open Culture
+  url: https://www.openculture.com/feed
+  region: us
+  quality: standard
+- name: The Optimist Daily
+  url: https://www.optimistdaily.com/feed/
+  region: global
+  quality: standard
+- name: Pick the Brain
+  url: https://www.pickthebrain.com/blog/feed/
+  region: us
+  quality: low
+- name: Positive News
+  url: https://www.positive.news/feed/
+  region: uk
+  quality: standard
+- name: Prevention
+  url: https://www.prevention.com/rss/all.xml/
+  region: us
+  quality: low
+- name: Psychology Today
+  url: https://www.psychologytoday.com/us/blog/feed
+  region: us
+  quality: low
+- name: Reader's Digest
+  url: https://www.rd.com/feed/
+  region: us
+  quality: low
+- name: SA Good News
+  url: https://www.sagoodnews.co.za/feed/
+  region: africa
+  quality: standard
+- name: ScienceDaily
+  url: https://www.sciencedaily.com/rss/all.xml
+  region: us
+  quality: standard
+- name: Space.com
+  url: https://www.space.com/feeds/all
+  region: us
+  quality: standard
+- name: SUCCESS
+  url: https://www.success.com/feed/
+  region: us
+  quality: low
+- name: Sunny Skyz
+  url: https://www.sunnyskyz.com/good-news/rss.xml
+  region: us
+  quality: standard
+- name: Sunny Skyz
+  url: https://www.sunnyskyz.com/rss/
+  region: us
+  quality: standard
+- name: MIT Technology Review
+  url: https://www.technologyreview.com/feed/
+  region: us
+  quality: standard
+- name: The Better India
+  url: https://www.thebetterindia.com/feed/
+  region: south_asia
+  quality: standard
+- name: The Dodo
+  url: https://www.thedodo.com/rss.xml
+  region: us
+  quality: standard
+- name: The Guardian
+  url: https://www.theguardian.com/world/rss
+  region: uk
+  quality: standard
+- name: The Players' Tribune
+  url: https://www.theplayerstribune.com/feed
+  region: us
+  quality: standard
+- name: The Verge
+  url: https://www.theverge.com/rss/index.xml
+  region: us
+  quality: low
+- name: Colossal
+  url: https://www.thisiscolossal.com/feed/
+  region: us
+  quality: standard
+- name: Treehugger
+  url: https://www.treehugger.com/feeds/rss
+  region: us
+  quality: standard
+- name: Upworthy
+  url: https://www.upworthy.com/feed
+  region: us
+  quality: standard
+- name: Upworthy
+  url: https://www.upworthy.com/rss
+  region: us
+  quality: low
+- name: Volts
+  url: https://www.volts.wtf/feed
+  region: us
+  quality: standard
+- name: WebMD
+  url: https://www.webmd.com/rss/rss.aspx?RSSSource=RSS_PUBLIC
+  region: us
+  quality: low
+- name: WIRED
+  url: https://www.wired.com/feed/rss
+  region: us
+  quality: low
+- name: "YES! Magazine"
+  url: https://www.yesmagazine.org/rss.xml
+  region: us
+  quality: standard
+- name: Zen Habits
+  url: https://zenhabits.net/feed/
+  region: us
+  quality: standard

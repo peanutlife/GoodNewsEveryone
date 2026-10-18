@@ -1,0 +1,115 @@
+{% extends "site/base.html" %}
+{% import "site/_macros.html" as m with context %}
+{% block title %}{{ e.get('headline') or a.title }} | Peanutlife{% endblock %}
+{% block description %}{{ e.get('one_line') or a.title }}{% endblock %}
+{% block ogimage %}{{ a.image_url if a.image_url and a.image_url.startswith('http') else 'https://peanutlife.com/static/icons/icon-512x512.png' }}{% endblock %}
+{% block head %}
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","headline":{{ (e.get('headline') or a.title)|tojson }},"datePublished":{{ (a.published.isoformat() if a.published else '')|tojson }},"image":{{ (a.image_url or '')|tojson }},"author":{"@type":"Organization","name":{{ a.source_name|tojson }}},"publisher":{"@type":"Organization","name":"Peanutlife"},"isBasedOn":{{ a.link|tojson }},"description":{{ (e.get('one_line') or '')|tojson }}}</script>
+{% endblock %}
+{% block body %}
+<main class="wrap main">
+  <article class="col story">
+    <nav class="crumb meta" aria-label="Breadcrumb">
+      <a href="{{ url_for('site.home') }}">Today's ten</a><span aria-hidden="true">›</span>
+      {% if position %}<span>Story {{ position }} of {{ total }}</span><span aria-hidden="true">›</span>{% endif %}
+      <a href="{{ url_for('site.section', slug=a.section) }}">{{ SECTIONS.get(a.section, 'Today') }}</a>
+    </nav>
+    <h1>{{ e.get('headline') or a.title }}</h1>
+    <p class="meta" style="font-size:15px;display:flex;gap:14px;flex-wrap:wrap">
+      <strong style="color:var(--ink)">{{ a.source_name }}</strong>
+      {% if a.published %}<span>{{ a.published.strftime('%-d %B %Y') }}</span>{% endif %}
+      <span>{{ a.read_minutes or 3 }} min read</span>
+      {% if a.enrich_model and a.enrich_model != 'dry-run' %}<span>Summary by Claude, reviewed by Peanutlife</span>{% endif %}
+    </p>
+    {% if a.image_url and a.image_url.startswith('http') %}<div class="hero"><img src="{{ a.image_url }}" alt=""></div>{% endif %}
+
+    <section class="panel">
+      {% if e.get('in_short') %}<h2>In short</h2><ul>{% for b in e.in_short %}<li>{{ b }}</li>{% endfor %}</ul>{% endif %}
+      {% if e.get('why_long') %}<h2 style="margin-top:6px">Why this is good news</h2><p>{{ e.why_long }}</p>{% endif %}
+      {% if e.get('before') and e.get('now') %}
+      <div class="bn"><div class="before"><span class="l">Before</span><span>{{ e.before }}</span></div><div class="now"><span class="l">Now</span><span>{{ e.now }}</span></div></div>
+      {% endif %}
+      {% if e.get('action') %}<p class="act" style="font-size:15px">Something you can do: {{ e.action }}</p>{% endif %}
+    </section>
+
+    {{ m.ad('ad-inline') }}
+
+    <section style="display:flex;flex-direction:column;gap:14px">
+      <h2 style="font-size:22px">From {{ a.source_name }}</h2>
+      <p class="excerpt">{{ (a.summary or '')|striptags|truncate(600) }}</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+        <a href="{{ a.link }}" class="btn" target="_blank" rel="noopener" onclick="gtag('event','read_source',{story:'{{ a.id }}'})">Read the full story at {{ a.source_name }}</a>
+        <span class="meta">Opens the publisher's site in a new tab.</span>
+      </div>
+    </section>
+
+    <section class="panel" id="ask">
+      <h2>Ask this story</h2>
+      <p class="meta" style="font-size:13px">Answers come only from the material behind this story, with a link to the source.</p>
+      <form class="ask" onsubmit="return askStory(event)">
+        <label for="q" class="meta" style="position:absolute;left:-9999px">Your question</label>
+        <input id="q" type="text" maxlength="400" placeholder="How long did it take?" required>
+        <button type="submit" class="btn2" style="height:44px">Ask</button>
+      </form>
+      <div class="answer" id="answer"></div>
+    </section>
+
+    {% if e.get('kid_version') and a.kid_safe %}
+    <section class="panel">
+      <h2>For kids</h2>
+      <p>{{ e.kid_version }}</p>
+    </section>
+    {% endif %}
+
+    {% if follow_ups %}
+    <section class="panel">
+      <h2>What happened next</h2>
+      {% for f in follow_ups %}<a href="{{ url_for('site.story', slug=f.slug) }}" style="font-weight:600">{{ f.published.strftime('%-d %b') if f.published }} · {{ (f.enrichment or {}).get('headline') or f.title }}</a>{% endfor %}
+    </section>
+    {% endif %}
+
+    <section class="share">
+      <span class="meta" style="font-weight:700">Share</span>
+      <button type="button" class="btn2" onclick="navigator.clipboard.writeText(location.href).then(function(){toast('Link copied')})">Copy link</button>
+      <a class="btn2" href="mailto:?subject={{ (e.get('headline') or a.title)|urlencode }}&body={{ request.url|urlencode }}">Email</a>
+      <a class="btn2" href="https://wa.me/?text={{ (e.get('headline') or a.title)|urlencode }}%20{{ request.url|urlencode }}" target="_blank" rel="noopener">WhatsApp</a>
+      <span style="flex:1"></span>
+      <button type="button" class="btn2" onclick="document.getElementById('follow').hidden=false;this.hidden=true">Follow this story</button>
+      <a href="mailto:contact@peanutlife.com?subject=Not%20good%20news%3A%20{{ a.id }}" class="meta" style="font-weight:700">Not good news? Tell us</a>
+    </section>
+    <form class="box" id="follow" hidden onsubmit="return followStory(event)">
+      <h3>Tell me when this story has a next chapter</h3>
+      <p class="meta">One email if and when the story moves on. Nothing else.</p>
+      <label for="fem">Email</label>
+      <input id="fem" type="email" required placeholder="you@example.com">
+      <button type="submit" class="btn">Follow</button>
+    </form>
+
+    {% if next_items %}
+    <section>
+      <div class="sec-head" style="margin-bottom:14px"><h2 style="font-size:22px">{% if position %}Next in today's ten{% else %}More like this{% endif %}</h2></div>
+      <div class="grid" style="grid-template-columns:repeat(2, minmax(0,1fr))">{% for n in next_items %}{{ m.row(n, (position + loop.index) if position else None) }}{% endfor %}</div>
+    </section>
+    {% endif %}
+    {{ m.ad('ad-inline') }}
+  </article>
+  <aside class="rail">
+    {{ m.ad('ad-rail') }}
+    {{ m.subscribe_box() }}
+    {% if more %}
+    <div class="box">
+      <h3>More in {{ SECTIONS.get(a.section, 'Today')|lower }}</h3>
+      {% for x in more %}<a href="{{ url_for('site.story', slug=x.slug) }}" style="font-weight:600;line-height:1.35">{{ (x.enrichment or {}).get('headline') or x.title }}</a>{% endfor %}
+    </div>
+    {% endif %}
+  </aside>
+</main>
+{% endblock %}
+{% block scripts %}
+<script>
+function askStory(ev){ev.preventDefault();var q=document.getElementById('q'),box=document.getElementById('answer');box.className='answer show';box.textContent='Thinking…';
+fetch('/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({article_id:'{{ a.id }}',question:q.value})}).then(function(r){return r.json()}).then(function(d){box.innerHTML=(d.answer||d.error||'No answer.').replace(/</g,'&lt;')+(d.source?' <a href="'+d.source+'" target="_blank" rel="noopener" class="act">Source →</a>':'');}).catch(function(){box.textContent='Could not reach the editor.';});return false;}
+function followStory(ev){ev.preventDefault();var em=document.getElementById('fem').value;
+fetch('/follow',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({article_id:'{{ a.id }}',email:em})}).then(function(r){return r.json()}).then(function(d){toast(d.message||d.error||'Done');if(d.ok){document.getElementById('follow').hidden=true;}});return false;}
+</script>
+{% endblock %}
