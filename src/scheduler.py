@@ -74,6 +74,8 @@ def _run_once(app, force: bool = False) -> str:
                 return f"built {missing or 'all'} for {today}"
             except Exception as e:  # noqa: BLE001
                 logger.exception("Scheduled pipeline run failed")
+                from src.models.article import log_event
+                log_event("error", f"run failed: {type(e).__name__}: {e}\n{traceback.format_exc()[-1500:]}")
                 PROGRESS.update(stage="failed", error=f"{type(e).__name__}: {e}\n{traceback.format_exc()[-1500:]}",
                                 finished=datetime.utcnow().isoformat(timespec="seconds"))
                 return f"failed: {type(e).__name__}: {e}"[:300]
@@ -107,6 +109,9 @@ def start(app, initial_delay: int = 30) -> threading.Thread | None:
             STATE["checks"] += 1
             try:
                 STATE["last_decision"] = _run_once(app)
+                with app.app_context():
+                    from src.models.article import log_event
+                    log_event("decision", STATE["last_decision"] or "")
             except Exception as e:  # noqa: BLE001 - keep the thread alive no matter what
                 logger.exception("Scheduler check failed")
                 STATE["last_error"] = f"{datetime.utcnow().isoformat(timespec='seconds')} {type(e).__name__}: {e}\n{traceback.format_exc()[-1200:]}"

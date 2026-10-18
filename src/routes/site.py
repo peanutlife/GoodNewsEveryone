@@ -366,6 +366,10 @@ def pipeline_status():
 
     from src.pipeline import PROGRESS
     from src.enrich import RECENT_ERRORS, ENRICH_MODEL, EDITOR_MODEL, has_api_key
+    from src.models.article import PipelineEvent
+    from flask import current_app
+    events = [{"at": e.at.isoformat(timespec="seconds"), "kind": e.kind, "pid": e.pid, "message": e.message}
+              for e in PipelineEvent.query.order_by(PipelineEvent.id.desc()).limit(30).all()]
     pending = Article.query.filter(Article.enriched_at.is_(None)).count()
     untriaged = Article.query.filter(Article.triage.is_(None), Article.enriched_at.is_(None)).count()
     awaiting_read = Article.query.filter(Article.enriched_at.is_(None), Article.triage.in_(["yes", "maybe"])).count()
@@ -383,7 +387,9 @@ def pipeline_status():
         "scheduler": _sched_state(),
         "recent_errors": RECENT_ERRORS[-8:],
         "config": {"enrich_model": ENRICH_MODEL, "editor_model": EDITOR_MODEL, "api_key_present": has_api_key(),
-                   "scheduler": _os.environ.get("PEANUT_SCHEDULER", "1")},
+                   "scheduler": _os.environ.get("PEANUT_SCHEDULER", "1"), "flask_env": _os.environ.get("FLASK_ENV", "production"),
+                   "debug": bool(current_app.debug), "pid": _os.getpid()},
+        "events": events,
         "latest_editions": latest,
         "prices_note": "Estimated from list prices per million tokens; the Anthropic console is the bill of record.",
     })

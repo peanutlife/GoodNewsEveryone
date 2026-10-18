@@ -29,6 +29,11 @@ RECENT_ERRORS: list[str] = []  # last few API failures, shown on /_pipeline
 def _note_error(msg: str) -> None:
     RECENT_ERRORS.append(f"{datetime.utcnow().isoformat(timespec='seconds')} {msg}"[:400])
     del RECENT_ERRORS[:-8]
+    try:
+        from src.models.article import log_event
+        log_event("error", msg)
+    except Exception:  # noqa: BLE001
+        pass
 
 
 ENRICH_MODEL = os.environ.get("PEANUT_ENRICH_MODEL", "claude-haiku-5-5")

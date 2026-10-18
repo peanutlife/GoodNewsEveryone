@@ -119,3 +119,27 @@ class Follow(db.Model):
     token = db.Column(db.String(64), unique=True)
 
     __table_args__ = (db.UniqueConstraint("email", "article_id", name="uq_follow"),)
+
+
+class PipelineEvent(db.Model):
+    """Short log lines written by the pipeline and scheduler, readable from any process on /_pipeline."""
+    __tablename__ = "pipeline_events"
+
+    id = db.Column(db.Integer, primary_key=True)
+    at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+    kind = db.Column(db.String(12))  # error | stage | decision | info
+    message = db.Column(db.Text)
+    pid = db.Column(db.Integer)
+
+
+def log_event(kind: str, message: str) -> None:
+    """Best-effort: never let logging break the pipeline."""
+    import os
+    from flask import has_app_context
+    if not has_app_context():
+        return
+    try:
+        db.session.add(PipelineEvent(kind=kind, message=(message or "")[:2000], pid=os.getpid()))
+        db.session.commit()
+    except Exception:  # noqa: BLE001
+        db.session.rollback()

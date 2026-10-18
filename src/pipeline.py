@@ -18,7 +18,7 @@ import requests
 
 from src.edition import config as sources_config
 from src.enrich import article_id, enrich_many, slugify, triage_many
-from src.models.article import Article
+from src.models.article import Article, log_event
 from src.models.user import db
 
 logger = logging.getLogger(__name__)
@@ -281,6 +281,7 @@ def run(dry_run: bool = False, limit: int = ENRICH_LIMIT, editions_only: bool = 
     from src.editions import build_all_editions
 
     PROGRESS.update(stage="fetching", started=datetime.utcnow().isoformat(timespec="seconds"), finished=None, error=None)
+    log_event("stage", f"run started (dry_run={dry_run}, limit={limit})")
     if not editions_only:
         items = fetch_all(limit_sources=limit_sources)
         logger.info("Fetched %d unique entries", len(items))
@@ -288,13 +289,17 @@ def run(dry_run: bool = False, limit: int = ENRICH_LIMIT, editions_only: bool = 
         logger.info("%d pass the pre-filter", len(items))
         new_rows = store_new(items)
         logger.info("%d new articles stored", len(new_rows))
+        log_event("stage", f"fetched {len(items)} after pre-filter, {len(new_rows)} new")
         t = triage_pending(dry_run=dry_run)
         logger.info("Triage: %s", t)
+        log_event("stage", f"triage {t}")
         n = enrich_pending(limit=limit, dry_run=dry_run)
+        log_event("stage", f"enriched {n}")
         logger.info("Enriched %d articles (%s)", n, "dry run" if dry_run else "Claude")
     PROGRESS["stage"] = "building editions"
     built = build_all_editions(dry_run=dry_run)
     PROGRESS.update(stage="idle", finished=datetime.utcnow().isoformat(timespec="seconds"))
+    log_event("stage", "run finished: " + ", ".join(f"{b.edition}={len(b.picks or [])}" for b in built))
     for ed in built:
         logger.info("Edition %s/%s: %d picks", ed.day, ed.edition, len(ed.picks or []))
 
