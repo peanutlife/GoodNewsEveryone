@@ -537,6 +537,9 @@ def create_app():
     # Initialize application with additional configuration
     initialize_app(app)
 
+    from src.scheduler import start as start_scheduler
+    start_scheduler(app)
+
     return app
 
 
