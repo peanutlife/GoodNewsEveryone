@@ -100,6 +100,7 @@ def build_html(ed, picks: list, unsubscribe_url: str) -> str:
   </td></tr>
   <tr><td style="padding:22px 4px 0 4px;">
     <p style="margin:0;font:400 12px/1.6 'Nunito Sans',Helvetica,Arial,sans-serif;color:{MUTED};">
+      Liked one? Tap &#9829; on its page and we follow the story for you: next chapters and stories like it land on <a href="{SITE}/me" style="color:{MUTED};">your page</a>.<br>
       You asked for this email at peanutlife.com. One a day, no tracking pixels, no &#8220;we miss you&#8221; emails.<br>
       <a href="{unsubscribe_url}" style="color:{MUTED};">Unsubscribe in one tap</a> &nbsp;·&nbsp; <a href="{SITE}/promise" style="color:{MUTED};">Our reader promise</a>
     </p>
@@ -120,7 +121,9 @@ def build_text(ed, picks: list, unsubscribe_url: str) -> str:
             lines.append(f"   Why it's good news: {e['why_card']}")
         lines.append(f"   {SITE}/story/{a.slug}")
         lines.append("")
-    lines += ["That's today's ten. You're all caught up.", "", f"Unsubscribe: {unsubscribe_url}"]
+    lines += ["That's today's ten. You're all caught up.", "",
+              f"Liked one? Tap the heart on its page and we follow the story for you: {SITE}/me", "",
+              f"Unsubscribe: {unsubscribe_url}"]
     return "\n".join(lines)
 
 

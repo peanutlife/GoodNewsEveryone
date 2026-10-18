@@ -6,6 +6,13 @@
   <div class="col">
     <div class="dateline" style="padding-top:0"><h1>🥜 Your good news</h1><p class="meta">{{ current_user.email }} · <a href="{{ url_for('account.signout') }}" class="act">Sign out</a></p></div>
 
+    {% if fresh %}
+    <section class="since">
+      <h2><span class="emo">🔔</span> Since you were last here</h2>
+      <ul>{% for t, c in fresh %}{% set ce = c.enrichment or {} %}<li><a href="{{ url_for('site.story', slug=c.slug) }}#thread"><b>{{ ce.get('headline') or c.title }}</b></a> <span class="meta">{{ c.published.strftime('%-d %b') if c.published }} · follows “{{ (t.root.enrichment or {}).get('headline') or t.root.title }}”</span>{% if ce.get('chapter_note') %}<span class="note">{{ ce.chapter_note }}</span>{% endif %}</li>{% endfor %}</ul>
+    </section>
+    {% endif %}
+
     <section class="threads" id="following">
       <h2><span class="emo">♥</span> Stories you're following</h2>
       {% if threads %}
@@ -31,11 +38,23 @@
       {% endif %}
     </section>
 
+    {% if because %}
+    <section class="foryou">
+      <h2><span class="emo">🎯</span> More like the ones you ♥</h2>
+      <p class="meta">Recent stories about the same things. Heart any of these and we follow them too.</p>
+      {% for r, sims in because %}
+      <div class="bgroup">
+        <p class="bwhy">Because you ♥ <a href="{{ url_for('site.story', slug=r.slug) }}">{{ (r.enrichment or {}).get('headline') or r.title }}</a></p>
+        <div class="grid" style="grid-template-columns:repeat(2, minmax(0,1fr))">{% for a in sims %}<div class="brow">{{ m.row(a) }}<div class="bacts">{{ m.like_btn(a, small=True) }}</div></div>{% endfor %}</div>
+      </div>
+      {% endfor %}
+    </section>
+    {% endif %}
     {% if for_you %}
     <section class="foryou">
-      <h2><span class="emo">🎯</span> More for you</h2>
-      <p class="meta">You heart {% for s, n in fav %}{{ SECTIONS.get(s, s)|lower }}{% if not loop.last %}{% if loop.index == fav|length - 1 %} and {% else %}, {% endif %}{% endif %}{% endfor %} most, so here is the best of the last two weeks from there.</p>
-      <div class="grid" style="grid-template-columns:repeat(2, minmax(0,1fr))">{% for a in for_you %}{{ m.row(a) }}{% endfor %}</div>
+      <h2><span class="emo">{{ (SECTION_META.get(fav[0][0]) or {}).get('icon', '✨') }}</span> More from {% for s, n in fav %}{{ SECTIONS.get(s, s)|lower }}{% if not loop.last %}{% if loop.index == fav|length - 1 %} and {% else %}, {% endif %}{% endif %}{% endfor %}</h2>
+      <p class="meta">The sections you heart most. The best of the last two weeks from there.</p>
+      <div class="grid" style="grid-template-columns:repeat(2, minmax(0,1fr))">{% for a in for_you %}<div class="brow">{{ m.row(a) }}<div class="bacts">{{ m.like_btn(a, small=True) }}</div></div>{% endfor %}</div>
     </section>
     {% endif %}
 
@@ -61,7 +80,7 @@
     </div>
     <div class="box">
       <h3>🤝 What we keep</h3>
-      <ul><li>Your email, to send you links and the morning ten.</li><li>The stories you ♥, so we can follow them for you and pick "more for you" by section.</li><li>One feeling per day, if you tap one.</li><li>Your "one good thing" notes.</li><li>Nothing else. No reading history, no ads profile. Un-heart a story and it is gone.</li></ul>
+      <ul><li>Your email, to send you links and the morning ten.</li><li>The stories you ♥, so we can follow them for you and find stories like them.</li><li>One feeling per day, if you tap one.</li><li>Your "one good thing" notes.</li><li>Nothing else. No reading history, no ads profile. Un-heart a story and it is gone.</li></ul>
     </div>
   </aside>
 </main>

@@ -14,7 +14,7 @@ from flask import Blueprint, current_app, flash, jsonify, redirect, render_templ
 from flask_login import current_user, login_required, login_user, logout_user
 from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
 
-from src.chapters import chapter_time
+from src.chapters import chapter_time, similar_stories
 from src.models.article import FEELINGS, Article, Feeling, JournalEntry, Like, thread_root, thread_for
 from src.models.subscriber import EmailSubscriber
 from src.models.user import User, db
@@ -136,11 +136,15 @@ def me():
     for v in feelings.values():
         if v in counts:
             counts[v] += 1
-    threads, for_you, fav = _followed_threads(), [], []
+    threads, for_you, fav, because = _followed_threads(), [], [], []
     if threads:
-        fav, for_you = _for_you([t["root"] for t in threads] + [c for t in threads for c in t["chapters"]])
+        members = [t["root"] for t in threads] + [c for t in threads for c in t["chapters"]]
+        because = similar_stories([t["root"] for t in threads], {a.id for a in members})
+        fav, for_you = _for_you(members, {a.id for _, sims in because for a in sims})
+    fresh = [(t, c) for t in threads for c in t["chapters"] if c.id in t["new_ids"]]
     return render_template("site/me.html", days=days, feelings=feelings, entries=entries, counts=counts,
-                           subscribed=bool(sub and sub.is_active), threads=threads, for_you=for_you, fav=fav)
+                           subscribed=bool(sub and sub.is_active), threads=threads, for_you=for_you, fav=fav,
+                           because=because, fresh=fresh)
 
 
 def _followed_threads() -> list[dict]:
@@ -159,14 +163,14 @@ def _followed_threads() -> list[dict]:
         chapters = thread_for(root)[1:]
         since = lk.seen_at or lk.created_at or now
         new = [c for c in chapters if chapter_time(c) > since]
-        out[root.id] = {"root": root, "liked": lk.created_at, "chapters": chapters, "new": len(new),
+        out[root.id] = {"root": root, "liked": lk.created_at, "chapters": chapters, "new": len(new), "new_ids": {c.id for c in new},
                         "last": (chapters[-1].published if chapters else root.published) or now}
         lk.seen_at = now
     db.session.commit()
     return sorted(out.values(), key=lambda t: (t["new"], t["last"]), reverse=True)
 
 
-def _for_you(liked: list[Article]) -> tuple[list[tuple[str, int]], list[Article]]:
+def _for_you(liked: list[Article], also_seen: set[str] = frozenset()) -> tuple[list[tuple[str, int]], list[Article]]:
     """Sections this reader hearts most, and recent good stories from them they haven't seen."""
     counts: dict[str, int] = {}
     for a in liked:
@@ -175,7 +179,7 @@ def _for_you(liked: list[Article]) -> tuple[list[tuple[str, int]], list[Article]
     fav = sorted(counts.items(), key=lambda kv: -kv[1])[:3]
     if not fav:
         return [], []
-    seen = {a.id for a in liked}
+    seen = {a.id for a in liked} | set(also_seen)
     since = datetime.utcnow() - timedelta(days=14)
     rows = (Article.query.filter(Article.is_good_news.is_(True), Article.section.in_([s for s, _ in fav]),
                                  Article.published >= since, Article.id.notin_(list(seen)))

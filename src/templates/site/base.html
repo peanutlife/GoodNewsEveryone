@@ -77,7 +77,7 @@ var on=!b.classList.contains('on');b.disabled=true;
 fetch('/api/like',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({article_id:b.dataset.like,on:on})}).then(function(r){return r.json()}).then(function(d){b.disabled=false;if(!d.ok){toast(d.error||'Could not save');return;}
 document.querySelectorAll('[data-like="'+b.dataset.like+'"]').forEach(function(x){x.classList.toggle('on',on);x.setAttribute('aria-pressed',on?'true':'false');x.querySelector('i').textContent=on?'♥':'♡';var s=x.querySelector('span');if(s)s.textContent=on?'Following':'Follow this story';});
 toast(on?(d.signed_in?'Following. New chapters go to your page and your inbox.':'Following. New chapters appear on your page. Sign in to get them by email.'):'Unfollowed.');
-if(window.gtag)gtag('event',on?'like':'unlike',{story:b.dataset.like});}).catch(function(){b.disabled=false;toast('Could not save');});});
+if(window.onLiked)onLiked(on,d);if(window.gtag)gtag('event',on?'like':'unlike',{story:b.dataset.like});}).catch(function(){b.disabled=false;toast('Could not save');});});
 </script>
 {% block scripts %}{% endblock %}
 </body>

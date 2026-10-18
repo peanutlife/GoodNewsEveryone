@@ -166,6 +166,33 @@ def link_chapters(limit: int = 150, judge=None, dry_run: bool = False) -> int:
     return linked
 
 
+def similar_stories(roots: list[Article], exclude: set[str], days: int = 21, per: int = 2, pool: int = 400) -> list[tuple[Article, list[Article]]]:
+    """For each hearted story, recent good stories that are about the same things (keywords + headline words,
+    with a nudge for the same section). Free: no AI calls. Returns [(root, [similar...])] skipping empties."""
+    since = datetime.utcnow() - timedelta(days=days)
+    recent = (Article.query.filter(Article.is_good_news.is_(True), Article.published >= since)
+              .order_by(Article.published.desc()).limit(pool).all())
+    recent = [a for a in recent if a.id not in exclude]
+    rterms = [(a, _terms(a)) for a in recent]
+    taken: set[str] = set()
+    out = []
+    for r in roots:
+        t = _terms(r)
+        scored = []
+        for a, at in rterms:
+            if a.id in taken or a.id == r.id or a.follows_id == r.id:
+                continue
+            n = len(t & at) + (1 if a.section == r.section else 0)
+            if n >= 2 and len(t & at) >= 1:
+                scored.append((n, a))
+        scored.sort(key=lambda x: (-x[0], -(x[1].score or 0)))
+        picks = [a for _, a in scored[:per]]
+        if picks:
+            taken.update(a.id for a in picks)
+            out.append((r, picks))
+    return out
+
+
 def notify_chapters() -> dict:
     """One email per signed-in reader per thread when it has chapters they have not been told about."""
     from src.config import config

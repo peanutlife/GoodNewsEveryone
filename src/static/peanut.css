@@ -445,3 +445,30 @@ img { max-width: 100%; height: auto; }
 .trow .acts .like.sm { height: 36px; }
 .badge { background: #C2412E; color: #fff; font-weight: 800; font-size: 12px; padding: 3px 9px; border-radius: 999px; }
 @media (max-width: 699px) { .trow .thumb { flex-basis: 84px; height: 70px; } .foryou .grid { grid-template-columns: 1fr !important; } }
+
+/* ---- teach the heart + similar stories (v16) ---- */
+.hhint { background: #FBE9E6; border: 1px solid #E9B8B0; color: #8A2E22; border-radius: var(--r-sm); padding: 8px 12px; font-size: 14px; line-height: 1.4; }
+.hhint b { color: #C2412E; }
+.hlist { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.hchips { display: flex; flex-wrap: wrap; gap: 8px; }
+.hchip { display: inline-flex; align-items: center; gap: 6px; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 3px 12px 3px 3px; font-size: 13px; font-weight: 700; max-width: 100%; }
+.hchip .like.sm { height: 30px; padding: 0 8px; border: 0; background: transparent; }
+.hchip .like.sm.on { background: #FBE9E6; }
+.hchip .like i { font-size: 16px; }
+.hchip a { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nudge { border-color: #E9B8B0; background: #FFF7F5; margin-top: 14px; }
+.nudge .kick { color: #8A2E22; }
+.since { background: #FFF7F5; border: 1px solid #E9B8B0; border-radius: var(--r); padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+.since h2 { font-family: var(--display); font-size: 22px; display: flex; gap: 8px; align-items: center; }
+.since ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.since li { display: flex; flex-direction: column; gap: 2px; line-height: 1.35; }
+.since li b { font-family: var(--serif); font-size: 17px; }
+.since .note { color: var(--muted); font-size: 14px; }
+.bgroup { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+.bwhy { font-weight: 700; font-size: 14px; color: #8A2E22; }
+.bwhy a { text-decoration: underline; text-decoration-color: #E9B8B0; }
+.brow { position: relative; }
+.brow .row { padding-bottom: 8px; }
+.brow .bacts { position: absolute; right: 6px; bottom: 6px; }
+.brow .bacts .like.sm { height: 32px; padding: 0 10px; }
+@media (max-width: 699px) { .hchips { flex-direction: column; } }

@@ -43,6 +43,7 @@
               <div class="top"><span class="num">{{ loop.index }}</span>{{ m.kicker(a) }}</div>
               <h2><a href="{{ url_for('site.story', slug=a.slug) }}">{{ e.get('headline') or a.title }}</a></h2>
               {{ m.peanut_why(e) }}
+              {% if loop.first %}<p class="hhint" id="heart-hint" hidden>New: tap <b>♥</b> to follow a story. We watch for its next chapter and tell you on <a href="{{ url_for('account.me') }}" class="act">your page</a>.</p>{% endif %}
               <span class="meta">{{ a.source_name }} · {{ a.read_minutes or 3 }} min read{% if a.follows_id %} · <a href="{{ url_for('site.story', slug=a.slug) }}#thread" class="act">📜 A story we've been following moves on</a>{% endif %}</span>
               <div class="walk-acts">
                 <button type="button" class="btn2 prev" {% if loop.first %}disabled{% endif %}>← Back</button>
@@ -58,6 +59,12 @@
               <div class="top"><span class="kick"><i>🎉</i>That's {% if one_story %}your one{% else %}today's ten{% endif %}</span></div>
               <h2>How do you feel after today's ten?</h2>
               {{ m.feel_box(inline=True) }}
+              {% if not one_story %}
+              <div class="hlist">
+                <p class="why"><span class="pn">Did one stick with you?</span> Tap ♥ and we follow it: new chapters and stories like it land on <a href="{{ url_for('account.me') }}" class="act">your page</a>.</p>
+                <div class="hchips">{% for a in walk %}<span class="hchip">{{ m.like_btn(a, small=True) }}<a href="{{ url_for('site.story', slug=a.slug) }}">{{ ((a.enrichment or {}).get('headline') or a.title)|truncate(44) }}</a></span>{% endfor %}</div>
+              </div>
+              {% endif %}
               <p class="why">Nothing else to scroll here, on purpose. Tomorrow brings ten more. {% if one_story %}<a href="{{ url_for('site.home') }}" class="act">Show all ten</a>{% endif %}</p>
               <div class="walk-acts">
                 <a href="#one-good-thing" class="btn">Write down one good thing 🌱</a>
@@ -69,6 +76,13 @@
       </div>
       <noscript><style>.walk-win{overflow-x:auto}.walk-track{transform:none!important}.walk-acts button,.walk-head .play,.walk-bar{display:none}</style></noscript>
     </section>
+    {% if not current_user.is_authenticated %}
+    <section class="box nudge" id="heart-nudge" {% if not liked %}hidden{% endif %}>
+      <span class="kick"><i>♥</i>Following <b id="nudge-n">{{ liked|length }}</b> <span id="nudge-w">{{ 'story' if liked|length == 1 else 'stories' }}</span> on this device</span>
+      <p class="meta">Sign in and they follow you to any device. You get a page with what happened next and stories like them, plus one email per new chapter.</p>
+      <a href="{{ url_for('account.signin') }}" class="btn">Sign in with a magic link</a>
+    </section>
+    {% endif %}
 
     {% if not one_story %}
     <section>
@@ -154,6 +168,10 @@
 })();
 (function(){
   var KEY='peanut.ogt', ta=document.getElementById('ogt'); if(!ta) return;
+  (function(){var h=document.getElementById('heart-hint');if(!h)return;try{if(!localStorage.getItem('peanut.heart.seen')&&!document.querySelector('.like.on'))h.hidden=false;}catch(e){}})();
+  window.onLiked=function(on,d){try{localStorage.setItem('peanut.heart.seen','1');}catch(e){}var h=document.getElementById('heart-hint');if(h)h.hidden=true;
+    var nd=document.getElementById('heart-nudge');if(!nd)return;var ids={};document.querySelectorAll('.like.on').forEach(function(x){ids[x.dataset.like]=1;});var n=Object.keys(ids).length;
+    document.getElementById('nudge-n').textContent=n;document.getElementById('nudge-w').textContent=n===1?'story':'stories';nd.hidden=n===0;};
   var synced=document.getElementById('one-good-thing').dataset.synced==='1';
   function load(){try{return JSON.parse(localStorage.getItem(KEY)||'[]');}catch(e){return [];}}
   if(synced){ fetch('/api/journal').then(function(r){return r.json();}).then(function(j){ if(j&&j.entries&&j.entries.length){ try{localStorage.setItem(KEY, JSON.stringify(j.entries));}catch(e){} } }).catch(function(){}); }

@@ -367,3 +367,32 @@ def test_chapter_linking_builds_a_thread(client, app):
     assert "1 new chapter" in html and "Thames otters have their first pups" in html
     html = client.get("/me").get_data(as_text=True)  # seen now: badge gone, chapter count stays
     assert "new chapter" not in html and "2 chapters" in html
+
+
+def test_similar_stories_and_my_page_groups(client, app):
+    from src.chapters import similar_stories
+    from src.models.article import Like
+    with app.app_context():
+        root = _article(20, section="nature", hours_ago=24 * 10)
+        root.enrichment = {"headline": "Beavers return to Devon rivers", "keywords": ["beavers", "devon", "rivers"]}
+        alike = _article(21, section="nature", hours_ago=5)
+        alike.enrichment = {"headline": "Scotland's beavers get a new river", "keywords": ["beavers", "scotland", "river"]}
+        unrelated = _article(22, section="sports", hours_ago=5)
+        unrelated.enrichment = {"headline": "Marathon raises a record sum", "keywords": ["marathon", "charity"]}
+        db.session.add_all([root, alike, unrelated])
+        db.session.add(Like(vid="abcdefghijklmnopqrstuv", article_id="id020"))
+        db.session.commit()
+        groups = similar_stories([root], {"id020"})
+        assert [(r.id, [a.id for a in sims]) for r, sims in groups] == [("id020", ["id021"])]
+        build_edition("us", date.today(), dry_run=True)
+    client.set_cookie("pv", "abcdefghijklmnopqrstuv")
+    html = client.get("/?edition=us").get_data(as_text=True)
+    assert 'id="heart-nudge" ' in html and "Following <b id=\"nudge-n\">1</b>" in html  # signed out: nudge is shown
+    with app.test_request_context():
+        from src.routes.account import make_signin_token
+        token = make_signin_token("fan@example.com")
+    client.get(f"/signin/{token}")
+    html = client.get("/me").get_data(as_text=True)
+    assert "More like the ones you ♥" in html and "Because you ♥" in html and "beavers get a new river" in html
+    picks = html.split("More like the ones you")[1].split("Your one good things")[0]
+    assert "Marathon raises a record sum" not in picks  # (it is on the page only via the ticker)
