@@ -54,11 +54,12 @@
           {% endfor %}
           <article class="wcard wend" data-i="{{ walk|length + 1 }}">
             <div class="pad">
-              <h2>🎉 That's {% if one_story %}your one{% else %}today's ten{% endif %}. You're all caught up.</h2>
+              <div class="top"><span class="kick"><i>🎉</i>That's {% if one_story %}your one{% else %}today's ten{% endif %}</span></div>
+              <h2>How do you feel after today's ten?</h2>
+              {{ m.feel_box(inline=True) }}
               <p class="why">Nothing else to scroll here, on purpose. Tomorrow brings ten more. {% if one_story %}<a href="{{ url_for('site.home') }}" class="act">Show all ten</a>{% endif %}</p>
               <div class="walk-acts">
-                <a href="#feel" class="btn">Say how you feel 💬</a>
-                <a href="#one-good-thing" class="btn2">Write down one good thing 🌱</a>
+                <a href="#one-good-thing" class="btn">Write down one good thing 🌱</a>
                 <button type="button" class="btn2 restart">Start again</button>
               </div>
             </div>
@@ -122,7 +123,6 @@
     </section>
     {% endif %}
 
-    {{ m.feel_box() }}
     {{ m.subscribe_box() }}
     {{ m.ad('ad-rect') }}
 
@@ -175,6 +175,7 @@
     var c=cards[cur-1]; if(!c) return;
     var gap=parseFloat(getComputedStyle(track).columnGap||getComputedStyle(track).gap)||16;
     var x=(win.clientWidth-c.offsetWidth)/2-(c.offsetWidth+gap)*(cur-1);
+    win.scrollLeft=0; win.scrollTop=0;
     track.style.transform='translateX('+Math.round(x)+'px)';
   }
   function show(i, focus){
@@ -212,7 +213,10 @@
   w.addEventListener('touchend', function(ev){ if(x0===null) return; var dx=ev.changedTouches[0].clientX-x0; x0=null; if(Math.abs(dx)>50) show(dx<0?cur+1:cur-1, false); setTimeout(resume, 4000); }, {passive:true});
   window.addEventListener('resize', layout);
   if(reduce){ stopAuto(); }
+  var toFeel=(location.hash==='#feel');
+  if(toFeel){ cur=n+1; try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} }
   show(cur, false);
+  if(toFeel){ setTimeout(function(){ layout(); w.scrollIntoView({block:'start'}); }, 50); }
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
   window.addEventListener('load', layout);
 })();

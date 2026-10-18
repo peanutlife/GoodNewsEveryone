@@ -70,9 +70,9 @@
 </form>
 {%- endmacro %}
 
-{% macro feel_box(compact=False) -%}
-<section class="box feelbox" id="feel" data-day="{{ feel.day }}">
-  <span class="kick"><i>💬</i>How do you feel after today's ten?</span>
+{% macro feel_box(inline=False) -%}
+<section class="{% if inline %}feelbox feel-inline{% else %}box feelbox{% endif %}" id="feel" data-day="{{ feel.day }}">
+  {% if not inline %}<span class="kick"><i>💬</i>How do you feel after today's ten?</span>{% endif %}
   <div class="feel-opts" role="group" aria-label="How do you feel">
     {% for key, f in FEELINGS.items() %}<button type="button" data-feel="{{ key }}" aria-pressed="false"><i>{{ f.icon }}</i><span>{{ f.label }}</span></button>{% endfor %}
   </div>

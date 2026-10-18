@@ -401,3 +401,12 @@ img { max-width: 100%; height: auto; }
 .feel-grid .fd { display: flex; align-items: center; justify-content: center; aspect-ratio: 1; border-radius: 8px; background: var(--card); border: 1px solid var(--line); font-size: 20px; color: var(--faint); }
 .feel-grid .fd.calmer, .feel-grid .fd.better { background: var(--nature-bg); border-color: #C5DDBF; }
 .feel-grid .fd.same { background: var(--ad); } .feel-grid .fd.meh { background: var(--kindness-bg); }
+
+/* Feeling check-in as the last slide of the walk */
+.feel-inline { display: flex; flex-direction: column; gap: 10px; }
+.feel-inline .feel-opts { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; max-width: 520px; }
+.feel-inline .feel-opts button { padding: 12px 6px; font-size: 13px; border-radius: 14px; }
+.feel-inline .feel-opts button i { font-size: 32px; }
+.walk-track .wend { justify-content: flex-start; }
+.walk-track .wend .pad { padding: 10px 10px 14px; }
+.walk-track .wend h2 { font-size: 26px; }
