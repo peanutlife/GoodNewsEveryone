@@ -2,7 +2,7 @@
 {% import "site/_macros.html" as m with context %}
 {% block title %}{{ e.get('headline') or a.title }} | Peanutlife{% endblock %}
 {% block description %}{{ e.get('one_line') or a.title }}{% endblock %}
-{% block ogimage %}{{ a.image_url if a.image_url and a.image_url.startswith('http') else 'https://peanutlife.com/static/icons/icon-512x512.png' }}{% endblock %}
+{% block ogimage %}{{ a.image_url if a.image_url and a.image_url.startswith('http') else site_url ~ '/static/icons/icon-512x512.png' }}{% endblock %}
 {% block head %}
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","headline":{{ (e.get('headline') or a.title)|tojson }},"datePublished":{{ (a.published.isoformat() if a.published else '')|tojson }},"image":{{ (a.image_url or '')|tojson }},"author":{"@type":"Organization","name":{{ a.source_name|tojson }}},"publisher":{"@type":"Organization","name":"Peanutlife"},"isBasedOn":{{ a.link|tojson }},"description":{{ (e.get('one_line') or '')|tojson }}}</script>
 {% endblock %}
@@ -83,8 +83,8 @@
     <section class="share">
       <span class="meta" style="font-weight:700">Share</span>
       <button type="button" class="btn2" onclick="navigator.clipboard.writeText(location.href).then(function(){toast('Link copied')})">Copy link</button>
-      <a class="btn2" href="mailto:?subject={{ (e.get('headline') or a.title)|urlencode }}&body={{ request.url|urlencode }}">Email</a>
-      <a class="btn2" href="https://wa.me/?text={{ (e.get('headline') or a.title)|urlencode }}%20{{ request.url|urlencode }}" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn2" href="mailto:?subject={{ (e.get('headline') or a.title)|urlencode }}&body={{ canonical_url|urlencode }}">Email</a>
+      <a class="btn2" href="https://wa.me/?text={{ (e.get('headline') or a.title)|urlencode }}%20{{ canonical_url|urlencode }}" target="_blank" rel="noopener">WhatsApp</a>
       <span style="flex:1"></span>
       {{ m.like_btn(root) }}
       <a href="mailto:contact@peanutlife.com?subject=Not%20good%20news%3A%20{{ a.id }}" class="meta" style="font-weight:700">Not good news? Tell us</a>
