@@ -25,3 +25,11 @@ data/brightside.db
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# Local/editor junk and private files (kept out of this public repo)
+.DS_Store
+.idea/
+*.pdf
+*.db
+eaton.html
+eaton_files/

@@ -231,7 +231,7 @@ def test_digest_builds_and_sends_once_per_day(app, monkeypatch):
     db.session.add(EmailSubscriber(email="a@example.com", unsubscribe_token="tok-a", is_active=True))
     db.session.add(EmailSubscriber(email="b@example.com", unsubscribe_token="tok-b", is_active=False))
     db.session.commit()
-    ed = build_edition("global", date.today(), dry_run=True)
+    ed = build_edition("global", datetime.utcnow().date(), dry_run=True)  # digest_due() compares in UTC
     html_out = digest.build_html(ed, Article.query.filter(Article.id.in_(ed.picks)).all(), "https://x/unsub")
     assert "Story" in html_out and "unsub" in html_out and "caught up" in html_out
 
