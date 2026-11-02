@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}Peanutlife, ten good things a day{% endblock %}</title>
 <meta name="description" content="{% block description %}Ten true stories a day about things getting better, chosen and explained by an editor. Global, US and East Asia editions.{% endblock %}">
-<link rel="canonical" href="{{ request.base_url }}">
+<link rel="canonical" href="{{ canonical_url }}">
 <meta property="og:site_name" content="Peanutlife">
 <meta property="og:title" content="{{ self.title() }}">
 <meta property="og:description" content="{{ self.description() }}">
-<meta property="og:image" content="{% block ogimage %}https://peanutlife.com/static/icons/icon-512x512.png{% endblock %}">
+<meta property="og:image" content="{% block ogimage %}{{ site_url }}/static/icons/icon-512x512.png{% endblock %}">
 <meta name="theme-color" content="#FBF7F1">
 <link rel="manifest" href="/static/manifest.json">
 <link rel="apple-touch-icon" href="/static/icons/icon-192x192.png">

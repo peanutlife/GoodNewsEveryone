@@ -396,3 +396,20 @@ def test_similar_stories_and_my_page_groups(client, app):
     assert "More like the ones you ♥" in html and "Because you ♥" in html and "beavers get a new river" in html
     picks = html.split("More like the ones you")[1].split("Your one good things")[0]
     assert "Marathon raises a record sum" not in picks  # (it is on the page only via the ticker)
+
+
+# ---------- canonical URLs, sitemap, robots ----------
+
+def test_canonical_is_https_www_without_query(client, app):
+    html = client.get("/promise?utm_source=x", base_url="http://peanutlife.com").get_data(as_text=True)
+    assert '<link rel="canonical" href="https://www.peanutlife.com/promise">' in html
+    assert "http://peanutlife.com" not in html and 'href="http://' not in html.split("<body", 1)[0]
+
+
+def test_sitemap_and_robots_use_canonical_origin(client):
+    xml = client.get("/sitemap.xml").get_data(as_text=True)
+    assert "<loc>https://www.peanutlife.com/</loc>" in xml
+    assert "https://peanutlife.com" not in xml
+    robots = client.get("/robots.txt").get_data(as_text=True)
+    assert "Sitemap: https://www.peanutlife.com/sitemap.xml" in robots.splitlines()
+    assert all(line == line.lstrip() for line in robots.splitlines())

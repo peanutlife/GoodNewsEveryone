@@ -18,21 +18,21 @@
     <meta name="keywords" content="positive news, good news, uplifting stories, inspiring news, happy news, feel-good stories, optimistic news, hopeful news">
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="{{ request.url }}">
+    <link rel="canonical" href="{{ canonical_url }}">
 
     <!-- Open Graph Meta Tags -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Peanutlife - Uplifting News & Inspiring Stories Daily">
     <meta property="og:description" content="Discover inspiring news and uplifting stories every day. Peanutlife curates the most positive news from around the world.">
-    <meta property="og:image" content="https://peanutlife.com/static/icons/icon-512x512.png">
-    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:image" content="{{ site_url }}/static/icons/icon-512x512.png">
+    <meta property="og:url" content="{{ canonical_url }}">
     <meta property="og:site_name" content="Peanutlife">
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Peanutlife - Uplifting News & Inspiring Stories Daily">
     <meta name="twitter:description" content="Discover inspiring news and uplifting stories every day. Start your day with good news!">
-    <meta name="twitter:image" content="https://peanutlife.com/static/icons/icon-512x512.png">
+    <meta name="twitter:image" content="{{ site_url }}/static/icons/icon-512x512.png">
     <meta name="twitter:site" content="@peanutlife">
 
     <!-- PWA Meta Tags -->
@@ -65,8 +65,8 @@
       "@type": "Organization",
       "name": "Peanutlife",
       "alternateName": "Project Peanutlife",
-      "url": "https://peanutlife.com",
-      "logo": "https://peanutlife.com/static/icons/icon-512x512.png",
+      "url": "{{ site_url }}",
+      "logo": "{{ site_url }}/static/icons/icon-512x512.png",
       "description": "Peanutlife curates the most inspiring and uplifting news stories from around the world. Discover positive news daily.",
       "sameAs": [
         "https://twitter.com/peanutlife",
@@ -86,19 +86,19 @@
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "Peanutlife",
-      "url": "https://peanutlife.com",
+      "url": "{{ site_url }}",
       "description": "Your daily source for uplifting news and inspiring stories from around the world.",
       "publisher": {
         "@type": "Organization",
         "name": "Peanutlife",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://peanutlife.com/static/icons/icon-512x512.png"
+          "url": "{{ site_url }}/static/icons/icon-512x512.png"
         }
       },
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "https://peanutlife.com/?topic={search_term_string}",
+        "target": "{{ site_url }}/?topic={search_term_string}",
         "query-input": "required name=search_term_string"
       }
     }

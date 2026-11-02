@@ -8,7 +8,7 @@ import time
 import hashlib
 import logging
 from datetime import datetime, timedelta
-from urllib.parse import urlparse
+from urllib.parse import quote, urlparse
 from openai import OpenAI
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
@@ -517,6 +517,20 @@ def create_app():
 
     # Set session lifetime
     app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=24)
+
+    # One public origin for canonical tags, sitemap, robots and share links.
+    # (request.url is http:// behind Render's proxy, and the bare domain 301s to www.)
+    app.config["SITE_URL"] = os.environ.get("SITE_URL", "https://www.peanutlife.com").rstrip("/")
+
+    @app.context_processor
+    def inject_site_urls():
+        from flask import request
+        site = app.config["SITE_URL"]
+        canonical = site + request.path
+        topic = request.args.get("topic")  # topic pages are listed in the sitemap
+        if topic and request.path == "/":
+            canonical += "?topic=" + quote(topic)
+        return {"site_url": site, "canonical_url": canonical}
 
     # Log configuration info (sanitized)
     logging.info(f"🚀 Starting application in {env} mode")
@@ -1130,12 +1144,13 @@ def initialize_app(app):
     @app.route('/robots.txt')
     def robots_txt():
         """Serve robots.txt for search engine crawlers."""
-        robots_content = """User-agent: *
-    Allow: /
-    Disallow: /admin/
-    Disallow: /api/
-    Sitemap: https://peanutlife.com/sitemap.xml
-    """
+        robots_content = (
+            "User-agent: *\n"
+            "Allow: /\n"
+            "Disallow: /admin/\n"
+            "Disallow: /api/\n"
+            f"Sitemap: {app.config['SITE_URL']}/sitemap.xml\n"
+        )
         return robots_content, 200, {'Content-Type': 'text/plain; charset=utf-8'}
 
     @app.route('/sitemap.xml')
@@ -1159,22 +1174,24 @@ def initialize_app(app):
         # Get all articles
         all_articles = flatten_articles(articles_by_topic, sort_by_inspiration=True)
 
+        site = app.config['SITE_URL']
+
         # Start building sitemap XML
         sitemap_xml = '''<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://peanutlife.com/</loc>
+        <loc>''' + site + '''/</loc>
         <changefreq>hourly</changefreq>
         <priority>1.0</priority>
         <lastmod>''' + datetime.utcnow().strftime('%Y-%m-%d') + '''</lastmod>
     </url>
     <url>
-        <loc>https://peanutlife.com/auth/signup</loc>
+        <loc>''' + site + '''/auth/signup</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://peanutlife.com/auth/subscribe</loc>
+        <loc>''' + site + '''/auth/subscribe</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>'''
@@ -1185,14 +1202,14 @@ def initialize_app(app):
             for path in ["/edition/global", "/edition/us", "/edition/asia", "/dial", "/promise", "/yesterday"] + [f"/section/{k}" for k in _SECTIONS]:
                 sitemap_xml += f'''
     <url>
-        <loc>https://peanutlife.com{path}</loc>
+        <loc>{site}{path}</loc>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
     </url>'''
             for a in _Article.query.filter(_Article.is_good_news.is_(True), _Article.slug.isnot(None)).order_by(_Article.published.desc()).limit(1500):
                 sitemap_xml += f'''
     <url>
-        <loc>https://peanutlife.com/story/{a.slug}</loc>
+        <loc>{site}/story/{a.slug}</loc>
         <lastmod>{(a.published or a.fetched_at).strftime('%Y-%m-%d')}</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
@@ -1205,7 +1222,7 @@ def initialize_app(app):
         for topic in unique_topics:
             sitemap_xml += f'''
     <url>
-        <loc>https://peanutlife.com/?topic={topic}</loc>
+        <loc>{site}/?topic={topic}</loc>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
     </url>'''
@@ -1227,7 +1244,7 @@ def initialize_app(app):
 
             sitemap_xml += f'''
     <url>
-        <loc>https://peanutlife.com/article/{article_slug}</loc>
+        <loc>{site}/article/{article_slug}</loc>
         <lastmod>{lastmod}</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
