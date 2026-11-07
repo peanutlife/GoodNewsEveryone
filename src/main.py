@@ -1168,6 +1168,8 @@ def initialize_app(app):
             "Allow: /\n"
             "Disallow: /admin/\n"
             "Disallow: /api/\n"
+            "Disallow: /_pipeline\n"  # internal ops JSON: model ids and token spend, nothing for readers
+            "Disallow: /_edition\n"
             f"Sitemap: {app.config['SITE_URL']}/sitemap.xml\n"
         )
         return robots_content, 200, {'Content-Type': 'text/plain; charset=utf-8'}
@@ -1225,6 +1227,14 @@ def initialize_app(app):
         <loc>{site}{path}</loc>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
+    </url>'''
+            # About and the legal pages: rarely change, but they must be discoverable.
+            for path in ["/about", "/privacy", "/terms"]:
+                sitemap_xml += f'''
+    <url>
+        <loc>{site}{path}</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.4</priority>
     </url>'''
             for a in _Article.query.filter(_Article.is_good_news.is_(True), _Article.slug.isnot(None)).order_by(_Article.published.desc()).limit(1500):
                 sitemap_xml += f'''

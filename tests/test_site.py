@@ -161,7 +161,8 @@ def test_pages_render_with_edition(client, app):
     assert b"ten good things" in r.data
     assert b"adsbygoogle" not in r.data  # ADS_ENABLED=False in tests
 
-    for path in ["/section/kids", "/section/nature", "/dial?t=1", "/dial?t=3", "/dial?t=7", "/dial?t=15", "/promise", "/story/story-1", "/?mood=calm", "/?one=1"]:
+    for path in ["/section/kids", "/section/nature", "/dial?t=1", "/dial?t=3", "/dial?t=7", "/dial?t=15", "/promise",
+                 "/about", "/privacy", "/terms", "/story/story-1", "/?mood=calm", "/?one=1"]:
         r = client.get(path)
         assert r.status_code == 200, path
 
@@ -216,7 +217,9 @@ def test_pipeline_run_endpoint_requires_admin(client, app):
     assert client.post("/_pipeline/run").status_code == 401
     app.config.update(ADMIN_USER="admin", ADMIN_PASS="pw")
     assert client.post("/_pipeline/run", auth=("admin", "wrong")).status_code == 401
-    r = client.get("/_pipeline")
+    assert client.get("/_pipeline").status_code == 401
+    assert client.get("/_pipeline", auth=("admin", "wrong")).status_code == 401
+    r = client.get("/_pipeline", auth=("admin", "pw"))
     assert r.status_code == 200 and "scheduler" in r.get_json()
 
 
@@ -404,6 +407,94 @@ def test_canonical_is_https_www_without_query(client, app):
     html = client.get("/promise?utm_source=x", base_url="http://peanutlife.com").get_data(as_text=True)
     assert '<link rel="canonical" href="https://www.peanutlife.com/promise">' in html
     assert "http://peanutlife.com" not in html and 'href="http://' not in html.split("<body", 1)[0]
+
+
+# ---------- legal pages and honest wording ----------
+
+LEGAL_PATHS = ["/privacy", "/terms", "/about"]
+
+
+def test_legal_pages_render_and_are_linked_from_every_footer(client, app):
+    sections = list(SECTIONS)
+    for i in range(20):
+        db.session.add(_article(i, section=sections[i % len(sections)], source=f"Src{i % 7}"))
+    db.session.commit()
+    build_edition("global", date.today(), dry_run=True)
+
+    for path in LEGAL_PATHS:
+        page = client.get(path)
+        assert page.status_code == 200, path
+        body = page.get_data(as_text=True)
+        assert "contact@peanutlife.com" in body, path  # the only contact address, already public
+        assert "TODO" not in body and "pending legal review" not in body, path
+
+    # every page built on the site layout carries all three links in its footer
+    for path in ["/", "/promise", "/story/story-1", "/dial", "/section/nature"] + LEGAL_PATHS:
+        body = client.get(path).get_data(as_text=True)
+        for legal in LEGAL_PATHS:
+            assert f'href="{legal}"' in body, f"{legal} missing from {path}"
+
+
+def test_public_pages_make_no_human_review_or_vendor_claims(client, app):
+    """The pipeline has no human review step and we don't name the AI vendor to readers."""
+    sections = list(SECTIONS)
+    for i in range(20):
+        db.session.add(_article(i, section=sections[i % len(sections)], source=f"Src{i % 7}"))
+    db.session.commit()
+    ed = build_edition("global", date.today(), dry_run=True)
+    a = Article.query.get(ed.picks[0])
+    a.enrich_model = "some-model"  # so the story byline is rendered at all
+    db.session.commit()
+
+    banned = ["claude", "anthropic", "double-check", "the humans at", "good news desk",
+              "an editor chooses", "picked and double"]
+    for path in ["/", "/promise", "/about", "/privacy", "/terms", "/dial", f"/story/{a.slug}"]:
+        body = client.get(path).get_data(as_text=True).lower()
+        for phrase in banned:
+            assert phrase not in body, f"{phrase!r} still on {path}"
+
+    # the AI disclosure itself must stay
+    story = client.get(f"/story/{a.slug}").get_data(as_text=True)
+    assert "Summarised with AI from" in story and "not reviewed by a person" in story
+    for path in ["/", "/promise", "/about"]:
+        assert "AI" in client.get(path).get_data(as_text=True), path
+
+
+def test_digest_email_is_honest_and_links_the_legal_pages(app):
+    from src import digest
+    sections = list(SECTIONS)
+    for i in range(20):
+        db.session.add(_article(i, section=sections[i % len(sections)], source=f"Src{i % 7}"))
+    db.session.commit()
+    ed = build_edition("global", date.today(), dry_run=True)
+    picks = Article.query.filter(Article.id.in_(ed.picks)).all()
+    for body in (digest.build_html(ed, picks, "https://x/unsub"), digest.build_text(ed, picks, "https://x/unsub")):
+        low = body.lower()
+        assert "claude" not in low and "anthropic" not in low
+        assert "from the editor" not in low and "double-check" not in low
+        assert "written with AI from each publisher" in body
+        for legal in LEGAL_PATHS:
+            assert legal in body
+
+
+def test_generated_letter_is_signed_peanutlife(app):
+    from src.enrich import EDITOR_SCHEMA, EDITOR_SYSTEM, write_edition_copy
+    assert "Peanutlife" in EDITOR_SCHEMA["properties"]["letter"]["description"]
+    assert "The editor" not in EDITOR_SCHEMA["properties"]["letter"]["description"]
+    assert "Sign the letter 'Peanutlife'" in EDITOR_SYSTEM
+    copy = write_edition_copy("global", [], {}, datetime.utcnow(), dry_run=True)
+    assert copy["letter"].rstrip().endswith("Peanutlife")
+
+
+def test_robots_keeps_the_ops_json_out_of_search(client):
+    robots = client.get("/robots.txt").get_data(as_text=True).splitlines()
+    assert "Disallow: /_pipeline" in robots
+
+
+def test_sitemap_lists_the_legal_pages(client):
+    xml = client.get("/sitemap.xml").get_data(as_text=True)
+    for path in LEGAL_PATHS:
+        assert f"<loc>https://www.peanutlife.com{path}</loc>" in xml
 
 
 def test_sitemap_and_robots_use_canonical_origin(client):
