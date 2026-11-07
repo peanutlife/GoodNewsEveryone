@@ -161,9 +161,10 @@
                 </div>
                 {% endif %}
 
-                {% if pick.get('image_url') %}
+                {% set pick_img = safe_image_url(pick.get('image_url')) %}
+                {% if pick_img %}
                 <div class="pick-image">
-                    <img src="{{ pick['image_url'] }}" alt="{{ pick['title'] }}" loading="eager">
+                    <img src="{{ pick_img }}" alt="{{ pick['title'] }}" loading="eager">
                 </div>
                 {% endif %}
 
@@ -268,9 +269,10 @@
                         </div>
 
                         <article class="hero-article">
-                            {% if hero_article.get('image_url') %}
+                            {% set hero_img = safe_image_url(hero_article.get('image_url')) %}
+                            {% if hero_img %}
                                 <div class="hero-image">
-                                    <img src="{{ hero_article['image_url'] }}" alt="{{ hero_article['title'] }}" loading="eager">
+                                    <img src="{{ hero_img }}" alt="{{ hero_article['title'] }}" loading="eager">
                                 </div>
                             {% endif %}
 
@@ -392,9 +394,10 @@
                 <div class="articles-grid">
                     {% for article in articles[start_index:] %}
                         <div class="post">
-                            {% if article.get('image_url') %}
+                            {% set article_img = safe_image_url(article.get('image_url')) %}
+                            {% if article_img %}
                                 <div class="post-image">
-                                    <img src="{{ article['image_url'] }}" alt="{{ article['title'] }}" loading="lazy">
+                                    <img src="{{ article_img }}" alt="{{ article['title'] }}" loading="lazy">
                                 </div>
                             {% endif %}
 
@@ -577,6 +580,7 @@
     <footer>
         <p>&copy; {{ now.year }} Project Peanutlife. All rights reserved.</p>
         <p>Powered by Good Vibes & Peanuts 🥜</p>
+        <p><a href="/about">About</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="mailto:contact@peanutlife.com">Contact</a></p>
     </footer>
 
     <!-- Toast notification -->

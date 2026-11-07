@@ -448,7 +448,7 @@ def ask():
         return jsonify({"error": "Busy right now, try again in a minute."}), 429
     except (anthropic.APIStatusError, anthropic.APIConnectionError) as ex:
         logger.error("Ask failed: %s", ex)
-        return jsonify({"error": "Could not reach the editor. Try again shortly."}), 502
+        return jsonify({"error": "Could not get an answer just now. Try again shortly."}), 502
 
 
 # ---- Follow this story -------------------------------------------------------
@@ -483,6 +483,27 @@ def unfollow(token):
 @site_bp.route("/promise")
 def promise():
     return render_template("site/promise.html")
+
+
+# ---- Legal and about ---------------------------------------------------------
+
+# Shown on the legal pages. Bump it whenever the wording on one of them changes.
+LEGAL_UPDATED = "6 November 2026"
+
+
+@site_bp.route("/privacy")
+def privacy():
+    return render_template("site/privacy.html", legal_updated=LEGAL_UPDATED)
+
+
+@site_bp.route("/terms")
+def terms():
+    return render_template("site/terms.html", legal_updated=LEGAL_UPDATED)
+
+
+@site_bp.route("/about")
+def about():
+    return render_template("site/about.html", legal_updated=LEGAL_UPDATED)
 
 
 @site_bp.route("/_edition")
@@ -571,6 +592,8 @@ def pipeline_digest():
 @site_bp.route("/_pipeline")
 def pipeline_status():
     """Token usage and estimated spend, per UTC day, for the Claude calls the pipeline made."""
+    if not _admin_ok():
+        return jsonify({"error": "admin credentials required"}), 401, {"WWW-Authenticate": 'Basic realm="peanut"'}
     import os as _os
     from datetime import datetime, date, timedelta, timedelta
     from src.models.article import Article, Edition
@@ -657,5 +680,5 @@ def pipeline_status():
         "events": events,
         "latest_editions": latest,
         "feelings": _feelings_by_day(),
-        "prices_note": "Estimated from list prices per million tokens; the Anthropic console is the bill of record.",
+        "prices_note": "Estimated from list prices per million tokens; the AI provider's console is the bill of record.",
     })

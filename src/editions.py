@@ -1,4 +1,4 @@
-"""Build the daily lists: ten stories per edition, section lists, mood orders, editor's letter."""
+"""Build the daily lists: ten stories per edition, section lists, mood orders, the daily letter."""
 from __future__ import annotations
 
 import logging
@@ -93,7 +93,7 @@ LIFT_SECTIONS = {"sports": 0, "kindness": 0, "progress": 0, "science": 1, "polit
 
 
 def mood_sort(picks: list[Article], mood: str) -> list[Article]:
-    """Reorder the ten for a mood. Surprise = the editor's order. Never adds or drops a story."""
+    """Reorder the ten for a mood. Surprise = the published order. Never adds or drops a story."""
     def tone(a):
         return (a.enrichment or {}).get("tone", "neutral")
     tone_rank = {"calm": 0, "neutral": 1, "lift": 2}

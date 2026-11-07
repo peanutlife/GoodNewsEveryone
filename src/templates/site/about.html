@@ -1,0 +1,60 @@
+{% extends "site/base.html" %}
+{% block title %}About Peanutlife{% endblock %}
+{% block description %}Peanutlife is a daily good-news site. Ten stories a morning, summarised by AI from the publishers who reported them, with every source linked.{% endblock %}
+{% block body %}
+<main class="wrap main">
+  <article class="col story">
+    <h1>About Peanutlife</h1>
+    <p class="meta">Last updated {{ legal_updated }}.</p>
+    <p>Peanutlife publishes ten true stories a day about things that got better, and then it stops. No infinite scroll,
+      no notifications, no streaks. If you read all ten you are finished for the day, which is the whole idea.</p>
+
+    <section class="panel">
+      <h2>How a day is made</h2>
+      <p>The site is built by a program that runs every morning. There is no newsroom and no human editor between the
+        publisher and you. In order:</p>
+      <ol>
+        <li>It fetches {{ stats.sources or 'about 160' }} news feeds from the US, UK, Europe, East Asia, South Asia and Africa.</li>
+        <li>A keyword filter drops the obvious non-candidates.</li>
+        <li>An AI model vets what is left from the headline and opening lines, and marks each one yes, maybe or no.</li>
+        <li>For the survivors, the model reads the publisher's own summary and decides whether it really is good news,
+          which section it belongs in, and how strong a story it is. It writes the headline we show, the "in short"
+          bullets, the "why it's good news" line and the longer significance note.</li>
+        <li>The ten are then chosen arithmetically: highest-scoring stories first, with a cap of two per publisher and
+          three per section so one source or one subject can't take over the day.</li>
+        <li>A second AI model writes the daily letter and the section introductions from the list of ten.</li>
+        <li>The morning email is built from the same published edition, so it always matches the front page.</li>
+      </ol>
+      <p>So: the stories are real and reported by someone else; the summaries, the letter and the "why" are written by
+        AI from that reporting; the selection is done by score and quota. Every story carries the publisher's name and
+        a link, and we never rewrite their article as our own.</p>
+      <p>We check the output and change the rules and prompts when they get something wrong, but we do not read and
+        approve each story before it is published. That is why every story page has a "Not good news? Tell us" link.</p>
+    </section>
+
+    <section class="panel">
+      <h2>What we leave out</h2>
+      <p>A story counts for us if something got better, was repaired, protected, discovered or done well, and it is
+        true. Product launches, celebrity news, business results, listicles and anything whose main event is a death,
+        crime, disaster or war are left out, even with a hopeful ending. Politics appears only when it works: a law
+        passed, a service delivered, a ruling that extends rights. Never campaigns, polls or who is winning.</p>
+      <p>Our <a href="{{ url_for('site.promise') }}">reader promise</a> has the longer version, including how the page
+        behaves and how ads are placed.</p>
+    </section>
+
+    <section class="panel">
+      <h2>How it pays for itself</h2>
+      <p>Ads, through Google AdSense. They are labelled, never placed above a headline and never shaped like a story.
+        We take no money from publishers for linking to them and we don't run sponsored stories. Nothing in the ten is
+        there because someone paid for it.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Getting in touch</h2>
+      <p>Corrections, takedown requests, press, or a source we should be reading:
+        <a href="mailto:contact@peanutlife.com">contact@peanutlife.com</a>. For what we store about you and how to have
+        it deleted, see <a href="{{ url_for('site.privacy') }}">Privacy</a>.</p>
+    </section>
+  </article>
+</main>
+{% endblock %}

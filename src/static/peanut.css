@@ -269,6 +269,15 @@ img { max-width: 100%; height: auto; }
 .pic .ph, .thumb .ph { align-items: center; justify-content: center; flex-direction: column; gap: 6px; font-family: var(--display); font-style: normal; font-weight: 600; font-size: 15px; color: rgba(31,42,36,.6); background: none; }
 .pic .ph i, .thumb .ph i { font-style: normal; font-size: 40px; line-height: 1; opacity: .9; }
 .thumb .ph i { font-size: 22px; } .thumb .ph { font-size: 11px; gap: 2px; }
+/* Story hero with no picture we may serve: the section's own tint and mark, the same
+   panel the cards use. Needs .story .hero to outrank the plain .t-* rules above. */
+.story .hero { position: relative; }
+.story .hero.t-kids { background: var(--kids-bg); } .story .hero.t-politics { background: var(--politics-bg); } .story .hero.t-nature { background: var(--nature-bg); } .story .hero.t-sports { background: var(--sports-bg); }
+.story .hero.t-science { background: var(--science-bg); } .story .hero.t-kindness { background: var(--kindness-bg); } .story .hero.t-culture { background: var(--culture-bg); } .story .hero.t-progress { background: var(--progress-bg); }
+.story .hero .ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; font-family: var(--display); font-style: normal; font-weight: 600; font-size: 17px; color: rgba(31,42,36,.6); }
+.story .hero .ph i { font-style: normal; font-size: 48px; line-height: 1; opacity: .9; }
+.story .hero.nopic { aspect-ratio: 32/9; }  /* a band, not an empty photo frame */
+@media (max-width: 699px) { .story .hero.nopic { aspect-ratio: 16/7; } }
 .lead .big { border-top: 0; padding-top: 0; }
 .card { border-top-color: var(--line); }
 .letter { border-top: 0; background: #FFF8E8; border-radius: 14px; padding: 18px 18px 16px; border: 1px solid #F1E2BC; }

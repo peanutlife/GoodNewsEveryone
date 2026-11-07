@@ -46,7 +46,7 @@ Unsure: a story about a problem with a promising fix is good news if the fix is 
 
 ## The daily letter
 
-120 to 180 words from the editor. Finds a through-line in the day's ten (three stories about things coming back; two about young people fixing what adults broke). Points to one section worth a look. Honest about the mood of the week if the news has been hard. Never summarises all ten. Ends on something plain, not a flourish. Signed "The editor".
+120 to 180 words in the house voice. Finds a through-line in the day's ten (three stories about things coming back; two about young people fixing what adults broke). Points to one section worth a look. Honest about the mood of the week if the news has been hard. Never summarises all ten. Ends on something plain, not a flourish. Signed "Peanutlife". Never claims a person chose, read or checked the stories.
 
 ## Section standfirsts
 
