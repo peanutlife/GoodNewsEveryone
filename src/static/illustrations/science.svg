@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
+<!-- Peanutlife section art, "Science & health": a flask, a sprout under glass, orbits.
+     Original flat drawing. -->
+<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FBFCF6"/><stop offset="1" stop-color="#CDE9EE"/></linearGradient></defs>
+<rect width="480" height="270" fill="url(#g)"/>
+<circle cx="406" cy="84" r="44" fill="#FFF3CC"/><circle cx="406" cy="84" r="27" fill="#F2A65A"/>
+<g fill="#FFFDF7"><rect x="38" y="70" width="92" height="24" rx="12"/><circle cx="66" cy="70" r="17"/><circle cx="102" cy="74" r="13"/></g>
+<!-- orbits -->
+<g stroke="#8FC9D4" stroke-width="3" fill="none" opacity=".85">
+<ellipse cx="366" cy="150" rx="74" ry="30"/>
+<ellipse cx="366" cy="150" rx="74" ry="30" transform="rotate(58 366 150)"/>
+</g>
+<circle cx="366" cy="150" r="16" fill="#1F6B78"/>
+<circle cx="440" cy="150" r="7" fill="#F2A65A"/><circle cx="340" cy="123" r="6" fill="#E8718A"/><circle cx="392" cy="177" r="6" fill="#7FC8A9"/>
+<!-- ground -->
+<path d="M0 214 C 130 200 300 216 480 206 V270 H0 Z" fill="#AEDCE4"/>
+<path d="M0 240 C 150 228 330 244 480 234 V270 H0 Z" fill="#93CCD8"/>
+<!-- the flask -->
+<path d="M126 112 h36 v30 l40 72 a12 12 0 0 1 -10 18 h-96 a12 12 0 0 1 -10 -18 l40 -72 z" fill="#FFFDF7" opacity=".95"/>
+<path d="M112 176 l-16 28 a12 12 0 0 0 10 18 h96 a12 12 0 0 0 10 -18 l-16 -28 z" fill="#7FC8A9"/>
+<path d="M112 176 h84" stroke="#5FAE8C" stroke-width="3"/>
+<path d="M126 112 h36" stroke="#1F6B78" stroke-width="7" stroke-linecap="round"/>
+<g fill="#FFFDF7" opacity=".9"><circle cx="134" cy="196" r="7"/><circle cx="164" cy="204" r="5"/><circle cx="152" cy="184" r="4"/><circle cx="182" cy="192" r="4"/></g>
+<path d="M144 152 l0 -22 M133 141 h22" stroke="#CDE9EE" stroke-width="5" stroke-linecap="round"/>
+<!-- a sprout in a dish: the health half -->
+<path d="M252 226 h64 l-8 -30 h-48 z" fill="#1F6B78"/>
+<path d="M258 196 h52" stroke="#145260" stroke-width="4"/>
+<path d="M284 196 V156" stroke="#5FAE8C" stroke-width="5" stroke-linecap="round"/>
+<path d="M284 172 C 266 170 258 158 258 146 C 274 146 284 158 284 172 Z" fill="#7FC8A9"/>
+<path d="M284 166 C 302 162 310 150 310 138 C 294 139 284 152 284 166 Z" fill="#5FAE8C"/>
+<circle cx="284" cy="150" r="6" fill="#F2C14E"/>
+<!-- sparkles -->
+<g fill="#FFFDF7" opacity=".8"><circle cx="222" cy="112" r="4"/><circle cx="250" cy="86" r="3"/><circle cx="62" cy="140" r="4"/><circle cx="96" cy="118" r="3"/></g>
+</svg>

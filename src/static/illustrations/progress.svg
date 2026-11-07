@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
+<!-- Peanutlife section art, "Progress": a turbine, panels, a road climbing to the sun.
+     Original flat drawing. -->
+<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFBF2"/><stop offset="1" stop-color="#FFE0B8"/></linearGradient></defs>
+<rect width="480" height="270" fill="url(#g)"/>
+<circle cx="398" cy="88" r="48" fill="#FFF3CC"/><circle cx="398" cy="88" r="30" fill="#F7C756"/>
+<g fill="#FFFDF7"><rect x="40" y="68" width="92" height="24" rx="12"/><circle cx="68" cy="68" r="17"/><circle cx="104" cy="72" r="13"/></g>
+<g fill="#FFFDF7" opacity=".8"><circle cx="150" cy="104" r="4"/><circle cx="330" cy="100" r="4"/><circle cx="58" cy="146" r="3"/><circle cx="452" cy="154" r="4"/></g>
+<!-- hills -->
+<path d="M0 198 C 90 168 170 186 256 182 C 346 178 412 194 480 184 V270 H0 Z" fill="#F7CE9A"/>
+<path d="M0 230 C 130 212 300 232 480 218 V270 H0 Z" fill="#EFB871"/>
+<!-- the road climbing to the light -->
+<path d="M150 270 C 196 230 236 214 292 200 L308 212 C 254 228 214 244 186 270 Z" fill="#FFFDF7" opacity=".9"/>
+<g stroke="#EFB871" stroke-width="4" stroke-linecap="round"><path d="M186 256 l12 -8"/><path d="M220 234 l12 -7"/><path d="M256 218 l13 -5"/></g>
+<!-- wind turbine -->
+<path d="M108 234 V130" stroke="#FBF7F1" stroke-width="9" stroke-linecap="round"/>
+<g stroke="#8F5100" stroke-width="8" stroke-linecap="round" fill="none">
+<path d="M108 126 V78"/><path d="M108 126 l42 24"/><path d="M108 126 l-42 24"/>
+</g>
+<circle cx="108" cy="126" r="8" fill="#8F5100"/>
+<!-- a smaller turbine, further off -->
+<path d="M58 222 V168" stroke="#FBF7F1" stroke-width="6" stroke-linecap="round" opacity=".85"/>
+<g stroke="#B0783C" stroke-width="5" stroke-linecap="round" fill="none" opacity=".75">
+<path d="M58 166 V138"/><path d="M58 166 l26 14"/><path d="M58 166 l-26 14"/>
+</g>
+<!-- solar panels -->
+<g>
+<path d="M322 230 l16 -42 h78 l-16 42 z" fill="#2F6E8C"/>
+<path d="M322 230 l16 -42 h78 l-16 42 z" fill="none" stroke="#1F4E66" stroke-width="3"/>
+<path d="M348 188 l-16 42 M374 188 l-16 42 M400 188 l-16 42 M332 202 h78 M327 216 h78" stroke="#5E9FBA" stroke-width="2.5"/>
+<rect x="352" y="230" width="8" height="18" rx="3" fill="#1F4E66"/>
+<rect x="386" y="230" width="8" height="18" rx="3" fill="#1F4E66"/>
+</g>
+<!-- a sprout in the bar chart: things growing, not just going up -->
+<g>
+<rect x="208" y="166" width="20" height="36" rx="5" fill="#E8718A" opacity=".9"/>
+<rect x="236" y="146" width="20" height="56" rx="5" fill="#F2B33D"/>
+<rect x="264" y="122" width="20" height="80" rx="5" fill="#4FAFA8"/>
+<path d="M274 122 V96" stroke="#3B9189" stroke-width="5" stroke-linecap="round"/>
+<path d="M274 108 C 258 106 252 96 252 86 C 266 86 274 96 274 108 Z" fill="#5EBFB5"/>
+<path d="M274 102 C 290 98 296 88 296 78 C 282 79 274 90 274 102 Z" fill="#4FAFA8"/>
+</g>
+</svg>

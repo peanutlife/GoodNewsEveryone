@@ -26,7 +26,7 @@ from src.models.subscriber import EmailSubscriber
 from src.models.article import Article, Edition  # noqa: F401  (registers tables for create_all)
 from src.routes.site import site_bp
 from src.config import config
-from src.images import ALLOWLIST_KEY, og_image_url, safe_image_url
+from src.images import ALLOWLIST_KEY, og_image_url, safe_image_url, section_art_path
 
 # Set up logging
 logging.basicConfig(level=logging.INFO,
@@ -697,6 +697,7 @@ def initialize_app(app):
     # CDN is never asked for a picture on a reader's behalf. See src/images.py.
     app.jinja_env.globals["safe_image_url"] = safe_image_url
     app.jinja_env.globals["og_image_url"] = og_image_url
+    app.jinja_env.globals["section_art_path"] = section_art_path
 
     @app.after_request
     def noindex_legacy_articles(resp):

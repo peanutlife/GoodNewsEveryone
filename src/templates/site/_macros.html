@@ -1,9 +1,10 @@
-{# A story's picture, or the section's tinted panel when we have no image we may serve.
-   safe_image_url keeps publisher CDNs out: see src/images.py. #}
+{# A story's picture, or our own drawing for its section when we have no image we
+   may serve. safe_image_url keeps publisher CDNs out: see src/images.py. The
+   drawing is decorative — it illustrates the topic, never the event — so the alt
+   text stays empty either way. #}
 {% macro pic(a, cls='pic') -%}
-{% set sm = SECTION_META.get(a.section) or {'short': 'Today', 'icon': '✨'} %}
 {% set img = safe_image_url(a.image_url) %}
-<div class="{{ cls }} t-{{ a.section or 'progress' }}">{% if img %}<img src="{{ img }}" alt="" loading="lazy">{% else %}<span class="ph" aria-hidden="true"><i>{{ sm.icon }}</i>{{ sm.short }}</span>{% endif %}</div>
+<div class="{{ cls }} t-{{ a.section or 'progress' }}{% if not img %} art{% endif %}"><img src="{{ img or section_art_path(a.section) }}" alt="" loading="lazy"></div>
 {%- endmacro %}
 
 {% macro kicker(a) -%}

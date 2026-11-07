@@ -20,7 +20,23 @@ ALLOWLIST_KEY = "IMAGE_HOST_ALLOWLIST"
 #: Shown to social cards and search engines when a story has no usable picture.
 FALLBACK_IMAGE_PATH = "/static/icons/icon-512x512.png"
 
+#: Our own drawings, one per section, shown in place of a photo when a story has
+#: no picture we may serve. They are illustrations of a theme, never a depiction
+#: of the event, so they stay out of og:image and JSON-LD.
+SECTION_ART = frozenset(
+    {"kids", "politics", "nature", "sports", "science", "kindness", "culture", "progress"}
+)
+DEFAULT_ART_SECTION = "progress"
+
 DEFAULT_SITE_URL = "https://www.peanutlife.com"
+
+
+def section_art_path(section=None) -> str:
+    """Site-relative path to the drawing for a section. Always returns one."""
+    key = section.strip().lower() if isinstance(section, str) else ""
+    if key not in SECTION_ART:
+        key = DEFAULT_ART_SECTION
+    return f"/static/illustrations/{key}.svg"
 
 
 def _config(key: str):

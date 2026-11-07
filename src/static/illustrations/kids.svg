@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
+<!-- Peanutlife section art, "For kids": a kite afternoon on a hill.
+     Original flat drawing. Figures are simple shapes with no facial features. -->
+<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFBF2"/><stop offset="1" stop-color="#FFE9A8"/></linearGradient></defs>
+<rect width="480" height="270" fill="url(#g)"/>
+<circle cx="406" cy="84" r="46" fill="#FFF3CC"/><circle cx="406" cy="84" r="29" fill="#F7C756"/>
+<g fill="#FFFDF7"><rect x="40" y="78" width="104" height="26" rx="13"/><circle cx="74" cy="78" r="19"/><circle cx="112" cy="82" r="14"/><rect x="250" y="54" width="72" height="20" rx="10"/><circle cx="276" cy="54" r="15"/></g>
+<g fill="#FFFDF7" opacity=".8"><circle cx="92" cy="152" r="4"/><circle cx="124" cy="178" r="3"/><circle cx="440" cy="150" r="4"/><circle cx="58" cy="124" r="3"/><circle cx="330" cy="98" r="3"/></g>
+<!-- kite and its string -->
+<path d="M172 148 C 188 166 198 158 214 168" stroke="#AC8341" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<path d="M172 76 L201 112 L172 148 L143 112 Z" fill="#F2785C"/>
+<path d="M172 76 L201 112 L172 148 Z" fill="#DE5F48"/>
+<path d="M143 112 H201 M172 76 V148" stroke="#FFF4E6" stroke-width="2"/>
+<path d="M172 148 l-8 13 12 8 -8 13" stroke="#4FAFA8" stroke-width="3" fill="none" stroke-linecap="round"/>
+<!-- balloons -->
+<path d="M346 152 C 340 168 352 170 348 186" stroke="#AC8341" stroke-width="2" fill="none"/>
+<path d="M376 160 C 370 174 380 178 376 190" stroke="#AC8341" stroke-width="2" fill="none"/>
+<ellipse cx="346" cy="138" rx="17" ry="20" fill="#E8718A"/>
+<ellipse cx="376" cy="146" rx="14" ry="17" fill="#4FAFA8"/>
+<ellipse cx="340" cy="131" rx="5" ry="7" fill="#FFF4E6" opacity=".55"/>
+<!-- hill -->
+<path d="M0 206 C 110 182 230 198 480 184 V270 H0 Z" fill="#F3D27E"/>
+<path d="M0 234 C 150 214 320 238 480 222 V270 H0 Z" fill="#E7BC5E"/>
+<g fill="#F7E3AE" opacity=".7"><circle cx="64" cy="222" r="5"/><circle cx="118" cy="234" r="4"/><circle cx="404" cy="214" r="5"/><circle cx="440" cy="228" r="4"/></g>
+<!-- the child flying the kite -->
+<path d="M226 184 L214 168" stroke="#C98C5A" stroke-width="7" stroke-linecap="round"/>
+<path d="M225 208 V178 a14 14 0 0 1 28 0 v30 z" fill="#4FAFA8"/>
+<circle cx="239" cy="162" r="12" fill="#C98C5A"/>
+<path d="M227 162 a12 12 0 0 1 24 0 z" fill="#5B3A96"/>
+<!-- the child holding the balloons -->
+<path d="M298 192 l16 -8" stroke="#E8B98A" stroke-width="6" stroke-linecap="round"/>
+<path d="M272 210 V186 a13 13 0 0 1 26 0 v24 z" fill="#F2B33D"/>
+<circle cx="285" cy="170" r="11" fill="#E8B98A"/>
+<path d="M274 170 a11 11 0 0 1 22 0 z" fill="#A3471A"/>
+</svg>
