@@ -1,0 +1,84 @@
+{% extends "site/base.html" %}
+{% block title %}Terms of use | Peanutlife{% endblock %}
+{% block description %}The terms you agree to when you read Peanutlife: what you may do with the site, what we promise, and what we don't.{% endblock %}
+{% block body %}
+<main class="wrap main">
+  <article class="col story">
+    <h1>Terms of use</h1>
+    <p class="meta">Draft, pending legal review. Last updated {{ legal_updated }}.</p>
+    <p>Using peanutlife.com means accepting these terms. They are short on purpose.</p>
+
+    <section class="panel">
+      <h2>What the site is</h2>
+      <p>Peanutlife publishes ten summaries a day of news reported by other publishers. Each summary is written
+        automatically by an AI model from the publisher's own article, and each one links to that article. We are not
+        the source, and the summary is not a substitute for reading the publisher. Nothing here is advice: not medical,
+        legal, financial or otherwise.</p>
+      <p>We try hard to be accurate and to keep the caveats in, but automated summaries can be wrong or out of date.
+        The publisher's article is always the authority. If you spot a mistake, use the "Not good news? Tell us" link on
+        the story or write to <a href="mailto:contact@peanutlife.com">contact@peanutlife.com</a> and we will correct or
+        remove it.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Other people's work</h2>
+      <p>Headlines, quotations and short extracts belong to the publishers who wrote them, and images belong to their
+        owners. We summarise and link; we do not republish articles. If you are a publisher and want a story of yours
+        taken down, email <a href="mailto:contact@peanutlife.com">contact@peanutlife.com</a> and we will remove it.</p>
+      <p>The parts of the site we wrote — the summaries, the daily letter, the section introductions, the design and the
+        code behind it — are ours. You may read, print and share links freely. Please don't copy the site wholesale,
+        scrape it in bulk, or republish our summaries as your own.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Your account and your email address</h2>
+      <p>Accounts are free and passwordless: a sign-in link goes to your email address. Keep that inbox secure, because
+        anyone who can open the link can open your page. Use your own email address, not someone else's. We can close
+        an account that is used to abuse the site. You can ask us to delete yours at any time — see
+        <a href="{{ url_for('site.privacy') }}">Privacy</a>.</p>
+      <p>Anything you type into "one good thing from your own day" is yours. We do not publish it, and we do not read
+        it as part of running the site.</p>
+    </section>
+
+    <section class="panel">
+      <h2>"Ask this story"</h2>
+      <p>Questions are answered by an AI model from the material behind that one story. Answers can be incomplete or
+        wrong; check the linked source before relying on anything. Don't use the box to send us personal or
+        confidential information, and don't try to use it to get the model to do something unrelated to the story.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Ads</h2>
+      <p>Ads pay for the site and are served by Google AdSense. They are labelled. We don't control which ads you see
+        and we don't endorse them. Please don't click an ad you aren't genuinely interested in, and never ask others
+        to — it breaks Google's rules and it would get the site removed from the programme.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Fair use of the site</h2>
+      <p>Don't attack the site, don't try to break into parts of it that aren't yours, don't hammer it with automated
+        requests, and don't use it to break the law. We may change, pause or stop any part of the site, including the
+        morning email, at any time.</p>
+    </section>
+
+    <section class="panel">
+      <h2>No warranty, and limits on liability</h2>
+      <p>The site is provided as it is, without warranties of any kind. We don't promise it will always be available,
+        or that every summary is error-free. To the fullest extent the law allows, we are not liable for any loss
+        arising from your use of the site, from anything you read here, or from a site we linked to. Nothing in these
+        terms removes rights you have under consumer law that cannot be waived.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Changes to these terms</h2>
+      <p>If we change them, we change this page and the date at the top. Continuing to use the site after that means
+        you accept the new version.</p>
+      <p class="meta"><strong>TODO (for the board, before publishing):</strong> fill in the contracting legal entity and
+        its registered address, the governing law and the courts that would hear a dispute, and confirm whether the
+        liability wording above is acceptable in the jurisdictions we serve. We have deliberately not invented an
+        entity, an address or a jurisdiction.</p>
+      <p>Anything unclear: <a href="mailto:contact@peanutlife.com">contact@peanutlife.com</a>.</p>
+    </section>
+  </article>
+</main>
+{% endblock %}

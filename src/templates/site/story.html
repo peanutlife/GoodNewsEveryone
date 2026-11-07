@@ -19,7 +19,7 @@
       <strong style="color:var(--ink)">{{ a.source_name }}</strong>
       {% if a.published %}<span>{{ a.published.strftime('%-d %B %Y') }}</span>{% endif %}
       <span>{{ a.read_minutes or 3 }} min read</span>
-      {% if a.enrich_model and a.enrich_model != 'dry-run' %}{{ m.byline() }}{% endif %}
+      {% if a.enrich_model and a.enrich_model != 'dry-run' %}{{ m.byline(a) }}{% endif %}
     </p>
     {% if a.image_url and a.image_url.startswith('http') %}<div class="hero"><img src="{{ a.image_url }}" alt=""></div>{% endif %}
     {% if e.get('before') and e.get('now') %}
@@ -31,7 +31,7 @@
 
     <section class="panel">
       {% if e.get('in_short') %}<h2>In short</h2><ul>{% for b in e.in_short %}<li>{{ b }}</li>{% endfor %}</ul>{% endif %}
-      {% if e.get('why_long') %}<h2 style="margin-top:6px">Why the Good News Desk likes this one</h2><p>{{ e.why_long }}</p>{% endif %}
+      {% if e.get('why_long') %}<h2 style="margin-top:6px">Why it's good news</h2><p>{{ e.why_long }}</p>{% endif %}
       {% if e.get('action') %}<p class="act" style="font-size:15px">Something you can do: {{ e.action }}</p>{% endif %}
     </section>
 
@@ -48,7 +48,7 @@
 
     <section class="panel" id="ask">
       <h2>Ask this story</h2>
-      <p class="meta" style="font-size:13px">Answers come only from the material behind this story, with a link to the source.</p>
+      <p class="meta" style="font-size:13px">An AI model answers from the material behind this story only, with a link to the source. Your question is sent to our AI provider and isn't stored. See <a href="{{ url_for('site.privacy') }}">Privacy</a>.</p>
       <form class="ask" onsubmit="return askStory(event)">
         <label for="q" class="meta" style="position:absolute;left:-9999px">Your question</label>
         <input id="q" type="text" maxlength="400" placeholder="How long did it take?" required>
@@ -114,6 +114,6 @@
 {% block scripts %}
 <script>
 function askStory(ev){ev.preventDefault();var q=document.getElementById('q'),box=document.getElementById('answer');box.className='answer show';box.textContent='Thinking…';
-fetch('/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({article_id:'{{ a.id }}',question:q.value})}).then(function(r){return r.json()}).then(function(d){box.innerHTML=(d.answer||d.error||'No answer.').replace(/</g,'&lt;')+(d.source?' <a href="'+d.source+'" target="_blank" rel="noopener" class="act">Source →</a>':'');}).catch(function(){box.textContent='Could not reach the editor.';});return false;}
+fetch('/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({article_id:'{{ a.id }}',question:q.value})}).then(function(r){return r.json()}).then(function(d){box.innerHTML=(d.answer||d.error||'No answer.').replace(/</g,'&lt;')+(d.source?' <a href="'+d.source+'" target="_blank" rel="noopener" class="act">Source →</a>':'');}).catch(function(){box.textContent='Could not get an answer just now.';});return false;}
 </script>
 {% endblock %}

@@ -229,7 +229,7 @@ def subscribe():
         db.session.add(subscriber)
         db.session.commit()
 
-        flash('Thank you. Ten good things and the editor\'s letter will arrive each morning.', 'success')
+        flash('Thank you. Ten good things and the daily letter will arrive each morning.', 'success')
         return redirect(url_for('site.home'))
 
     return redirect(url_for('site.home', _anchor='subscribe'))

@@ -1,0 +1,132 @@
+{% extends "site/base.html" %}
+{% block title %}Privacy | Peanutlife{% endblock %}
+{% block description %}What Peanutlife stores, which cookies the site sets, who else sees your visit, and how to ask us to delete your data.{% endblock %}
+{% block body %}
+<main class="wrap main">
+  <article class="col story">
+    <h1>Privacy</h1>
+    <p class="meta">Draft, pending legal review. Last updated {{ legal_updated }}.</p>
+    <p>This page describes what the site actually does. If you find something here that does not match what you
+      experience, write to <a href="mailto:contact@peanutlife.com">contact@peanutlife.com</a> and we will fix the page
+      or the code.</p>
+
+    <section class="panel">
+      <h2>Reading the site without an account</h2>
+      <p>You can read every story without giving us anything. When you do, we set a cookie called <code>pv</code>
+        containing a random id with no name, email or IP address in it. We use it for three things:</p>
+      <ul>
+        <li>Counting one reader per day, so the number on the front page is real. We store the date and the random id,
+          nothing else.</li>
+        <li>Remembering which stories you tapped ♥ on, so the hearts stay filled in on this device.</li>
+        <li>Keeping your answer to "how do you feel after today's ten" to one per day. We store the date, the random id,
+          the answer and which edition you read.</li>
+      </ul>
+      <p>Two more cookies store only a preference: <code>edition</code> (Global, US or East Asia) and <code>mood</code>
+        (the order the ten are shown in). All three last up to a year and you can delete them in your browser at any
+        time.</p>
+      <p>We do not log your IP address and we do not fingerprint your browser. Our hosting provider and CDN see your IP
+        address in order to deliver the page, as any web host does. We read a country code from the CDN
+        (<code>CF-IPCountry</code>) to guess your edition; we use it for that request and do not store it.</p>
+      <p>"One good thing from your own day" is kept in your browser's local storage. It never reaches our server unless
+        you are signed in (see below). Your seven-day feelings trail and your place in today's ten are also local to
+        your browser.</p>
+    </section>
+
+    <section class="panel">
+      <h2>The morning email</h2>
+      <p>If you subscribe, we store your email address, the date you subscribed, whether the subscription is active, a
+        random unsubscribe token, when we last sent to you and how many emails we have sent. We use it only to send the
+        daily digest. Every email has a one-tap unsubscribe link, which sets your subscription to inactive. We do not
+        put tracking pixels in the email and we do not sell or rent the list.</p>
+      <p>If you give us your email to follow one specific story, we store that address, the story id, the date, and a
+        token so you can unfollow. We use it only to tell you when that story has a next chapter.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Signing in</h2>
+      <p>Accounts are passwordless. You type your email address, we email you a signed link that works for thirty
+        minutes, and opening it signs you in. We store your email address, a generated username, when the account was
+        created and when you last signed in. (A password column exists in the database for historical reasons; we fill
+        it with a random value that is never used and never shown.)</p>
+      <p>Signing in sets a session cookie, and a "remember me" cookie that lasts ninety days.</p>
+      <p>Once you are signed in, these are stored against your account instead of only against the random cookie id:
+        the stories you ♥ and when you last looked at your page, your daily feeling, and any "one good thing" notes you
+        choose to save. Only you can read your notes through the site.</p>
+    </section>
+
+    <section class="panel">
+      <h2>"Ask this story"</h2>
+      <p>The question you type on a story page is sent to our AI provider together with that story's title, publisher,
+        link, the publisher's own summary and the summary we wrote, and the answer comes straight back to your browser.
+        We do not save your question or the answer in our database, and we do not attach your cookie id or account to
+        it. Our provider processes it under their own terms in order to produce the answer. Don't type anything into
+        that box you would not want sent to a third party.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Ads and analytics</h2>
+      <p>Two Google services run on every page and both set their own cookies, which we cannot read:</p>
+      <ul>
+        <li><strong>Google AdSense</strong> (publisher <code>ca-pub-4295146235414490</code>) serves the ads that pay
+          for the site. Google may use cookies and device identifiers to choose and measure ads. You can review and
+          change what Google uses at <a href="https://myadcenter.google.com/" target="_blank" rel="noopener">My Ad
+          Center</a> and <a href="https://adssettings.google.com/" target="_blank" rel="noopener">Ad Settings</a>.</li>
+        <li><strong>Google Analytics 4</strong> (property <code>G-V4SHHF8RVX</code>) tells us how many people read
+          which pages. We also send GA4 an event when you tap ♥ or open a publisher's link; those events carry the
+          story id, never your email address or your notes.</li>
+      </ul>
+      <p>Pages also load fonts from <code>fonts.googleapis.com</code> and <code>fonts.gstatic.com</code>, which means
+        Google receives your IP address and browser details in order to serve the font files.</p>
+      <p>Google's own explanation of the data it handles for these services is at
+        <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">policies.google.com/technologies/partner-sites</a>.</p>
+      <p class="meta"><strong>TODO (for the board, before publishing):</strong> decide whether a consent banner is
+        required for readers in the UK, EU and other regions with prior-consent rules, and whether to switch on
+        Google's consent mode. The site currently loads AdSense and GA4 without asking first.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Links to other sites</h2>
+      <p>Every story links to the publisher that reported it, and some stories link to an organisation you could help.
+        Those sites are not ours. Once you follow a link, that site's own privacy policy applies, and it can set its
+        own cookies. We get no money from publishers for sending you to them.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Children</h2>
+      <p>The kids section exists so stories can be read aloud to a child. The site is not aimed at children and we do
+        not ask anyone's age. Please do not create an account or subscribe on a child's behalf.</p>
+    </section>
+
+    <section class="panel">
+      <h2>How long we keep things, and how to get rid of them</h2>
+      <ul>
+        <li><strong>Unsubscribe:</strong> the one-tap link at the bottom of any email, which stops the emails
+          immediately.</li>
+        <li><strong>Delete everything:</strong> email <a href="mailto:contact@peanutlife.com">contact@peanutlife.com</a>
+          from the address you used, say you want your data deleted, and we will delete your subscriber record, your
+          account, your ♥s, your feelings and your notes. We aim to do it within thirty days.</li>
+        <li><strong>A copy of your data:</strong> ask at the same address and we will send you what we hold.</li>
+        <li><strong>Cookies:</strong> clearing cookies for this site removes the random id, so the daily reader count,
+          the hearts on that device and that device's feelings trail start again from nothing.</li>
+      </ul>
+      <p>Daily reader counts and feeling tallies are kept as aggregate rows keyed by the random cookie id, with no way
+        for us to connect them to a person unless that person signs in.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Where the data lives</h2>
+      <p>The site runs on Render behind Cloudflare, with a PostgreSQL database. Email is sent over SMTP by our mail
+        provider. Those providers process data on our behalf in order to run the site.</p>
+      <p class="meta"><strong>TODO (for the board, before publishing):</strong> name the legal entity that controls
+        this data, its postal address and the country whose data-protection law applies, and name the mail provider and
+        the AI provider explicitly if legal review wants them named. We have deliberately not invented any of these.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Changes</h2>
+      <p>If we change what we collect, we change this page, and the date at the top changes with it.</p>
+      <p>Questions about anything here: <a href="mailto:contact@peanutlife.com">contact@peanutlife.com</a>.</p>
+    </section>
+  </article>
+</main>
+{% endblock %}
