@@ -584,6 +584,8 @@ def pipeline_digest():
 @site_bp.route("/_pipeline")
 def pipeline_status():
     """Token usage and estimated spend, per UTC day, for the Claude calls the pipeline made."""
+    if not _admin_ok():
+        return jsonify({"error": "admin credentials required"}), 401, {"WWW-Authenticate": 'Basic realm="peanut"'}
     import os as _os
     from datetime import datetime, date, timedelta, timedelta
     from src.models.article import Article, Edition

@@ -217,7 +217,9 @@ def test_pipeline_run_endpoint_requires_admin(client, app):
     assert client.post("/_pipeline/run").status_code == 401
     app.config.update(ADMIN_USER="admin", ADMIN_PASS="pw")
     assert client.post("/_pipeline/run", auth=("admin", "wrong")).status_code == 401
-    r = client.get("/_pipeline")
+    assert client.get("/_pipeline").status_code == 401
+    assert client.get("/_pipeline", auth=("admin", "wrong")).status_code == 401
+    r = client.get("/_pipeline", auth=("admin", "pw"))
     assert r.status_code == 200 and "scheduler" in r.get_json()
 
 
@@ -424,7 +426,7 @@ def test_legal_pages_render_and_are_linked_from_every_footer(client, app):
         assert page.status_code == 200, path
         body = page.get_data(as_text=True)
         assert "contact@peanutlife.com" in body, path  # the only contact address, already public
-        assert "pending legal review" in body, path
+        assert "TODO" not in body and "pending legal review" not in body, path
 
     # every page built on the site layout carries all three links in its footer
     for path in ["/", "/promise", "/story/story-1", "/dial", "/section/nature"] + LEGAL_PATHS:
