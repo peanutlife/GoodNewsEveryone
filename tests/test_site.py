@@ -413,3 +413,93 @@ def test_sitemap_and_robots_use_canonical_origin(client):
     robots = client.get("/robots.txt").get_data(as_text=True)
     assert "Sitemap: https://www.peanutlife.com/sitemap.xml" in robots.splitlines()
     assert all(line == line.lstrip() for line in robots.splitlines())
+
+
+# ---------- publisher images and the legacy /article pages ----------
+
+PUBLISHER_IMG = "https://assets.rebelmouse.io/eyJhbGciOi/img.png?width=1200&height=800"
+
+
+def test_safe_image_url_lets_no_third_party_host_through_by_default(app):
+    from src.images import og_image_url, safe_image_url
+    icon = "https://www.peanutlife.com/static/icons/icon-512x512.png"
+    with app.app_context():
+        assert safe_image_url(PUBLISHER_IMG) is None
+        assert safe_image_url("//assets.rebelmouse.io/img.png") is None  # protocol-relative
+        assert safe_image_url("http://www.peanutlife.com/a.png") is None  # http, even for us
+        assert safe_image_url("") is None and safe_image_url(None) is None
+        # ours passes: site-relative paths and our own host
+        assert safe_image_url("/static/icons/icon-512x512.png") == "/static/icons/icon-512x512.png"
+        assert safe_image_url("https://www.peanutlife.com/a.png") == "https://www.peanutlife.com/a.png"
+        # og:image and JSON-LD always have something on our origin
+        assert og_image_url(PUBLISHER_IMG) == icon
+        assert og_image_url(None) == icon
+        assert og_image_url("/static/icons/icon-512x512.png") == icon
+
+
+def test_widening_the_image_allowlist_is_the_whole_revert(app):
+    from src.images import ALLOWLIST_KEY, safe_image_url
+    with app.app_context():
+        app.config[ALLOWLIST_KEY] = "assets.rebelmouse.io"
+        assert safe_image_url(PUBLISHER_IMG) == PUBLISHER_IMG
+        app.config[ALLOWLIST_KEY] = "*.rebelmouse.io"  # subdomain form
+        assert safe_image_url(PUBLISHER_IMG) == PUBLISHER_IMG
+        assert safe_image_url("https://notrebelmouse.io/a.png") is None  # not a suffix match
+        app.config[ALLOWLIST_KEY] = ""
+        assert safe_image_url(PUBLISHER_IMG) is None
+
+
+def test_no_publisher_image_host_in_home_story_or_email(client, app):
+    from src.editions import articles_by_ids
+    from src.models.article import Edition
+    with app.app_context():
+        a = _article(30, section="nature")
+        a.image_url = PUBLISHER_IMG
+        db.session.add(a)
+        db.session.commit()
+        build_edition("us", date.today(), dry_run=True)
+    for path in ("/?edition=us", "/story/story-30", "/section/nature", "/dial", "/yesterday"):
+        html = client.get(path, follow_redirects=True).get_data(as_text=True)
+        assert "rebelmouse" not in html, path
+    story = client.get("/story/story-30").get_data(as_text=True)
+    assert 'class="hero t-nature nopic"' in story  # the section panel stands in for the hero
+    assert "🌿" in story
+    assert '<meta property="og:image" content="https://www.peanutlife.com/static/icons/icon-512x512.png">' in story
+    assert '"image":"https://www.peanutlife.com/static/icons/icon-512x512.png"' in story  # JSON-LD
+    with app.app_context():
+        from src.digest import build_html, build_text
+        ed = Edition.query.filter_by(edition="us").first()
+        picks = articles_by_ids(ed.picks or [])
+        assert picks and picks[0].image_url == PUBLISHER_IMG  # still in the database, so this is reversible
+        email = build_html(ed, picks, "https://www.peanutlife.com/unsub")
+        assert "rebelmouse" not in email and "<img" not in email
+        assert "rebelmouse" not in build_text(ed, picks, "https://www.peanutlife.com/unsub")
+        # the legacy digest templates are unused but must not hotlink if they are switched back on
+        from src.email_templates import generate_modern_digest_html, generate_nyt_digest_html
+        articles = [{"title": "Beavers are back", "link": "https://x.test/1", "topic_name": "nature",
+                     "image_url": PUBLISHER_IMG,
+                     "summary": f'<img src="{PUBLISHER_IMG}" /><p>Good.</p>'}]
+        for build in (generate_nyt_digest_html, generate_modern_digest_html):
+            legacy = build(articles, "https://www.peanutlife.com/unsub")
+            assert "rebelmouse" not in legacy and "unsplash" not in legacy, build.__name__
+
+
+def test_legacy_article_pages_serve_noindex_and_leave_the_sitemap(client, app, monkeypatch):
+    import src.main as main
+    monkeypatch.setattr(main, "PERMANENT_CACHE_FILE", "/nonexistent/article_cache.json")
+    monkeypatch.setattr(main, "articles_by_topic", {"nature": [{
+        "title": "Beavers are back", "link": "https://x.test/beavers", "summary": "<p>Good news.</p>",
+        "image_url": PUBLISHER_IMG, "topic_name": "nature", "source_name": "Riverside Times",
+        "published": datetime.utcnow().isoformat(), "why_it_matters": "Rivers come back when beavers do.",
+    }]})
+    r = client.get("/article/beavers-are-back")
+    assert r.status_code == 200  # still reachable: old links and shares keep working
+    assert r.headers["X-Robots-Tag"] == "noindex, follow"
+    html = r.get_data(as_text=True)
+    assert '<meta name="robots" content="noindex, follow">' in html
+    assert "rebelmouse" not in html
+    xml = client.get("/sitemap.xml").get_data(as_text=True)
+    assert "/article/" not in xml
+    assert f"<loc>https://www.peanutlife.com/story/story-" in xml or "<loc>https://www.peanutlife.com/</loc>" in xml
+    robots = client.get("/robots.txt").get_data(as_text=True)
+    assert "/article" not in robots  # never blocked: Google has to crawl it to see the noindex
