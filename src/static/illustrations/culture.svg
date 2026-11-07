@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
+<!-- Peanutlife section art, "Culture & ideas": a lit stage, a guitar, a book, notes.
+     Original flat drawing. -->
+<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FCFAF6"/><stop offset="1" stop-color="#E6D9F5"/></linearGradient></defs>
+<rect width="480" height="270" fill="url(#g)"/>
+<circle cx="408" cy="82" r="44" fill="#FFF3CC"/><circle cx="408" cy="82" r="27" fill="#F2B33D"/>
+<g fill="#FFFDF7"><rect x="36" y="70" width="92" height="24" rx="12"/><circle cx="64" cy="70" r="17"/><circle cx="100" cy="74" r="13"/></g>
+<!-- notes -->
+<g fill="#5B3A96">
+<path d="M332 150 v-40 l24 -7 v10 l-16 5 v32 z"/><ellipse cx="326" cy="152" rx="10" ry="8"/>
+<path d="M100 170 v-34 l20 -6 v9 l-13 4 v27 z"/><ellipse cx="95" cy="172" rx="8" ry="6.5"/>
+</g>
+<g fill="#FFFDF7" opacity=".8"><circle cx="146" cy="104" r="4"/><circle cx="366" cy="112" r="4"/><circle cx="60" cy="140" r="3"/><circle cx="444" cy="152" r="4"/></g>
+<!-- ground -->
+<path d="M0 216 C 130 202 300 218 480 208 V270 H0 Z" fill="#D2C0EC"/>
+<path d="M0 242 C 150 230 330 246 480 236 V270 H0 Z" fill="#BFA9E2"/>
+<!-- the stage: an arch, two curtains, a row of footlights -->
+<path d="M152 222 V162 a76 76 0 0 1 152 0 v60 z" fill="#FFFDF7"/>
+<path d="M152 222 V162 a76 76 0 0 1 152 0 v60 z" fill="none" stroke="#C9B6E8" stroke-width="5"/>
+<path d="M152 222 V162 a76 76 0 0 1 36 -63 v124 z" fill="#AE8BD8"/>
+<path d="M304 222 V162 a76 76 0 0 0 -36 -63 v124 z" fill="#AE8BD8"/>
+<g stroke="#9B76C9" stroke-width="3" opacity=".75"><path d="M164 128 V222"/><path d="M176 112 V222"/><path d="M292 128 V222"/><path d="M280 112 V222"/></g>
+<path d="M188 99 C 212 126 244 126 268 99 l0 -14 h-80 z" fill="#C0A3E4"/>
+<g fill="#F2B33D"><circle cx="176" cy="228" r="5"/><circle cx="204" cy="230" r="5"/><circle cx="232" cy="231" r="5"/><circle cx="260" cy="230" r="5"/><circle cx="288" cy="228" r="5"/></g>
+<!-- the guitar -->
+<path d="M212 170 l44 -44" stroke="#8A5A3C" stroke-width="9" stroke-linecap="round"/>
+<rect x="250" y="116" width="18" height="12" rx="4" fill="#5B3A96" transform="rotate(-45 259 122)"/>
+<ellipse cx="196" cy="190" rx="38" ry="32" fill="#E09A3C" transform="rotate(-20 196 190)"/>
+<ellipse cx="196" cy="190" rx="38" ry="32" fill="none" stroke="#B3761F" stroke-width="3" transform="rotate(-20 196 190)"/>
+<circle cx="200" cy="186" r="11" fill="#7A4D12"/>
+<path d="M174 206 h30" stroke="#FFF4E6" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+<!-- the book -->
+<path d="M300 228 l54 -12 v-46 l-54 12 z" fill="#E8718A"/>
+<path d="M354 216 l54 12 v-46 l-54 -12 z" fill="#F2869B"/>
+<path d="M352 170 v46" stroke="#C9556E" stroke-width="4"/>
+<path d="M312 196 l34 -8 M312 208 l34 -8 M362 188 l34 8 M362 200 l34 8" stroke="#FFFDF7" stroke-width="3" opacity=".75"/>
+<!-- a brush and a dab of paint -->
+<path d="M74 226 l34 -34" stroke="#8A5A3C" stroke-width="8" stroke-linecap="round"/>
+<path d="M104 188 l16 -16 10 10 -16 16 z" fill="#4FAFA8"/>
+<circle cx="56" cy="238" r="12" fill="#4FAFA8" opacity=".55"/>
+</svg>

@@ -602,8 +602,8 @@ def test_no_publisher_image_host_in_home_story_or_email(client, app):
         html = client.get(path, follow_redirects=True).get_data(as_text=True)
         assert "rebelmouse" not in html, path
     story = client.get("/story/story-30").get_data(as_text=True)
-    assert 'class="hero t-nature nopic"' in story  # the section panel stands in for the hero
-    assert "🌿" in story
+    assert 'class="hero t-nature art"' in story  # our own drawing stands in for the hero
+    assert '<img src="/static/illustrations/nature.svg" alt="">' in story
     assert '<meta property="og:image" content="https://www.peanutlife.com/static/icons/icon-512x512.png">' in story
     assert '"image":"https://www.peanutlife.com/static/icons/icon-512x512.png"' in story  # JSON-LD
     with app.app_context():
@@ -643,3 +643,67 @@ def test_legacy_article_pages_serve_noindex_and_leave_the_sitemap(client, app, m
     assert f"<loc>https://www.peanutlife.com/story/story-" in xml or "<loc>https://www.peanutlife.com/</loc>" in xml
     robots = client.get("/robots.txt").get_data(as_text=True)
     assert "/article" not in robots  # never blocked: Google has to crawl it to see the noindex
+
+
+# ---------- section illustrations (PEA-14) ----------
+
+ART_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src", "static", "illustrations")
+
+
+def test_every_section_has_a_drawing_that_is_small_and_well_formed():
+    import xml.etree.ElementTree as ET
+    from src.images import SECTION_ART
+    assert SECTION_ART == set(SECTIONS)  # one per section, no orphans either way
+    for key in SECTIONS:
+        path = os.path.join(ART_DIR, f"{key}.svg")
+        assert os.path.exists(path), key
+        size = os.path.getsize(path)
+        assert size < 12 * 1024, f"{key}.svg is {size} bytes"  # the budget in PEA-14
+        root = ET.parse(path).getroot()  # parses, so it is not broken XML
+        assert root.tag.endswith("svg") and root.get("viewBox") == "0 0 480 270"
+
+
+def test_section_art_path_always_returns_a_drawing():
+    from src.images import section_art_path
+    assert section_art_path("nature") == "/static/illustrations/nature.svg"
+    assert section_art_path("NATURE ") == "/static/illustrations/nature.svg"
+    for odd in (None, "", "weather", 7):
+        assert section_art_path(odd) == "/static/illustrations/progress.svg"
+
+
+def test_drawings_are_served_over_http(client):
+    r = client.get("/static/illustrations/kids.svg")
+    assert r.status_code == 200
+    assert "svg" in r.headers["Content-Type"]
+
+
+def test_pages_show_the_section_drawing_instead_of_an_empty_panel(client, app):
+    with app.app_context():
+        db.session.add_all([_article(i, section=s) for i, s in enumerate(SECTIONS)])
+        db.session.commit()
+        build_edition("global", date.today(), dry_run=True)
+    for path in ("/", "/section/nature", "/story/story-2", "/dial?t=7"):  # t=7 is the card view
+        html = client.get(path, follow_redirects=True).get_data(as_text=True)
+        assert "/static/illustrations/" in html, path
+        assert 'class="ph"' not in html, path  # the emoji-and-label panel is gone
+    home = client.get("/").get_data(as_text=True)
+    assert '<img src="/static/illustrations/nature.svg" alt="" loading="lazy">' in home
+    # decorative only: no drawing is described to a screen reader or handed to social cards
+    assert 'alt=""' in home
+    for path in ("/", "/story/story-2"):
+        html = client.get(path).get_data(as_text=True)
+        assert "illustrations" not in html.split("</head>")[0], path  # not in og:image or JSON-LD
+
+
+def test_a_real_allowlisted_image_still_wins_over_the_drawing(client, app):
+    own = "https://www.peanutlife.com/static/placeholders/kids.jpg"
+    with app.app_context():
+        a = _article(40, section="kids")
+        a.image_url = own
+        db.session.add(a)
+        db.session.commit()
+        build_edition("us", date.today(), dry_run=True)
+    story = client.get("/story/story-40").get_data(as_text=True)
+    assert f'<img src="{own}" alt="">' in story
+    assert "/static/illustrations/" not in story
+    assert 'class="hero t-kids"' in story  # no .art class, so it keeps the photo frame height

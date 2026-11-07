@@ -95,19 +95,18 @@ button, input, textarea { font: inherit; }
 .dateline .meta { font-size: 14px; }
 @media (min-width: 700px) { .dateline h1 { font-size: 28px; } }
 
-/* Kickers, pictures and placeholders */
+/* Kickers and pictures. A frame holds either a publisher photo we may serve or
+   our own section drawing (.art); the t-* tint sits behind it while it loads. */
 .kick { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--accent); }
 .pic, .thumb { position: relative; background: var(--tint-sky); overflow: hidden; }
 .pic img, .thumb img { width: 100%; height: 100%; object-fit: cover; }
-.pic .ph, .thumb .ph { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 10px 12px; font-family: var(--serif); font-style: italic; font-size: 15px; color: rgba(31,42,36,.55); background: linear-gradient(135deg, rgba(255,255,255,.35), rgba(255,255,255,0) 60%); }
-.thumb .ph { font-size: 11px; padding: 6px 8px; }
 .t-nature { background: var(--tint-sage); } .t-kindness { background: var(--tint-blush); } .t-culture { background: var(--tint-sand); }
 .t-science { background: var(--tint-sky); } .t-sports { background: #E6DDD0; } .t-politics { background: #DCE0E6; } .t-kids { background: #F2E3C8; } .t-progress { background: var(--tint-sky); }
 
 /* Story cards: flat, newspaper style. Hairline above, image, kicker, headline. */
 .card { display: flex; flex-direction: column; color: inherit; border-top: 1px solid var(--line-2); padding-top: 12px; min-width: 0; }
 .card:hover h2, .card:hover h3 { color: var(--accent); }
-.card .pic { aspect-ratio: 16/10; border-radius: 6px; }
+.card .pic { aspect-ratio: 2/1; border-radius: 6px; }  /* a band, so the headline sits higher */
 .card .pad { padding: 12px 0 4px; display: flex; flex-direction: column; gap: 8px; }
 .card h2 { font-size: 22px; } .card h3 { font-size: 18px; line-height: 1.25; font-weight: 600; }
 .card .why { font-size: 14px; }
@@ -115,7 +114,7 @@ button, input, textarea { font: inherit; }
 
 /* Lead story: picture left, words right */
 .lead .big { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; border-top: 3px solid var(--accent); padding-top: 14px; }
-.lead .big .pic { aspect-ratio: 16/10; border-radius: 6px; }
+.lead .big .pic { aspect-ratio: 16/9; border-radius: 6px; }
 .lead .big h2 { font-size: 26px; line-height: 1.12; font-weight: 600; }
 .lead .big .why { font-size: 16px; }
 .lead .big .pad { padding: 0; gap: 10px; }
@@ -266,18 +265,14 @@ img { max-width: 100%; height: auto; }
 .c-science { color: var(--science-fg); } .c-kindness { color: var(--kindness-fg); } .c-culture { color: var(--culture-fg); } .c-progress { color: var(--progress-fg); }
 .t-kids { background: var(--kids-bg); } .t-politics { background: var(--politics-bg); } .t-nature { background: var(--nature-bg); } .t-sports { background: var(--sports-bg); }
 .t-science { background: var(--science-bg); } .t-kindness { background: var(--kindness-bg); } .t-culture { background: var(--culture-bg); } .t-progress { background: var(--progress-bg); }
-.pic .ph, .thumb .ph { align-items: center; justify-content: center; flex-direction: column; gap: 6px; font-family: var(--display); font-style: normal; font-weight: 600; font-size: 15px; color: rgba(31,42,36,.6); background: none; }
-.pic .ph i, .thumb .ph i { font-style: normal; font-size: 40px; line-height: 1; opacity: .9; }
-.thumb .ph i { font-size: 22px; } .thumb .ph { font-size: 11px; gap: 2px; }
-/* Story hero with no picture we may serve: the section's own tint and mark, the same
-   panel the cards use. Needs .story .hero to outrank the plain .t-* rules above. */
+/* Story hero carrying our own section drawing. A wide band, not a photo frame,
+   so the words under it start higher. Needs .story .hero to outrank .t-* above. */
 .story .hero { position: relative; }
 .story .hero.t-kids { background: var(--kids-bg); } .story .hero.t-politics { background: var(--politics-bg); } .story .hero.t-nature { background: var(--nature-bg); } .story .hero.t-sports { background: var(--sports-bg); }
 .story .hero.t-science { background: var(--science-bg); } .story .hero.t-kindness { background: var(--kindness-bg); } .story .hero.t-culture { background: var(--culture-bg); } .story .hero.t-progress { background: var(--progress-bg); }
-.story .hero .ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; font-family: var(--display); font-style: normal; font-weight: 600; font-size: 17px; color: rgba(31,42,36,.6); }
-.story .hero .ph i { font-style: normal; font-size: 48px; line-height: 1; opacity: .9; }
-.story .hero.nopic { aspect-ratio: 32/9; }  /* a band, not an empty photo frame */
-@media (max-width: 699px) { .story .hero.nopic { aspect-ratio: 16/7; } }
+.story .hero.art { aspect-ratio: 32/9; }
+.story .hero.art img { object-position: 50% 60%; }  /* the band keeps the horizon and the figures' feet */
+@media (max-width: 699px) { .story .hero.art { aspect-ratio: 16/7; } }
 .lead .big { border-top: 0; padding-top: 0; }
 .card { border-top-color: var(--line); }
 .letter { border-top: 0; background: #FFF8E8; border-radius: 14px; padding: 18px 18px 16px; border: 1px solid #F1E2BC; }
@@ -334,7 +329,7 @@ img { max-width: 100%; height: auto; }
 .walk-head .dots i { height: 6px; border-radius: 3px; }
 .wcard { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; outline: none; }
 .wcard .wpic { display: block; }
-.wcard .pic { aspect-ratio: 16/10; border-radius: 12px; }
+.wcard .pic { aspect-ratio: 16/9; border-radius: 12px; }
 .wcard .pad { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 .wcard h2 { font-size: 26px; line-height: 1.12; }
 .wcard h2 a:hover { color: var(--accent); }

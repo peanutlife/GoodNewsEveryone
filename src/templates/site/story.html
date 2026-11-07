@@ -21,9 +21,11 @@
       <span>{{ a.read_minutes or 3 }} min read</span>
       {% if a.enrich_model and a.enrich_model != 'dry-run' %}{{ m.byline(a) }}{% endif %}
     </p>
+    {# Our own section drawing stands in for a photo we may not serve. Decorative:
+       it illustrates the topic, not the event, so alt stays empty and og:image
+       keeps the site fallback. #}
     {% set hero = safe_image_url(a.image_url) %}
-    {% set sm = SECTION_META.get(a.section) or {'short': 'Today', 'icon': '✨'} %}
-    <div class="hero t-{{ a.section or 'progress' }}{% if not hero %} nopic{% endif %}">{% if hero %}<img src="{{ hero }}" alt="">{% else %}<span class="ph" aria-hidden="true"><i>{{ sm.icon }}</i>{{ sm.short }}</span>{% endif %}</div>
+    <div class="hero t-{{ a.section or 'progress' }}{% if not hero %} art{% endif %}"><img src="{{ hero or section_art_path(a.section) }}" alt=""></div>
     {% if e.get('before') and e.get('now') %}
     <section class="bn bn-top" aria-label="Before and now">
       <div class="before"><span class="l">⏮ Before</span><span>{{ e.before }}</span></div>

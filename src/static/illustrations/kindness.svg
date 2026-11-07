@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
+<!-- Peanutlife section art, "Kindness": two people, one passing a heart to the other.
+     Original flat drawing. Figures are simple shapes with no facial features. -->
+<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFAF6"/><stop offset="1" stop-color="#FFD6DF"/></linearGradient></defs>
+<rect width="480" height="270" fill="url(#g)"/>
+<circle cx="404" cy="84" r="44" fill="#FFF3CC"/><circle cx="404" cy="84" r="27" fill="#F2C14E"/>
+<g fill="#FFFDF7"><rect x="38" y="72" width="94" height="24" rx="12"/><circle cx="66" cy="72" r="17"/><circle cx="104" cy="76" r="13"/><rect x="286" y="50" width="62" height="18" rx="9"/><circle cx="308" cy="50" r="13"/></g>
+<!-- floating hearts -->
+<g fill="#E8718A" opacity=".55">
+<path d="M330 128 c 0 -9 -14 -13 -14 -2 0 8 14 16 14 16 0 0 14 -8 14 -16 0 -11 -14 -7 -14 2 z"/>
+<path d="M92 142 c 0 -7 -11 -10 -11 -2 0 6 11 12 11 12 0 0 11 -6 11 -12 0 -8 -11 -5 -11 2 z"/>
+<path d="M376 172 c 0 -6 -9 -8 -9 -1 0 5 9 10 9 10 0 0 9 -5 9 -10 0 -7 -9 -5 -9 1 z"/>
+</g>
+<g fill="#FFFDF7" opacity=".8"><circle cx="134" cy="106" r="4"/><circle cx="60" cy="178" r="4"/><circle cx="442" cy="152" r="4"/><circle cx="356" cy="104" r="3"/></g>
+<!-- ground -->
+<path d="M0 212 C 130 198 290 214 480 204 V270 H0 Z" fill="#F9C3CF"/>
+<path d="M0 240 C 150 226 330 244 480 234 V270 H0 Z" fill="#F2AABB"/>
+<!-- a bench behind them -->
+<g opacity=".85">
+<rect x="18" y="194" width="92" height="9" rx="4" fill="#C98C5A"/>
+<rect x="18" y="178" width="92" height="8" rx="4" fill="#D89E6D"/>
+<rect x="26" y="203" width="7" height="24" rx="3" fill="#A9743F"/>
+<rect x="96" y="203" width="7" height="24" rx="3" fill="#A9743F"/>
+</g>
+<!-- the one giving -->
+<path d="M160 236 V184 a24 24 0 0 1 48 0 v52 z" fill="#7FB7C8"/>
+<path d="M160 214 h48" stroke="#6AA3B6" stroke-width="4"/>
+<circle cx="184" cy="160" r="17" fill="#8C5A3C"/>
+<path d="M167 160 a17 17 0 0 1 34 0 z" fill="#2F2A26"/>
+<path d="M207 190 l28 4" stroke="#8C5A3C" stroke-width="9" stroke-linecap="round"/>
+<!-- the one receiving -->
+<path d="M272 236 V188 a22 22 0 0 1 44 0 v48 z" fill="#F2C14E"/>
+<path d="M272 214 h44" stroke="#DCA92F" stroke-width="4"/>
+<circle cx="294" cy="166" r="16" fill="#E8B98A"/>
+<path d="M278 166 a16 16 0 0 1 32 0 z" fill="#A3471A"/>
+<path d="M272 192 l-26 4" stroke="#E8B98A" stroke-width="9" stroke-linecap="round"/>
+<!-- the heart passing between them -->
+<path d="M240 176 c 0 -16 -25 -22 -25 -3 0 14 25 28 25 28 0 0 25 -14 25 -28 0 -19 -25 -13 -25 3 z" fill="#E35776"/>
+<path d="M226 174 c 0 -5 5 -7 8 -4" stroke="#FFFDF7" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8"/>
+</svg>

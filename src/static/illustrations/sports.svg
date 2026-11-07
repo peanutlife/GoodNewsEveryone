@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
+<!-- Peanutlife section art, "Sports": a finish line, arms up, confetti.
+     Original flat drawing. Figures are simple shapes with no facial features. -->
+<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFBF4"/><stop offset="1" stop-color="#FFD9C2"/></linearGradient></defs>
+<rect width="480" height="270" fill="url(#g)"/>
+<circle cx="410" cy="82" r="44" fill="#FFF3CC"/><circle cx="410" cy="82" r="27" fill="#F7C756"/>
+<g fill="#FFFDF7"><rect x="34" y="70" width="92" height="24" rx="12"/><circle cx="62" cy="70" r="17"/><circle cx="98" cy="74" r="13"/></g>
+<!-- confetti -->
+<g opacity=".9">
+<rect x="92" y="104" width="9" height="14" rx="3" fill="#4FAFA8" transform="rotate(22 96 111)"/>
+<rect x="148" y="78" width="9" height="14" rx="3" fill="#E8718A" transform="rotate(-18 152 85)"/>
+<rect x="312" y="94" width="9" height="14" rx="3" fill="#F2C14E" transform="rotate(34 316 101)"/>
+<rect x="356" y="132" width="9" height="14" rx="3" fill="#4FAFA8" transform="rotate(-28 360 139)"/>
+<rect x="58" y="146" width="9" height="14" rx="3" fill="#F2C14E" transform="rotate(14 62 153)"/>
+<rect x="268" y="66" width="9" height="14" rx="3" fill="#A3471A" transform="rotate(40 272 73)"/>
+<circle cx="208" cy="76" r="5" fill="#F2785C"/><circle cx="394" cy="116" r="5" fill="#E8718A"/><circle cx="120" cy="134" r="4" fill="#A3471A"/>
+</g>
+<!-- the ball, arcing in -->
+<path d="M352 212 C 360 176 376 152 398 142" stroke="#C98A63" stroke-width="3" fill="none" stroke-dasharray="7 9" stroke-linecap="round" opacity=".65"/>
+<circle cx="408" cy="140" r="22" fill="#FBF7F1" stroke="#A3471A" stroke-width="3"/>
+<path d="M392 124 C 400 132 402 148 396 158" stroke="#A3471A" stroke-width="3" fill="none" stroke-linecap="round"/>
+<path d="M424 124 C 416 132 414 148 420 158" stroke="#A3471A" stroke-width="3" fill="none" stroke-linecap="round"/>
+<!-- ground -->
+<path d="M0 212 C 130 198 280 214 480 202 V270 H0 Z" fill="#F7C3A1"/>
+<path d="M0 240 C 150 226 330 244 480 234 V270 H0 Z" fill="#EFAE84"/>
+<g stroke="#FFFDF7" stroke-width="4" stroke-linecap="round" opacity=".65"><path d="M36 256 h44"/><path d="M128 250 h44"/><path d="M284 258 h44"/><path d="M380 250 h44"/></g>
+<!-- finish ribbon -->
+<rect x="112" y="128" width="7" height="86" rx="3" fill="#A3471A"/>
+<rect x="326" y="124" width="7" height="90" rx="3" fill="#A3471A"/>
+<path d="M119 150 C 180 176 266 170 326 146" stroke="#E8718A" stroke-width="7" fill="none" stroke-linecap="round"/>
+<!-- the finisher, arms up -->
+<path d="M196 180 l-22 -30 M244 178 l22 -32" stroke="#C98C5A" stroke-width="8" stroke-linecap="round"/>
+<path d="M200 220 V182 a20 20 0 0 1 40 0 v38 z" fill="#4FAFA8"/>
+<path d="M200 206 h40" stroke="#FFFDF7" stroke-width="5"/>
+<circle cx="220" cy="160" r="15" fill="#C98C5A"/>
+<path d="M205 160 a15 15 0 0 1 30 0 z" fill="#2F2A26"/>
+<path d="M208 220 v26 M232 220 v26" stroke="#C98C5A" stroke-width="9" stroke-linecap="round"/>
+<path d="M204 248 h14 M228 248 h14" stroke="#F2C14E" stroke-width="8" stroke-linecap="round"/>
+</svg>

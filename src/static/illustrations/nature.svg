@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
+<!-- Peanutlife section art, "Nature": hills, a wide tree, a pond, birds.
+     Original flat drawing. -->
+<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FBFCF4"/><stop offset="1" stop-color="#D4EBD0"/></linearGradient></defs>
+<rect width="480" height="270" fill="url(#g)"/>
+<circle cx="404" cy="82" r="46" fill="#FFF3CC"/><circle cx="404" cy="82" r="28" fill="#F2C14E"/>
+<g fill="#FFFDF7"><rect x="44" y="72" width="96" height="24" rx="12"/><circle cx="74" cy="72" r="18"/><circle cx="112" cy="76" r="13"/><rect x="262" y="48" width="66" height="18" rx="9"/><circle cx="286" cy="48" r="13"/></g>
+<!-- far hills -->
+<path d="M0 182 C 70 146 136 160 196 180 C 250 198 300 170 364 158 C 418 148 452 160 480 170 V270 H0 Z" fill="#B6DCAE"/>
+<path d="M0 214 C 90 190 170 208 252 200 C 340 192 404 210 480 200 V270 H0 Z" fill="#8FC98C"/>
+<path d="M0 246 C 120 230 300 250 480 236 V270 H0 Z" fill="#6FB373"/>
+<!-- birds -->
+<g stroke="#2D6A3A" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7">
+<path d="M296 100 c 7 -7 13 -7 19 0"/><path d="M315 100 c 7 -7 13 -7 19 0"/>
+<path d="M248 126 c 5 -5 10 -5 15 0"/><path d="M263 126 c 5 -5 10 -5 15 0"/>
+</g>
+<!-- the tree -->
+<path d="M146 230 V156" stroke="#9A6F45" stroke-width="14" stroke-linecap="round"/>
+<path d="M146 186 l-26 -20 M146 176 l26 -22" stroke="#9A6F45" stroke-width="8" stroke-linecap="round"/>
+<circle cx="146" cy="132" r="42" fill="#5EA868"/>
+<circle cx="104" cy="152" r="28" fill="#6FB373"/>
+<circle cx="190" cy="150" r="26" fill="#6FB373"/>
+<circle cx="160" cy="106" r="24" fill="#7FC183"/>
+<circle cx="120" cy="118" r="19" fill="#4E9459" opacity=".5"/>
+<circle cx="118" cy="150" r="5" fill="#F2785C"/><circle cx="178" cy="138" r="5" fill="#F2785C"/><circle cx="150" cy="166" r="4" fill="#F2785C"/>
+<!-- pond -->
+<ellipse cx="344" cy="226" rx="88" ry="26" fill="#9FD3DC"/>
+<ellipse cx="344" cy="220" rx="88" ry="24" fill="#BCE2E8"/>
+<path d="M296 216 h40 M360 228 h46 M320 232 h28" stroke="#FFFDF7" stroke-width="3" stroke-linecap="round" opacity=".8"/>
+<!-- reeds and flowers -->
+<g stroke="#4E9459" stroke-width="3" fill="none" stroke-linecap="round">
+<path d="M432 222 C 436 204 432 194 438 182"/><path d="M448 226 C 452 210 448 200 452 190"/><path d="M58 236 C 60 220 56 212 60 202"/>
+</g>
+<circle cx="438" cy="178" r="6" fill="#F2C14E"/><circle cx="452" cy="186" r="5" fill="#E8718A"/><circle cx="60" cy="198" r="6" fill="#FFFDF7"/>
+<g fill="#FFFDF7" opacity=".75"><circle cx="78" cy="118" r="4"/><circle cx="222" cy="92" r="3"/><circle cx="448" cy="140" r="4"/></g>
+</svg>
