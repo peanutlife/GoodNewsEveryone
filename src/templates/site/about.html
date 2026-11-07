@@ -14,7 +14,7 @@
       <p>The site is built by a program that runs every morning. There is no newsroom and no human editor between the
         publisher and you. In order:</p>
       <ol>
-        <li>It fetches about 160 news feeds from the US, UK, Europe, East Asia, South Asia and Africa.</li>
+        <li>It fetches {{ stats.sources or 'about 160' }} news feeds from the US, UK, Europe, East Asia, South Asia and Africa.</li>
         <li>A keyword filter drops the obvious non-candidates.</li>
         <li>An AI model vets what is left from the headline and opening lines, and marks each one yes, maybe or no.</li>
         <li>For the survivors, the model reads the publisher's own summary and decides whether it really is good news,

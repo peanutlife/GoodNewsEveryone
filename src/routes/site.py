@@ -13,7 +13,7 @@ from flask import Blueprint, abort, g, jsonify, make_response, redirect, render_
 from src.edition import edition_for_country, COOKIE_MAX_AGE, COOKIE_NAME, EDITIONS, detect_edition, edition_name
 from src.editions import mood_sort, articles_by_ids, latest_edition, previous_edition
 from src.enrich import ENRICH_MODEL, STYLE_GUIDE, has_api_key
-from src.models.article import SECTIONS, SECTION_META, FEELINGS, Article, Feeling, Follow, Like, Visit, count_visit, thread_root, thread_for
+from src.models.article import SECTIONS, SECTION_META, FEELINGS, Article, Feeling, Follow, Like, count_visit, thread_root, thread_for
 from src.models.user import db
 
 logger = logging.getLogger(__name__)
@@ -206,25 +206,33 @@ def _set_visit_cookie(resp):
 
 
 def _stats() -> dict:
-    """Real numbers for the masthead counter, cached for a minute per process."""
+    """Numbers for the masthead counter, cached for a minute per process.
+
+    `checked_*` counts Article rows by `fetched_at`: stories the pipeline pulled from the
+    feeds and put in front of the model, not stories anyone read. `sources` is the length
+    of the source list, so the footer and the counter can never disagree.
+
+    No reader counts live here on purpose. A Visit row is one cookie per day, so a reader
+    who comes back is counted again every day and a cookieless bot makes a fresh row on
+    every hit; the sum is not a number of people. Visit rows are still written (see
+    `count_visit`) and GA4 remains the honest audience figure.
+    """
     now = datetime.utcnow()
     if _STATS_CACHE["at"] and (now - _STATS_CACHE["at"]).total_seconds() < 60:
         return _STATS_CACHE["value"]
+    from src.edition import config as _cfg
     try:
-        today = now.date()
-        readers_today = db.session.query(Visit).filter(Visit.day == today).count()
-        readers_week = db.session.query(Visit).filter(Visit.day >= today - timedelta(days=6)).count()
-        midnight = datetime.combine(today, datetime.min.time())
-        vetted_today = Article.query.filter(Article.fetched_at >= midnight).count()
-        vetted_week = Article.query.filter(Article.fetched_at >= midnight - timedelta(days=6)).count()
-        vetted_total = Article.query.count()
-        from src.edition import config as _cfg
         sources = len(_cfg().get("sources", []))
-        value = {"readers_today": readers_today, "readers_week": readers_week, "vetted_today": vetted_today,
-                 "vetted_week": vetted_week, "vetted_total": vetted_total, "sources": sources, "since": "May 2025"}
+    except Exception:  # noqa: BLE001  (a missing config file is not worth a 500)
+        sources = 0
+    value = {"sources": sources, "since": "May 2025"}
+    try:
+        midnight = datetime.combine(now.date(), datetime.min.time())
+        value["checked_today"] = Article.query.filter(Article.fetched_at >= midnight).count()
+        value["checked_week"] = Article.query.filter(Article.fetched_at >= midnight - timedelta(days=6)).count()
+        value["checked_total"] = Article.query.count()
     except Exception:  # noqa: BLE001
         db.session.rollback()
-        value = {}
     _STATS_CACHE.update(at=now, value=value)
     return value
 
