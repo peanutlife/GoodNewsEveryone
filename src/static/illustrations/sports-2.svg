@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
+<!-- Peanutlife section art, "Sports" variant 2: a floodlit pitch at night, the ball
+     already past the keeper and into the top corner. Original flat drawing; figures
+     are simple shapes with no facial features. Subject sits inside x 63-417,
+     y 81-216, which is what the 32/9 band shows. -->
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#27384C"/><stop offset="1" stop-color="#4A5E6B"/></linearGradient>
+<linearGradient id="beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF3CC" stop-opacity=".45"/><stop offset="1" stop-color="#FFF3CC" stop-opacity="0"/></linearGradient>
+</defs>
+<rect width="480" height="270" fill="url(#g)"/>
+<g fill="#FFFDF7" opacity=".55"><circle cx="146" cy="52" r="2.5"/><circle cx="236" cy="38" r="2"/><circle cx="330" cy="56" r="2.5"/><circle cx="62" cy="40" r="2"/><circle cx="420" cy="44" r="2.5"/><circle cx="276" cy="70" r="2"/></g>
+<!-- the two floodlight beams -->
+<path d="M74 96 L8 230 h150 z" fill="url(#beam)"/>
+<path d="M406 96 L330 230 h152 z" fill="url(#beam)"/>
+<!-- the pitch, painted before everything standing on it -->
+<path d="M0 194 H480 V270 H0 Z" fill="#3E7A4E"/>
+<path d="M0 194 H480 v6 H0 Z" fill="#2E6A3E"/>
+<g fill="#4A8A58" opacity=".6"><rect x="0" y="206" width="480" height="14"/><rect x="0" y="236" width="480" height="14"/></g>
+<path d="M150 246 a110 30 0 0 0 180 0" fill="none" stroke="#C9E6CE" stroke-width="4" opacity=".8"/>
+<!-- crowd, a dark band behind the goal -->
+<g fill="#1F2E3C" opacity=".75">
+<rect x="0" y="178" width="480" height="18"/>
+<circle cx="24" cy="178" r="7"/><circle cx="52" cy="176" r="6"/><circle cx="82" cy="178" r="7"/><circle cx="112" cy="175" r="6"/><circle cx="142" cy="178" r="7"/>
+<circle cx="350" cy="177" r="7"/><circle cx="378" cy="175" r="6"/><circle cx="408" cy="178" r="7"/><circle cx="438" cy="175" r="6"/><circle cx="466" cy="178" r="7"/>
+</g>
+<!-- the goal -->
+<path d="M166 194 V124 h148 v70" fill="#3A6B52" opacity=".45"/>
+<g stroke="#D9EAF0" stroke-width="2" opacity=".75">
+<path d="M180 124 V194 M196 124 V194 M212 124 V194 M228 124 V194 M244 124 V194 M260 124 V194 M276 124 V194 M292 124 V194 M308 124 V194"/>
+<path d="M166 136 H314 M166 150 H314 M166 164 H314 M166 178 H314"/>
+</g>
+<path d="M160 194 V120 h160 v74" fill="none" stroke="#FFFDF7" stroke-width="7" stroke-linejoin="round"/>
+<!-- the ball, already in -->
+<path d="M126 196 C 180 170 240 142 282 136" stroke="#FFD9C2" stroke-width="3" fill="none" stroke-dasharray="7 9" stroke-linecap="round" opacity=".8"/>
+<circle cx="292" cy="140" r="15" fill="#FBF7F1"/>
+<path d="M292 128 l10 8 -4 12 h-12 l-4 -12 z" fill="#2F3A33"/>
+<path d="M281 150 l-6 8 M303 150 l6 8 M292 125 v-7" stroke="#2F3A33" stroke-width="2.5" stroke-linecap="round"/>
+<!-- the one who struck it -->
+<path d="M96 162 l-20 -16 M124 160 l20 -12" stroke="#C98C5A" stroke-width="7" stroke-linecap="round"/>
+<path d="M98 198 V158 a17 17 0 0 1 34 0 v40 z" fill="#F2785C"/>
+<path d="M98 182 h34" stroke="#FFFDF7" stroke-width="4"/>
+<circle cx="115" cy="140" r="13" fill="#C98C5A"/><path d="M102 140 a13 13 0 0 1 26 0 z" fill="#2F2A26"/>
+<path d="M104 198 v12 M126 196 l16 10" stroke="#C98C5A" stroke-width="9" stroke-linecap="round"/>
+<path d="M100 212 h10 M142 204 l10 4" stroke="#F2C14E" stroke-width="8" stroke-linecap="round"/>
+<!-- floodlight masts -->
+<path d="M74 230 V100" stroke="#8A9AA8" stroke-width="7" stroke-linecap="round"/>
+<path d="M406 230 V100" stroke="#8A9AA8" stroke-width="7" stroke-linecap="round"/>
+<g fill="#FFF3CC"><rect x="48" y="84" width="52" height="18" rx="5"/><rect x="380" y="84" width="52" height="18" rx="5"/></g>
+<g fill="#F7C756"><rect x="52" y="88" width="10" height="10" rx="3"/><rect x="68" y="88" width="10" height="10" rx="3"/><rect x="84" y="88" width="10" height="10" rx="3"/><rect x="384" y="88" width="10" height="10" rx="3"/><rect x="400" y="88" width="10" height="10" rx="3"/><rect x="416" y="88" width="10" height="10" rx="3"/></g>
+</svg>

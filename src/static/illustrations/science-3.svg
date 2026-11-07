@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
+<!-- Peanutlife section art, "Science & health" variant 3: the bench at the end of
+     the day - a microscope, a slide, a notebook with the curve going the right way.
+     Indoors, lamp on. Original flat drawing; figures are simple shapes with no
+     facial features. Subject sits inside x 63-417, y 81-216, the 32/9 band. -->
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E6F2F4"/><stop offset="1" stop-color="#CDE9EE"/></linearGradient>
+<radialGradient id="lamp" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFF3CC" stop-opacity=".9"/><stop offset="1" stop-color="#FFF3CC" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="480" height="270" fill="url(#g)"/>
+<!-- a shelf of jars along the back wall -->
+<rect x="38" y="104" width="150" height="7" rx="3" fill="#A9CED6"/>
+<g>
+<rect x="52" y="76" width="22" height="28" rx="5" fill="#8FC8D4"/><rect x="52" y="88" width="22" height="16" rx="4" fill="#5FAE8C"/><rect x="56" y="70" width="14" height="8" rx="3" fill="#1F6B78"/>
+<rect x="88" y="82" width="20" height="22" rx="5" fill="#8FC8D4"/><rect x="88" y="92" width="20" height="12" rx="4" fill="#E8718A"/><rect x="92" y="76" width="12" height="8" rx="3" fill="#1F6B78"/>
+<rect x="122" y="72" width="24" height="32" rx="5" fill="#8FC8D4"/><rect x="122" y="86" width="24" height="18" rx="4" fill="#F2C14E"/><rect x="127" y="66" width="14" height="8" rx="3" fill="#1F6B78"/>
+<rect x="158" y="84" width="20" height="20" rx="5" fill="#8FC8D4"/><rect x="162" y="78" width="12" height="8" rx="3" fill="#1F6B78"/>
+</g>
+<!-- the lamp -->
+<rect x="386" y="188" width="56" height="10" rx="5" fill="#1F6B78"/>
+<path d="M414 190 V146 L352 118" stroke="#1F6B78" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M322 104 l40 18 -16 26 -32 -18 z" fill="#F2A65A"/>
+<ellipse cx="300" cy="170" rx="94" ry="60" fill="url(#lamp)"/>
+<!-- the bench -->
+<path d="M0 196 H480 V270 H0 Z" fill="#DCC9A8"/>
+<path d="M0 196 H480 v7 H0 Z" fill="#C2AC88"/>
+<!-- the microscope -->
+<path d="M214 196 h76 l-12 -16 h-52 z" fill="#1F6B78"/>
+<path d="M268 182 C 296 172 298 134 274 122" stroke="#2E8795" stroke-width="12" fill="none" stroke-linecap="round"/>
+<rect x="222" y="160" width="58" height="9" rx="4" fill="#15555F"/>
+<rect x="240" y="152" width="26" height="9" rx="3" fill="#E8718A"/>
+<g transform="rotate(26 262 124)">
+<rect x="250" y="88" width="24" height="56" rx="8" fill="#2E8795"/>
+<rect x="246" y="82" width="32" height="14" rx="6" fill="#15555F"/>
+<rect x="252" y="140" width="20" height="14" rx="5" fill="#15555F"/>
+</g>
+<path d="M236 169 h26" stroke="#FFFDF7" stroke-width="4"/>
+<!-- a rack of samples -->
+<rect x="318" y="174" width="58" height="22" rx="5" fill="#1F6B78"/>
+<g><rect x="326" y="146" width="12" height="34" rx="6" fill="#DFF0F4"/><rect x="326" y="162" width="12" height="18" rx="6" fill="#5FAE8C"/></g>
+<g><rect x="342" y="146" width="12" height="34" rx="6" fill="#DFF0F4"/><rect x="342" y="158" width="12" height="22" rx="6" fill="#F2C14E"/></g>
+<g><rect x="358" y="146" width="12" height="34" rx="6" fill="#DFF0F4"/><rect x="358" y="166" width="12" height="14" rx="6" fill="#E8718A"/></g>
+<!-- the notebook, curve going the right way -->
+<g transform="rotate(-6 170 180)">
+<rect x="130" y="158" width="80" height="38" rx="4" fill="#FBF7F1"/>
+<path d="M138 188 L156 178 L172 182 L192 164" stroke="#1F6B78" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="192" cy="164" r="4" fill="#E8718A"/>
+<path d="M138 168 h24" stroke="#C7D9DE" stroke-width="3" stroke-linecap="round"/>
+</g>
+<!-- someone at the bench; kept clear of x 63 so the 3/2 thumb does not slice them -->
+<path d="M72 196 V150 a20 20 0 0 1 40 0 v46 z" fill="#7FC8A9"/>
+<circle cx="92" cy="132" r="15" fill="#8C5A3C"/><path d="M77 132 a15 15 0 0 1 30 0 z" fill="#2F2A26"/>
+<path d="M110 160 l28 16" stroke="#8C5A3C" stroke-width="8" stroke-linecap="round"/>
+<g fill="#FFFDF7" opacity=".7"><circle cx="412" cy="88" r="4"/><circle cx="446" cy="124" r="3"/><circle cx="222" cy="72" r="3"/></g>
+</svg>

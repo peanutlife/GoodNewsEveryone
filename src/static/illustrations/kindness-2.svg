@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
+<!-- Peanutlife section art, "Kindness" variant 2: one long table in the street,
+     everybody's food in the middle, lights strung over it. Dusk. Original flat
+     drawing; figures are simple shapes with no facial features. Subject sits inside
+     x 63-417, y 81-216, which is what the 32/9 band shows. -->
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9B4CE"/><stop offset=".45" stop-color="#F3CBC4"/><stop offset="1" stop-color="#FFD6DF"/></linearGradient>
+</defs>
+<rect width="480" height="270" fill="url(#g)"/>
+<g fill="#FFFDF7" opacity=".7"><circle cx="78" cy="40" r="2.5"/><circle cx="196" cy="28" r="2"/><circle cx="338" cy="44" r="2.5"/><circle cx="430" cy="26" r="2"/></g>
+<!-- houses down the street -->
+<g fill="#C9A8B6">
+<path d="M12 170 h74 v-38 h-74 z"/><path d="M6 132 l43 -24 43 24 z"/>
+<path d="M104 170 h62 v-30 h-62 z"/><path d="M98 140 l37 -20 37 20 z"/>
+<path d="M318 170 h66 v-34 h-66 z"/><path d="M312 136 l39 -22 39 22 z"/>
+<path d="M398 170 h74 v-28 h-74 z"/><path d="M392 142 l43 -22 43 22 z"/>
+</g>
+<g fill="#F7D98C"><rect x="34" y="140" width="16" height="18" rx="3"/><rect x="124" y="146" width="14" height="16" rx="3"/><rect x="340" y="144" width="15" height="18" rx="3"/><rect x="424" y="150" width="14" height="14" rx="3"/></g>
+<g fill="#B898A8"><circle cx="222" cy="152" r="22"/><circle cx="252" cy="160" r="16"/><circle cx="196" cy="160" r="15"/><path d="M186 160 h80 v16 h-80 z"/></g>
+<!-- the strung lights -->
+<path d="M46 108 V196 M434 108 V196" stroke="#A9798C" stroke-width="5" stroke-linecap="round"/>
+<path d="M46 110 C 120 140 180 92 240 100 C 306 108 368 142 434 110" stroke="#A9798C" stroke-width="2.5" fill="none"/>
+<g fill="#FFE9A8"><circle cx="92" cy="128" r="6"/><circle cx="140" cy="126" r="6"/><circle cx="190" cy="104" r="6"/><circle cx="240" cy="100" r="6"/><circle cx="290" cy="108" r="6"/><circle cx="340" cy="124" r="6"/><circle cx="392" cy="128" r="6"/></g>
+<g fill="#FFE9A8" opacity=".3"><circle cx="92" cy="128" r="15"/><circle cx="190" cy="104" r="15"/><circle cx="290" cy="108" r="15"/><circle cx="392" cy="128" r="15"/></g>
+<!-- the ground -->
+<path d="M0 176 H480 V270 H0 Z" fill="#F2AABB"/>
+<path d="M0 232 C 150 222 330 238 480 228 V270 H0 Z" fill="#E394A8"/>
+<!-- four of them along the far side -->
+<path d="M92 196 V158 a16 16 0 0 1 32 0 v38 z" fill="#7FB7C8"/>
+<circle cx="108" cy="142" r="13" fill="#8C5A3C"/><path d="M95 142 a13 13 0 0 1 26 0 z" fill="#2F2A26"/>
+<path d="M124 166 l20 10" stroke="#8C5A3C" stroke-width="7" stroke-linecap="round"/>
+<path d="M172 196 V152 a17 17 0 0 1 34 0 v44 z" fill="#F2C14E"/>
+<circle cx="189" cy="136" r="13" fill="#E8B98A"/><path d="M176 136 a13 13 0 0 1 26 0 z" fill="#A3471A"/>
+<path d="M266 196 V156 a17 17 0 0 1 34 0 v40 z" fill="#AE8BD8"/>
+<circle cx="283" cy="140" r="13" fill="#C98C5A"/><path d="M270 140 a13 13 0 0 1 26 0 z" fill="#6B4226"/>
+<path d="M266 172 l-22 8" stroke="#C98C5A" stroke-width="7" stroke-linecap="round"/>
+<path d="M352 196 V154 a16 16 0 0 1 32 0 v42 z" fill="#4FAFA8"/>
+<circle cx="368" cy="138" r="12" fill="#6B4226"/><path d="M356 138 a12 12 0 0 1 24 0 z" fill="#2F2A26"/>
+<!-- the table -->
+<path d="M26 192 h428 v16 h-428 z" fill="#FBF7F1"/>
+<path d="M26 208 h428 v8 h-428 z" fill="#E6D6D0"/>
+<path d="M26 208 C 90 220 150 206 212 216 C 280 226 342 208 454 218 v-10 h-428 z" fill="#F2AABB" opacity=".55"/>
+<!-- what is on it -->
+<path d="M214 192 a34 18 0 0 0 68 0 z" fill="#E35776"/>
+<path d="M214 192 h68" stroke="#C04560" stroke-width="4"/>
+<rect x="238" y="166" width="20" height="24" rx="5" fill="#C9AE86"/>
+<ellipse cx="248" cy="166" rx="14" ry="6" fill="#E0C9A6"/>
+<path d="M142 192 a22 12 0 0 0 44 0 z" fill="#7FB7C8"/>
+<path d="M310 192 a22 12 0 0 0 44 0 z" fill="#F2C14E"/>
+<g fill="#C98C5A"><ellipse cx="96" cy="186" rx="20" ry="9"/><ellipse cx="96" cy="181" rx="15" ry="7" fill="#DDAE7C"/></g>
+<g fill="#7FC8A9"><ellipse cx="398" cy="186" rx="19" ry="9"/></g>
+<g fill="#DFF0F4"><rect x="196" y="176" width="11" height="16" rx="3"/><rect x="292" y="176" width="11" height="16" rx="3"/><rect x="124" y="178" width="10" height="14" rx="3"/><rect x="362" y="178" width="10" height="14" rx="3"/></g>
+<!-- a small heart drawn on the cloth -->
+<path d="M62 204 c 0 -7 -11 -10 -11 -2 0 6 11 12 11 12 0 0 11 -6 11 -12 0 -8 -11 -5 -11 2 z" fill="#E35776" opacity=".8"/>
+</svg>

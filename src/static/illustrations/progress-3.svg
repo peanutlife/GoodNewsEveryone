@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
+<!-- Peanutlife section art, "Progress" variant 3: a repair bench - the old bike up
+     on the stand, the tools on the board, being mended instead of replaced.
+     Indoors, close in. Original flat drawing; figures are simple shapes with no
+     facial features. Subject sits inside x 63-417, y 81-216, the 32/9 band. -->
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF6E8"/><stop offset="1" stop-color="#FFE0B8"/></linearGradient>
+</defs>
+<rect width="480" height="270" fill="url(#g)"/>
+<!-- the pegboard -->
+<rect x="26" y="36" width="168" height="112" rx="6" fill="#EBD6B8"/>
+<g fill="#D8BF99"><circle cx="46" cy="56" r="2.5"/><circle cx="76" cy="56" r="2.5"/><circle cx="106" cy="56" r="2.5"/><circle cx="136" cy="56" r="2.5"/><circle cx="166" cy="56" r="2.5"/><circle cx="46" cy="100" r="2.5"/><circle cx="76" cy="100" r="2.5"/><circle cx="106" cy="100" r="2.5"/><circle cx="136" cy="100" r="2.5"/><circle cx="166" cy="100" r="2.5"/><circle cx="46" cy="134" r="2.5"/><circle cx="106" cy="134" r="2.5"/><circle cx="166" cy="134" r="2.5"/></g>
+<g>
+<path d="M46 62 v44" stroke="#8F5100" stroke-width="7" stroke-linecap="round"/><path d="M40 62 h12 v10 h-12 z" fill="#4A4A52"/>
+<path d="M76 62 v40" stroke="#4A4A52" stroke-width="6" stroke-linecap="round"/><path d="M70 60 a6 8 0 1 1 12 0 z" fill="#4A4A52"/>
+<path d="M106 64 v38" stroke="#C97B4E" stroke-width="8" stroke-linecap="round"/><path d="M98 62 h16 v12 h-16 z" fill="#8F5100"/>
+<path d="M130 62 l22 36" stroke="#4FAFA8" stroke-width="7" stroke-linecap="round"/>
+<path d="M166 64 v34" stroke="#4A4A52" stroke-width="5" stroke-linecap="round"/><circle cx="166" cy="102" r="9" fill="none" stroke="#4A4A52" stroke-width="5"/>
+<rect x="34" y="118" width="46" height="22" rx="4" fill="#E8718A"/>
+<rect x="92" y="118" width="40" height="22" rx="4" fill="#F2C14E"/>
+<rect x="144" y="118" width="40" height="22" rx="4" fill="#7FB7C8"/>
+</g>
+<!-- the bench and the floor -->
+<path d="M0 216 H480 V270 H0 Z" fill="#E4CBA4"/>
+<path d="M0 216 H480 v6 H0 Z" fill="#C9AC80"/>
+<!-- the repair stand -->
+<path d="M300 216 L300 148" stroke="#4A4A52" stroke-width="9" stroke-linecap="round"/>
+<path d="M300 212 l-30 16 M300 212 l30 16" stroke="#4A4A52" stroke-width="8" stroke-linecap="round"/>
+<path d="M300 152 h-36" stroke="#4A4A52" stroke-width="8" stroke-linecap="round"/>
+<rect x="250" y="144" width="20" height="18" rx="5" fill="#E8718A"/>
+<!-- the bike -->
+<g fill="none" stroke="#8F5100" stroke-width="7">
+<circle cx="150" cy="166" r="42"/><circle cx="314" cy="166" r="42"/>
+</g>
+<g fill="none" stroke="#D9A96B" stroke-width="2.5" opacity=".9">
+<path d="M150 124 V208 M108 166 H192 M120 136 L180 196 M180 136 L120 196"/>
+<path d="M314 124 V208 M272 166 H356 M284 136 L344 196 M344 136 L284 196"/>
+</g>
+<g fill="none" stroke="#4FAFA8" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<path d="M150 166 L206 166 L240 112"/>
+<path d="M206 166 L248 166 L240 112"/>
+<path d="M248 166 L314 166"/>
+<path d="M248 166 L266 120"/>
+</g>
+<path d="M240 112 L224 100" stroke="#4A4A52" stroke-width="7" stroke-linecap="round"/>
+<path d="M216 96 h24" stroke="#4A4A52" stroke-width="8" stroke-linecap="round"/>
+<path d="M266 120 l-16 -8 a9 9 0 0 1 10 -12 l20 10 z" fill="#4A4A52"/>
+<circle cx="248" cy="166" r="13" fill="#F2C14E"/>
+<circle cx="248" cy="166" r="5" fill="#8F5100"/>
+<path d="M248 166 l18 12" stroke="#4A4A52" stroke-width="6" stroke-linecap="round"/>
+<!-- whoever is fixing it -->
+<path d="M392 216 V152 a22 22 0 0 0 -44 0 v64 z" fill="#E8718A"/>
+<path d="M348 186 h44" stroke="#C9556E" stroke-width="4"/>
+<circle cx="370" cy="132" r="16" fill="#8C5A3C"/><path d="M354 132 a16 16 0 0 1 32 0 z" fill="#2F2A26"/>
+<path d="M350 166 l-30 10" stroke="#8C5A3C" stroke-width="9" stroke-linecap="round"/>
+<path d="M318 176 l-16 -6" stroke="#4A4A52" stroke-width="7" stroke-linecap="round"/>
+<path d="M302 170 a7 7 0 1 0 -4 -11 l8 4 z" fill="#4A4A52"/>
+<!-- the parts tray and the tag -->
+<path d="M70 216 h74 l-8 -20 h-58 z" fill="#C97B4E"/>
+<g fill="#4A4A52"><circle cx="92" cy="206" r="5"/><circle cx="108" cy="208" r="4"/><circle cx="124" cy="205" r="5"/></g>
+<rect x="398" y="96" width="54" height="30" rx="5" fill="#FBF7F1" transform="rotate(8 425 111)"/>
+<path d="M410 112 l7 8 16 -18" stroke="#4FAFA8" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="rotate(8 425 111)"/>
+</svg>

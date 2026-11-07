@@ -645,22 +645,39 @@ def test_legacy_article_pages_serve_noindex_and_leave_the_sitemap(client, app, m
     assert "/article" not in robots  # never blocked: Google has to crawl it to see the noindex
 
 
-# ---------- section illustrations (PEA-14) ----------
+# ---------- section illustrations (PEA-14, variants PEA-15) ----------
 
 ART_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src", "static", "illustrations")
 
 
-def test_every_section_has_a_drawing_that_is_small_and_well_formed():
+def test_every_section_has_its_drawings_small_and_well_formed():
     import xml.etree.ElementTree as ET
-    from src.images import SECTION_ART
-    assert SECTION_ART == set(SECTIONS)  # one per section, no orphans either way
+    from src.images import SECTION_ART, art_variants
+    assert SECTION_ART == set(SECTIONS)  # one set per section, no orphans either way
+    seen = set()
     for key in SECTIONS:
-        path = os.path.join(ART_DIR, f"{key}.svg")
-        assert os.path.exists(path), key
-        size = os.path.getsize(path)
-        assert size < 12 * 1024, f"{key}.svg is {size} bytes"  # the budget in PEA-14
-        root = ET.parse(path).getroot()  # parses, so it is not broken XML
-        assert root.tag.endswith("svg") and root.get("viewBox") == "0 0 480 270"
+        for url in art_variants(key):
+            name = os.path.basename(url)
+            path = os.path.join(ART_DIR, name)
+            assert os.path.exists(path), url
+            size = os.path.getsize(path)
+            assert size < 12 * 1024, f"{name} is {size} bytes"  # the budget in PEA-14
+            root = ET.parse(path).getroot()  # parses, so it is not broken XML
+            assert root.tag.endswith("svg") and root.get("viewBox") == "0 0 480 270"
+            seen.add(name)
+    # and nothing is sitting in the folder that no section can reach
+    assert seen == {f for f in os.listdir(ART_DIR) if f.endswith(".svg")}
+
+
+def test_drawings_stay_inert_and_self_contained():
+    """We serve these as <img src>; they must not script, link or fetch anything."""
+    banned = ("<script", "<foreignObject", "<use", "javascript:", "<a ", "<image", "onload", "onclick")
+    for name in sorted(f for f in os.listdir(ART_DIR) if f.endswith(".svg")):
+        body = open(os.path.join(ART_DIR, name), encoding="utf-8").read()
+        root_tag, rest = body.split(">", 1)  # the xmlns on <svg> is the one URL allowed
+        assert "http" not in rest, f"{name} refers to something off-site"
+        for token in banned:
+            assert token not in body, f"{name} contains {token!r}"
 
 
 def test_section_art_path_always_returns_a_drawing():
@@ -669,6 +686,40 @@ def test_section_art_path_always_returns_a_drawing():
     assert section_art_path("NATURE ") == "/static/illustrations/nature.svg"
     for odd in (None, "", "weather", 7):
         assert section_art_path(odd) == "/static/illustrations/progress.svg"
+
+
+def test_the_variant_is_a_stable_hash_of_the_story_id():
+    # deliberately not hash(): str hashing is salted per process, so two Gunicorn
+    # workers would draw the same story differently and it would move on restart
+    from src.images import ART_VARIANTS, art_variant_index, art_variants, section_art_path
+    assert ART_VARIANTS == 3
+    assert art_variants("nature") == (
+        "/static/illustrations/nature.svg",
+        "/static/illustrations/nature-2.svg",
+        "/static/illustrations/nature-3.svg",
+    )
+    # pinned: change the hash and every story's drawing changes under the readers
+    assert [art_variant_index(i) for i in (1, 2, 3, 4)] == [1, 0, 1, 2]
+    assert section_art_path("nature", 1) == "/static/illustrations/nature-2.svg"
+    assert section_art_path("nature", 2) == "/static/illustrations/nature.svg"
+    assert art_variant_index("77") == art_variant_index(77)  # str id or int, one answer
+    assert section_art_path("weather", 9) == section_art_path("progress", 9)  # unknown section
+    for empty in (None, "", "   "):
+        assert art_variant_index(empty) == 0  # no id: the base scene, as before PEA-15
+    assert {art_variant_index(i) for i in range(1, 60)} == {0, 1, 2}  # all three get used
+
+
+def test_neighbouring_stories_in_a_section_usually_get_different_drawings():
+    """The point of PEA-15, so it gets a number rather than a hope.
+
+    One drawing per section meant neighbours always matched. An even three-way
+    split puts two thirds of adjacent pairs on different scenes; measured 68.6%
+    over ids 1-300.
+    """
+    from src.images import art_variant_index
+    picks = [art_variant_index(i) for i in range(1, 301)]
+    differ = sum(1 for a, b in zip(picks, picks[1:]) if a != b)
+    assert differ / (len(picks) - 1) > 0.55, differ
 
 
 def test_drawings_are_served_over_http(client):
@@ -686,13 +737,35 @@ def test_pages_show_the_section_drawing_instead_of_an_empty_panel(client, app):
         html = client.get(path, follow_redirects=True).get_data(as_text=True)
         assert "/static/illustrations/" in html, path
         assert 'class="ph"' not in html, path  # the emoji-and-label panel is gone
+    from src.images import section_art_path
     home = client.get("/").get_data(as_text=True)
-    assert '<img src="/static/illustrations/nature.svg" alt="" loading="lazy">' in home
+    nature_id = "id%03d" % list(SECTIONS).index("nature")
+    assert f'<img src="{section_art_path("nature", nature_id)}" alt="" loading="lazy">' in home
     # decorative only: no drawing is described to a screen reader or handed to social cards
     assert 'alt=""' in home
     for path in ("/", "/story/story-2"):
         html = client.get(path).get_data(as_text=True)
         assert "illustrations" not in html.split("</head>")[0], path  # not in og:image or JSON-LD
+
+
+def test_a_section_page_no_longer_repeats_one_drawing(client, app):
+    """PEA-14 shipped one scene per section, so a section page showed it over and
+    over. Six nature stories must now pull more than one of the three scenes, and
+    a story's hero must be the same drawing as the card that led to it."""
+    import re
+    with app.app_context():
+        db.session.add_all([_article(i, section="nature", source=f"Src{i}", hours_ago=i + 1) for i in range(6)])
+        db.session.commit()
+        build_edition("global", date.today(), dry_run=True)
+    html = client.get("/section/nature").get_data(as_text=True)
+    drawn = re.findall(r"/static/illustrations/(nature[-\w]*\.svg)", html)
+    assert len(drawn) == 6, drawn
+    assert len(set(drawn)) > 1, drawn  # the whole point of PEA-15
+    story = client.get("/story/story-3").get_data(as_text=True)
+    from src.images import section_art_path
+    hero = section_art_path("nature", "id003")
+    assert f'<img src="{hero}" alt="">' in story  # hero matches the card, same id
+    assert hero in html
 
 
 def test_a_real_allowlisted_image_still_wins_over_the_drawing(client, app):
