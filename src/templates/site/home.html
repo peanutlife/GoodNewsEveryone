@@ -118,7 +118,7 @@
   <aside class="rail">
     {% if ed and ed.letter %}
     <section class="letter" id="letter">
-      <span class="kick"><i>✍️</i>From the editor</span>
+      <span class="kick"><i>✍️</i>Today's letter</span>
       <h2>{{ ed.letter_title or "Today's letter" }}</h2>
       <p class="body" id="letter-body">{{ ed.letter }}</p>
       <button type="button" class="more" id="letter-more" hidden>Read the whole letter</button>
@@ -132,7 +132,7 @@
       <div class="opts">
         <a href="{{ url_for('site.home', mood='calm') }}" class="m-calm {% if mood == 'calm' %}on{% endif %}"><b>🍃 Calm</b><span>quiet stories first</span></a>
         <a href="{{ url_for('site.home', mood='lift') }}" class="m-lift {% if mood == 'lift' %}on{% endif %}"><b>🎈 Lift</b><span>wins first</span></a>
-        <a href="{{ url_for('site.home', mood='surprise') }}" class="m-surprise {% if mood == 'surprise' %}on{% endif %}"><b>🎲 Surprise</b><span>editor's order</span></a>
+        <a href="{{ url_for('site.home', mood='surprise') }}" class="m-surprise {% if mood == 'surprise' %}on{% endif %}"><b>🎲 Surprise</b><span>the order we published</span></a>
       </div>
       <span class="meta">Changes the order only. Remembered on this device.</span>
     </section>

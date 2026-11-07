@@ -1,4 +1,4 @@
-"""The morning email: today's ten plus the editor's letter, sent once a day per subscriber.
+"""The morning email: today's ten plus the daily letter, sent once a day per subscriber.
 
 Replaces the legacy digest that read the old article cache. Content comes from the
 published Edition rows, so the email always matches the front page.
@@ -67,7 +67,7 @@ def build_html(ed, picks: list, unsubscribe_url: str) -> str:
 <tr><td style="padding:0 0 24px 0;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:{CARD};border:1px solid {LINE};border-radius:14px;">
     <tr><td style="padding:22px 24px;">
-      <p style="margin:0 0 4px 0;font:600 12px/1.4 'Nunito Sans',Helvetica,Arial,sans-serif;color:{MUTED};text-transform:uppercase;letter-spacing:.08em;">From the editor</p>
+      <p style="margin:0 0 4px 0;font:600 12px/1.4 'Nunito Sans',Helvetica,Arial,sans-serif;color:{MUTED};text-transform:uppercase;letter-spacing:.08em;">Today&#8217;s letter</p>
       <h2 style="margin:0 0 12px 0;font:600 22px/1.25 Fraunces,Georgia,serif;color:{INK};">{_esc(ed.letter_title or "Today's ten")}</h2>
       {paras}
     </td></tr>
@@ -102,7 +102,8 @@ def build_html(ed, picks: list, unsubscribe_url: str) -> str:
     <p style="margin:0;font:400 12px/1.6 'Nunito Sans',Helvetica,Arial,sans-serif;color:{MUTED};">
       Liked one? Tap &#9829; on its page and we follow the story for you: next chapters and stories like it land on <a href="{SITE}/me" style="color:{MUTED};">your page</a>.<br>
       You asked for this email at peanutlife.com. One a day, no tracking pixels, no &#8220;we miss you&#8221; emails.<br>
-      <a href="{unsubscribe_url}" style="color:{MUTED};">Unsubscribe in one tap</a> &nbsp;·&nbsp; <a href="{SITE}/promise" style="color:{MUTED};">Our reader promise</a>
+      Summaries are written with AI from each publisher&#8217;s own reporting, and are not reviewed by a person before sending. The linked story is the source.<br>
+      <a href="{unsubscribe_url}" style="color:{MUTED};">Unsubscribe in one tap</a> &nbsp;·&nbsp; <a href="{SITE}/about" style="color:{MUTED};">About</a> &nbsp;·&nbsp; <a href="{SITE}/promise" style="color:{MUTED};">Our reader promise</a> &nbsp;·&nbsp; <a href="{SITE}/privacy" style="color:{MUTED};">Privacy</a> &nbsp;·&nbsp; <a href="{SITE}/terms" style="color:{MUTED};">Terms</a>
     </p>
   </td></tr>
 </table>
@@ -123,6 +124,9 @@ def build_text(ed, picks: list, unsubscribe_url: str) -> str:
         lines.append("")
     lines += ["That's today's ten. You're all caught up.", "",
               f"Liked one? Tap the heart on its page and we follow the story for you: {SITE}/me", "",
+              "Summaries are written with AI from each publisher's own reporting, and are not reviewed by a person",
+              "before sending. The linked story is the source.", "",
+              f"About: {SITE}/about  ·  Privacy: {SITE}/privacy  ·  Terms: {SITE}/terms", "",
               f"Unsubscribe: {unsubscribe_url}"]
     return "\n".join(lines)
 

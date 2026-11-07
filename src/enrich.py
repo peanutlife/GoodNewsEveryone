@@ -93,7 +93,7 @@ EDITOR_SCHEMA = {
     "type": "object",
     "properties": {
         "letter_title": {"type": "string", "description": "4 to 8 words"},
-        "letter": {"type": "string", "description": "120-180 words, signed 'The editor'"},
+        "letter": {"type": "string", "description": "120-180 words, signed 'Peanutlife'"},
         "standfirsts": {
             "type": "object",
             "properties": {k: {"type": "string"} for k in SECTIONS},
@@ -106,9 +106,11 @@ EDITOR_SCHEMA = {
 }
 
 EDITOR_SYSTEM = (
-    "You are the editor of Peanutlife, writing the daily letter and the section standfirsts for one "
-    "edition. Write only from the stories listed; do not add facts. Where a section has no stories "
-    "today, write a standfirst that says what the section is for in one sentence.\n\n"
+    "You write the daily letter and the section standfirsts for one edition of Peanutlife, in the "
+    "house voice. Write only from the stories listed; do not add facts. Where a section has no stories "
+    "today, write a standfirst that says what the section is for in one sentence. The ten are chosen "
+    "automatically by score, so never claim that a person picked, read or checked them, and never write "
+    "as an individual human editor. Sign the letter 'Peanutlife'.\n\n"
     "House style follows.\n\n" + STYLE_GUIDE
 )
 
@@ -339,8 +341,8 @@ def dry_enrichment(a: dict) -> dict:
         "kid_safe": section in ("kids", "nature", "sports") and not bad, "tone": TONES[h % 3],
         "read_minutes": 2 + h % 5, "headline": title[:100], "one_line": title[:120],
         "in_short": [s.strip()[:140] for s in re.split(r"(?<=[.!?])\s+", html.unescape(re.sub(r"<[^>]+>", "", a.get("summary", ""))))[:3] if s.strip()],
-        "why_card": "Dry run: why this matters goes here once Claude is connected.",
-        "why_long": "Dry run text. Set ANTHROPIC_API_KEY to generate the real summary and significance.",
+        "why_card": "Dry run: why this matters goes here once the enrichment model is connected.",
+        "why_long": "Dry run text. Connect the enrichment model to generate the real summary and significance.",
         "before": "", "now": "", "action": "", "kid_version": "", "keywords": [], "_model": "dry-run",
     }
 
@@ -381,8 +383,8 @@ def write_edition_copy(edition_name: str, picks: list[dict], section_lists: dict
     if dry_run or not has_api_key():
         return {
             "letter_title": "Today's ten",
-            "letter": ("Ten stories today. Set ANTHROPIC_API_KEY to have the editor write a real letter "
-                       "that finds the through-line in them.\n\nThe editor"),
+            "letter": ("Ten stories today. Connect the enrichment model to have a real letter written "
+                       "that finds the through-line in them.\n\nPeanutlife"),
             "standfirsts": {k: v for k, v in _DEFAULT_STANDFIRSTS.items()},
         }
     lines = [f"Edition: {edition_name}. Date: {day.strftime('%A %d %B %Y')}.", "", "Today's ten:"]
