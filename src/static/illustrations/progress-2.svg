@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
+<!-- Peanutlife section art, "Progress" variant 2: rooftops at first light - panels
+     up, a garden on the flat roof, a tank being filled. Looking across from a roof,
+     dawn, no sun disc. Original flat drawing; figures are simple shapes with no
+     facial features. Subject sits inside x 63-417, y 81-216, the 32/9 band. -->
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF6E4"/><stop offset=".55" stop-color="#FFE2BC"/><stop offset="1" stop-color="#F9C99A"/></linearGradient>
+</defs>
+<rect width="480" height="270" fill="url(#g)"/>
+<!-- one long low cloud, well off to the left -->
+<g fill="#FFFDF7" opacity=".85"><rect x="18" y="74" width="132" height="18" rx="9"/><circle cx="58" cy="74" r="15"/><circle cx="104" cy="77" r="11"/></g>
+<g stroke="#B0783C" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".6">
+<path d="M330 92 c 6 -6 11 -6 17 0"/><path d="M347 92 c 6 -6 11 -6 17 0"/><path d="M296 106 c 5 -5 9 -5 14 0"/>
+</g>
+<!-- the far skyline -->
+<g fill="#F2CDA4" opacity=".9">
+<rect x="0" y="146" width="48" height="60"/><rect x="56" y="162" width="40" height="44"/><rect x="104" y="138" width="34" height="68"/>
+<rect x="346" y="150" width="44" height="56"/><rect x="398" y="134" width="36" height="72"/><rect x="442" y="156" width="38" height="50"/>
+</g>
+<!-- the near roofs -->
+<path d="M140 206 h132 V124 H140 Z" fill="#E6D6C0"/>
+<path d="M140 124 h132 v10 H140 Z" fill="#CFB999"/>
+<path d="M272 206 h92 V146 h-92 Z" fill="#DCCAB2"/>
+<path d="M272 146 h92 v10 h-92 Z" fill="#C5AD8C"/>
+<path d="M40 206 h104 V162 H40 Z" fill="#EFE0CC"/>
+<path d="M40 162 h104 v9 H40 Z" fill="#D3BF9E"/>
+<g fill="#C9B193" opacity=".7"><rect x="156" y="150" width="18" height="22" rx="3"/><rect x="190" y="150" width="18" height="22" rx="3"/><rect x="296" y="172" width="16" height="20" rx="3"/><rect x="326" y="172" width="16" height="20" rx="3"/></g>
+<!-- solar panels on the tall roof -->
+<g>
+<path d="M150 124 l12 -26 h46 l-12 26 z" fill="#2F6E8C"/>
+<path d="M150 124 l12 -26 h46 l-12 26 z" fill="none" stroke="#1F4E66" stroke-width="2.5"/>
+<path d="M174 98 l-12 26 M190 98 l-12 26 M156 111 h46" stroke="#5E9FBA" stroke-width="2"/>
+<path d="M216 124 l12 -26 h46 l-12 26 z" fill="#2F6E8C"/>
+<path d="M216 124 l12 -26 h46 l-12 26 z" fill="none" stroke="#1F4E66" stroke-width="2.5"/>
+<path d="M240 98 l-12 26 M256 98 l-12 26 M222 111 h46" stroke="#5E9FBA" stroke-width="2"/>
+</g>
+<!-- the water tank and its gauge -->
+<rect x="300" y="100" width="44" height="46" rx="8" fill="#CBD9DE"/>
+<rect x="300" y="122" width="44" height="24" rx="4" fill="#7FC8DC"/>
+<rect x="312" y="90" width="20" height="12" rx="4" fill="#8F6A3C"/>
+<path d="M322 146 V170" stroke="#8F6A3C" stroke-width="5"/>
+<!-- the roof garden -->
+<g>
+<rect x="286" y="178" width="34" height="18" rx="4" fill="#C97B4E"/>
+<circle cx="296" cy="172" r="10" fill="#6FB373"/><circle cx="310" cy="174" r="8" fill="#5EA868"/>
+<rect x="330" y="178" width="30" height="18" rx="4" fill="#C97B4E"/>
+<path d="M345 178 V150" stroke="#9A6F45" stroke-width="5"/><circle cx="345" cy="142" r="16" fill="#5EA868"/><circle cx="332" cy="152" r="10" fill="#6FB373"/><circle cx="357" cy="152" r="9" fill="#7FC183"/>
+<rect x="378" y="186" width="26" height="14" rx="4" fill="#C97B4E"/><circle cx="391" cy="180" r="9" fill="#6FB373"/>
+</g>
+<!-- someone watering it -->
+<path d="M240 206 V172 a15 15 0 0 1 30 0 v34 z" fill="#4FAFA8"/>
+<circle cx="255" cy="157" r="12" fill="#8C5A3C"/><path d="M243 157 a12 12 0 0 1 24 0 z" fill="#2F2A26"/>
+<path d="M269 178 l16 6" stroke="#8C5A3C" stroke-width="6" stroke-linecap="round"/>
+<path d="M284 178 h22 v14 h-22 z" fill="#F2C14E"/>
+<path d="M306 180 l14 -6 v6 z" fill="#F2C14E"/>
+<g stroke="#7FC8DC" stroke-width="2.5" stroke-linecap="round"><path d="M318 180 l6 8"/><path d="M324 178 l5 9"/><path d="M330 180 l4 8"/></g>
+<!-- a line of panels on the low roof too -->
+<g>
+<path d="M54 162 l9 -18 h34 l-9 18 z" fill="#2F6E8C"/>
+<path d="M54 162 l9 -18 h34 l-9 18 z" fill="none" stroke="#1F4E66" stroke-width="2.5"/>
+<path d="M72 144 l-9 18 M84 144 l-9 18" stroke="#5E9FBA" stroke-width="2"/>
+</g>
+<!-- the street below -->
+<path d="M0 206 H480 V270 H0 Z" fill="#E0C49A"/>
+<path d="M0 230 H480 v22 H0 Z" fill="#C9AD86"/>
+<g stroke="#F7E6C8" stroke-width="4" stroke-linecap="round"><path d="M28 241 h34"/><path d="M104 241 h34"/><path d="M180 241 h34"/><path d="M256 241 h34"/><path d="M332 241 h34"/><path d="M408 241 h34"/></g>
+</svg>

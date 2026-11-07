@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
+<!-- Peanutlife section art, "Politics" variant 2: a new bridge open, two banks
+     joined, people and a bike crossing it. Overcast morning, no sun; side-on
+     elevation across the water. Original flat drawing; figures are simple shapes
+     with no facial features. Subject sits inside x 63-417, y 81-216. -->
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EDF3FC"/><stop offset="1" stop-color="#D9E3F5"/></linearGradient>
+<linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9CBE6"/><stop offset="1" stop-color="#7FAACD"/></linearGradient>
+</defs>
+<rect width="480" height="270" fill="url(#g)"/>
+<!-- a single long cloud bank, low and left -->
+<g fill="#FFFDF7" opacity=".9">
+<rect x="22" y="96" width="150" height="20" rx="10"/><circle cx="70" cy="96" r="16"/><circle cx="118" cy="99" r="12"/>
+</g>
+<g stroke="#2F4A7A" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".55">
+<path d="M352 110 c 6 -6 11 -6 17 0"/><path d="M369 110 c 6 -6 11 -6 17 0"/><path d="M330 124 c 5 -5 9 -5 14 0"/>
+</g>
+<!-- far shore -->
+<path d="M0 174 C 90 160 150 170 230 168 C 320 166 400 174 480 166 V190 H0 Z" fill="#B9CBE6"/>
+<g fill="#8FBB94" opacity=".8"><circle cx="54" cy="166" r="13"/><circle cx="76" cy="170" r="10"/><circle cx="414" cy="164" r="12"/><circle cx="436" cy="168" r="9"/></g>
+<!-- the water, painted before the piers standing in it -->
+<path d="M0 188 H480 V270 H0 Z" fill="url(#w)"/>
+<g stroke="#C7E0F2" stroke-width="3" stroke-linecap="round" opacity=".7">
+<path d="M34 202 h46"/><path d="M118 212 h40"/><path d="M286 204 h52"/><path d="M382 216 h58"/><path d="M196 226 h44"/>
+</g>
+<!-- banks -->
+<path d="M0 162 C 30 158 54 168 74 190 V270 H0 Z" fill="#CBB894"/>
+<path d="M480 160 C 450 156 426 168 406 190 V270 H480 Z" fill="#CBB894"/>
+<!-- piers -->
+<rect x="158" y="156" width="22" height="48" rx="4" fill="#C7D2E6"/>
+<rect x="302" y="156" width="22" height="48" rx="4" fill="#C7D2E6"/>
+<ellipse cx="169" cy="204" rx="22" ry="7" fill="#6E99BD" opacity=".7"/>
+<ellipse cx="313" cy="204" rx="22" ry="7" fill="#6E99BD" opacity=".7"/>
+<!-- cables -->
+<g stroke="#8FA8CE" stroke-width="2.5" fill="none">
+<path d="M169 88 L92 150 M169 88 L124 150 M169 88 L214 150 M169 88 L254 150"/>
+<path d="M313 88 L228 150 M313 88 L268 150 M313 88 L358 150 M313 88 L396 150"/>
+</g>
+<!-- pylons -->
+<path d="M160 156 L166 84 h6 l6 72 z" fill="#FFFDF7"/>
+<path d="M304 156 L310 84 h6 l6 72 z" fill="#FFFDF7"/>
+<path d="M163 120 h16 M307 120 h16" stroke="#C7D2E6" stroke-width="4"/>
+<!-- the deck -->
+<path d="M62 150 H420 v12 H62 z" fill="#FBF7F1"/>
+<path d="M62 162 H420 v6 H62 z" fill="#D5DEEE"/>
+<g stroke="#A9BBDC" stroke-width="3" stroke-linecap="round"><path d="M74 150 v-10 M104 150 v-10 M134 150 v-10 M196 150 v-10 M226 150 v-10 M256 150 v-10 M340 150 v-10 M370 150 v-10 M400 150 v-10"/></g>
+<path d="M62 140 H420" stroke="#A9BBDC" stroke-width="3"/>
+<!-- a ribbon still tied across the new deck -->
+<path d="M90 134 C 140 122 190 142 236 128" stroke="#E8718A" stroke-width="5" fill="none" stroke-linecap="round" opacity=".9"/>
+<!-- people crossing -->
+<path d="M100 150 V128 a12 12 0 0 1 24 0 v22 z" fill="#4FAFA8"/>
+<circle cx="112" cy="112" r="10" fill="#8C5A3C"/><path d="M102 112 a10 10 0 0 1 20 0 z" fill="#2F2A26"/>
+<path d="M136 150 V130 a11 11 0 0 1 22 0 v20 z" fill="#F2C14E"/>
+<circle cx="147" cy="115" r="9" fill="#E8B98A"/><path d="M138 115 a9 9 0 0 1 18 0 z" fill="#A3471A"/>
+<path d="M123 134 l14 4" stroke="#8C5A3C" stroke-width="5" stroke-linecap="round"/>
+<path d="M352 150 V126 a13 13 0 0 1 26 0 v24 z" fill="#AE8BD8"/>
+<circle cx="365" cy="110" r="10" fill="#C98C5A"/><path d="M355 110 a10 10 0 0 1 20 0 z" fill="#6B4226"/>
+<!-- someone on a bike -->
+<g stroke="#2F4A7A" stroke-width="3" fill="none"><circle cx="252" cy="141" r="9"/><circle cx="282" cy="141" r="9"/><path d="M252 141 l10 -16 h14 l6 16 M262 125 h16"/></g>
+<path d="M268 126 V112 a10 10 0 0 1 20 0 v14 z" fill="#E8718A"/>
+<circle cx="278" cy="98" r="9" fill="#6B4226"/><path d="M269 98 a9 9 0 0 1 18 0 z" fill="#2F2A26"/>
+<path d="M268 118 l-8 8" stroke="#6B4226" stroke-width="5" stroke-linecap="round"/>
+</svg>

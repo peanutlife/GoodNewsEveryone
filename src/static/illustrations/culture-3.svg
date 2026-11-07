@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
+<!-- Peanutlife section art, "Culture & ideas" variant 3: the reading room still open
+     late - tall shelves, one lamp, one reader. Interior, night. Original flat
+     drawing; figures are simple shapes with no facial features. Subject sits inside
+     x 63-417, y 81-216, which is what the 32/9 band shows. -->
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3A2F58"/><stop offset="1" stop-color="#5B4A7A"/></linearGradient>
+<radialGradient id="lamp" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFE9A8" stop-opacity=".8"/><stop offset="1" stop-color="#FFE9A8" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="480" height="270" fill="url(#g)"/>
+<!-- the arched window at the back -->
+<path d="M196 182 V116 a44 44 0 0 1 88 0 v66 z" fill="#2B2448"/>
+<path d="M196 182 V116 a44 44 0 0 1 88 0 v66 z" fill="none" stroke="#7A66A8" stroke-width="6"/>
+<path d="M240 72 V182 M196 128 H284" stroke="#7A66A8" stroke-width="5"/>
+<circle cx="216" cy="104" r="13" fill="#F0E6DC" opacity=".9"/>
+<g fill="#FFFDF7" opacity=".6"><circle cx="266" cy="96" r="2"/><circle cx="258" cy="148" r="2"/><circle cx="212" cy="156" r="2"/></g>
+<!-- shelves, left -->
+<g>
+<rect x="8" y="56" width="140" height="150" rx="4" fill="#4A3A6B"/>
+<g fill="#3A2D56"><rect x="8" y="98" width="140" height="7"/><rect x="8" y="146" width="140" height="7"/><rect x="8" y="196" width="140" height="10"/></g>
+<g fill="#E8718A"><rect x="18" y="68" width="12" height="30" rx="2"/><rect x="62" y="112" width="13" height="34" rx="2"/><rect x="112" y="162" width="12" height="34" rx="2"/></g>
+<g fill="#F2C14E"><rect x="34" y="64" width="11" height="34" rx="2"/><rect x="79" y="116" width="11" height="30" rx="2"/><rect x="30" y="158" width="13" height="38" rx="2"/></g>
+<g fill="#4FAFA8"><rect x="49" y="70" width="12" height="28" rx="2"/><rect x="94" y="110" width="12" height="36" rx="2"/><rect x="47" y="164" width="11" height="32" rx="2"/></g>
+<g fill="#AE8BD8"><rect x="65" y="66" width="11" height="32" rx="2"/><rect x="110" y="114" width="13" height="32" rx="2"/><rect x="62" y="160" width="12" height="36" rx="2"/></g>
+<g fill="#7FB7C8"><rect x="80" y="72" width="13" height="26" rx="2"/><rect x="126" y="118" width="11" height="28" rx="2"/><rect x="78" y="166" width="12" height="30" rx="2"/></g>
+<g fill="#F2785C"><rect x="97" y="68" width="11" height="30" rx="2"/><rect x="18" y="118" width="12" height="28" rx="2"/><rect x="95" y="160" width="12" height="36" rx="2"/></g>
+<g fill="#EFE7DC"><rect x="112" y="74" width="12" height="24" rx="2"/><rect x="34" y="112" width="11" height="34" rx="2"/><rect x="128" y="170" width="11" height="26" rx="2"/></g>
+</g>
+<!-- shelves, right -->
+<g>
+<rect x="332" y="56" width="140" height="150" rx="4" fill="#4A3A6B"/>
+<g fill="#3A2D56"><rect x="332" y="98" width="140" height="7"/><rect x="332" y="146" width="140" height="7"/><rect x="332" y="196" width="140" height="10"/></g>
+<g fill="#4FAFA8"><rect x="342" y="64" width="12" height="34" rx="2"/><rect x="388" y="114" width="12" height="32" rx="2"/><rect x="436" y="160" width="12" height="36" rx="2"/></g>
+<g fill="#F2C14E"><rect x="358" y="70" width="11" height="28" rx="2"/><rect x="404" y="110" width="13" height="36" rx="2"/><rect x="340" y="166" width="11" height="30" rx="2"/></g>
+<g fill="#E8718A"><rect x="373" y="66" width="12" height="32" rx="2"/><rect x="420" y="118" width="11" height="28" rx="2"/><rect x="356" y="158" width="13" height="38" rx="2"/></g>
+<g fill="#AE8BD8"><rect x="389" y="72" width="11" height="26" rx="2"/><rect x="436" y="112" width="12" height="34" rx="2"/><rect x="373" y="164" width="12" height="32" rx="2"/></g>
+<g fill="#F2785C"><rect x="404" y="68" width="12" height="30" rx="2"/><rect x="342" y="116" width="11" height="30" rx="2"/><rect x="390" y="162" width="11" height="34" rx="2"/></g>
+<g fill="#EFE7DC"><rect x="420" y="74" width="11" height="24" rx="2"/><rect x="358" y="120" width="12" height="26" rx="2"/><rect x="406" y="168" width="12" height="28" rx="2"/></g>
+<g fill="#7FB7C8"><rect x="436" y="66" width="12" height="32" rx="2"/><rect x="372" y="112" width="11" height="34" rx="2"/><rect x="420" y="160" width="13" height="36" rx="2"/></g>
+</g>
+<!-- the floor -->
+<path d="M0 206 H480 V270 H0 Z" fill="#473A66"/>
+<path d="M0 206 H480 v5 H0 Z" fill="#6B5A94"/>
+<ellipse cx="240" cy="222" rx="140" ry="20" fill="#2F2648" opacity=".5"/>
+<!-- the lamp pool -->
+<ellipse cx="240" cy="192" rx="118" ry="60" fill="url(#lamp)"/>
+<!-- the reader -->
+<path d="M180 212 V166 a18 18 0 0 1 36 0 v46 z" fill="#4FAFA8"/>
+<circle cx="198" cy="148" r="14" fill="#8C5A3C"/><path d="M184 148 a14 14 0 0 1 28 0 z" fill="#2F2A26"/>
+<path d="M216 176 l24 10" stroke="#8C5A3C" stroke-width="8" stroke-linecap="round"/>
+<!-- the table, the book and the banker's lamp -->
+<path d="M158 196 h180 v12 h-180 z" fill="#8A6A42"/>
+<path d="M158 208 h180 v5 h-180 z" fill="#6E5333"/>
+<path d="M236 196 l38 -10 v-16 l-38 10 z" fill="#FBF7F1"/>
+<path d="M274 186 l36 10 v-16 l-36 -10 z" fill="#EFE8DC"/>
+<path d="M273 170 v26" stroke="#C9BFAE" stroke-width="3"/>
+<path d="M312 196 V160" stroke="#C9AE86" stroke-width="5" stroke-linecap="round"/>
+<path d="M290 160 h44 l-10 -16 h-24 z" fill="#2E7D6E"/>
+<ellipse cx="312" cy="162" rx="22" ry="5" fill="#FFE9A8"/>
+</svg>

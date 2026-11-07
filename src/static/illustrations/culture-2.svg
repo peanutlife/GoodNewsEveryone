@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
+<!-- Peanutlife section art, "Culture & ideas" variant 2: a wall getting a mural,
+     half of it still bare plaster with the outline pencilled in. Flat on to the
+     wall, daylight, no sky. Original flat drawing; figures are simple shapes with
+     no facial features. Subject sits inside x 63-417, y 81-216, the 32/9 band. -->
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F0E9F8"/><stop offset="1" stop-color="#E6D9F5"/></linearGradient>
+</defs>
+<rect width="480" height="270" fill="url(#g)"/>
+<!-- the wall -->
+<rect x="0" y="22" width="480" height="202" fill="#EFE7DC"/>
+<g fill="#E5DACB" opacity=".8"><rect x="0" y="62" width="480" height="3"/><rect x="0" y="118" width="480" height="3"/><rect x="0" y="174" width="480" height="3"/></g>
+<rect x="0" y="22" width="480" height="7" fill="#D6C9B6"/>
+<!-- the painted half -->
+<circle cx="132" cy="110" r="40" fill="#F2B33D"/>
+<g stroke="#F2B33D" stroke-width="6" stroke-linecap="round"><path d="M132 52 v-14 M132 182 v-14 M74 110 h-14 M190 110 h14 M92 70 l-10 -10 M172 150 l10 10 M172 70 l10 -10 M92 150 l-10 10"/></g>
+<path d="M62 224 V168" stroke="#8A5A3C" stroke-width="12" stroke-linecap="round"/>
+<path d="M62 188 l-24 -18 M62 176 l24 -20" stroke="#8A5A3C" stroke-width="7" stroke-linecap="round"/>
+<circle cx="62" cy="150" r="30" fill="#5B3A96"/><circle cx="34" cy="168" r="20" fill="#7A57B5"/><circle cx="92" cy="166" r="18" fill="#7A57B5"/>
+<g stroke="#4FAFA8" stroke-width="5" fill="none" stroke-linecap="round"><path d="M176 92 c 8 -9 15 -9 23 0"/><path d="M199 92 c 8 -9 15 -9 23 0"/><path d="M206 120 c 6 -7 12 -7 18 0"/></g>
+<path d="M164 224 C 176 196 206 184 236 188 C 230 212 202 226 164 224 Z" fill="#4FAFA8"/>
+<path d="M186 224 C 190 206 206 196 222 194" stroke="#2F8F88" stroke-width="3" fill="none"/>
+<!-- the halfway line: wet edge -->
+<path d="M252 224 C 246 180 262 140 252 96" stroke="#C9B6E8" stroke-width="5" fill="none" stroke-linecap="round"/>
+<!-- the pencilled half, not painted yet -->
+<g stroke="#C6BBA8" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="330" cy="130" r="34"/>
+<path d="M330 164 v60 M330 186 l-22 -16 M330 176 l22 -18"/>
+<path d="M382 108 c 7 -8 13 -8 20 0 M402 108 c 7 -8 13 -8 20 0"/>
+<path d="M286 224 C 296 200 322 190 348 194"/>
+<path d="M398 224 V166 a20 20 0 0 1 40 0 v58"/>
+</g>
+<!-- the ladder -->
+<g stroke="#C98C5A" stroke-width="6" stroke-linecap="round">
+<path d="M276 226 L296 96"/><path d="M314 226 L324 96"/>
+<path d="M282 190 h30 M288 156 h28 M293 122 h26"/>
+</g>
+<!-- whoever is up it, with a roller -->
+<path d="M268 160 l-18 -22" stroke="#C98C5A" stroke-width="7" stroke-linecap="round"/>
+<path d="M258 196 V154 a17 17 0 0 1 34 0 v42 z" fill="#E8718A"/>
+<circle cx="275" cy="138" r="13" fill="#C98C5A"/><path d="M262 138 a13 13 0 0 1 26 0 z" fill="#2F2A26"/>
+<path d="M292 166 l16 -6" stroke="#C98C5A" stroke-width="7" stroke-linecap="round"/>
+<rect x="232" y="122" width="26" height="14" rx="6" fill="#4FAFA8" transform="rotate(-38 245 129)"/>
+<path d="M248 140 l-6 -8" stroke="#8A5A3C" stroke-width="4" stroke-linecap="round"/>
+<!-- and whoever is mixing the colours -->
+<path d="M382 214 V176 a16 16 0 0 1 32 0 v38 z" fill="#F2C14E"/>
+<circle cx="398" cy="160" r="12" fill="#8C5A3C"/><path d="M386 160 a12 12 0 0 1 24 0 z" fill="#A3471A"/>
+<path d="M382 190 l-20 12" stroke="#8C5A3C" stroke-width="7" stroke-linecap="round"/>
+<path d="M0 224 H480 V270 H0 Z" fill="#D2C0EC"/>
+<path d="M0 224 H480 v5 H0 Z" fill="#BFA9E2"/>
+<g>
+<path d="M336 224 h30 v-24 h-30 z" fill="#4FAFA8"/><rect x="333" y="196" width="36" height="6" rx="3" fill="#3B9189"/>
+<path d="M430 224 h28 v-22 h-28 z" fill="#E8718A"/><rect x="427" y="198" width="34" height="6" rx="3" fill="#C9556E"/>
+<ellipse cx="122" cy="232" rx="26" ry="8" fill="#F2B33D" opacity=".6"/>
+</g>
+</svg>

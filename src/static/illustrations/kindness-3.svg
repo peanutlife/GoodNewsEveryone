@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
+<!-- Peanutlife section art, "Kindness" variant 3: a box left on a doorstep after
+     dark and whoever left it already walking on. Night, street level. Original flat
+     drawing; figures are simple shapes with no facial features. Subject sits inside
+     x 63-417, y 81-216, which is what the 32/9 band shows. -->
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3A3350"/><stop offset="1" stop-color="#6B4E60"/></linearGradient>
+<linearGradient id="cone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE9A8" stop-opacity=".5"/><stop offset="1" stop-color="#FFE9A8" stop-opacity="0"/></linearGradient>
+<radialGradient id="warm" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFD98C" stop-opacity=".75"/><stop offset="1" stop-color="#FFD98C" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="480" height="270" fill="url(#g)"/>
+<g fill="#FFFDF7" opacity=".6"><circle cx="300" cy="36" r="2.5"/><circle cx="352" cy="62" r="2"/><circle cx="404" cy="30" r="2.5"/><circle cx="262" cy="58" r="2"/></g>
+<path d="M444 70 a26 26 0 1 1 -19 -40 a21 21 0 0 0 19 40 z" fill="#F0E6DC" opacity=".9"/>
+<!-- the house front -->
+<path d="M0 46 H304 V216 H0 Z" fill="#59445E"/>
+<path d="M0 46 H304 v8 H0 Z" fill="#7A5F7C"/>
+<g fill="#4A3850"><rect x="0" y="92" width="304" height="3"/><rect x="0" y="140" width="304" height="3"/><rect x="0" y="188" width="304" height="3"/></g>
+<!-- the lit window -->
+<rect x="42" y="96" width="86" height="64" rx="5" fill="#F7D98C"/>
+<path d="M85 96 V160 M42 128 H128" stroke="#A9798C" stroke-width="6"/>
+<rect x="42" y="96" width="86" height="64" rx="5" fill="none" stroke="#8C6F8E" stroke-width="6"/>
+<ellipse cx="85" cy="150" rx="86" ry="56" fill="url(#warm)"/>
+<!-- the door and its step -->
+<rect x="186" y="96" width="76" height="110" rx="6" fill="#8A5A62"/>
+<rect x="194" y="104" width="60" height="42" rx="4" fill="#9E6B73"/>
+<rect x="194" y="154" width="60" height="44" rx="4" fill="#9E6B73"/>
+<circle cx="250" cy="156" r="5" fill="#F2C14E"/>
+<rect x="172" y="206" width="104" height="10" rx="3" fill="#A48898"/>
+<!-- the box left on the step -->
+<path d="M200 206 h56 v-30 h-56 z" fill="#C9AE86"/>
+<path d="M200 176 h56 v9 h-56 z" fill="#DDC39B"/>
+<path d="M224 206 v-30 h8 v30 z" fill="#B99A72"/>
+<path d="M228 176 c -10 -12 -24 -4 -16 6 M228 176 c 10 -12 24 -4 16 6" fill="none" stroke="#E8718A" stroke-width="4" stroke-linecap="round"/>
+<rect x="258" y="186" width="22" height="16" rx="3" fill="#FBF7F1" transform="rotate(-10 269 194)"/>
+<g fill="#5EA868"><path d="M196 180 C 182 176 176 164 178 154 C 190 158 196 170 196 180 Z"/></g>
+<circle cx="180" cy="150" r="7" fill="#E8718A"/>
+<!-- the street lamp and its cone -->
+<path d="M396 110 L336 216 h130 z" fill="url(#cone)"/>
+<path d="M402 216 V104" stroke="#A48898" stroke-width="7" stroke-linecap="round"/>
+<path d="M402 104 a22 14 0 0 1 -22 -14 h44 a22 14 0 0 1 -22 14 z" fill="#8C6F8E"/>
+<ellipse cx="402" cy="96" rx="15" ry="7" fill="#FFE9A8"/>
+<ellipse cx="402" cy="96" rx="30" ry="18" fill="#FFE9A8" opacity=".25"/>
+<!-- the pavement -->
+<path d="M0 216 H480 V270 H0 Z" fill="#4A3C50"/>
+<path d="M0 216 H480 v5 H0 Z" fill="#6B566E"/>
+<!-- whoever left it, already going -->
+<path d="M330 214 V168 a17 17 0 0 1 34 0 v46 z" fill="#E8718A"/>
+<path d="M330 192 h34" stroke="#C9556E" stroke-width="4"/>
+<circle cx="347" cy="151" r="13" fill="#8C5A3C"/><path d="M334 151 a13 13 0 0 1 26 0 z" fill="#2F2A26"/>
+<path d="M364 176 l16 12" stroke="#8C5A3C" stroke-width="7" stroke-linecap="round"/>
+<ellipse cx="347" cy="220" rx="26" ry="6" fill="#2F2538" opacity=".5"/>
+<g fill="#E8718A" opacity=".45">
+<path d="M310 142 c 0 -8 -12 -11 -12 -2 0 7 12 13 12 13 0 0 12 -6 12 -13 0 -9 -12 -6 -12 2 z"/>
+<path d="M150 180 c 0 -6 -9 -8 -9 -1 0 5 9 10 9 10 0 0 9 -5 9 -10 0 -7 -9 -5 -9 1 z"/>
+</g>
+</svg>

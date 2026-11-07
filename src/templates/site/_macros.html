@@ -1,10 +1,11 @@
-{# A story's picture, or our own drawing for its section when we have no image we
-   may serve. safe_image_url keeps publisher CDNs out: see src/images.py. The
-   drawing is decorative — it illustrates the topic, never the event — so the alt
-   text stays empty either way. #}
+{# A story's picture, or one of our drawings for its section when we have no image
+   we may serve. safe_image_url keeps publisher CDNs out: see src/images.py. Each
+   section has several scenes and the story id picks which one, so two stories
+   side by side in the same section usually differ. The drawing is decorative —
+   it illustrates the topic, never the event — so alt stays empty either way. #}
 {% macro pic(a, cls='pic') -%}
 {% set img = safe_image_url(a.image_url) %}
-<div class="{{ cls }} t-{{ a.section or 'progress' }}{% if not img %} art{% endif %}"><img src="{{ img or section_art_path(a.section) }}" alt="" loading="lazy"></div>
+<div class="{{ cls }} t-{{ a.section or 'progress' }}{% if not img %} art{% endif %}"><img src="{{ img or section_art_path(a.section, a.id) }}" alt="" loading="lazy"></div>
 {%- endmacro %}
 
 {% macro kicker(a) -%}

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
+<!-- Peanutlife section art, "For kids" variant 2: a blanket fort after dark, one
+     lantern, a book open between two of them. Indoors, night. Original flat
+     drawing; figures are simple shapes with no facial features. Subject sits
+     inside x 63-417, y 81-216, which is what the 32/9 band shows. -->
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3C4668"/><stop offset="1" stop-color="#5C5A74"/></linearGradient>
+<radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFE9A8" stop-opacity=".85"/><stop offset="1" stop-color="#FFE9A8" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="480" height="270" fill="url(#g)"/>
+<!-- fairy lights across the top -->
+<path d="M0 58 C 80 92 180 84 240 70 C 320 52 410 78 480 62" stroke="#8A86A8" stroke-width="2.5" fill="none"/>
+<g fill="#FFE9A8"><circle cx="58" cy="79" r="5"/><circle cx="124" cy="88" r="5"/><circle cx="190" cy="83" r="5"/><circle cx="256" cy="67" r="5"/><circle cx="322" cy="61" r="5"/><circle cx="392" cy="71" r="5"/><circle cx="452" cy="65" r="5"/></g>
+<g fill="#FFE9A8" opacity=".3"><circle cx="58" cy="79" r="12"/><circle cx="190" cy="83" r="12"/><circle cx="322" cy="61" r="12"/><circle cx="452" cy="65" r="12"/></g>
+<!-- the floor -->
+<path d="M0 214 H480 V270 H0 Z" fill="#4A4663"/>
+<ellipse cx="240" cy="216" rx="190" ry="22" fill="#6B6486" opacity=".6"/>
+<!-- the two chairs the sheet is thrown over, drawn first so their legs show -->
+<g stroke="#8A5A3C" stroke-width="8" stroke-linecap="round">
+<path d="M120 212 V230 M156 212 V230 M340 212 V230 M376 212 V230"/>
+</g>
+<!-- the fort: a sheet over them, so it peaks twice instead of doming -->
+<path d="M96 216 C 102 184 112 156 136 148 C 164 138 186 108 240 94 C 294 108 316 138 344 148 C 368 156 378 184 384 216 z" fill="#E9E2F0"/>
+<path d="M240 94 C 294 108 316 138 344 148 C 368 156 378 184 384 216 h-144 z" fill="#D5CBE4"/>
+<path d="M96 216 C 120 206 148 220 172 210 C 198 200 222 218 248 208 C 276 198 302 218 328 208 C 354 198 372 216 384 216" fill="none" stroke="#C3B7D8" stroke-width="4" stroke-linecap="round"/>
+<path d="M136 148 C 150 160 150 190 146 216 M344 148 C 330 160 330 190 334 216" fill="none" stroke="#D5CBE4" stroke-width="3"/>
+<path d="M232 94 h16 v-14 h-16 z" fill="#C3B7D8"/><circle cx="240" cy="76" r="7" fill="#E8718A"/>
+<!-- the lit doorway of the fort -->
+<path d="M152 216 C 158 168 194 138 240 138 C 286 138 322 168 328 216 z" fill="#8A5A00"/>
+<path d="M160 216 C 166 174 198 146 240 146 C 282 146 314 174 320 216 z" fill="#F7D98C"/>
+<ellipse cx="240" cy="190" rx="110" ry="64" fill="url(#glow)"/>
+<!-- the lantern -->
+<path d="M188 196 h30 v-22 a15 15 0 0 0 -30 0 z" fill="#F2C14E"/>
+<rect x="184" y="194" width="38" height="10" rx="4" fill="#A3771A"/>
+<path d="M194 152 a9 9 0 0 1 18 0 v8 h-18 z" fill="#A3771A"/>
+<circle cx="203" cy="182" r="10" fill="#FFF7DE"/>
+<!-- two of them, reading -->
+<path d="M240 206 V176 a17 17 0 0 1 34 0 v30 z" fill="#4FAFA8"/>
+<circle cx="257" cy="160" r="13" fill="#8C5A3C"/><path d="M244 160 a13 13 0 0 1 26 0 z" fill="#2F2A26"/>
+<path d="M240 188 l-14 6" stroke="#8C5A3C" stroke-width="7" stroke-linecap="round"/>
+<path d="M290 208 V180 a16 16 0 0 1 32 0 v28 z" fill="#E8718A"/>
+<circle cx="306" cy="164" r="12" fill="#E8B98A"/><path d="M294 164 a12 12 0 0 1 24 0 z" fill="#A3471A"/>
+<path d="M290 190 l-16 6" stroke="#E8B98A" stroke-width="7" stroke-linecap="round"/>
+<!-- the book they are both looking at -->
+<path d="M244 202 l34 -10 v-24 l-34 10 z" fill="#FBF7F1"/>
+<path d="M278 192 l34 10 v-24 l-34 -10 z" fill="#EFE8DC"/>
+<path d="M277 178 v24" stroke="#C9BFAE" stroke-width="3"/>
+<path d="M252 184 h20 M252 192 h16 M284 184 h20 M284 192 h16" stroke="#C9BFAE" stroke-width="2.5" stroke-linecap="round"/>
+<!-- cushions -->
+<rect x="112" y="192" width="46" height="26" rx="12" fill="#AE8BD8"/>
+<rect x="334" y="196" width="44" height="24" rx="12" fill="#7FB7C8"/>
+<g fill="#FFE9A8" opacity=".55"><circle cx="412" cy="132" r="3"/><circle cx="70" cy="146" r="3"/><circle cx="440" cy="176" r="2.5"/><circle cx="44" cy="186" r="2.5"/></g>
+</svg>

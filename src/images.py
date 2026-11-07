@@ -9,6 +9,7 @@ Article.image_url, so widening IMAGE_HOST_ALLOWLIST is the whole revert.
 """
 from __future__ import annotations
 
+import hashlib
 import os
 from urllib.parse import urlsplit
 
@@ -28,15 +29,51 @@ SECTION_ART = frozenset(
 )
 DEFAULT_ART_SECTION = "progress"
 
+#: How many different scenes each section has: `<section>.svg`, `<section>-2.svg`
+#: and `<section>-3.svg`. One drawing per section meant a section page showed the
+#: same picture three times (PEA-15); three means two neighbours usually differ.
+#: Adding a fourth is: draw `<section>-4.svg` for all eight, bump this.
+ART_VARIANTS = 3
+
 DEFAULT_SITE_URL = "https://www.peanutlife.com"
 
 
-def section_art_path(section=None) -> str:
-    """Site-relative path to the drawing for a section. Always returns one."""
+def art_section(section=None) -> str:
+    """The section key we have drawings for, falling back to the default."""
     key = section.strip().lower() if isinstance(section, str) else ""
-    if key not in SECTION_ART:
-        key = DEFAULT_ART_SECTION
-    return f"/static/illustrations/{key}.svg"
+    return key if key in SECTION_ART else DEFAULT_ART_SECTION
+
+
+def art_variants(section=None) -> tuple[str, ...]:
+    """Every drawing we have for a section, base scene first."""
+    key = art_section(section)
+    return tuple(
+        f"/static/illustrations/{key}.svg" if n == 1 else f"/static/illustrations/{key}-{n}.svg"
+        for n in range(1, ART_VARIANTS + 1)
+    )
+
+
+def art_variant_index(key=None) -> int:
+    """Which scene a story gets: a stable hash of its id, never `hash()`.
+
+    `hash()` on a str is salted per process (PYTHONHASHSEED), so the same story
+    would be drawn differently by each Gunicorn worker and change on every
+    restart. blake2s gives the same answer everywhere, forever.
+    """
+    raw = "" if key is None else str(key).strip()
+    if not raw:
+        return 0
+    digest = hashlib.blake2s(raw.encode("utf-8"), digest_size=8).digest()
+    return int.from_bytes(digest, "big") % ART_VARIANTS
+
+
+def section_art_path(section=None, key=None) -> str:
+    """Site-relative path to a drawing for a section. Always returns one.
+
+    `key` is the story id. Without it you get the section's base scene, which is
+    what callers that have no particular story (and the old signature) want.
+    """
+    return art_variants(section)[art_variant_index(key)]
 
 
 def _config(key: str):

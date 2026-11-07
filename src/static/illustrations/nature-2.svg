@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
+<!-- Peanutlife section art, "Nature" variant 2: a wetland at dusk - the sun low on
+     the left, geese going over, a heron in the shallows. Original flat drawing.
+     Subject sits inside x 63-417, y 81-216, which is what the 32/9 band shows. -->
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BFD8DC"/><stop offset=".55" stop-color="#E9D9BE"/><stop offset="1" stop-color="#F7D3A2"/></linearGradient>
+<linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F0C99C"/><stop offset=".45" stop-color="#C2C9B0"/><stop offset="1" stop-color="#8FB49E"/></linearGradient>
+</defs>
+<rect width="480" height="270" fill="url(#g)"/>
+<!-- the low sun -->
+<circle cx="104" cy="170" r="44" fill="#FBE0B4" opacity=".75"/>
+<circle cx="104" cy="170" r="27" fill="#F2A65A"/>
+<!-- geese -->
+<g stroke="#2D6A3A" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8">
+<path d="M300 96 c 7 -7 13 -7 19 0"/><path d="M276 110 c 7 -7 13 -7 19 0"/><path d="M324 110 c 7 -7 13 -7 19 0"/>
+<path d="M254 124 c 6 -6 11 -6 17 0"/><path d="M348 124 c 6 -6 11 -6 17 0"/><path d="M232 138 c 5 -5 10 -5 15 0"/>
+</g>
+<!-- far treeline -->
+<path d="M0 168 C 46 152 70 160 104 150 C 140 140 170 158 212 152 C 268 144 310 160 360 150 C 412 140 448 158 480 150 V176 H0 Z" fill="#3E7A4E"/>
+<!-- the water -->
+<path d="M0 172 H480 V270 H0 Z" fill="url(#w)"/>
+<g fill="#F7D3A2" opacity=".6"><rect x="88" y="178" width="32" height="7" rx="3"/><rect x="84" y="192" width="40" height="7" rx="3"/><rect x="90" y="206" width="28" height="6" rx="3"/><rect x="80" y="220" width="46" height="7" rx="3"/><rect x="92" y="236" width="24" height="6" rx="3"/></g>
+<g stroke="#FBF0DC" stroke-width="3" stroke-linecap="round" opacity=".75">
+<path d="M38 194 h44"/><path d="M146 186 h38"/><path d="M196 206 h56"/><path d="M372 192 h52"/><path d="M136 220 h40"/><path d="M296 222 h48"/>
+</g>
+<!-- lily pads -->
+<g fill="#4E9459" opacity=".85"><ellipse cx="152" cy="206" rx="20" ry="7"/><ellipse cx="200" cy="222" rx="16" ry="6"/><ellipse cx="392" cy="212" rx="22" ry="8"/></g>
+<circle cx="200" cy="216" r="5" fill="#FFFDF7" opacity=".9"/>
+<!-- the heron -->
+<g stroke="#2E4A46" stroke-width="4" stroke-linecap="round" fill="none"><path d="M288 208 V184"/><path d="M302 208 V184"/><path d="M284 208 h10 M298 208 h10"/></g>
+<path d="M262 176 l-22 -12 24 -4 z" fill="#5C7E78"/>
+<ellipse cx="294" cy="178" rx="30" ry="14" fill="#6F918A"/>
+<ellipse cx="288" cy="176" rx="22" ry="9" fill="#8CAAA3"/>
+<path d="M314 170 C 326 158 320 136 306 128" stroke="#6F918A" stroke-width="8" fill="none" stroke-linecap="round"/>
+<circle cx="306" cy="128" r="8" fill="#6F918A"/>
+<path d="M300 126 l-22 6 22 6 z" fill="#E8B23A"/>
+<path d="M312 122 l12 -8" stroke="#2E4A46" stroke-width="3" stroke-linecap="round"/>
+<!-- reeds, front and back -->
+<g stroke="#2E5F40" stroke-width="4" fill="none" stroke-linecap="round">
+<path d="M58 222 C 62 196 56 182 62 158"/><path d="M78 228 C 84 204 78 190 84 170"/><path d="M40 216 C 44 198 40 186 44 170"/>
+<path d="M424 218 C 430 194 424 180 430 158"/><path d="M444 226 C 450 202 444 188 450 172"/><path d="M406 224 C 410 204 406 192 410 178"/>
+</g>
+<g fill="#8A6A42"><ellipse cx="62" cy="152" rx="5" ry="12"/><ellipse cx="84" cy="164" rx="4" ry="10"/><ellipse cx="430" cy="152" rx="5" ry="12"/><ellipse cx="450" cy="166" rx="4" ry="10"/></g>
+<g fill="#FBF0DC" opacity=".7"><circle cx="186" cy="116" r="3"/><circle cx="412" cy="112" r="3"/><circle cx="154" cy="142" r="2.5"/></g>
+</svg>

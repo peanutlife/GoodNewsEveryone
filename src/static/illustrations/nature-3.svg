@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
+<!-- Peanutlife section art, "Nature" variant 3: close in, a bee working a cosmos
+     head, leaves filling the frame. No sky and no horizon - the opposite viewpoint
+     to the other two. Original flat drawing. Subject sits inside x 63-417,
+     y 81-216, which is what the 32/9 band shows. -->
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E4F1DC"/><stop offset="1" stop-color="#BBDDB4"/></linearGradient>
+</defs>
+<rect width="480" height="270" fill="url(#g)"/>
+<!-- out-of-focus leaves behind -->
+<g opacity=".55">
+<ellipse cx="62" cy="86" rx="66" ry="40" fill="#A5D29E" transform="rotate(-24 62 86)"/>
+<ellipse cx="420" cy="74" rx="72" ry="38" fill="#9ACB95" transform="rotate(18 420 74)"/>
+<ellipse cx="392" cy="226" rx="86" ry="44" fill="#8FC58C" transform="rotate(-12 392 226)"/>
+<ellipse cx="54" cy="236" rx="70" ry="36" fill="#9ACB95" transform="rotate(14 54 236)"/>
+</g>
+<g fill="#FFFDF7" opacity=".45"><circle cx="146" cy="70" r="16"/><circle cx="356" cy="134" r="11"/><circle cx="96" cy="166" r="9"/><circle cx="268" cy="54" r="13"/></g>
+<!-- stems and leaves, painted before the flowers on them -->
+<path d="M224 270 C 222 220 228 190 232 162" stroke="#4E9459" stroke-width="9" fill="none" stroke-linecap="round"/>
+<path d="M126 270 C 128 234 124 214 122 196" stroke="#5EA868" stroke-width="7" fill="none" stroke-linecap="round"/>
+<path d="M226 214 C 198 212 182 198 178 180 C 204 178 222 194 226 214 Z" fill="#5EA868"/>
+<path d="M229 192 C 256 186 270 170 272 152 C 248 154 232 172 229 192 Z" fill="#6FB373"/>
+<path d="M124 226 C 104 224 92 214 90 200 C 110 200 122 212 124 226 Z" fill="#6FB373"/>
+<!-- the big flower -->
+<g fill="#E8718A">
+<ellipse cx="232" cy="110" rx="17" ry="30"/><ellipse cx="232" cy="190" rx="17" ry="30"/>
+<ellipse cx="192" cy="150" rx="30" ry="17"/><ellipse cx="272" cy="150" rx="30" ry="17"/>
+<ellipse cx="204" cy="122" rx="17" ry="29" transform="rotate(45 204 122)"/>
+<ellipse cx="260" cy="178" rx="17" ry="29" transform="rotate(45 260 178)"/>
+<ellipse cx="260" cy="122" rx="17" ry="29" transform="rotate(-45 260 122)"/>
+<ellipse cx="204" cy="178" rx="17" ry="29" transform="rotate(-45 204 178)"/>
+</g>
+<g fill="#F2869B" opacity=".7">
+<ellipse cx="232" cy="118" rx="9" ry="18"/><ellipse cx="200" cy="150" rx="18" ry="9"/>
+</g>
+<circle cx="232" cy="150" r="26" fill="#F2C14E"/>
+<g fill="#D9A024"><circle cx="224" cy="143" r="4"/><circle cx="240" cy="145" r="3.5"/><circle cx="230" cy="158" r="4"/><circle cx="243" cy="157" r="3"/><circle cx="219" cy="155" r="3"/></g>
+<!-- a smaller flower -->
+<g fill="#FFFDF7"><ellipse cx="122" cy="168" rx="9" ry="16"/><ellipse cx="122" cy="212" rx="9" ry="16"/><ellipse cx="100" cy="190" rx="16" ry="9"/><ellipse cx="144" cy="190" rx="16" ry="9"/></g>
+<circle cx="122" cy="190" r="12" fill="#F2C14E"/>
+<!-- the bee -->
+<g stroke="#8A6A42" stroke-width="2.5" fill="none" stroke-dasharray="5 7" stroke-linecap="round" opacity=".7">
+<path d="M396 180 C 370 172 368 140 342 124"/>
+</g>
+<g transform="rotate(-16 330 116)">
+<ellipse cx="330" cy="116" rx="26" ry="17" fill="#F2C14E"/>
+<path d="M322 100 a26 17 0 0 0 0 32 z" fill="#3B332A"/>
+<path d="M340 102 a26 17 0 0 1 0 28 z" fill="#3B332A" opacity=".85"/>
+<path d="M356 112 a9 9 0 0 1 0 9 z" fill="#3B332A"/>
+<ellipse cx="320" cy="94" rx="20" ry="11" fill="#FFFDF7" opacity=".75" transform="rotate(-24 320 94)"/>
+<ellipse cx="340" cy="92" rx="17" ry="9" fill="#FFFDF7" opacity=".65" transform="rotate(16 340 92)"/>
+</g>
+</svg>

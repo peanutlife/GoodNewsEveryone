@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
+<!-- Peanutlife section art, "Sports" variant 3: a pool at training time, seen from
+     straight above - two lane ropes, two swimmers mid-stroke, the deck at top and
+     bottom. No sky, no horizon. Original flat drawing; figures are simple shapes
+     with no facial features. Subject sits inside x 63-417, y 81-216, the 32/9 band. -->
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6FC6D4"/><stop offset=".5" stop-color="#4FAFC2"/><stop offset="1" stop-color="#3C96AC"/></linearGradient>
+</defs>
+<rect width="480" height="270" fill="url(#g)"/>
+<!-- the deck, top and bottom -->
+<rect x="0" y="0" width="480" height="56" fill="#F7C3A1"/>
+<rect x="0" y="56" width="480" height="6" fill="#FFFDF7"/>
+<rect x="0" y="238" width="480" height="32" fill="#F7C3A1"/>
+<rect x="0" y="232" width="480" height="6" fill="#FFFDF7"/>
+<g fill="#EFAE84"><rect x="0" y="16" width="480" height="4"/><rect x="0" y="256" width="480" height="4"/></g>
+<!-- starting blocks -->
+<g fill="#EFAE84"><rect x="96" y="24" width="48" height="32" rx="5"/><rect x="232" y="24" width="48" height="32" rx="5"/><rect x="368" y="24" width="48" height="32" rx="5"/></g>
+<g fill="#A3471A"><rect x="112" y="16" width="16" height="10" rx="3"/><rect x="248" y="16" width="16" height="10" rx="3"/><rect x="384" y="16" width="16" height="10" rx="3"/></g>
+<!-- light caustics -->
+<g stroke="#A8E4EC" stroke-width="4" fill="none" stroke-linecap="round" opacity=".35">
+<path d="M28 86 C 52 76 70 94 96 84"/><path d="M348 88 C 372 78 390 96 416 86"/><path d="M48 220 C 72 210 90 228 116 218"/><path d="M382 162 C 404 152 422 170 448 160"/>
+</g>
+<!-- two lane ropes, kept small so the swimmers carry the picture -->
+<g fill="#F2785C"><circle cx="20" cy="118" r="6"/><circle cx="52" cy="118" r="6"/><circle cx="84" cy="118" r="6"/><circle cx="116" cy="118" r="6"/><circle cx="148" cy="118" r="6"/><circle cx="180" cy="118" r="6"/><circle cx="212" cy="118" r="6"/><circle cx="244" cy="118" r="6"/><circle cx="276" cy="118" r="6"/><circle cx="308" cy="118" r="6"/><circle cx="340" cy="118" r="6"/><circle cx="372" cy="118" r="6"/><circle cx="404" cy="118" r="6"/><circle cx="436" cy="118" r="6"/><circle cx="468" cy="118" r="6"/></g>
+<g fill="#FFFDF7"><circle cx="36" cy="118" r="6"/><circle cx="68" cy="118" r="6"/><circle cx="100" cy="118" r="6"/><circle cx="132" cy="118" r="6"/><circle cx="164" cy="118" r="6"/><circle cx="196" cy="118" r="6"/><circle cx="228" cy="118" r="6"/><circle cx="260" cy="118" r="6"/><circle cx="292" cy="118" r="6"/><circle cx="324" cy="118" r="6"/><circle cx="356" cy="118" r="6"/><circle cx="388" cy="118" r="6"/><circle cx="420" cy="118" r="6"/><circle cx="452" cy="118" r="6"/></g>
+<g fill="#F2C14E"><circle cx="20" cy="190" r="6"/><circle cx="52" cy="190" r="6"/><circle cx="84" cy="190" r="6"/><circle cx="116" cy="190" r="6"/><circle cx="148" cy="190" r="6"/><circle cx="180" cy="190" r="6"/><circle cx="212" cy="190" r="6"/><circle cx="244" cy="190" r="6"/><circle cx="276" cy="190" r="6"/><circle cx="308" cy="190" r="6"/><circle cx="340" cy="190" r="6"/><circle cx="372" cy="190" r="6"/><circle cx="404" cy="190" r="6"/><circle cx="436" cy="190" r="6"/><circle cx="468" cy="190" r="6"/></g>
+<g fill="#FFFDF7"><circle cx="36" cy="190" r="6"/><circle cx="68" cy="190" r="6"/><circle cx="100" cy="190" r="6"/><circle cx="132" cy="190" r="6"/><circle cx="164" cy="190" r="6"/><circle cx="196" cy="190" r="6"/><circle cx="228" cy="190" r="6"/><circle cx="260" cy="190" r="6"/><circle cx="292" cy="190" r="6"/><circle cx="324" cy="190" r="6"/><circle cx="356" cy="190" r="6"/><circle cx="388" cy="190" r="6"/><circle cx="420" cy="190" r="6"/><circle cx="452" cy="190" r="6"/></g>
+<!-- middle lane: wake, then the kick, then the body over them -->
+<g stroke="#D8F1F6" stroke-width="5" fill="none" stroke-linecap="round" opacity=".6">
+<path d="M70 146 h42"/><path d="M78 164 h32"/><path d="M62 156 h26"/>
+</g>
+<g stroke="#C98C5A" stroke-width="12" fill="none" stroke-linecap="round">
+<path d="M166 148 L118 134"/><path d="M166 160 L118 174"/>
+</g>
+<g fill="#F2E6D4"><circle cx="116" cy="132" r="8"/><circle cx="116" cy="176" r="8"/></g>
+<g fill="#EAF9FC" opacity=".95"><circle cx="104" cy="128" r="12"/><circle cx="102" cy="180" r="11"/><circle cx="88" cy="154" r="8"/></g>
+<ellipse cx="212" cy="154" rx="52" ry="17" fill="#F2785C"/>
+<path d="M176 143 C 210 138 244 142 262 150" stroke="#FFC9B4" stroke-width="5" fill="none" stroke-linecap="round" opacity=".8"/>
+<path d="M266 146 C 296 136 322 140 338 152" stroke="#C98C5A" stroke-width="12" fill="none" stroke-linecap="round"/>
+<circle cx="340" cy="153" r="8" fill="#C98C5A"/>
+<path d="M216 168 C 208 184 194 190 178 188" stroke="#C98C5A" stroke-width="12" fill="none" stroke-linecap="round"/>
+<circle cx="177" cy="188" r="8" fill="#C98C5A"/>
+<circle cx="260" cy="154" r="16" fill="#FFFDF7"/>
+<path d="M248 148 h24" stroke="#2F3A4A" stroke-width="5" stroke-linecap="round"/>
+<path d="M276 144 C 284 150 284 158 276 164" stroke="#EAF9FC" stroke-width="4" fill="none" stroke-linecap="round"/>
+<g fill="#EAF9FC" opacity=".95"><circle cx="350" cy="156" r="11"/><circle cx="364" cy="147" r="7"/><circle cx="170" cy="194" r="9"/></g>
+<!-- bottom lane, a length behind -->
+<g stroke="#D8F1F6" stroke-width="4" fill="none" stroke-linecap="round" opacity=".55"><path d="M196 210 h28"/><path d="M204 224 h22"/></g>
+<g stroke="#8C5A3C" stroke-width="9" fill="none" stroke-linecap="round"><path d="M272 212 L236 204"/><path d="M272 222 L236 230"/></g>
+<ellipse cx="312" cy="217" rx="40" ry="13" fill="#F2C14E"/>
+<path d="M356 212 C 376 204 390 208 400 217" stroke="#8C5A3C" stroke-width="9" fill="none" stroke-linecap="round"/>
+<circle cx="401" cy="218" r="6" fill="#8C5A3C"/>
+<circle cx="350" cy="217" r="12" fill="#4FAFA8"/>
+<path d="M341 213 h18" stroke="#2F3A4A" stroke-width="4" stroke-linecap="round"/>
+<g fill="#EAF9FC" opacity=".85"><circle cx="410" cy="220" r="9"/><circle cx="230" cy="234" r="7"/><circle cx="232" cy="200" r="6"/></g>
+</svg>

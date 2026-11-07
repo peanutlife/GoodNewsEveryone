@@ -1,39 +1,68 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270">
-<!-- Peanutlife section art, "Politics": a civic hall, a ballot going in, people on the square.
-     Original flat drawing. Figures are simple shapes with no facial features. -->
-<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FBFAF4"/><stop offset="1" stop-color="#D9E3F5"/></linearGradient></defs>
+<!-- Peanutlife section art, "Politics" base scene: a neighbourhood meeting round a
+     table - papers out, mugs out, the plans pinned on the wall. Interior, lamp on.
+     Replaces the dome-and-ballot-box scene. Original flat drawing; figures are
+     simple shapes with no facial features. Everything that has to read sits inside
+     x 63-417, y 81-216, which is what the 32/9 story band shows. -->
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FBFAF4"/><stop offset="1" stop-color="#D9E3F5"/></linearGradient>
+<radialGradient id="lamp" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFF3CC" stop-opacity=".9"/><stop offset="1" stop-color="#FFF3CC" stop-opacity="0"/></radialGradient>
+<clipPath id="win"><rect x="298" y="58" width="122" height="86" rx="6"/></clipPath>
+</defs>
 <rect width="480" height="270" fill="url(#g)"/>
-<circle cx="408" cy="86" r="44" fill="#FFF3CC"/><circle cx="408" cy="86" r="27" fill="#F7C756"/>
-<g fill="#FFFDF7"><rect x="36" y="74" width="98" height="24" rx="12"/><circle cx="68" cy="74" r="18"/><circle cx="106" cy="78" r="13"/><rect x="286" y="50" width="64" height="18" rx="9"/><circle cx="310" cy="50" r="13"/></g>
-<g fill="#FFFDF7" opacity=".75"><circle cx="100" cy="150" r="4"/><circle cx="68" cy="124" r="3"/><circle cx="446" cy="152" r="4"/><circle cx="366" cy="118" r="3"/></g>
-<!-- the hall -->
-<path d="M168 206 V130 h144 v76 z" fill="#FBF7F1"/>
-<path d="M240 76 l92 56 H148 Z" fill="#EDE5D8"/>
-<path d="M240 76 l92 56 h-92 Z" fill="#E2D8C7"/>
-<path d="M206 130 a34 30 0 0 1 68 0 z" fill="#E8B23A"/>
-<path d="M240 100 a34 30 0 0 1 34 30 h-34 z" fill="#D39C28" opacity=".55"/>
-<rect x="236" y="56" width="5" height="22" rx="2" fill="#2F4A7A"/>
-<path d="M241 56 l30 8 -30 8 z" fill="#E8718A"/>
-<g fill="#D9E3F5"><rect x="182" y="146" width="15" height="60" rx="7"/><rect x="208" y="146" width="15" height="60" rx="7"/><rect x="257" y="146" width="15" height="60" rx="7"/><rect x="283" y="146" width="15" height="60" rx="7"/></g>
-<rect x="228" y="156" width="26" height="50" rx="12" fill="#2F4A7A"/>
-<rect x="166" y="202" width="148" height="8" rx="4" fill="#C6B9A4"/>
-<!-- ballot box and the hand posting a vote -->
-<rect x="56" y="168" width="78" height="56" rx="10" fill="#2F4A7A"/>
-<rect x="68" y="178" width="54" height="36" rx="6" fill="#4C6AA0"/>
-<rect x="76" y="158" width="38" height="8" rx="4" fill="#1F3560"/>
-<g transform="rotate(-12 95 136)">
-<rect x="72" y="106" width="46" height="60" rx="5" fill="#FBF7F1"/>
-<path d="M80 122 h30 M80 134 h30" stroke="#C7D2E6" stroke-width="4" stroke-linecap="round"/>
-<path d="M84 150 l8 9 16 -19" stroke="#E8718A" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<!-- the floor, painted before anything standing on it -->
+<path d="M0 216 H480 V270 H0 Z" fill="#C3D0E9"/>
+<path d="M0 216 H480 v5 H0 Z" fill="#A9BBDC"/>
+<!-- a window onto the street -->
+<rect x="298" y="58" width="122" height="86" rx="6" fill="#D7EAF6"/>
+<g clip-path="url(#win)">
+<path d="M298 126 C 334 110 364 122 420 112 V144 H298 Z" fill="#A8D6A0"/>
+<path d="M336 126 V104" stroke="#9A6F45" stroke-width="5"/><circle cx="336" cy="98" r="16" fill="#7FC183"/>
+<path d="M396 120 V100" stroke="#9A6F45" stroke-width="4"/><circle cx="396" cy="95" r="12" fill="#6FB373"/>
 </g>
-<g stroke="#A9BBDC" stroke-width="3" stroke-linecap="round" opacity=".9"><path d="M126 112 l12 -6"/><path d="M130 126 l13 -2"/></g>
-<!-- ground -->
-<path d="M0 212 C 120 198 260 214 480 204 V270 H0 Z" fill="#BFCDE8"/>
-<path d="M0 238 C 160 224 330 242 480 232 V270 H0 Z" fill="#A9BBDC"/>
-<!-- people on the square -->
-<path d="M330 230 V206 a13 13 0 0 1 26 0 v24 z" fill="#E8718A"/>
-<circle cx="343" cy="190" r="11" fill="#8C5A3C"/><path d="M332 190 a11 11 0 0 1 22 0 z" fill="#2F2A26"/>
-<path d="M374 234 V212 a12 12 0 0 1 24 0 v22 z" fill="#4FAFA8"/>
-<circle cx="386" cy="197" r="10" fill="#E8B98A"/><path d="M376 197 a10 10 0 0 1 20 0 z" fill="#A3471A"/>
-<path d="M356 212 l18 4" stroke="#8C5A3C" stroke-width="6" stroke-linecap="round"/>
+<rect x="298" y="58" width="122" height="86" rx="6" fill="none" stroke="#FFFDF7" stroke-width="7"/>
+<path d="M359 58 V144 M298 101 H420" stroke="#FFFDF7" stroke-width="6"/>
+<!-- the plans, pinned up -->
+<g transform="rotate(-2 92 104)">
+<rect x="54" y="72" width="76" height="64" rx="4" fill="#FBF7F1"/>
+<path d="M62 86 h40 M62 96 h52 M62 124 h30" stroke="#C7D2E6" stroke-width="3" stroke-linecap="round"/>
+<path d="M64 104 h30 v16 h-30 z" fill="#CDE4F2"/><path d="M100 106 h26 v12 h-26 z" fill="#F7D9A0"/>
+</g>
+<circle cx="92" cy="70" r="4" fill="#E8718A"/>
+<!-- the lamp over the table -->
+<path d="M212 0 V46" stroke="#2F4A7A" stroke-width="3"/>
+<path d="M190 70 l10 -24 h24 l10 24 z" fill="#2F4A7A"/>
+<ellipse cx="212" cy="92" rx="50" ry="28" fill="url(#lamp)"/>
+<!-- five people round the table -->
+<path d="M92 198 V150 a18 18 0 0 1 36 0 v48 z" fill="#E8718A"/>
+<circle cx="110" cy="132" r="13" fill="#8C5A3C"/><path d="M97 132 a13 13 0 0 1 26 0 z" fill="#2F2A26"/>
+<path d="M158 196 V142 a18 18 0 0 1 36 0 v54 z" fill="#4FAFA8"/>
+<circle cx="176" cy="124" r="13" fill="#E8B98A"/><path d="M163 124 a13 13 0 0 1 26 0 z" fill="#A3471A"/>
+<path d="M193 158 l24 12" stroke="#E8B98A" stroke-width="8" stroke-linecap="round"/>
+<path d="M222 198 V148 a18 18 0 0 1 36 0 v50 z" fill="#F2C14E"/>
+<circle cx="240" cy="130" r="13" fill="#C98C5A"/><path d="M227 130 a13 13 0 0 1 26 0 z" fill="#6B4226"/>
+<path d="M286 196 V140 a18 18 0 0 1 36 0 v56 z" fill="#7FB7C8"/>
+<circle cx="304" cy="122" r="13" fill="#6B4226"/><path d="M291 122 a13 13 0 0 1 26 0 z" fill="#2F2A26"/>
+<path d="M287 156 l-22 12" stroke="#6B4226" stroke-width="8" stroke-linecap="round"/>
+<path d="M350 198 V150 a18 18 0 0 1 36 0 v48 z" fill="#AE8BD8"/>
+<circle cx="368" cy="132" r="13" fill="#E8B98A"/><path d="M355 132 a13 13 0 0 1 26 0 z" fill="#8A5A00"/>
+<!-- the table -->
+<ellipse cx="240" cy="246" rx="152" ry="14" fill="#A9BBDC" opacity=".45"/>
+<ellipse cx="240" cy="208" rx="162" ry="34" fill="#C9AE86"/>
+<ellipse cx="240" cy="203" rx="162" ry="34" fill="#E0C9A6"/>
+<!-- what is on it -->
+<g transform="rotate(-8 150 196)">
+<rect x="124" y="180" width="54" height="34" rx="3" fill="#FBF7F1"/>
+<path d="M132 190 h36 M132 199 h28" stroke="#C7D2E6" stroke-width="3" stroke-linecap="round"/>
+</g>
+<g transform="rotate(7 330 193)">
+<rect x="304" y="178" width="52" height="32" rx="3" fill="#FBF7F1"/>
+<path d="M312 188 h34 M312 197 h22" stroke="#C7D2E6" stroke-width="3" stroke-linecap="round"/>
+</g>
+<rect x="206" y="182" width="20" height="18" rx="4" fill="#4FAFA8"/>
+<path d="M226 187 a6 6 0 0 1 0 10" stroke="#4FAFA8" stroke-width="4" fill="none"/>
+<rect x="252" y="186" width="18" height="16" rx="4" fill="#E8718A"/>
+<path d="M270 190 a5 5 0 0 1 0 9" stroke="#E8718A" stroke-width="4" fill="none"/>
+<path d="M374 208 h30 l-5 -18 h-20 z" fill="#C97B4E"/>
+<circle cx="389" cy="180" r="12" fill="#6FB373"/><circle cx="376" cy="188" r="8" fill="#7FC183"/><circle cx="401" cy="187" r="7" fill="#5EA868"/>
 </svg>
