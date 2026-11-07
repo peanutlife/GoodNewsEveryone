@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ article['title'] }} | Peanutlife - Good News Every Day</title>
     <meta name="description" content="{{ article['summary'] | striptags | truncate(155) }}">
+    {# Retired page: /story/<slug> replaced it. Crawlable on purpose so Google reads this
+       and drops it from the index; the X-Robots-Tag header in src/main.py says the same. #}
+    <meta name="robots" content="noindex, follow">
     <meta name="keywords" content="positive news, uplifting stories, good news, {{ article.get('topic_name', 'inspiration') }}, happy news">
 
     <!-- Open Graph / Social Media Meta Tags -->
     <meta property="og:type" content="article">
     <meta property="og:title" content="{{ article['title'] }}">
     <meta property="og:description" content="{{ article['summary'] | striptags | truncate(200) }}">
-    <meta property="og:image" content="{{ article.get('image_url', site_url ~ '/static/icons/icon-512x512.png') }}">
+    <meta property="og:image" content="{{ og_image_url(article.get('image_url')) }}">
     <meta property="og:url" content="{{ canonical_url }}">
     <meta property="og:site_name" content="Peanutlife">
     <meta property="article:published_time" content="{{ article['published'] }}">
@@ -24,7 +27,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ article['title'] }}">
     <meta name="twitter:description" content="{{ article['summary'] | striptags | truncate(200) }}">
-    <meta name="twitter:image" content="{{ article.get('image_url', site_url ~ '/static/icons/icon-512x512.png') }}">
+    <meta name="twitter:image" content="{{ og_image_url(article.get('image_url')) }}">
     <meta name="twitter:site" content="@peanutlife">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -57,7 +60,7 @@
       "@type": "NewsArticle",
       "headline": {{ article['title'] | striptags | tojson }},
       "description": {{ (article['summary'] | striptags | truncate(200)) | tojson }},
-      "image": {{ article.get('image_url', '') | tojson }},
+      "image": {{ og_image_url(article.get('image_url')) | tojson }},
       "datePublished": {{ article['published'] | tojson }},
       "dateModified": {{ article['published'] | tojson }},
       "author": {
@@ -177,9 +180,10 @@
             <h1 class="article-title">{{ article['title'] }}</h1>
 
             <!-- Hero Image -->
-            {% if article.get('image_url') %}
+            {% set hero_img = safe_image_url(article.get('image_url')) %}
+            {% if hero_img %}
                 <div class="article-image-hero">
-                    <img src="{{ article['image_url'] }}" alt="{{ article['title'] }}" loading="eager">
+                    <img src="{{ hero_img }}" alt="{{ article['title'] }}" loading="eager">
                 </div>
             {% endif %}
 
@@ -262,9 +266,10 @@
             <div class="related-articles-grid">
                 {% for related in related_articles %}
                 <a href="/article/{{ related.get('article_slug', related['article_id']) }}" class="related-article-card">
-                    {% if related.get('image_url') %}
+                    {% set related_img = safe_image_url(related.get('image_url')) %}
+                    {% if related_img %}
                         <div class="related-article-image">
-                            <img src="{{ related['image_url'] }}" alt="{{ related['title'] }}" loading="lazy">
+                            <img src="{{ related_img }}" alt="{{ related['title'] }}" loading="lazy">
                         </div>
                     {% endif %}
                     <div class="related-article-content">

@@ -26,6 +26,7 @@ from src.models.subscriber import EmailSubscriber
 from src.models.article import Article, Edition  # noqa: F401  (registers tables for create_all)
 from src.routes.site import site_bp
 from src.config import config
+from src.images import ALLOWLIST_KEY, og_image_url, safe_image_url
 
 # Set up logging
 logging.basicConfig(level=logging.INFO,
@@ -522,6 +523,11 @@ def create_app():
     # (request.url is http:// behind Render's proxy, and the bare domain 301s to www.)
     app.config["SITE_URL"] = os.environ.get("SITE_URL", "https://www.peanutlife.com").rstrip("/")
 
+    # Hosts we may load images from, on top of our own. Empty means "ours only":
+    # no publisher hotlinking. Set IMAGE_HOST_ALLOWLIST to a comma-separated list
+    # of hosts (a leading "." or "*." covers subdomains) to let specific CDNs back in.
+    app.config[ALLOWLIST_KEY] = os.environ.get(ALLOWLIST_KEY, "")
+
     @app.context_processor
     def inject_site_urls():
         from flask import request
@@ -686,6 +692,19 @@ def initialize_app(app):
     @app.context_processor
     def inject_now():
         return {"now": datetime.utcnow(), "request": request}
+
+    # Every <img>, og:image and JSON-LD image goes through these, so a publisher's
+    # CDN is never asked for a picture on a reader's behalf. See src/images.py.
+    app.jinja_env.globals["safe_image_url"] = safe_image_url
+    app.jinja_env.globals["og_image_url"] = og_image_url
+
+    @app.after_request
+    def noindex_legacy_articles(resp):
+        """Legacy /article/* pages are superseded by /story/*. They stay reachable and
+        crawlable on purpose: Google has to fetch them to see this header and drop them."""
+        if request.endpoint == "article_detail":
+            resp.headers["X-Robots-Tag"] = "noindex, follow"
+        return resp
 
     @app.route("/legacy")
     def index():
@@ -1157,7 +1176,11 @@ def initialize_app(app):
 
     @app.route('/sitemap.xml')
     def sitemap():
-        """Generate dynamic sitemap for search engines with all articles."""
+        """Dynamic sitemap: the front page, the editions and sections, and the /story/ pages.
+
+        Legacy /article/* URLs are deliberately absent. They still answer 200 and are
+        still crawlable, but they carry noindex now, so advertising them here would only
+        ask Google to index pages we are retiring."""
         from flask import Response
         global articles_by_topic
 
@@ -1172,9 +1195,6 @@ def initialize_app(app):
 
         if not articles_by_topic:
             articles_by_topic = article_cache.get("articles", {})
-
-        # Get all articles
-        all_articles = flatten_articles(articles_by_topic, sort_by_inspiration=True)
 
         site = app.config['SITE_URL']
 
@@ -1237,28 +1257,8 @@ def initialize_app(app):
         <priority>0.8</priority>
     </url>'''
 
-        # Add all article pages (limit to most recent 1000 for sitemap size)
-        for article in all_articles[:1000]:
-            article_slug = generate_article_slug(article['title'])
-            article_date = article.get('published', datetime.utcnow().isoformat())
-
-            # Parse the date and format it
-            try:
-                if isinstance(article_date, str):
-                    pub_date = datetime.fromisoformat(article_date)
-                else:
-                    pub_date = article_date
-                lastmod = pub_date.strftime('%Y-%m-%d')
-            except:
-                lastmod = datetime.utcnow().strftime('%Y-%m-%d')
-
-            sitemap_xml += f'''
-    <url>
-        <loc>{site}/article/{article_slug}</loc>
-        <lastmod>{lastmod}</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-    </url>'''
+        # Legacy /article/* pages are not listed: they serve noindex now (see
+        # noindex_legacy_articles) and /story/ above is their replacement.
 
         sitemap_xml += '''
 </urlset>'''

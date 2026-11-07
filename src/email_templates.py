@@ -5,6 +5,8 @@ from datetime import datetime
 import re
 import random
 
+from src.images import safe_image_url
+
 # Inspirational quotes for daily emails (quote, author, image_url)
 DAILY_QUOTES = [
     ("Be the change you wish to see in the world.", "Mahatma Gandhi", "https://images.unsplash.com/photo-1615461066841-6116e61058f4?w=400&h=400&fit=crop"),
@@ -60,6 +62,13 @@ def generate_nyt_digest_html(articles, unsubscribe_url):
 
     # Get random daily quote
     quote_text, quote_author, quote_image = random.choice(DAILY_QUOTES)
+    quote_image = safe_image_url(quote_image)
+    quote_image_html = (
+        f'<td width="120" style="vertical-align: top; padding: 30px 0 30px 30px;">'
+        f'<img src="{quote_image}" alt="{quote_author}" style="width: 100px; height: 100px; '
+        f'border-radius: 50%; border: 4px solid rgba(255,255,255,0.3); display: block; '
+        f'object-fit: cover;" /></td>'
+    ) if quote_image else ""
 
     # Build article sections
     article_sections = ""
@@ -70,8 +79,9 @@ def generate_nyt_digest_html(articles, unsubscribe_url):
         link = article.get('link', '#')
         inspiration_score = article.get('inspiration_score', 5)
 
-        # Extract image from summary HTML
-        image_url = extract_image_from_summary(summary_html)
+        # Extract image from summary HTML. safe_image_url drops it unless the host is
+        # allowlisted, so a subscriber's mail client never fetches a publisher's picture.
+        image_url = safe_image_url(extract_image_from_summary(summary_html))
 
         # Clean summary text (remove HTML)
         summary = strip_html(summary_html)
@@ -81,7 +91,7 @@ def generate_nyt_digest_html(articles, unsubscribe_url):
 
         # Build image HTML if we have an image
         image_html = ""
-        if image_url and image_url.startswith('http'):
+        if image_url:
             image_html = f"""
             <tr>
                 <td style="padding: 0 0 20px 0;">
@@ -173,10 +183,8 @@ def generate_nyt_digest_html(articles, unsubscribe_url):
                                     <td style="padding: 0;">
                                         <table width="100%" cellpadding="0" cellspacing="0">
                                             <tr>
-                                                <!-- Quote Image -->
-                                                <td width="120" style="vertical-align: top; padding: 30px 0 30px 30px;">
-                                                    <img src="{quote_image}" alt="{quote_author}" style="width: 100px; height: 100px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.3); display: block; object-fit: cover;" />
-                                                </td>
+                                                <!-- Quote Image (only when its host is allowlisted) -->
+                                                {quote_image_html}
                                                 <!-- Quote Text -->
                                                 <td style="vertical-align: middle; padding: 30px 30px 30px 20px;">
                                                     <p style="margin: 0 0 12px 0; font-size: 19px; line-height: 1.5; color: white; font-style: italic; font-weight: 500;">
@@ -249,9 +257,11 @@ def generate_modern_digest_html(articles, unsubscribe_url):
     for i, article in enumerate(articles, 1):
         topic_name = article.get('topic_name', 'general').title().replace('_', ' ')
         title = article.get('title', 'No title')
-        summary = article.get('summary', '')[:150] + '...' if len(article.get('summary', '')) > 150 else article.get('summary', '')
+        # strip_html first: publisher summaries carry inline <img> tags pointing at their CDN.
+        summary = strip_html(article.get('summary', ''))
+        summary = summary[:150] + '...' if len(summary) > 150 else summary
         link = article.get('link', '#')
-        image_url = article.get('image_url', '')
+        image_url = safe_image_url(article.get('image_url')) or ''
         inspiration_score = article.get('inspiration_score', 5)
 
         # Topic color mapping
@@ -274,14 +284,16 @@ def generate_modern_digest_html(articles, unsubscribe_url):
         # Star rating
         score_stars = '★' * min(int(inspiration_score), 5)
 
-        # Card HTML with image as background
+        # Card HTML. The gradient is the whole background unless the picture passed the gate.
+        image_bg = f", url('{image_url}') center/cover" if image_url else ""
+
         article_cards += f"""
         <tr>
             <td style="padding: 10px;">
                 <table width="100%" cellpadding="0" cellspacing="0" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                     <!-- Image Header -->
                     <tr>
-                        <td style="height: 180px; background: linear-gradient(135deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9)), url('{image_url}') center/cover; position: relative; padding: 20px;">
+                        <td style="height: 180px; background: linear-gradient(135deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9)){image_bg}; position: relative; padding: 20px;">
                             <div style="position: relative; z-index: 2;">
                                 <div style="display: inline-block; background: {topic_color}; color: white; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; margin-bottom: 8px;">
                                     {topic_name}

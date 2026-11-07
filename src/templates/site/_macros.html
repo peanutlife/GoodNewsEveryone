@@ -1,6 +1,9 @@
+{# A story's picture, or the section's tinted panel when we have no image we may serve.
+   safe_image_url keeps publisher CDNs out: see src/images.py. #}
 {% macro pic(a, cls='pic') -%}
 {% set sm = SECTION_META.get(a.section) or {'short': 'Today', 'icon': '✨'} %}
-<div class="{{ cls }} t-{{ a.section or 'progress' }}">{% if a.image_url and a.image_url.startswith('http') %}<img src="{{ a.image_url }}" alt="" loading="lazy">{% else %}<span class="ph" aria-hidden="true"><i>{{ sm.icon }}</i>{{ sm.short }}</span>{% endif %}</div>
+{% set img = safe_image_url(a.image_url) %}
+<div class="{{ cls }} t-{{ a.section or 'progress' }}">{% if img %}<img src="{{ img }}" alt="" loading="lazy">{% else %}<span class="ph" aria-hidden="true"><i>{{ sm.icon }}</i>{{ sm.short }}</span>{% endif %}</div>
 {%- endmacro %}
 
 {% macro kicker(a) -%}

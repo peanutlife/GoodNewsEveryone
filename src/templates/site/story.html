@@ -2,9 +2,9 @@
 {% import "site/_macros.html" as m with context %}
 {% block title %}{{ e.get('headline') or a.title }} | Peanutlife{% endblock %}
 {% block description %}{{ e.get('one_line') or a.title }}{% endblock %}
-{% block ogimage %}{{ a.image_url if a.image_url and a.image_url.startswith('http') else site_url ~ '/static/icons/icon-512x512.png' }}{% endblock %}
+{% block ogimage %}{{ og_image_url(a.image_url) }}{% endblock %}
 {% block head %}
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","headline":{{ (e.get('headline') or a.title)|tojson }},"datePublished":{{ (a.published.isoformat() if a.published else '')|tojson }},"image":{{ (a.image_url or '')|tojson }},"author":{"@type":"Organization","name":{{ a.source_name|tojson }}},"publisher":{"@type":"Organization","name":"Peanutlife"},"isBasedOn":{{ a.link|tojson }},"description":{{ (e.get('one_line') or '')|tojson }}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","headline":{{ (e.get('headline') or a.title)|tojson }},"datePublished":{{ (a.published.isoformat() if a.published else '')|tojson }},"image":{{ og_image_url(a.image_url)|tojson }},"author":{"@type":"Organization","name":{{ a.source_name|tojson }}},"publisher":{"@type":"Organization","name":"Peanutlife"},"isBasedOn":{{ a.link|tojson }},"description":{{ (e.get('one_line') or '')|tojson }}}</script>
 {% endblock %}
 {% block body %}
 <main class="wrap main">
@@ -21,7 +21,9 @@
       <span>{{ a.read_minutes or 3 }} min read</span>
       {% if a.enrich_model and a.enrich_model != 'dry-run' %}{{ m.byline(a) }}{% endif %}
     </p>
-    {% if a.image_url and a.image_url.startswith('http') %}<div class="hero"><img src="{{ a.image_url }}" alt=""></div>{% endif %}
+    {% set hero = safe_image_url(a.image_url) %}
+    {% set sm = SECTION_META.get(a.section) or {'short': 'Today', 'icon': '✨'} %}
+    <div class="hero t-{{ a.section or 'progress' }}{% if not hero %} nopic{% endif %}">{% if hero %}<img src="{{ hero }}" alt="">{% else %}<span class="ph" aria-hidden="true"><i>{{ sm.icon }}</i>{{ sm.short }}</span>{% endif %}</div>
     {% if e.get('before') and e.get('now') %}
     <section class="bn bn-top" aria-label="Before and now">
       <div class="before"><span class="l">⏮ Before</span><span>{{ e.before }}</span></div>
