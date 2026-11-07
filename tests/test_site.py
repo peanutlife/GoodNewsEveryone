@@ -266,6 +266,55 @@ def test_reader_counter_counts_once_per_day(client, app):
         assert Visit.query.count() == 1
 
 
+def _fresh_stats(app):
+    """_stats() caches for 60s per process, which outlives a test. Recompute."""
+    from src.routes import site as site_routes
+    site_routes._STATS_CACHE.update(at=None, value={})
+    with app.app_context():
+        return site_routes._stats()
+
+
+def test_homepage_never_shows_a_reader_count(client, app):
+    # Visit rows are one cookie per day, so returning readers and cookieless bots inflate
+    # the sum. We keep writing them, but no page may present them as a number of people.
+    from src.models.article import Visit, count_visit
+    today = date.today()
+    for d in range(7):
+        for n in range(30):
+            count_visit(today - timedelta(days=d), f"vid{d}-{n}")
+    with app.app_context():
+        assert Visit.query.count() == 210  # still stored, just not shown
+    stats = _fresh_stats(app)
+    assert not [k for k in stats if "reader" in k or "visit" in k], stats
+    body = client.get("/").data.decode()
+    assert "readers this week" not in body
+    assert "210" not in body
+    assert "Real numbers from our own database" not in body
+
+
+def test_counter_labels_checked_stories_not_read_stories(client, app):
+    for i in range(12):
+        db.session.add(_article(i))
+    db.session.commit()
+    stats = _fresh_stats(app)
+    assert stats["checked_week"] == 12 and stats["checked_today"] == 12
+    body = client.get("/").data.decode()
+    assert "12</b> stories checked by our software this week" in body
+    assert "stories read this week" not in body
+
+
+def test_source_count_is_the_same_number_everywhere(client, app):
+    from src.edition import config
+    with app.app_context():
+        expected = len(config()["sources"])
+    assert _fresh_stats(app)["sources"] == expected
+    home, promise = client.get("/").data.decode(), client.get("/promise").data.decode()
+    assert f"{expected}</b> sources read every morning" in home
+    for body in (home, promise):
+        assert f"reads {expected} sources every morning" in body or f"read {expected} sources across" in body
+        assert "about 160" not in body
+
+
 def test_feeling_is_one_per_reader_per_day(client, app):
     from src.models.article import Feeling
     r = client.post("/api/feel", json={"feeling": "better"})

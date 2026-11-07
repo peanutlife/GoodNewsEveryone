@@ -59,7 +59,7 @@
 {% block body %}{% endblock %}
 <footer class="ftr" id="about">
   <div class="wrap">
-    <p class="meta" style="max-width:560px">Peanutlife reads about 160 sources every morning and keeps only the stories that show things getting better. An editor chooses the ten; Claude helps write the summaries, and every story links to its original publisher.</p>
+    <p class="meta" style="max-width:560px">Peanutlife reads {{ stats.sources or 'about 160' }} sources every morning and keeps only the stories that show things getting better. An editor chooses the ten; Claude helps write the summaries, and every story links to its original publisher.</p>
     <nav aria-label="Footer"><a href="{{ url_for('site.promise') }}">Our promise</a><a href="{{ url_for('site.promise') }}#sources">Sources</a><a href="{{ url_for('site.promise') }}#ads">Ads</a><a href="mailto:contact@peanutlife.com">Contact</a></nav>
   </div>
 </footer>
